@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "allowJs": false,
     "strict": true,
@@ -18,7 +18,8 @@
       "@typings/*": ["typings/*"],
       "@services/*": ["services/*"],
       "@routes/*": ["routes/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@mocks/*": ["mocks/*"]
     }
   }
 }
