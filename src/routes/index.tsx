@@ -5,6 +5,7 @@ const PrivateRoute = lazy(() => import('@components/common/PrivateRoute'));
 const PublicRoute = lazy(() => import('@components/common/PublicRoute'));
 const MainLayout = lazy(() => import('@components/layouts/MainLayout'));
 const Home = lazy(() => import('@pages/Home'));
+const Login = lazy(() => import('@pages/Login'));
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
         </Route>
         <Route element={<PublicRoute />}>
           {/* 로그인, 회원가입등 public route가 들어가는 영역 */}
+          <Route path="/login" element={<Login />} />
         </Route>
         <Route path="*" element="Not Found" />
       </Routes>

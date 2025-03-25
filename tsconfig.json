@@ -21,5 +21,6 @@
       "@utils/*": ["utils/*"],
       "@mocks/*": ["mocks/*"]
     }
-  }
+  },
+  "include": ["src"]
 }
