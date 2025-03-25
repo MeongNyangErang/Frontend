@@ -34,13 +34,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html, body {
-    width: 100%;
-    height: 100%;
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 1.5;
-    color: #222;
+    color: #333;
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -76,18 +73,12 @@ const GlobalStyle = createGlobalStyle`
 
 /* ------------------ 전역 변수 (CSS 변수) ------------------ */
     :root {
-    // colors
     --main-color: #f03e5e;
     --wrap-bg-color: #FFF2F4;
-    
-    // sizes 
-    --max-width: 480px;
-    --header-height: 50px;
-    --footer-height: 200px;
-    --nav-height: 56px;
-    
-    // etc
-    --border-radius: 8px;
+    --gray-100: #f5f5f5;
+    --gray-300: #e0e0e0;
+    --gray-500: #9e9e9e;
+    --gray-700: #424242;
   }
 
 
