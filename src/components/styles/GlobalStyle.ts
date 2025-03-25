@@ -76,7 +76,17 @@ const GlobalStyle = createGlobalStyle`
 
 /* ------------------ 전역 변수 (CSS 변수) ------------------ */
     :root {
+    // colors
     --main-color: #f03e5e;
+    --wrap-bg-color: #FFF2F4;
+    
+    // sizes 
+    --max-width: 480px;
+    --header-height: 50px;
+    --footer-height: 200px;
+    --nav-height: 56px;
+    
+    // etc
     --border-radius: 8px;
   }
 
