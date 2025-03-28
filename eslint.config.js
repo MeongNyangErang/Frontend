@@ -26,7 +26,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'prettier/prettier': 'warn',
+      'prettier/prettier': 'auto',
     },
     extends: [
       js.configs.recommended,

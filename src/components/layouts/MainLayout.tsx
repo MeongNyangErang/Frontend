@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import Header from './Header';
 import Footer from './Footer';
 import Nav from './Nav';
+import SearchBar from '@components/common/Home/SearchBar';
 
 const MainLayout = () => {
   return (
     <SContainer>
       <Header />
+      <SearchBar />
       <main>
         <Outlet />
       </main>
