@@ -43,6 +43,12 @@ const SearchBar = () => {
     }
   };
 
+  const handleFocus = () => {
+    if (!location) {
+      setLocationDropdownOpen(true);
+    }
+  };
+
   const handleLocationKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       setLocationDropdownOpen(false);
@@ -155,9 +161,11 @@ const SearchBar = () => {
           type="text"
           value={location}
           onChange={handleLocationChange}
+          onFocus={handleFocus}
           onKeyDown={handleLocationKeyDown}
           placeholder="여행지를 검색해보세요"
         />
+
         {LocationDropdownOpen && (
           <LocationDropdown ref={locationDropdownRef}>
             {locations.map((location, index) => (
@@ -274,6 +282,7 @@ const LocationDropdown = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
+  text-align: center;
 `;
 
 const PeopleDropdown = styled.div`
@@ -307,7 +316,24 @@ const NumberInput = styled.input`
 
 const DatePickerWrapper = styled.div`
   width: 70px;
-  position: relative;
+
+  .react-datepicker__header {
+    background-color: #ffffff;
+    border-bottom: none;
+    font-family: 'Noto Sans KR';
+  }
+
+  .react-datepicker {
+    left: 35px;
+    font-family: 'Noto Sans KR';
+  }
+
+  .react-datepicker__day {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
 `;
 
 const Button = styled.button`
@@ -351,7 +377,7 @@ const Container = styled.div`
 
 const ApplyButton = styled.button`
   padding: 5px;
-  border: 1px solid rgb(255, 157, 77);
+  border: 1px solid rgb(253, 100, 133);
   border-radius: 4px;
   cursor: pointer;
   width: 95%;
