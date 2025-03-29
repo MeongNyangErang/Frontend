@@ -2,27 +2,54 @@ import styled from 'styled-components';
 import { buttonStyle } from '@components/styles/mixins';
 
 const SButton = styled.button<{
-  $color: 'main' | 'white';
+  $variant: 'main' | 'grayBorder' | 'mainBorder' | 'accent';
   $fullWidth: boolean | undefined;
   $fontSize: string;
+  $fixedHeight: boolean | undefined;
 }>`
   ${buttonStyle}
 
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
-  background-color: ${({ $color, theme }) =>
-    $color === 'main' ? theme.colors.main : '#fff'};
+  height: ${({ $fixedHeight }) => ($fixedHeight ? '48px' : 'auto')};
+
+  background-color: ${({ $variant, theme }) =>
+    $variant === 'main'
+      ? theme.colors.main
+      : $variant === 'accent'
+        ? theme.colors.info
+        : '#fff'};
 
   font-size: ${({ $fontSize }) => $fontSize};
 
-  color: ${({ $color, theme }) =>
-    $color === 'main' ? '#fff' : theme.colors.gray500};
+  color: #fff;
 
-  ${({ $color, theme }) =>
-    $color === 'white' &&
+  ${({ $variant, theme }) =>
+    $variant === 'grayBorder' &&
     `
-      border: 1px solid ${theme.colors.gray500}
+      color: ${theme.colors.gray500};
+      border: 1px solid ${theme.colors.gray500};
     `}
+
+  ${({ $variant, theme }) =>
+    $variant === 'mainBorder' &&
+    `
+      color: ${theme.colors.main};
+      border: 1px solid ${theme.colors.main};
+    `}
+
+   ${({ $variant, theme }) =>
+    $variant === 'accent' &&
+    `
+      color: ${theme.colors.infoText};
+    `}
+
+
+    &:disabled {
+    color: ${({ theme }) => theme.colors.gray500};
+    background-color: ${({ theme }) => theme.colors.gray200};
+    border: none;
+  }
 `;
 
 export { SButton };

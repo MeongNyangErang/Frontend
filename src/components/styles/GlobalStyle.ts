@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 /* ------------------ Reset ------------------ */
-*,
+  *,
   *::before,
   *::after {
     margin: 0;
@@ -42,6 +42,11 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  h1,h2,h3,h4,h5 {
+    font-size: 1rem;
+    font-weight: 400;
+  }
 
   a {
     text-decoration: none;
@@ -52,6 +57,7 @@ const GlobalStyle = createGlobalStyle`
     all: unset;
     cursor: pointer;
     font-family: inherit;
+    box-sizing: border-box;
   }
 
   ul, ol {
@@ -71,13 +77,23 @@ const GlobalStyle = createGlobalStyle`
     background: none;
   }
 
+  strong {
+    font-weight: 400;
+  }
+
 /* ------------------ 전역 변수 (CSS 변수) ------------------ */
     :root {
     --main-color: #f03e5e;
+    --sub-color: #F48E99;
+    --info-color: #E6F0FA;
+    --info-text-color: #3178C6;
     --wrap-bg-color: #FFF2F4;
     --gray-100: #f5f5f5;
+    --gray-200: #eeeeee;
     --gray-300: #e0e0e0;
+    --gray-400: #bdbdbd;
     --gray-500: #9e9e9e;
+    --gray-600: #757575;
     --gray-700: #424242;
   }
 

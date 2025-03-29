@@ -1,14 +1,34 @@
 import { useEffect } from 'react';
-import { SWrap, SModal } from './styles';
+import { createPortal } from 'react-dom';
+import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
+import {
+  SWrap,
+  SModal,
+  SModalHeader,
+  SModalBody,
+  SModalFooter,
+} from './styles';
+import Button from '../Button';
 
 interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
-  onClose(): void;
   variant: 'full' | 'centered';
+  role?: 'alert' | 'confirm';
+  closeType: 'none' | 'arrow' | 'x';
+  onClose?: () => void;
 }
 
-const Modal = ({ isOpen, children, onClose, variant }: ModalProps) => {
+const Modal = ({
+  isOpen,
+  children,
+  variant,
+  closeType,
+  role,
+  onClose,
+}: ModalProps) => {
+  const modalRoot = document.getElementById('modal-root');
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -21,12 +41,33 @@ const Modal = ({ isOpen, children, onClose, variant }: ModalProps) => {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !modalRoot) return null;
 
-  return (
+  return createPortal(
     <SWrap $variant={variant}>
-      <SModal $variant={variant}>{children}</SModal>
-    </SWrap>
+      <SModal $variant={variant}>
+        {closeType !== 'none' && (
+          <SModalHeader>
+            <button onClick={onClose}>
+              {closeType === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
+            </button>
+          </SModalHeader>
+        )}
+        {['alert', 'confirm'].includes(role || '') ? (
+          <>
+            <SModalBody>{children}</SModalBody>
+            <SModalFooter>
+              <Button variant="main" fontSize="14px" onClick={onClose!}>
+                확인
+              </Button>
+            </SModalFooter>
+          </>
+        ) : (
+          children
+        )}
+      </SModal>
+    </SWrap>,
+    modalRoot,
   );
 };
 

@@ -51,6 +51,8 @@ const SUserMenu = styled.div`
 const SLoginButton = styled(Link)`
   ${buttonStyle}
   margin-right: 8px;
+  background-color: ${({ theme }) => theme.colors.main};
+  color: #fff;
 `;
 
 const SNotifyButton = styled(Link)`
