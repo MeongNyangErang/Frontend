@@ -1,8 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import {
+  SearchBarWrapper,
+  InputWrapper,
+  SearchButton,
+  Button,
+  PeopleDropdown,
+  Input,
+  LocationDropdown,
+  DropdownItem,
+  DatePickerWrapper,
+  Container,
+  CheckWrapper,
+  BoxWrapper,
+  Label,
+  NumberInputWrapper,
+  TextInput,
+  ApplyButton,
+} from '@components/common/SearchBar/styles';
 
 const SearchBar = () => {
   const [location, setLocation] = useState('');
@@ -18,7 +35,7 @@ const SearchBar = () => {
   const locationInputRef = useRef<HTMLInputElement | null>(null);
   const peopleDropdownRef = useRef<HTMLDivElement | null>(null);
   const locationDropdownRef = useRef<HTMLDivElement | null>(null);
-
+  const navigate = useNavigate();
   const locations = [
     '서울',
     '제주',
@@ -60,14 +77,26 @@ const SearchBar = () => {
     setLocationDropdownOpen(false);
   };
 
-  const handlePeopleCountChange = (e: any) => {
-    const count = Number(e.target.value);
-    setPeopleCount(count);
+  const handlePeopleCountChange = (operation: 'increment' | 'decrement') => {
+    setPeopleCount((prevCount) => {
+      if (operation === 'increment') {
+        return prevCount + 1;
+      } else if (operation === 'decrement') {
+        return prevCount > 1 ? prevCount - 1 : 1;
+      }
+      return prevCount;
+    });
   };
 
-  const handlePetCountChange = (e: any) => {
-    const count = Number(e.target.value);
-    setPetCount(count);
+  const handlePetCountChange = (operation: 'increment' | 'decrement') => {
+    setPetCount((prevCount) => {
+      if (operation === 'increment') {
+        return prevCount + 1;
+      } else if (operation === 'decrement') {
+        return prevCount > 1 ? prevCount - 1 : 1;
+      }
+      return prevCount;
+    });
   };
 
   const handleSearch = async () => {
@@ -85,30 +114,8 @@ const SearchBar = () => {
       }
     }
 
-    const formattedCheckInDate = checkInDate?.toISOString().split('T')[0];
-    const formattedCheckOutDate = checkOutDate?.toISOString().split('T')[0];
-
-    try {
-      const response = await axios.post('/api/v1/users/accommodations/search', {
-        location,
-        checkInDate: formattedCheckInDate,
-        checkOutDate: formattedCheckOutDate,
-        peopleCount,
-        petCount,
-      });
-
-      if (response.status === 200) {
-        console.log(response.data.data.content);
-      } else {
-        alert('API 요청에 실패했습니다.');
-        console.log('API 요청에 실패했습니다');
-      }
-    } catch (error) {
-      console.error('Error fetching accommodations:', error);
-      alert('네트워크 오류가 발생했습니다.');
-    } finally {
-      console.log('Search finished');
-    }
+    const url = `/search?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&peopleCount=${peopleCount}&petCount=${petCount}&location=${location}`;
+    navigate(url);
   };
 
   const handlePeopleToggle = () => {
@@ -201,30 +208,33 @@ const SearchBar = () => {
           <Label onClick={handlePeopleToggle}>
             {peopleLabel}&nbsp;&nbsp;{petLabel}
           </Label>
+
           {PeopleDropdownOpen && (
             <PeopleDropdown ref={peopleDropdownRef}>
               <DropdownItem>
                 <NumberInputWrapper>
-                  <label>인원</label>
-                  <NumberInput
-                    type="number"
-                    value={peopleCount}
-                    onChange={handlePeopleCountChange}
-                    min="1"
-                  />
+                  <Label>인원</Label>
+                  <Button onClick={() => handlePeopleCountChange('decrement')}>
+                    -
+                  </Button>
+                  <TextInput type="text" value={peopleCount} readOnly />
+                  <Button onClick={() => handlePeopleCountChange('increment')}>
+                    +
+                  </Button>
                 </NumberInputWrapper>
               </DropdownItem>
 
               <DropdownItem>
                 {/* 반려동물 수 입력 */}
                 <NumberInputWrapper>
-                  <label>반려동물</label>
-                  <NumberInput
-                    type="number"
-                    value={petCount}
-                    onChange={handlePetCountChange}
-                    min="1"
-                  />
+                  <Label>반려동물</Label>
+                  <Button onClick={() => handlePetCountChange('decrement')}>
+                    -
+                  </Button>
+                  <TextInput type="text" value={petCount} readOnly />
+                  <Button onClick={() => handlePetCountChange('increment')}>
+                    +
+                  </Button>
                 </NumberInputWrapper>
               </DropdownItem>
               <DropdownItem>
@@ -236,150 +246,9 @@ const SearchBar = () => {
       </Container>
 
       {/* 검색 버튼 */}
-      <Button onClick={handleSearch}>검색</Button>
+      <SearchButton onClick={handleSearch}>검색</SearchButton>
     </SearchBarWrapper>
   );
 };
 
 export default SearchBar;
-
-const SearchBarWrapper = styled.div`
-  display: flex;
-  gap: 2px;
-  width: 100%;
-  padding: 16px;
-  flex-direction: column;
-  color: #888;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const NumberInputWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-`;
-
-const LocationDropdown = styled.div`
-  position: absolute;
-  top: 40px;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  text-align: center;
-`;
-
-const PeopleDropdown = styled.div`
-  position: absolute;
-  top: 155px;
-  left: 240px;
-  width: 46%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-`;
-
-const DropdownItem = styled.div`
-  margin: 5px 5px;
-  padding: 5px;
-  cursor: pointer;
-`;
-
-const Label = styled.label`
-  font-size: 14px;
-  cursor: pointer;
-`;
-
-const NumberInput = styled.input`
-  margin-left: 30px;
-  width: 60px;
-  padding: 5px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-`;
-
-const DatePickerWrapper = styled.div`
-  width: 60px;
-
-  .react-datepicker__header {
-    background-color: #ffffff;
-    border-bottom: none;
-    font-family: 'Noto Sans KR';
-  }
-
-  .react-datepicker {
-    left: 35px;
-    font-family: 'Noto Sans KR';
-  }
-
-  .react-datepicker__day {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-  }
-`;
-
-const Button = styled.button`
-  padding: 10px;
-  background-color: rgb(252, 109, 135);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  &:hover {
-    background-color: var(--main-color);
-  }
-`;
-
-const CheckWrapper = styled.div`
-  width: 50%;
-  display: flex;
-  background-color: white;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 0 0 0px 10px;
-`;
-
-const BoxWrapper = styled.div`
-  width: 50%;
-  display: flex;
-  background-color: white;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 0 0 10px 0px;
-  font-family: 'Noto Sans KR';
-`;
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 3px;
-  margin-bottom: 5px;
-`;
-
-const ApplyButton = styled.button`
-  padding: 5px;
-  border: 1px solid rgb(253, 100, 133);
-  border-radius: 4px;
-  cursor: pointer;
-  width: 95%;
-  text-align: center;
-`;

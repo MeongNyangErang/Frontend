@@ -1,4 +1,4 @@
-import SearchBar from '@pages/Home/SearchBar';
+import SearchBar from '@components/common/SearchBar/index';
 
 const Home = () => {
   return (
