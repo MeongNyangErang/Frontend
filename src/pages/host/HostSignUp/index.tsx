@@ -44,7 +44,7 @@ const HostSignUp = () => {
         <SignUpProfileImage
           profileImage={formData.profileImage}
           onChange={onChangeFileData}
-          onPrev={() => onChangeStep(1)}
+          onPrev={() => onChangeStep(2)}
           onClick={onSubmit}
         />
       )}
