@@ -79,23 +79,25 @@ const EmailVerification = ({
 
   return (
     <SWrap>
-      <SInputArea>
-        <input
-          type="text"
-          value={text}
-          placeholder="인증번호를 입력해주세요"
-          onChange={handleChange}
-          ref={inputRef}
-        />
-        <STimeBox>{formatSecondsToTime(timeCount)}</STimeBox>
-        <button
-          type="button"
-          onClick={handleRequestButtonClick}
-          disabled={isEmailCodeChecked}
-        >
-          재전송
-        </button>
-      </SInputArea>
+      {!isEmailCodeChecked && (
+        <SInputArea>
+          <input
+            type="text"
+            value={text}
+            placeholder="인증번호를 입력해주세요"
+            onChange={handleChange}
+            ref={inputRef}
+          />
+          <STimeBox>{formatSecondsToTime(timeCount)}</STimeBox>
+          <button
+            type="button"
+            onClick={handleRequestButtonClick}
+            disabled={isEmailCodeChecked}
+          >
+            재전송
+          </button>
+        </SInputArea>
+      )}
       <Button
         fontSize="12px"
         variant="accent"

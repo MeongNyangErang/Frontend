@@ -4,7 +4,8 @@ function validateName(name: string) {
   const regex = /^[a-z가-힣]{2,20}$/;
   if (!name) return '이름을 입력해주세요.';
   if (name.length < 2) return '이름은 2자 이상 입력해주세요.';
-  if (!regex.test(name)) return '한글 또는 영문 소문자로만 입력해주세요.';
+  if (!regex.test(name))
+    return '한글 또는 영문 소문자로 된 정확한 이름을 입력해주세요.';
   return '';
 }
 
