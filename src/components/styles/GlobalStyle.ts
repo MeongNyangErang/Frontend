@@ -71,7 +71,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input, textarea {
-    font-family: inherit;
     border: none;
     outline: none;
     background: none;

@@ -8,6 +8,7 @@ const MainLayout = () => {
   return (
     <SContainer>
       <Header />
+
       <main>
         <Outlet />
       </main>
