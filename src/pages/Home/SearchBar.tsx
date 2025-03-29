@@ -247,7 +247,7 @@ const SearchBarWrapper = styled.div`
   display: flex;
   gap: 2px;
   width: 100%;
-  padding: 5px;
+  padding: 16px;
   flex-direction: column;
   color: #888;
 `;
@@ -287,9 +287,9 @@ const LocationDropdown = styled.div`
 
 const PeopleDropdown = styled.div`
   position: absolute;
-  top: 148px;
+  top: 155px;
   left: 240px;
-  width: 48%;
+  width: 46%;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -315,7 +315,7 @@ const NumberInput = styled.input`
 `;
 
 const DatePickerWrapper = styled.div`
-  width: 70px;
+  width: 60px;
 
   .react-datepicker__header {
     background-color: #ffffff;
