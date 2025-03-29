@@ -3,7 +3,10 @@ import styled from 'styled-components';
 const MobileWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <SWrapper>
-      <SContainer>{children}</SContainer>
+      <SContainer>
+        {children}
+        <div id="modal-root" />
+      </SContainer>
     </SWrapper>
   );
 };
