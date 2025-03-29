@@ -37,6 +37,7 @@ const HostSignUp = () => {
           formError={formError}
           updateError={updateError}
           onChange={onChangeFileData}
+          onPrev={() => onChangeStep(1)}
           onNext={() => onChangeStep(3)}
         />
       )}

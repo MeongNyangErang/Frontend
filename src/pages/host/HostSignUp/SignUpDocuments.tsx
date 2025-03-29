@@ -17,6 +17,7 @@ interface Props {
   updateError(key: keyof SignUpFormError, message: string): void;
   onChange(key: FileFormatFields, file: File | null): void;
   onNext(): void;
+  onPrev(): void;
 }
 
 const SignUpDocuments = ({
@@ -26,6 +27,7 @@ const SignUpDocuments = ({
   updateError,
   onChange,
   onNext,
+  onPrev,
 }: Props) => {
   const isAllSelected = registration && permit;
   const registrationRef = useRef<HTMLInputElement>(null);
@@ -48,11 +50,7 @@ const SignUpDocuments = ({
   );
   return (
     <>
-      <SubPageHeader
-        title="호스트 회원 가입"
-        style="arrow"
-        onClick={() => {}}
-      />
+      <SubPageHeader title="호스트 회원 가입" style="arrow" onClick={onPrev} />
       <SWrap>
         <SDesc>
           안전한 숙소 예약 환경을 위하여
