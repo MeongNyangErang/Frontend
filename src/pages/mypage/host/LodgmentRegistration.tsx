@@ -9,7 +9,7 @@ const accommodationOptions = ['Hotel', 'Hostel', 'Airbnb', 'Motel'];
 const petOptions = ['Dog', 'Cat', 'Rabbit', 'Bird'];
 const FaOptions = ['Dog', 'Cat', 'Rabbit', 'Bird'];
 
-const RegisterAccommodation = () => {
+const LodgmentRegistration = () => {
   const [selectedAccommodations, setSelectedAccommodations] = useState<
     string[]
   >([]);
@@ -105,7 +105,7 @@ const OptionSelector = ({
   );
 };
 
-export default RegisterAccommodation;
+export default LodgmentRegistration;
 
 const Fieldset = styled.fieldset`
   font-family: 'Noto Sans KR';

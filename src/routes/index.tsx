@@ -8,7 +8,9 @@ const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
-const Accommodation = lazy(() => import('@pages/mypage/host/Accommodation'));
+const Accommodation = lazy(
+  () => import('@pages/mypage/host/LodgmentRegistration'),
+);
 
 const AppRouter = () => {
   return (
@@ -17,17 +19,12 @@ const AppRouter = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
         </Route>
-<<<<<<< HEAD
-        <Route element={<PrivateRoute />}>
-          {/* 마이페이지등 private route가 들어가는 영역 */}
-          <Route path="/mypage/host" element={<Accommodation />} />
-=======
         <Route element={<PrivateRoute allowedRoles={['user']} />}>
           {/* 일반유저만 접근 가능한 영역 */}
         </Route>
         <Route element={<PrivateRoute allowedRoles={['host']} />}>
           {/* 호스트 유저만 접근 가능한 영역 */}
->>>>>>> 0ca25f29e7c4e1fe114ae8f076b5d51aed29ea65
+          <Route path="/mypage/host" element={<Accommodation />} />
         </Route>
         <Route element={<PublicRoute />}>
           {/* 게스트만 접근 가능한 영역 */}
