@@ -8,6 +8,7 @@ const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
+const Accommodation = lazy(() => import('@pages/mypage/host/Accommodation'));
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
         </Route>
         <Route element={<PrivateRoute />}>
           {/* 마이페이지등 private route가 들어가는 영역 */}
+          <Route path="/mypage/host" element={<Accommodation />} />
         </Route>
         <Route element={<PublicRoute />}>
           {/* 로그인, 회원가입등 public route가 들어가는 영역 */}

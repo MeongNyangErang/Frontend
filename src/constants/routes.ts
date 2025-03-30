@@ -6,8 +6,21 @@ const ROUTES = {
     host: '/signup/host',
   },
   myPage: {
-    user: '/mypage/user',
-    host: '/mypage/host',
+    user: {
+      root: '/mypage/user',
+      reservation: '/mypage/user/reservation',
+      reviews: '/mypage/user/reviews',
+      wishlist: '/mypage/user/wishlist',
+      profile: '/mypage/user/profile',
+    },
+    host: {
+      root: '/mypage/host',
+      profile: '/mypage/host/profile',
+      reservation: '/mypage/host/reservation',
+      reviews: '/mypage/host/reviews',
+      registerAccommodation: '/mypage/host/register/accommodation',
+      registerRoom: '/mypage/host/register/room',
+    },
   },
   search: '/search',
   detail: (id: string) => `/accommodation/${id}`,
