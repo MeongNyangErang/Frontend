@@ -16,11 +16,14 @@ const AppRouter = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
         </Route>
-        <Route element={<PrivateRoute />}>
-          {/* 마이페이지등 private route가 들어가는 영역 */}
+        <Route element={<PrivateRoute allowedRoles={['user']} />}>
+          {/* 일반유저만 접근 가능한 영역 */}
+        </Route>
+        <Route element={<PrivateRoute allowedRoles={['host']} />}>
+          {/* 호스트 유저만 접근 가능한 영역 */}
         </Route>
         <Route element={<PublicRoute />}>
-          {/* 로그인, 회원가입등 public route가 들어가는 영역 */}
+          {/* 게스트만 접근 가능한 영역 */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup/user" element={<UserSignUp />} />
           <Route path="/signup/host" element={<HostSignUp />} />
