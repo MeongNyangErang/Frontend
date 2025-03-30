@@ -23,7 +23,10 @@ const enableMocking = async () => {
 };
 
 enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
+  const $root = document.getElementById('root');
+  if (!$root) throw new Error('root element not found');
+
+  createRoot($root).render(
     <ThemeProvider theme={theme}>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>

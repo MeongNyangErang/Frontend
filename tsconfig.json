@@ -19,7 +19,8 @@
       "@services/*": ["services/*"],
       "@routes/*": ["routes/*"],
       "@utils/*": ["utils/*"],
-      "@mocks/*": ["mocks/*"]
+      "@mocks/*": ["mocks/*"],
+      "@recoil/*": ["recoil/*"]
     }
   },
   "include": ["src"]
