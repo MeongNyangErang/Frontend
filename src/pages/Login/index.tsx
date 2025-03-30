@@ -4,7 +4,7 @@ import Modal from '@components/common/Modal';
 import Button from '@components/common/Button';
 import kakaoImage from '@assets/images/sns/kakao.png';
 import googleImage from '@assets/images/sns/google.png';
-import useLogin from '@hooks/page/useLogin';
+import useLoginPage from '@hooks/page/useLoginPage';
 import {
   SLogin,
   SLogo,
@@ -20,12 +20,14 @@ const Login = () => {
   const {
     formData,
     isLoading,
-    isOpen,
-    openModal,
-    closeModal,
+    error,
+    isMemberSelectorOpen,
+    openMemberSelector,
+    closeMemberSelector,
+    resetError,
     onChange,
     onSubmit,
-  } = useLogin();
+  } = useLoginPage();
 
   return (
     <SLogin>
@@ -73,14 +75,24 @@ const Login = () => {
           구글로 시작하기
         </SSocialButton>
       </SSocialArea>
-      <SSignUpButton onClick={openModal}>이메일로 회원가입</SSignUpButton>
+      <SSignUpButton onClick={openMemberSelector}>
+        이메일로 회원가입
+      </SSignUpButton>
       <Modal
-        isOpen={isOpen}
-        onClose={closeModal}
+        isOpen={isMemberSelectorOpen}
+        onClose={closeMemberSelector}
         variant="centered"
         closeType="x"
       >
         <MemberTypeSelector />
+      </Modal>
+      <Modal
+        isOpen={!!error}
+        onClose={resetError}
+        variant="centered"
+        closeType="x"
+      >
+        {error}
       </Modal>
     </SLogin>
   );

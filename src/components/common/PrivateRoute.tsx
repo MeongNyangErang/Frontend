@@ -1,16 +1,18 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import ROUTES from '@constants/routes';
+import useAuth from '@hooks/auth/useAuth';
 
 interface Props {
   allowedRoles: ('user' | 'host')[];
 }
 
 const PrivateRoute = ({ allowedRoles }: Props) => {
-  // const {user} = useAuth()
+  const { member } = useAuth();
 
-  // if(!user) return <Navigate to={ROUTES.home} replace/>
+  if (!member) return <Navigate to={ROUTES.home} replace />;
 
-  // if (!allowedRoles.includes(user.role)) return <Navigate to="/403" replace />;
+  if (!allowedRoles.includes(member.role))
+    return <Navigate to="/403" replace />;
 
   return <Outlet />;
 };
