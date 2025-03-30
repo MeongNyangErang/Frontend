@@ -43,9 +43,9 @@ async function fetchCall<T>(
   data?: any,
 ): Promise<T> {
   const config = {
-    method,
     url,
-    ...(data && { data }), // data가 있을 경우에만 data 속성 추가
+    method,
+    ...(data && { data }),
   };
   return axiosInstance(config);
 }
