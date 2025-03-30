@@ -9,19 +9,19 @@ export const SearchBarWrapper = styled.div`
   color: #888;
 `;
 
-export const InputWrapper = styled.div`
+export const SInputBox = styled.div`
   position: relative;
   width: 100%;
 `;
 
-export const NumberInputWrapper = styled.div`
+export const SNumberInputWrapper = styled.div`
   display: flex;
   gap: 10px;
   padding: 8px 12px;
   align-items: center;
 `;
 
-export const Input = styled.input`
+export const SInput = styled.input`
   width: 100%;
   padding: 12px;
   border-radius: 10px 10px 0 0;
@@ -29,7 +29,7 @@ export const Input = styled.input`
   box-sizing: border-box;
 `;
 
-export const LocationDropdown = styled.div`
+export const SLocationDropdown = styled.div`
   position: absolute;
   top: 40px;
   left: 0;
@@ -44,7 +44,7 @@ export const LocationDropdown = styled.div`
   text-align: center;
 `;
 
-export const PeopleDropdown = styled.div`
+export const SPeopleDropdown = styled.div`
   position: absolute;
   top: 155px;
   right: 15px;
@@ -53,19 +53,19 @@ export const PeopleDropdown = styled.div`
   border-radius: 8px;
 `;
 
-export const DropdownItem = styled.div`
+export const SDropdownItem = styled.div`
   margin: 5px 5px;
   padding: 5px;
   cursor: pointer;
 `;
 
-export const Label = styled.label`
+export const SLabel = styled.label`
   font-size: 14px;
   cursor: pointer;
   margin-right: 20px;
 `;
 
-export const DatePickerWrapper = styled.div`
+export const SDatePickerWrapper = styled.div`
   width: 60px;
 
   .react-datepicker__header {
@@ -87,7 +87,7 @@ export const DatePickerWrapper = styled.div`
   }
 `;
 
-export const Button = styled.button`
+export const SButton = styled.button`
   width: 30px;
   height: 30px;
   background-color: var(--gray-300);
@@ -113,13 +113,13 @@ export const SearchButton = styled.button`
     background-color: var(--main-color);
   }
 `;
-export const TextInput = styled.input`
+export const STextInput = styled.input`
   width: 10px;
   text-align: center;
   cursor: pointer;
 `;
 
-export const CheckWrapper = styled.div`
+export const SCheckWrapper = styled.div`
   width: 50%;
   display: flex;
   background-color: white;
@@ -128,7 +128,7 @@ export const CheckWrapper = styled.div`
   border-radius: 0 0 0px 10px;
 `;
 
-export const BoxWrapper = styled.div`
+export const SBoxWrapper = styled.div`
   width: 50%;
   display: flex;
   background-color: white;
@@ -138,14 +138,14 @@ export const BoxWrapper = styled.div`
   font-family: 'Noto Sans KR';
 `;
 
-export const Container = styled.div`
+export const SContainer = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 3px;
   margin-bottom: 5px;
 `;
 
-export const ApplyButton = styled.button`
+export const SApplyButton = styled.button`
   padding: 5px;
   border: 1px solid rgb(253, 100, 133);
   border-radius: 4px;
