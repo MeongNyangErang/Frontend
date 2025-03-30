@@ -4,18 +4,23 @@ import { FaRegBell } from 'react-icons/fa';
 import logoImage from '@assets/images/logo.png';
 import ROUTES from '@constants/routes';
 import { buttonStyle } from '@components/styles/mixins';
+import useAuth from '@hooks/auth/useAuth';
 
 const Header = () => {
+  const { member } = useAuth();
   return (
     <SHeader>
       <SLogo to={ROUTES.home}>
         <img src={logoImage} alt="멍냥이랑" />
       </SLogo>
       <SUserMenu>
-        <SLoginButton to={ROUTES.logIn}>로그인</SLoginButton>
-        {/* <SNotifyButton to={ROUTES.home}>
-          <FaRegBell />
-        </SNotifyButton> */}
+        {!member ? (
+          <SLoginButton to={ROUTES.logIn}>로그인</SLoginButton>
+        ) : (
+          <SNotifyButton to={ROUTES.home}>
+            <FaRegBell />
+          </SNotifyButton>
+        )}
       </SUserMenu>
     </SHeader>
   );

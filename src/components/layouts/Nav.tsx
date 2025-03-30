@@ -5,8 +5,13 @@ import { IoSearch } from 'react-icons/io5';
 import { FaRegMessage } from 'react-icons/fa6';
 import { FaRegUser } from 'react-icons/fa';
 import ROUTES from '@constants/routes';
+import useAuth from '@hooks/auth/useAuth';
 
 const Nav = () => {
+  const { member } = useAuth();
+
+  if (!member) return null;
+
   return (
     <SNav>
       <SNavLink to={ROUTES.home}>
