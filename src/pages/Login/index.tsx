@@ -5,6 +5,7 @@ import kakaoImage from '@assets/images/sns/kakao.png';
 import googleImage from '@assets/images/sns/google.png';
 import { MemberRole } from '@typings/member';
 import useLoginPage from '@hooks/page/useLoginPage';
+import { parseNewLine } from '@utils/formatter';
 import LoginForm from './LoginForm';
 import {
   SLogin,
@@ -89,7 +90,7 @@ const Login = () => {
         closeType="none"
         role="alert"
       >
-        {error}
+        {parseNewLine(error)}
       </Modal>
     </SLogin>
   );

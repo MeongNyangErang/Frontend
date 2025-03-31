@@ -26,7 +26,13 @@ const Nav = () => {
         <FaRegMessage />
         <span>채팅</span>
       </SNavLink>
-      <SNavLink to={ROUTES.myPage.user}>
+      <SNavLink
+        to={
+          member.role === 'host'
+            ? ROUTES.myPage.host.root
+            : ROUTES.myPage.user.root
+        }
+      >
         <FaRegUser />
         <span>MY</span>
       </SNavLink>

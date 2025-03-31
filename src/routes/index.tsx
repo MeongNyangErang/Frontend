@@ -9,6 +9,8 @@ const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
+const UserMyPage = lazy(() => import('@pages/MyPage'));
+const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 
 const AppRouter = () => {
   return (
@@ -31,9 +33,11 @@ const AppRouter = () => {
         <Route element={<MinimalLayout />}>
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             {/* 일반유저만 접근 가능한 영역 */}
+            <Route path="/mypage/user" element={<UserMyPage />} />
           </Route>
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
             {/* 호스트 유저만 접근 가능한 영역 */}
+            <Route path="/mypage/host" element={<HostMyPage />} />
           </Route>
           <Route element={<PrivateRoute allowedRoles={['user', 'host']} />}>
             {/* 로그인한 모든 유저 접근 가능한 영역 */}
