@@ -12,6 +12,7 @@ const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/MyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 
+
 const AppRouter = () => {
   return (
     <Suspense fallback="lazy loading...">
