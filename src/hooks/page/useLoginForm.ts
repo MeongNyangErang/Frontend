@@ -2,6 +2,7 @@ import React, { useState, useCallback, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import useLogin from '@hooks/auth/useLogin';
 import { MemberRole } from '@typings/member';
+import { validateEmail } from '@utils/validateSignUp';
 
 const useLoginForm = <T extends MemberRole>(
   memberType: T,
@@ -14,7 +15,7 @@ const useLoginForm = <T extends MemberRole>(
 
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, key: 'email' | 'password') => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
+      setFormData((prev) => ({ ...prev, [key]: e.target.value.trim() }));
     },
     [],
   );
@@ -22,6 +23,17 @@ const useLoginForm = <T extends MemberRole>(
   const onSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      const emailError = validateEmail(formData.email);
+      if (emailError) {
+        onError(emailError);
+        return;
+      }
+
+      if (!formData.password) {
+        onError('비밀번호를 입력해주세요.');
+        return;
+      }
+
       onStart();
       try {
         await login(formData.email, formData.password);

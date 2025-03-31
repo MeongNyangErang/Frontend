@@ -17,7 +17,7 @@ function validatePhoneNumber(phoneNumber: string) {
   return '';
 }
 
-function validateEmail(email: string) {
+export function validateEmail(email: string) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) return '이메일을 입력해주세요.';
   if (!regex.test(email)) return '올바른 이메일을 입력해주세요.';

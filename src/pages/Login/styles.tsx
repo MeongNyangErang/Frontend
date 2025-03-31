@@ -44,9 +44,12 @@ const STabBox = styled.div`
   &::before {
     content: '';
     position: absolute;
+    left: 50%;
+    top: 50%;
     width: 1px;
     height: 80%;
     background-color: ${({ theme }) => theme.colors.gray300};
+    transform: translate(-50%, -50%);
   }
 
   > button {

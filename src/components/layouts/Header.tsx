@@ -33,6 +33,7 @@ const SHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 8px;
+  width: 100%;
   height: ${({ theme }) => theme.layouts.headerHeight};
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);

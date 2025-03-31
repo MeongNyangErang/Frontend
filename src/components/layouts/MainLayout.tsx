@@ -8,10 +8,12 @@ const MainLayout = () => {
   return (
     <SContainer>
       <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
+      <SContent>
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </SContent>
       <Nav />
     </SContainer>
   );
@@ -23,13 +25,10 @@ const SContainer = styled.div`
   position: relative;
 
   > header {
-    position: sticky;
+    position: absolute;
     top: 0;
-  }
-
-  > main {
-    min-height: ${({ theme }) =>
-      `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
+    left: 0;
+    z-index: 1000;
   }
 
   > nav {
@@ -37,5 +36,16 @@ const SContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
+  }
+`;
+
+const SContent = styled.div`
+  padding-top: ${({ theme }) => theme.layouts.headerHeight};
+  overflow-y: auto;
+  height: 100vh;
+
+  > main {
+    min-height: ${({ theme }) =>
+      `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
   }
 `;
