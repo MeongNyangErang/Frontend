@@ -8,10 +8,10 @@ const ROUTES = {
   myPage: {
     user: {
       root: '/mypage/user',
+      profile: '/mypage/user/profile',
       reservation: '/mypage/user/reservation',
       reviews: '/mypage/user/reviews',
       wishlist: '/mypage/user/wishlist',
-      profile: '/mypage/user/profile',
     },
     host: {
       root: '/mypage/host',

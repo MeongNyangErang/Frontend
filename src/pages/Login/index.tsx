@@ -1,32 +1,41 @@
 import ROUTES from '@constants/routes';
 import logoImage from '@assets/images/logo2.png';
 import Modal from '@components/common/Modal';
-import Button from '@components/common/Button';
 import kakaoImage from '@assets/images/sns/kakao.png';
 import googleImage from '@assets/images/sns/google.png';
+import { MemberRole } from '@typings/member';
 import useLoginPage from '@hooks/page/useLoginPage';
+import { parseNewLine } from '@utils/formatter';
+import LoginForm from './LoginForm';
 import {
   SLogin,
   SLogo,
   SDesc,
-  SForm,
   SSocialArea,
   SSocialButton,
   SSignUpButton,
+  STabBox,
 } from './styles';
 import MemberTypeSelector from './MemberTypeSelector';
 
+const tabList = [
+  { memberType: 'user', name: '일반회원' },
+  { memberType: 'host', name: '호스트회원' },
+] as const;
+
 const Login = () => {
   const {
-    formData,
+    currentType,
     isLoading,
     error,
-    isMemberSelectorOpen,
-    openMemberSelector,
-    closeMemberSelector,
+    isModalOpen,
+    openModal,
+    closeModal,
+    changeTab,
+    startLoading,
+    endLoading,
+    showError,
     resetError,
-    onChange,
-    onSubmit,
   } = useLoginPage();
 
   return (
@@ -37,34 +46,24 @@ const Login = () => {
         </h2>
       </SLogo>
       <SDesc>반려동물 동반 숙소, 쉽고 빠르게 찾기!</SDesc>
-      <SForm onSubmit={onSubmit}>
-        <input
-          type="email"
-          placeholder="이메일"
-          value={formData.email}
-          onChange={(e) => {
-            onChange(e, 'email');
-          }}
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={formData.password}
-          onChange={(e) => {
-            onChange(e, 'password');
-          }}
-        />
-        <Button
-          type="submit"
-          variant="main"
-          fontSize="14px"
-          fullWidth={true}
-          fixedHeight={true}
-          isLoading={isLoading}
-        >
-          로그인
-        </Button>
-      </SForm>
+      <STabBox>
+        {tabList.map(({ memberType, name }) => (
+          <button
+            key={memberType}
+            className={memberType === currentType ? 'is-active' : ''}
+            onClick={() => changeTab(memberType as MemberRole)}
+          >
+            {name}
+          </button>
+        ))}
+      </STabBox>
+      <LoginForm
+        memberType={currentType}
+        isLoading={isLoading}
+        onStart={startLoading}
+        onEnd={endLoading}
+        onError={showError}
+      />
       <SSocialArea>
         <SSocialButton $variant="yellow">
           <img src={kakaoImage} alt="카카오" />
@@ -75,12 +74,10 @@ const Login = () => {
           구글로 시작하기
         </SSocialButton>
       </SSocialArea>
-      <SSignUpButton onClick={openMemberSelector}>
-        이메일로 회원가입
-      </SSignUpButton>
+      <SSignUpButton onClick={openModal}>이메일로 회원가입</SSignUpButton>
       <Modal
-        isOpen={isMemberSelectorOpen}
-        onClose={closeMemberSelector}
+        isOpen={isModalOpen}
+        onClose={closeModal}
         variant="centered"
         closeType="x"
       >
@@ -90,9 +87,10 @@ const Login = () => {
         isOpen={!!error}
         onClose={resetError}
         variant="centered"
-        closeType="x"
+        closeType="none"
+        role="alert"
       >
-        {error}
+        {parseNewLine(error)}
       </Modal>
     </SLogin>
   );

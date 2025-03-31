@@ -1,20 +1,22 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '@hooks/auth/useAuth';
-import { postLogout } from '@services/auth';
+import { logoutHost, logoutUser } from '@services/auth';
 import ROUTES from '@constants/routes';
+import { MemberRole } from '@typings/member';
 
-const useLogin = () => {
+const useLogout = (memberType: MemberRole) => {
   const { removeMember } = useAuth();
   const navigate = useNavigate();
 
   const logout = useCallback(async () => {
-    await postLogout();
+    const logoutFn = memberType === 'user' ? logoutUser : logoutHost;
+    await logoutFn();
     removeMember();
     navigate(ROUTES.home, { replace: true });
-  }, []);
+  }, [memberType]);
 
   return { logout };
 };
 
-export default useLogin;
+export default useLogout;

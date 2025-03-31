@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const MobileWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <SWrapper>
-      <SContainer>
+      <SContainer id="mobile-container">
         {children}
         <div id="modal-root" />
       </SContainer>
@@ -20,10 +20,11 @@ const SWrapper = styled.div`
 `;
 
 const SContainer = styled.div`
+  overflow: hidden;
   position: relative;
   max-width: ${({ theme }) => theme.layouts.maxWidth};
   min-width: ${({ theme }) => theme.layouts.minWidth};
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #fff;
 `;

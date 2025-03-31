@@ -30,14 +30,15 @@ const Modal = ({
   const modalRoot = document.getElementById('modal-root');
 
   useEffect(() => {
+    const mobileContainer = document.getElementById('mobile-container')!;
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      mobileContainer.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';
+      mobileContainer.style.overflow = '';
     }
 
     return () => {
-      document.body.style.overflow = '';
+      mobileContainer.style.overflow = '';
     };
   }, [isOpen]);
 

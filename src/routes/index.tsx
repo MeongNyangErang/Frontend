@@ -4,33 +4,51 @@ import { Routes, Route } from 'react-router';
 const PrivateRoute = lazy(() => import('@components/common/PrivateRoute'));
 const PublicRoute = lazy(() => import('@components/common/PublicRoute'));
 const MainLayout = lazy(() => import('@components/layouts/MainLayout'));
+const MinimalLayout = lazy(() => import('@components/layouts/MinimalLayout'));
 const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
-const Accommodation = lazy(
-  () => import('@pages/mypage/host/LodgmentRegistration'),
-);
+const UserMyPage = lazy(() => import('@pages/MyPage'));
+const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
+
 
 const AppRouter = () => {
   return (
     <Suspense fallback="lazy loading...">
       <Routes>
+        {/* 메인레이아웃 적용 페이지 */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route element={<PrivateRoute allowedRoles={['user']} />}>
+            {/* 일반유저만 접근 가능한 영역 */}
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={['host']} />}>
+            {/* 호스트 유저만 접근 가능한 영역 */}
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={['user', 'host']} />}>
+            {/* 로그인한 모든 유저 접근 가능한 영역 */}
+          </Route>
         </Route>
-        <Route element={<PrivateRoute allowedRoles={['user']} />}>
-          {/* 일반유저만 접근 가능한 영역 */}
-        </Route>
-        <Route element={<PrivateRoute allowedRoles={['host']} />}>
-          {/* 호스트 유저만 접근 가능한 영역 */}
-          <Route path="/mypage/host" element={<Accommodation />} />
-        </Route>
-        <Route element={<PublicRoute />}>
-          {/* 게스트만 접근 가능한 영역 */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup/user" element={<UserSignUp />} />
-          <Route path="/signup/host" element={<HostSignUp />} />
+        {/* 헤더, 네브바 미적용 페이지 */}
+        <Route element={<MinimalLayout />}>
+          <Route element={<PrivateRoute allowedRoles={['user']} />}>
+            {/* 일반유저만 접근 가능한 영역 */}
+            <Route path="/mypage/user" element={<UserMyPage />} />
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={['host']} />}>
+            {/* 호스트 유저만 접근 가능한 영역 */}
+            <Route path="/mypage/host" element={<HostMyPage />} />
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={['user', 'host']} />}>
+            {/* 로그인한 모든 유저 접근 가능한 영역 */}
+          </Route>
+          <Route element={<PublicRoute />}>
+            {/* 게스트만 접근 가능한 영역 */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup/user" element={<UserSignUp />} />
+            <Route path="/signup/host" element={<HostSignUp />} />
+          </Route>
         </Route>
         <Route path="*" element="Not Found" />
       </Routes>
