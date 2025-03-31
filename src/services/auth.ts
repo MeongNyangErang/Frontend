@@ -12,9 +12,13 @@ export const loginHost = async (
   email: string,
   password: string,
 ): Promise<AppMember> => {
-  return await fetchCall('host/login', 'post', { email, password });
+  return await fetchCall('hosts/login', 'post', { email, password });
 };
 
-export const postLogout = async () => {
+export const logoutUser = async () => {
   return await fetchCall('users/logout', 'post');
+};
+
+export const logoutHost = async () => {
+  return await fetchCall('hosts/logout', 'post');
 };
