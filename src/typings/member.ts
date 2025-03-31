@@ -1,6 +1,6 @@
 import { MEMBER_KEYS, MEMBER_ROLES } from '@constants/member';
 
-type MemberRole = (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
+export type MemberRole = (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
 type Member<T extends MemberRole> = {
   [MEMBER_KEYS.ID]: string;
   [MEMBER_KEYS.ROLE]: T;

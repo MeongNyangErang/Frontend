@@ -1,13 +1,19 @@
 import { useCallback } from 'react';
 import useAuth from '@hooks/auth/useAuth';
-import { postLogin } from '@services/auth';
+import { loginUser, loginHost } from '@services/auth';
+import { MemberRole } from '@typings/member';
 
-const useLogin = () => {
+const useLogin = <T extends MemberRole>(memberType: T) => {
   const { setCurrentMember } = useAuth();
-  const login = useCallback(async (email: string, password: string) => {
-    const currentMember = await postLogin(email, password);
-    setCurrentMember(currentMember);
-  }, []);
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const loginFn = memberType === 'user' ? loginUser : loginHost;
+      const currentMember = await loginFn(email, password);
+      setCurrentMember(currentMember);
+    },
+    [memberType],
+  );
   return { login };
 };
 

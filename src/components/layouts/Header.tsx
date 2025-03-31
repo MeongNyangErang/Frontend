@@ -4,18 +4,23 @@ import { FaRegBell } from 'react-icons/fa';
 import logoImage from '@assets/images/logo.png';
 import ROUTES from '@constants/routes';
 import { buttonStyle } from '@components/styles/mixins';
+import useAuth from '@hooks/auth/useAuth';
 
 const Header = () => {
+  const { member } = useAuth();
   return (
     <SHeader>
       <SLogo to={ROUTES.home}>
         <img src={logoImage} alt="멍냥이랑" />
       </SLogo>
       <SUserMenu>
-        <SLoginButton to={ROUTES.logIn}>로그인</SLoginButton>
-        {/* <SNotifyButton to={ROUTES.home}>
-          <FaRegBell />
-        </SNotifyButton> */}
+        {!member ? (
+          <SLoginButton to={ROUTES.logIn}>로그인</SLoginButton>
+        ) : (
+          <SNotifyButton to={ROUTES.home}>
+            <FaRegBell />
+          </SNotifyButton>
+        )}
       </SUserMenu>
     </SHeader>
   );
@@ -28,6 +33,7 @@ const SHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 8px;
+  width: 100%;
   height: ${({ theme }) => theme.layouts.headerHeight};
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
