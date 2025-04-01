@@ -12,6 +12,10 @@ const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/MyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
+const AccommodationPage = lazy(
+  () => import('@pages/mypage/host/LodgmentRegistration'),
+);
+
 
 const AppRouter = () => {
   return (
@@ -21,6 +25,10 @@ const AppRouter = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
+          <Route
+            path="mypage/host/registerAccommodation"
+            element={<AccommodationPage />}
+          />
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             {/* 일반유저만 접근 가능한 영역 */}
           </Route>
