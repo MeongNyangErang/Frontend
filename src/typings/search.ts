@@ -1,9 +1,13 @@
 import { QUERY_KEYS } from '@constants/queryKeys';
 
-export type BaseSearchState = {
-  [QUERY_KEYS.SEARCH.CHECK_IN_DATE]: string;
-  [QUERY_KEYS.SEARCH.CHECK_OUT_DATE]: string;
-  [QUERY_KEYS.SEARCH.LOCATION]: string;
-  [QUERY_KEYS.SEARCH.PEOPLE_COUNT]: string;
-  [QUERY_KEYS.SEARCH.PET_COUNT]: string;
-};
+export interface SearchQuery {
+  [QUERY_KEYS.SEARCH.BASE.CHECK_IN_DATE]: string;
+  [QUERY_KEYS.SEARCH.BASE.CHECK_OUT_DATE]: string;
+  [QUERY_KEYS.SEARCH.BASE.LOCATION]: string;
+  [QUERY_KEYS.SEARCH.BASE.PEOPLE_COUNT]: string;
+  [QUERY_KEYS.SEARCH.BASE.PET_COUNT]: string;
+}
+
+export interface SearchFilterType {
+  [QUERY_KEYS.SEARCH.FILTER.ACCOMMODATION_TYPE]: string;
+}

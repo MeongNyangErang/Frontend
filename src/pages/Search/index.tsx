@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { QUERY_KEYS } from '@constants/queryKeys';
-import { getBaseSearchState } from '@utils/searchParams';
+import { getSearchQuery, getSearchFilter } from '@utils/searchParams';
 import useToggleModal from '@hooks/ui/useToggleModal';
 import SearchHeader from './SearchHeadear';
 import SearchResult from './SearchResult';
@@ -9,25 +8,25 @@ import SearchFilter from './SearchFilter';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
-  const [searchState, setSearchState] = useState({
-    base: getBaseSearchState(searchParams),
-    filter: {},
-  });
+  const currentQuery = useRef(getSearchQuery(searchParams));
+  const currentFilterRef = useRef(getSearchFilter(searchParams));
   const { isModalOpen, openModal, closeModal } = useToggleModal();
 
   useEffect(() => {
-    setSearchState((prev) => ({
-      ...prev,
-      base: getBaseSearchState(searchParams),
-    }));
+    currentQuery.current = getSearchQuery(searchParams);
+    currentFilterRef.current = getSearchFilter(searchParams);
   }, [searchParams]);
 
   return (
     <>
-      <SearchHeader baseSearchState={searchState.base} />
+      <SearchHeader currentQuery={currentQuery.current} />
       <button onClick={openModal}>filter</button>
       <SearchResult />
-      <SearchFilter isOpen={isModalOpen} onClose={closeModal} />
+      <SearchFilter
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        currentFilter={currentFilterRef.current}
+      />
     </>
   );
 };

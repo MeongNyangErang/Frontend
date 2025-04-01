@@ -1,5 +1,6 @@
 import BottomDrawer from '@components/common/BottomDrawer';
 import SubPageHeader from '@components/common/SubPageHeader';
+import { SearchFilterType } from '@typings/search';
 import {
   SContainer,
   SNavigatorWrap,
@@ -11,11 +12,12 @@ import {
 interface Props {
   isOpen: boolean;
   onClose(): void;
+  currentFilter: SearchFilterType;
 }
 
 const navigator = ['숙소유형', '가격', '사용자 평점', '#특징', '시설/서비스'];
 
-const SearchFilter = ({ isOpen, onClose }: Props) => {
+const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
   return (
     <BottomDrawer isOpen={isOpen}>
       <SContainer>
