@@ -6,6 +6,7 @@ const MobileWrapper = ({ children }: { children: React.ReactNode }) => {
       <SContainer id="mobile-container">
         {children}
         <div id="modal-root" />
+        <div id="drawer-root" />
       </SContainer>
     </SWrapper>
   );

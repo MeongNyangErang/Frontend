@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SearchBarWrapper = styled.div`
   display: flex;
-  gap: 2px;
+  gap: 4px;
   width: 100%;
   padding: 16px;
   flex-direction: column;
@@ -18,7 +18,14 @@ export const SNumberInputWrapper = styled.div`
   display: flex;
   gap: 10px;
   padding: 8px 12px;
+  justify-content: space-between;
   align-items: center;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 `;
 
 export const SInput = styled.input`
@@ -105,9 +112,7 @@ export const SearchButton = styled.button`
   padding: 10px;
   background-color: rgb(252, 109, 135);
   color: white;
-  border: none;
   border-radius: 8px;
-  cursor: pointer;
   text-align: center;
   &:hover {
     background-color: var(--main-color);
@@ -141,15 +146,14 @@ export const SBoxWrapper = styled.div`
 export const SContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 3px;
-  margin-bottom: 5px;
+  gap: 4px;
 `;
 
 export const SApplyButton = styled.button`
   padding: 5px;
-  border: 1px solid rgb(253, 100, 133);
+  border: ${({ theme }) => `1px solid ${theme.colors.main}`};
   border-radius: 4px;
-  cursor: pointer;
   width: 95%;
   text-align: center;
+  color: ${({ theme }) => theme.colors.main};
 `;

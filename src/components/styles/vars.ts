@@ -12,6 +12,7 @@ export const colors = {
   gray500: 'var(--gray-500)',
   gray600: 'var(--gray-600)',
   gray700: 'var(--gray-700)',
+  overlay: 'var(--overlay-color)',
 } as const;
 
 export const radius = {

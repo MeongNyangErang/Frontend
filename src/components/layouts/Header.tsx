@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaRegBell } from 'react-icons/fa';
+import { FaBell } from 'react-icons/fa';
 import logoImage from '@assets/images/logo.png';
 import ROUTES from '@constants/routes';
 import { buttonStyle } from '@components/styles/mixins';
@@ -18,7 +18,7 @@ const Header = () => {
           <SLoginButton to={ROUTES.logIn}>로그인</SLoginButton>
         ) : (
           <SNotifyButton to={ROUTES.home}>
-            <FaRegBell />
+            <FaBell />
           </SNotifyButton>
         )}
       </SUserMenu>
@@ -67,5 +67,5 @@ const SNotifyButton = styled(Link)`
   align-items: center;
   padding: 8px;
   font-size: 24px;
-  color: ${({ theme }) => theme.colors.gray500};
+  color: ${({ theme }) => theme.colors.gray400};
 `;
