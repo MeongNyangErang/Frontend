@@ -1,13 +1,15 @@
 import { QUERY_KEYS } from '@constants/queryKeys';
 
-export interface SearchQuery {
-  [QUERY_KEYS.SEARCH.BASE.CHECK_IN_DATE]: string;
-  [QUERY_KEYS.SEARCH.BASE.CHECK_OUT_DATE]: string;
-  [QUERY_KEYS.SEARCH.BASE.LOCATION]: string;
-  [QUERY_KEYS.SEARCH.BASE.PEOPLE_COUNT]: string;
-  [QUERY_KEYS.SEARCH.BASE.PET_COUNT]: string;
-}
+type SearchQueryMap = typeof QUERY_KEYS.SEARCH.BASE;
+type SearchQueryKey = SearchQueryMap[keyof SearchQueryMap];
 
-export interface SearchFilterType {
-  [QUERY_KEYS.SEARCH.FILTER.ACCOMMODATION_TYPE]: string;
-}
+export type SearchQuery = {
+  [K in SearchQueryKey]: string;
+};
+
+type SearchFilterMap = typeof QUERY_KEYS.SEARCH.FILTER;
+export type SearchFilterKey = SearchFilterMap[keyof SearchFilterMap];
+
+export type SearchFilterType = {
+  [K in SearchFilterKey]: string;
+};

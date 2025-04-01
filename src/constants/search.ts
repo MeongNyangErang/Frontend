@@ -15,7 +15,11 @@ export const locations = [
   '가평',
 ] as const;
 
-export const FILTER_ITEMS = [
+export const initialFilterState = {
+  [QUERY_KEYS.SEARCH.FILTER.ACCOMMODATION_TYPE]: '',
+} as const;
+
+export const SEARCH_FILTER_ITEMS = [
   {
     key: QUERY_KEYS.SEARCH.FILTER.ACCOMMODATION_TYPE,
     name: '숙소유형',

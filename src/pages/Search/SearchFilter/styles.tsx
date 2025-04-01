@@ -4,7 +4,7 @@ const SContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: pink;
+  background-color: #fff;
 `;
 
 const SNavigatorWrap = styled.div`
@@ -42,8 +42,25 @@ const SFilterItems = styled.div`
 `;
 
 const SFilterItem = styled.div`
-  height: 2000px;
-  background-color: yellow;
+  border-top: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+  background-color: beige;
+
+  &:first-child {
+    border-top: none;
+  }
 `;
 
-export { SContainer, SNavigatorWrap, SNavigator, SFilterItems, SFilterItem };
+const SItemName = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.gray700};
+`;
+
+export {
+  SContainer,
+  SNavigatorWrap,
+  SNavigator,
+  SFilterItems,
+  SFilterItem,
+  SItemName,
+};

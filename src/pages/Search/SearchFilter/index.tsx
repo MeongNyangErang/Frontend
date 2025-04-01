@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import BottomDrawer from '@components/common/BottomDrawer';
 import SubPageHeader from '@components/common/SubPageHeader';
-import { SearchFilterType } from '@typings/search';
+import { SearchFilterType, SearchFilterKey } from '@typings/search';
+import { SEARCH_FILTER_ITEMS } from '@constants/search';
+import RadioFilterOptions from './RadioFilterOptions';
 import {
   SContainer,
   SNavigatorWrap,
   SNavigator,
   SFilterItems,
   SFilterItem,
+  SItemName,
 } from './styles';
 
 interface Props {
@@ -18,10 +22,31 @@ interface Props {
 const navigator = ['숙소유형', '가격', '사용자 평점', '#특징', '시설/서비스'];
 
 const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
+  const [filterState, setFilterState] = useState(currentFilter);
+
+  const handleCloseDrawer = () => {
+    onClose();
+    setFilterState(currentFilter);
+  };
+
+  const onChangeRadio = (filterKey: SearchFilterKey) => (option: string) => {
+    setFilterState((prev) => {
+      const isCurrentOption = option === prev[filterKey];
+      return {
+        ...prev,
+        [filterKey]: isCurrentOption ? '' : option,
+      };
+    });
+  };
+
   return (
     <BottomDrawer isOpen={isOpen}>
       <SContainer>
-        <SubPageHeader onClick={onClose} title="필터" style="x"></SubPageHeader>
+        <SubPageHeader
+          onClick={handleCloseDrawer}
+          title="필터"
+          style="x"
+        ></SubPageHeader>
         <SNavigatorWrap>
           <SNavigator>
             <div>
@@ -31,7 +56,20 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
             </div>
           </SNavigator>
           <SFilterItems>
-            <SFilterItem>df</SFilterItem>
+            {SEARCH_FILTER_ITEMS.map(({ key, name, options, type }) => {
+              return (
+                <SFilterItem key={key}>
+                  <SItemName>{name}</SItemName>
+                  {type === 'radio' && (
+                    <RadioFilterOptions
+                      options={options}
+                      currentOption={filterState[key]}
+                      onChange={onChangeRadio(key)}
+                    />
+                  )}
+                </SFilterItem>
+              );
+            })}
           </SFilterItems>
         </SNavigatorWrap>
       </SContainer>
