@@ -93,7 +93,7 @@ const LodgmentRegistration = () => {
       />
       <InputAddress
         type="text"
-        placeholder="도로명/지번주소를 입력해주세요"
+        value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
         onClick={handleAddressClick}
       />
       <InputAddress type="text" placeholder="상세주소를 입력해주세요" />
@@ -126,6 +126,24 @@ const LodgmentRegistration = () => {
         onSelect={selectPetFacility}
       />
 
+      <Label>대표이미지</Label>
+      <AvatarImageWrapper>
+        <AvatarImage src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+      </AvatarImageWrapper>
+
+      <Label>이미지</Label>
+      <ImageWrapper>
+        <MaskedImageWrapper>
+          <AvatarImage src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        </MaskedImageWrapper>
+        <MaskedImageWrapper>
+          <AvatarImage src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        </MaskedImageWrapper>
+        <MaskedImageWrapper>
+          <AvatarImage src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        </MaskedImageWrapper>
+      </ImageWrapper>
+
       <Button>Submit</Button>
     </Fieldset>
   );
@@ -141,7 +159,7 @@ const OptionSelector = ({
   onSelect: (option: string) => void;
 }) => {
   return (
-    <div>
+    <OptionSelectorWrapper>
       {options.map((option) => (
         <CheckInput
           key={option}
@@ -151,7 +169,7 @@ const OptionSelector = ({
           {option}
         </CheckInput>
       ))}
-    </div>
+    </OptionSelectorWrapper>
   );
 };
 
@@ -161,6 +179,12 @@ const Fieldset = styled.fieldset`
   font-family: 'Noto Sans KR';
   padding: 16px;
   border: none;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OptionSelectorWrapper = styled.div`
+  margin-bottom: 10px;
 `;
 
 // 선택 버튼
@@ -177,6 +201,7 @@ const CheckInput = styled.button<ButtonProps>`
 `;
 
 const Label = styled.label`
+  font-family: 'Noto Sans KR';
   display: block;
   font-size: 1rem;
   margin: 10px 0;
@@ -213,7 +238,7 @@ const InputAddress = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
   padding: 8px;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
@@ -230,12 +255,33 @@ const CharacterCount = styled.div`
 const Button = styled.button`
   background-color: var(--sub-color);
   color: white;
-  margin-top: 30px;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 10px;
+  margin-left: auto;
   &:hover {
     background-color: var(--sub-color);
     border: 1px solid #f03e5e;
   }
+`;
+
+const AvatarImageWrapper = styled.div`
+  width: 7rem;
+  margin-bottom: 20px;
+`;
+
+const AvatarImage = styled.img`
+  width: 100%;
+`;
+
+const MaskedImageWrapper = styled.div`
+  display: inline-block;
+  margin-right: 10px;
+  width: 7rem;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
 `;
