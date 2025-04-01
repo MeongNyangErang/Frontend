@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
 import {
   SWrap,
@@ -9,6 +8,7 @@ import {
   SModalFooter,
 } from './styles';
 import Button from '../Button';
+import Portal from '../Portal';
 
 interface ModalProps {
   children: React.ReactNode;
@@ -27,8 +27,6 @@ const Modal = ({
   role,
   onClose,
 }: ModalProps) => {
-  const modalRoot = document.getElementById('modal-root');
-
   useEffect(() => {
     const mobileContainer = document.getElementById('mobile-container')!;
     if (isOpen) {
@@ -42,33 +40,34 @@ const Modal = ({
     };
   }, [isOpen]);
 
-  if (!isOpen || !modalRoot) return null;
+  if (!isOpen) return null;
 
-  return createPortal(
-    <SWrap $variant={variant}>
-      <SModal $variant={variant}>
-        {closeType !== 'none' && (
-          <SModalHeader>
-            <button onClick={onClose}>
-              {closeType === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
-            </button>
-          </SModalHeader>
-        )}
-        {['alert', 'confirm'].includes(role || '') ? (
-          <>
-            <SModalBody>{children}</SModalBody>
-            <SModalFooter>
-              <Button variant="main" fontSize="14px" onClick={onClose!}>
-                확인
-              </Button>
-            </SModalFooter>
-          </>
-        ) : (
-          children
-        )}
-      </SModal>
-    </SWrap>,
-    modalRoot,
+  return (
+    <Portal selector="modal-root">
+      <SWrap $variant={variant}>
+        <SModal $variant={variant}>
+          {closeType !== 'none' && (
+            <SModalHeader>
+              <button onClick={onClose}>
+                {closeType === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
+              </button>
+            </SModalHeader>
+          )}
+          {['alert', 'confirm'].includes(role || '') ? (
+            <>
+              <SModalBody>{children}</SModalBody>
+              <SModalFooter>
+                <Button variant="main" fontSize="14px" onClick={onClose!}>
+                  확인
+                </Button>
+              </SModalFooter>
+            </>
+          ) : (
+            children
+          )}
+        </SModal>
+      </SWrap>
+    </Portal>
   );
 };
 

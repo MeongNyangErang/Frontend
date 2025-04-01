@@ -87,6 +87,7 @@ const GlobalStyle = createGlobalStyle`
     --info-color: #E6F0FA;
     --info-text-color: #3178C6;
     --wrap-bg-color: #FFF2F4;
+    --overlay-color: rgba(0,0,0,0.3);
     --gray-100: #f5f5f5;
     --gray-200: #eeeeee;
     --gray-300: #e0e0e0;

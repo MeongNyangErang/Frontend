@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
+import { locations } from '@constants/search';
+import { formatDate, stringToDate } from '@utils/formatter';
+import { BaseSearchState } from '@typings/search';
 import {
   SearchBarWrapper,
   SInputBox,
@@ -19,43 +22,38 @@ import {
   SNumberInputWrapper,
   STextInput,
   SApplyButton,
-} from '@components/common/SearchBar/styles';
+} from './styles';
+import Modal from '../Modal';
 
-const SearchBar = () => {
+interface Props {
+  baseSearchState?: BaseSearchState;
+}
+
+const SearchBar = ({ baseSearchState }: Props) => {
   const [location, setLocation] = useState('');
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [peopleCount, setPeopleCount] = useState(1);
-  const [petCount, setPetCount] = useState(0);
+  const [petCount, setPetCount] = useState(1);
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [peopleDropdownOpen, setPeopleDropdownOpen] = useState(false);
-  const [peopleLabel, setPeopleLabel] = useState('인원');
-  const [petLabel, setPetLabel] = useState('반려동물');
-
-  const peopleDropdownRef = useRef<HTMLDivElement | null>(null);
-  const locationDropdownRef = useRef<HTMLDivElement | null>(null);
-
+  const peopleDropdownRef = useRef<HTMLDivElement>(null);
+  const locationDropdownRef = useRef<HTMLDivElement>(null);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const locations = [
-    '서울',
-    '제주',
-    '부산',
-    '인천',
-    '여수',
-    '강릉',
-    '속초',
-    '평창',
-    '전주',
-    '대구',
-    '경주',
-    '가평',
-  ];
 
-  const handleLocationChange = (e: any) => {
+  const resetError = () => {
+    setError('');
+  };
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (locationDropdownOpen) setLocationDropdownOpen(false);
     setLocation(e.target.value);
   };
 
-  const handleLocationSelect = (selectedLocation: string) => {
+  const handleLocationSelect = (
+    selectedLocation: (typeof locations)[number],
+  ) => {
     setLocation(selectedLocation);
     setLocationDropdownOpen(false);
   };
@@ -92,12 +90,20 @@ const SearchBar = () => {
 
     for (const validation of validations) {
       if (validation.condition) {
-        alert(validation.message);
+        setError(validation.message);
         return;
       }
     }
 
-    const url = `/search?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&peopleCount=${peopleCount}&petCount=${petCount}&location=${location}`;
+    const params = new URLSearchParams({
+      checkInDate: formatDate(checkInDate!),
+      checkOutDate: formatDate(checkOutDate!),
+      peopleCount: String(peopleCount),
+      petCount: String(petCount),
+      location: location,
+    });
+
+    const url = `/search?${params.toString()}`;
     navigate(url);
   };
 
@@ -115,10 +121,20 @@ const SearchBar = () => {
   };
 
   const applyPeopleAndPets = () => {
-    setPeopleLabel(`인원 ${peopleCount}`);
-    setPetLabel(`반려동물 ${petCount}`);
     setPeopleDropdownOpen(false);
   };
+
+  useEffect(() => {
+    if (baseSearchState) {
+      const { peopleCount, petCount, checkInDate, checkOutDate, location } =
+        baseSearchState;
+      setCheckInDate(stringToDate(checkInDate));
+      setCheckOutDate(stringToDate(checkOutDate));
+      setLocation(location);
+      setPetCount(parseFloat(petCount));
+      setPeopleCount(parseFloat(peopleCount));
+    }
+  }, [baseSearchState]);
 
   useEffect(() => {
     const handleClickOutside = (e: Event) => {
@@ -136,98 +152,123 @@ const SearchBar = () => {
 
     document.addEventListener('click', handleClickOutside);
 
+    applyPeopleAndPets();
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
   return (
-    <SearchBarWrapper>
-      {/* 여행지 검색 */}
-      <SInputBox>
-        <SInput
-          type="text"
-          value={location}
-          onChange={handleLocationChange}
-          placeholder="여행지를 검색해보세요"
-          onClick={() => setLocationDropdownOpen(!locationDropdownOpen)}
-        />
+    <>
+      <SearchBarWrapper>
+        {/* 여행지 검색 */}
+        <SInputBox>
+          <SInput
+            type="text"
+            value={location}
+            onChange={handleLocationChange}
+            placeholder="여행지를 검색해보세요"
+            onClick={() => setLocationDropdownOpen(!locationDropdownOpen)}
+          />
 
-        {locationDropdownOpen && (
-          <SLocationDropdown ref={locationDropdownRef}>
-            {locations.map((location, index) => (
-              <SDropdownItem
-                key={index}
-                onClick={() => handleLocationSelect(location)}
-              >
-                {location}
-              </SDropdownItem>
-            ))}
-          </SLocationDropdown>
-        )}
-      </SInputBox>
-
-      {/* 체크인/체크아웃 */}
-      <SContainer>
-        <SCheckWrapper>
-          <SDatePickerWrapper>
-            <DatePicker
-              selected={checkInDate}
-              onChange={handleDateChange}
-              placeholderText="날짜 선택"
-              dateFormat="yyyy-MM-dd"
-              minDate={new Date()}
-              selectsRange
-              startDate={checkInDate}
-              endDate={checkOutDate}
-            />
-          </SDatePickerWrapper>
-        </SCheckWrapper>
-
-        <SBoxWrapper>
-          <SLabel onClick={handlePeopleToggle}>
-            {peopleLabel}&nbsp;&nbsp;{petLabel}
-          </SLabel>
-
-          {peopleDropdownOpen && (
-            <SPeopleDropdown ref={peopleDropdownRef}>
-              <SDropdownItem>
-                <SNumberInputWrapper>
-                  <SLabel>인원</SLabel>
-                  <SButton onClick={() => handlePeopleCountChange('decrement')}>
-                    -
-                  </SButton>
-                  <STextInput type="text" value={peopleCount} readOnly />
-                  <SButton onClick={() => handlePeopleCountChange('increment')}>
-                    +
-                  </SButton>
-                </SNumberInputWrapper>
-              </SDropdownItem>
-
-              <SDropdownItem>
-                {/* 반려동물 수 입력 */}
-                <SNumberInputWrapper>
-                  <SLabel>반려동물</SLabel>
-                  <SButton onClick={() => handlePetCountChange('decrement')}>
-                    -
-                  </SButton>
-                  <STextInput type="text" value={petCount} readOnly />
-                  <SButton onClick={() => handlePetCountChange('increment')}>
-                    +
-                  </SButton>
-                </SNumberInputWrapper>
-              </SDropdownItem>
-              <SDropdownItem>
-                <SApplyButton onClick={applyPeopleAndPets}>완료</SApplyButton>
-              </SDropdownItem>
-            </SPeopleDropdown>
+          {locationDropdownOpen && (
+            <SLocationDropdown ref={locationDropdownRef}>
+              {locations.map((location, index) => (
+                <SDropdownItem
+                  key={index}
+                  onClick={() => handleLocationSelect(location)}
+                >
+                  {location}
+                </SDropdownItem>
+              ))}
+            </SLocationDropdown>
           )}
-        </SBoxWrapper>
-      </SContainer>
+        </SInputBox>
 
-      {/* 검색 버튼 */}
-      <SearchButton onClick={handleSearch}>검색</SearchButton>
-    </SearchBarWrapper>
+        {/* 체크인/체크아웃 */}
+        <SContainer>
+          <SCheckWrapper>
+            <SDatePickerWrapper>
+              <DatePicker
+                selected={checkInDate}
+                onChange={handleDateChange}
+                placeholderText="날짜 선택"
+                dateFormat="yyyy-MM-dd"
+                minDate={new Date()}
+                selectsRange
+                startDate={checkInDate}
+                endDate={checkOutDate}
+              />
+            </SDatePickerWrapper>
+          </SCheckWrapper>
+
+          <SBoxWrapper>
+            <SLabel onClick={handlePeopleToggle}>
+              인원 {peopleCount}&nbsp;&nbsp;반려동물 {petCount}
+            </SLabel>
+
+            {peopleDropdownOpen && (
+              <SPeopleDropdown ref={peopleDropdownRef}>
+                <SDropdownItem>
+                  <SNumberInputWrapper>
+                    <SLabel>인원</SLabel>
+                    <div>
+                      <SButton
+                        onClick={() => handlePeopleCountChange('decrement')}
+                      >
+                        -
+                      </SButton>
+                      <STextInput type="text" value={peopleCount} readOnly />
+                      <SButton
+                        onClick={() => handlePeopleCountChange('increment')}
+                      >
+                        +
+                      </SButton>
+                    </div>
+                  </SNumberInputWrapper>
+                </SDropdownItem>
+
+                <SDropdownItem>
+                  {/* 반려동물 수 입력 */}
+                  <SNumberInputWrapper>
+                    <SLabel>반려동물</SLabel>
+                    <div>
+                      <SButton
+                        onClick={() => handlePetCountChange('decrement')}
+                      >
+                        -
+                      </SButton>
+                      <STextInput type="text" value={petCount} readOnly />
+                      <SButton
+                        onClick={() => handlePetCountChange('increment')}
+                      >
+                        +
+                      </SButton>
+                    </div>
+                  </SNumberInputWrapper>
+                </SDropdownItem>
+                <SDropdownItem>
+                  <SApplyButton onClick={applyPeopleAndPets}>완료</SApplyButton>
+                </SDropdownItem>
+              </SPeopleDropdown>
+            )}
+          </SBoxWrapper>
+        </SContainer>
+
+        {/* 검색 버튼 */}
+        <SearchButton onClick={handleSearch}>검색</SearchButton>
+      </SearchBarWrapper>
+      <Modal
+        isOpen={!!error}
+        onClose={resetError}
+        closeType="none"
+        variant="centered"
+        role="alert"
+      >
+        {error}
+      </Modal>
+    </>
   );
 };
 

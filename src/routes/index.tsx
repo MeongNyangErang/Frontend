@@ -11,9 +11,11 @@ const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/MyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
+const Search = lazy(() => import('@pages/Search'));
 const AccommodationPage = lazy(
   () => import('@pages/mypage/host/LodgmentRegistration'),
 );
+
 
 const AppRouter = () => {
   return (
@@ -22,6 +24,7 @@ const AppRouter = () => {
         {/* 메인레이아웃 적용 페이지 */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="search" element={<Search />} />
           <Route
             path="mypage/host/registerAccommodation"
             element={<AccommodationPage />}

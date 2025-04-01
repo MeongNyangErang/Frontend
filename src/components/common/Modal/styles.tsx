@@ -7,8 +7,8 @@ const SWrap = styled.div<{ $variant: 'full' | 'centered' }>`
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: ${({ $variant }) =>
-    $variant === 'full' ? '#fff' : 'rgba(0,0,0,0.3)'};
+  background-color: ${({ $variant, theme }) =>
+    $variant === 'full' ? '#fff' : theme.colors.overlay};
 
   ${({ $variant }) =>
     $variant === 'centered' &&
