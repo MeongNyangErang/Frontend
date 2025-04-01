@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import useRegister from '@hooks/page/useRegister';
+import RegisterAddress from 'api/RegisterAddress';
 
 interface ButtonProps {
   selected: boolean;
@@ -36,6 +37,11 @@ const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
 const LodgmentRegistration = () => {
   const [description, setDescription] = useState('');
+  const [addressObj, setAddressObj] = useState({
+    areaAddress: '',
+    townAddress: '',
+  });
+
   const {
     selectedRegister: selectedAccommodationType,
     toggleRegister: selectAccommodationType,
@@ -57,6 +63,13 @@ const LodgmentRegistration = () => {
     }
   };
 
+  const POSTCODE_SCRIPT_URL =
+    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+
+  const handleAddressClick = () => {
+    document.getElementById('addressButton')?.click();
+  };
+
   return (
     <Fieldset>
       <Label>숙소명</Label>
@@ -74,8 +87,16 @@ const LodgmentRegistration = () => {
       </DescriptionWrapper>
 
       <Label>주소</Label>
-      <Input type="text" placeholder="도로명 / 건물번호" />
-      <Input type="text" placeholder="상세주소" />
+      <RegisterAddress
+        setAddressObj={setAddressObj}
+        postcodeScriptUrl={POSTCODE_SCRIPT_URL}
+      />
+      <InputAddress
+        type="text"
+        placeholder="도로명/지번주소를 입력해주세요"
+        onClick={handleAddressClick}
+      />
+      <InputAddress type="text" placeholder="상세주소를 입력해주세요" />
 
       <Label>숙소 유형</Label>
       <OptionSelector
@@ -166,7 +187,7 @@ const Input = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
   padding: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
@@ -181,12 +202,21 @@ const InputExplain = styled.textarea`
   width: 100%;
   height: 100px;
   padding: 8px;
-  margin-bottom: 16px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
   resize: none;
   overflow-y: auto;
+`;
+
+const InputAddress = styled.input`
+  font-family: 'Noto Sans KR';
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
 `;
 
 const CharacterCount = styled.div`
@@ -195,7 +225,6 @@ const CharacterCount = styled.div`
   right: 8px;
   font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 16px;
 `;
 
 const Button = styled.button`
