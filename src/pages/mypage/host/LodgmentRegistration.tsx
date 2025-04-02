@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useRegister from '@hooks/page/useRegister';
 import RegisterAddress from 'api/RegisterAddress';
@@ -36,7 +36,13 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const LodgmentRegistration = () => {
+const LodgmentRegistration = ({
+  mode,
+  accommodationId,
+}: {
+  mode: 'create' | 'edit';
+  accommodationId?: string;
+}) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [detailedAddress, setDetailedAddress] = useState('');
@@ -184,33 +190,58 @@ const LodgmentRegistration = () => {
     });
 
     try {
-      const response = await axios.post(
-        '/api/v1/hosts/accommodations',
-        formData,
-        {
+      let response;
+      if (mode === 'create') {
+        response = await axios.post('/api/v1/hosts/accommodations', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        },
-      );
+        });
+      } else if (mode === 'edit' && accommodationId) {
+        response = await axios.put(
+          `/api/v1/hosts/accommodations/${accommodationId}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+      }
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         console.log('API Response:', response.data);
-      } else if (response.status === 400) {
-        alert('지원하지 않는 파일 형식입니다');
-      } else if (response.status === 401) {
-        console.error('인증실패:', response.data);
-      } else if (response.status === 404) {
-        alert('존재하지 않는 호스트입니다');
-      } else if (response.status === 409) {
-        alert('이미 개설한 숙소가 존재합니다');
       } else {
-        console.error('알 수 없는 오류 발생:', response.statusText);
+        alert('숙소 등록/수정에 실패했습니다.');
       }
     } catch (error) {
       console.error('An error occurred while making the API call:', error);
     }
   };
+
+  // 숙소 수정
+  useEffect(() => {
+    if (mode === 'edit' && accommodationId) {
+      axios
+        .get(`/api/v1/hosts/accommodations/${accommodationId}`)
+        .then((response) => {
+          const accommodation = response.data;
+          setName(accommodation.name);
+          setDescription(accommodation.description);
+          setAddressObj({
+            areaAddress: accommodation.address.area,
+            townAddress: accommodation.address.town,
+          });
+          setLatitude(accommodation.latitude);
+          setLongitude(accommodation.longitude);
+          setThumbnailPreview(accommodation.thumbnail);
+          setAdditionalImagesPreview(accommodation.additionalImages);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch accommodation data:', error);
+        });
+    }
+  }, [mode, accommodationId]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -310,7 +341,9 @@ const LodgmentRegistration = () => {
           </PreviewWrapper>
         )}
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">
+          {mode === 'create' ? '등록하기' : '수정하기'}
+        </Button>
       </Fieldset>
     </form>
   );
