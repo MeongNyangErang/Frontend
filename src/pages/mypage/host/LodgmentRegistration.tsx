@@ -47,7 +47,11 @@ const LodgmentRegistration = () => {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+  const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
+    string[]
+  >([]);
 
   const {
     selectedRegister: selectedAccommodationType,
@@ -115,8 +119,15 @@ const LodgmentRegistration = () => {
   };
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setThumbnail(e.target.files[0]);
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      setThumbnail(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -124,7 +135,24 @@ const LodgmentRegistration = () => {
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (e.target.files) {
-      setAdditionalImages(Array.from(e.target.files));
+      const files = Array.from(e.target.files);
+      if (additionalImages.length + files.length <= 3) {
+        setAdditionalImages((prevImages) => [...prevImages, ...files]);
+
+        const newPreviews = files.map((file) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setAdditionalImagesPreview((prev) => [
+              ...prev,
+              reader.result as string,
+            ]);
+          };
+          reader.readAsDataURL(file);
+          return reader.result as string;
+        });
+      } else {
+        alert('최대 3개의 이미지만 업로드 가능합니다.');
+      }
     }
   };
 
@@ -215,6 +243,7 @@ const LodgmentRegistration = () => {
           type="text"
           value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
           onClick={handleAddressClick}
+          readOnly
         />
         <InputAddress
           type="text"
@@ -251,13 +280,35 @@ const LodgmentRegistration = () => {
           onSelect={selectPetFacility}
         />
 
-        <Label>대표이미지</Label>
-        <input type="file" onChange={handleThumbnailChange} />
+        <LabelFile>대표이미지</LabelFile>
+        <InputFile
+          type="file"
+          onChange={handleThumbnailChange}
+          accept="image/jpeg,image/jpg,image/png"
+        />
+        {thumbnailPreview && (
+          <ImagePreviewWrapper>
+            <img src={thumbnailPreview} alt="Thumbnail Preview" />
+          </ImagePreviewWrapper>
+        )}
 
-        <Label>이미지</Label>
-        <input type="file" multiple onChange={handleAdditionalImagesChange} />
-        <input type="file" multiple onChange={handleAdditionalImagesChange} />
-        <input type="file" multiple onChange={handleAdditionalImagesChange} />
+        <LabelFile>이미지</LabelFile>
+        <InputFile
+          type="file"
+          multiple
+          onChange={handleAdditionalImagesChange}
+          accept="image/jpeg,image/jpg,image/png"
+        />
+
+        {additionalImagesPreview.length > 0 && (
+          <PreviewWrapper>
+            {additionalImagesPreview.map((preview, index) => (
+              <ImagePreviewWrapper key={index}>
+                <img src={preview} alt={`Additional preview ${index}`} />
+              </ImagePreviewWrapper>
+            ))}
+          </PreviewWrapper>
+        )}
 
         <Button type="submit">Submit</Button>
       </Fieldset>
@@ -276,7 +327,7 @@ const Fieldset = styled.fieldset`
 `;
 
 const OptionSelectorWrapper = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 
 // 선택 버튼
@@ -296,6 +347,14 @@ const Label = styled.label`
   display: block;
   font-size: 1rem;
   margin: 10px 0;
+`;
+
+const LabelFile = styled.label`
+  font-family: 'Noto Sans KR';
+  display: block;
+  font-size: 1rem;
+  margin-top: 20px;
+  padding-bottom: 10px;
 `;
 
 const Input = styled.input`
@@ -354,4 +413,35 @@ const Button = styled.button`
     background-color: var(--sub-color);
     border: 1px solid #f03e5e;
   }
+`;
+
+const ImagePreviewWrapper = styled.div`
+  margin-top: 10px;
+  width: 50%;
+  height: 150px;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const PreviewWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 10px;
+  justify-content: flex-start;
+`;
+
+const InputFile = styled.input`
+  border: 1px solid #ccc;
+  width: 60%;
+  padding: 2px;
 `;
