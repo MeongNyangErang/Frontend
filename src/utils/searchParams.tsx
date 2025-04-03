@@ -29,14 +29,13 @@ export const getSearchFilter = (searchParams: URLSearchParams) => {
     return SINGLE_SELECT_FILTER_KEY.includes(key as SingleSelectFilterKey);
   };
 
-  for (let key in FILTER) {
-    const typedKey = key as SearchFilterKey;
-    const currentValue = searchParams.get(typedKey);
+  for (let key of Object.values(FILTER)) {
+    const currentValue = searchParams.get(key);
 
-    if (isSingleSelectKey(typedKey)) {
-      searchFilter[typedKey] = currentValue || '';
+    if (isSingleSelectKey(key)) {
+      searchFilter[key] = currentValue || '';
     } else {
-      searchFilter[typedKey] = currentValue ? [currentValue] : [];
+      searchFilter[key] = currentValue ? [currentValue] : [];
     }
   }
 

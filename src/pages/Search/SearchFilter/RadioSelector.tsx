@@ -10,7 +10,12 @@ interface Props {
   onClick(option: string): void;
 }
 
-const RadioStyle = ({ options, currentOption, filterKey, onClick }: Props) => {
+const RadioSelector = ({
+  options,
+  currentOption,
+  filterKey,
+  onClick,
+}: Props) => {
   const isNumberOptions = !Number.isNaN(Number(options[0]));
   const isRating = filterKey === QUERY_KEYS.SEARCH.FILTER.USER_RATING;
 
@@ -38,13 +43,13 @@ const RadioStyle = ({ options, currentOption, filterKey, onClick }: Props) => {
   );
 };
 
-export default RadioStyle;
+export default RadioSelector;
 
 const SRadioArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 24px 0;
+  padding: 20px 0;
 `;
 
 const SButton = styled.button`
@@ -52,12 +57,6 @@ const SButton = styled.button`
   align-items: center;
   gap: 10px;
   color: ${({ theme }) => theme.colors.gray700};
-
-  & .star-rating {
-    > span {
-      /* display: flex; */
-    }
-  }
 
   &[data-checked='true']::before {
     background-color: ${({ theme }) => theme.colors.main};

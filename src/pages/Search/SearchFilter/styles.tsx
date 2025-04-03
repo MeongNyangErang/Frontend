@@ -1,14 +1,47 @@
 import styled from 'styled-components';
 
 const SContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   background-color: #fff;
 `;
 
+const contorlBoxSize = '72px';
+
+const SControlBox = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: ${({ theme }) => `12px ${theme.layouts.paddingX}`};
+  width: 100%;
+  height: ${contorlBoxSize};
+  background-color: #fff;
+  box-shadow: ${({ theme }) => theme.shadow.top};
+
+  > button:last-child {
+    flex: 1;
+  }
+`;
+
+const SResetButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: ${({ theme }) => theme.colors.gray500};
+
+  > svg {
+    font-size: 20px;
+  }
+`;
+
 const SNavigatorWrap = styled.div`
   flex: 1;
+  padding-bottom: ${contorlBoxSize};
   overflow-y: auto;
   position: relative;
 `;
@@ -42,8 +75,8 @@ const SFilterItems = styled.div`
 `;
 
 const SFilterItem = styled.div`
+  padding-top: 20px;
   border-top: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
-  background-color: beige;
 
   &:first-child {
     border-top: none;
@@ -51,13 +84,23 @@ const SFilterItem = styled.div`
 `;
 
 const SItemName = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
   font-size: 16px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.gray700};
+
+  > i {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 export {
   SContainer,
+  SControlBox,
+  SResetButton,
   SNavigatorWrap,
   SNavigator,
   SFilterItems,

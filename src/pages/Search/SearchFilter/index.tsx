@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
+import { FaPaw } from 'react-icons/fa';
+import { IoMdRefresh } from 'react-icons/io';
+import Button from '@components/common/Button';
 import BottomDrawer from '@components/common/BottomDrawer';
 import SubPageHeader from '@components/common/SubPageHeader';
-import { SearchFilterType, SearchFilterKey } from '@typings/search';
-import { SEARCH_FILTER_ITEMS } from '@constants/search';
-import RadioStyle from './RadioStyle';
+import OptionSelector from '@components/common/OptionSelector';
+import {
+  SearchFilterType,
+  SearchFilterKey,
+  SingleSelectFilterKey,
+} from '@typings/search';
+import { SEARCH_FILTER_ITEMS, FILTER_CATEGORIES } from '@constants/search';
+import RadioSelector from './RadioSelector';
 import {
   SContainer,
+  SControlBox,
+  SResetButton,
   SNavigatorWrap,
   SNavigator,
   SFilterItems,
@@ -19,8 +29,6 @@ interface Props {
   currentFilter: SearchFilterType;
 }
 
-const navigator = ['숙소유형', '가격', '사용자 평점', '#특징', '시설/서비스'];
-
 const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
   const [filterState, setFilterState] = useState(currentFilter);
 
@@ -29,7 +37,7 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
     setFilterState(currentFilter);
   };
 
-  const onClickRadio = (filterKey: SearchFilterKey) => (option: string) => {
+  const onToggleRadio = (filterKey: SearchFilterKey) => (option: string) => {
     setFilterState((prev) => {
       const isCurrentOption = option === prev[filterKey];
       return {
@@ -38,6 +46,21 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
       };
     });
   };
+
+  const onToggleOptions =
+    (filterKey: Exclude<SearchFilterKey, SingleSelectFilterKey>) =>
+    (option: string) => {
+      setFilterState((prev) => {
+        const currentValue = prev[filterKey];
+        const isOptionIncluded = currentValue.includes(option);
+        return {
+          ...prev,
+          [filterKey]: isOptionIncluded
+            ? currentValue.filter((v) => v !== option)
+            : [...currentValue, option],
+        };
+      });
+    };
 
   return (
     <BottomDrawer isOpen={isOpen}>
@@ -50,30 +73,71 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
         <SNavigatorWrap>
           <SNavigator>
             <div>
-              {navigator.map((n) => (
+              {FILTER_CATEGORIES.map((n) => (
                 <button key={n}>{n}</button>
               ))}
             </div>
           </SNavigator>
           <SFilterItems>
-            {SEARCH_FILTER_ITEMS.map(({ key, name, options, type }) => {
+            {FILTER_CATEGORIES.map((category) => {
               return (
-                <SFilterItem key={key}>
-                  <SItemName>{name}</SItemName>
-                  {type === 'radio' && (
-                    <RadioStyle
-                      options={options}
-                      currentOption={filterState[key]}
-                      filterKey={key}
-                      onClick={onClickRadio(key)}
-                    />
-                  )}
+                <SFilterItem key={category}>
+                  <SItemName>
+                    {category}
+                    {category === '동반 반려동물' && (
+                      <i>
+                        <FaPaw />
+                      </i>
+                    )}
+                  </SItemName>
+                  {SEARCH_FILTER_ITEMS.filter(
+                    (item) => item.category === category,
+                  ).map(({ type, options, key }) => {
+                    return (
+                      <Fragment key={key}>
+                        {type === 'radio' && (
+                          <RadioSelector
+                            options={options}
+                            currentOption={filterState[key]}
+                            filterKey={key}
+                            onClick={onToggleRadio(key)}
+                          />
+                        )}
+                        {(type === 'capsule' || type === 'square') && (
+                          <OptionSelector
+                            $variant={type}
+                            onClick={onToggleOptions(key)}
+                            options={options}
+                            name={key}
+                            currentValue={filterState[key]}
+                          />
+                        )}
+                      </Fragment>
+                    );
+                  })}
                 </SFilterItem>
               );
             })}
           </SFilterItems>
         </SNavigatorWrap>
       </SContainer>
+      <SControlBox>
+        <SResetButton>
+          <IoMdRefresh />
+          초기화
+        </SResetButton>
+        <Button
+          onClick={() => {
+            console.log(filterState);
+          }}
+          variant="main"
+          fontSize="14px"
+          fullWidth={true}
+          fixedHeight={true}
+        >
+          숙소보기
+        </Button>
+      </SControlBox>
     </BottomDrawer>
   );
 };
