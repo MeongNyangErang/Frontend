@@ -2,6 +2,22 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useRegister from '@hooks/page/useRegister';
 import axios from 'axios';
+import {
+  SFieldset,
+  SOptionSelectorWrapper,
+  SButton,
+  SLabel,
+  SInput,
+  SLabelFile,
+  SDescriptionWrapper,
+  SInputExplain,
+  SCharacterCount,
+  SImagePreviewWrapper,
+  SInputFile,
+  SFormItem,
+  SInputNumber,
+  SFormContainer,
+} from './styles';
 
 interface ButtonProps {
   selected: boolean;
@@ -104,17 +120,17 @@ const Room = () => {
     onSelect: (option: string) => void;
   }) => {
     return (
-      <OptionSelectorWrapper>
+      <SOptionSelectorWrapper>
         {options.map((option) => (
-          <CheckInput
+          <SCheckInput
             key={option}
             selected={selectedOptions.includes(option)}
             onClick={() => onSelect(option)}
           >
             {option}
-          </CheckInput>
+          </SCheckInput>
         ))}
-      </OptionSelectorWrapper>
+      </SOptionSelectorWrapper>
     );
   };
 
@@ -156,202 +172,187 @@ const Room = () => {
       console.log(`${key}:`, value);
     }
     {
-      /* 
-    try {
-      let response;
-      response = await axios.post(
-        '/api/v1/hosts/accommodations/{accommodationId}/rooms',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+      try {
+        let response;
+        response = await axios.post(
+          '/api/v1/hosts/accommodations/{accommodationId}/rooms',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        },
-      );
+        );
 
-      if (response?.status === 200) {
-        console.log('API Response:', response.data);
-      } else {
-        alert('숙소 등록/수정에 실패했습니다.');
+        if (response?.status === 200) {
+          console.log('API Response:', response.data);
+        } else {
+          alert('숙소 등록/수정에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('An error occurred while making the API call:', error);
       }
-    } catch (error) {
-      console.error('An error occurred while making the API call:', error);
-    }
-      */
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Fieldset>
-        <Label>객실명</Label>
-        <Input
+      <SFieldset>
+        <SLabel>객실명</SLabel>
+        <SInput
           type="text"
           placeholder="숙소명을 입력해주세요"
           value={name}
           onChange={handleNameChange}
         />
 
-        <Label>설명</Label>
-        <DescriptionWrapper>
-          <InputExplain
+        <SLabel>설명</SLabel>
+        <SDescriptionWrapper>
+          <SInputExplain
             placeholder="숙소 설명을 작성해주세요"
             value={description}
             onChange={handleDescriptionChange}
             maxLength={2000}
           />
-          <CharacterCount>{description.length}/2000</CharacterCount>
-        </DescriptionWrapper>
+          <SCharacterCount>{description.length}/2000</SCharacterCount>
+        </SDescriptionWrapper>
 
-        <Label>체크인 - 체크아웃</Label>
-        <FormContainer>
-          <FormItem>
-            <InputNumber
+        <SLabel>체크인 - 체크아웃</SLabel>
+        <SFormContainer>
+          <SFormItem>
+            <SInputNumber
               type="time"
               placeholder="체크인"
               value={checkInTime}
               onChange={(e) => setCheckInTime(e.target.value)}
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="time"
               placeholder="체크아웃"
               value={checkOutTime}
               onChange={(e) => setCheckOutTime(e.target.value)}
             />
-          </FormItem>
-        </FormContainer>
+          </SFormItem>
+        </SFormContainer>
 
-        <Label>인원</Label>
-        <FormContainer>
-          <FormItem>
-            <InputNumber
+        <SLabel>인원</SLabel>
+        <SFormContainer>
+          <SFormItem>
+            <SInputNumber
               type="number"
               required
               placeholder="기준 인원"
               min="1"
               max="5"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="number"
               required
               placeholder="최대 인원"
               max="10"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="number"
               required
               placeholder="기준 반려동물"
               min="1"
               max="5"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="number"
               required
               placeholder="최대 반려동물"
               max="10"
             />
-          </FormItem>
-        </FormContainer>
+          </SFormItem>
+        </SFormContainer>
 
-        <Label>추가 금액</Label>
-        <FormContainer>
-          <FormItem>
-            <InputNumber
+        <SLabel>추가 금액</SLabel>
+        <SFormContainer>
+          <SFormItem>
+            <SInputNumber
               type="text"
               value={prices.price}
               onChange={(e) => handleNumberChange(e, 'price')}
               placeholder="기본 금액"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="text"
               value={prices.extraFee}
               onChange={(e) => handleNumberChange(e, 'extraFee')}
               placeholder="+ 공휴일/주말 금액"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="text"
               value={prices.extraPeopleFee}
               onChange={(e) => handleNumberChange(e, 'extraPeopleFee')}
               placeholder="인원 추가 금액"
             />
-          </FormItem>
-          <FormItem>
-            <InputNumber
+          </SFormItem>
+          <SFormItem>
+            <SInputNumber
               type="text"
               value={prices.extraPetFee}
               onChange={(e) => handleNumberChange(e, 'extraPetFee')}
               placeholder="반려동물 추가 금액"
             />
-          </FormItem>
-        </FormContainer>
+          </SFormItem>
+        </SFormContainer>
 
-        <Label>편의시설</Label>
+        <SLabel>편의시설</SLabel>
         <OptionSelector
           options={facility}
           selectedOptions={selectedFacility}
           onSelect={selectFacility}
         />
 
-        <Label>반려동물 편의시설</Label>
+        <SLabel>반려동물 편의시설</SLabel>
         <OptionSelector
           options={petFacility}
           selectedOptions={selectedPetFacility}
           onSelect={selectPetFacility}
         />
 
-        <Label>해시태그</Label>
+        <SLabel>해시태그</SLabel>
         <OptionSelector
           options={hashTag}
           selectedOptions={selectedHashTag}
           onSelect={selectHashTag}
         />
 
-        <LabelFile>대표이미지</LabelFile>
-        <InputFile
+        <SLabelFile>대표이미지</SLabelFile>
+        <SInputFile
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
         />
         {thumbnailPreview && (
-          <ImagePreviewWrapper>
+          <SImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
-          </ImagePreviewWrapper>
+          </SImagePreviewWrapper>
         )}
 
-        <Button type="submit">등록하기</Button>
-      </Fieldset>
+        <SButton type="submit">등록하기</SButton>
+      </SFieldset>
     </form>
   );
 };
 
 export default Room;
 
-const Fieldset = styled.fieldset`
-  font-family: 'Noto Sans KR';
-  padding: 16px;
-  border: none;
-  display: flex;
-  flex-direction: column;
-`;
-
-const OptionSelectorWrapper = styled.div`
-  margin-bottom: 8px;
-`;
-
-// 선택 버튼
-const CheckInput = styled.button<ButtonProps>`
+const SCheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
   color: black;
@@ -360,111 +361,4 @@ const CheckInput = styled.button<ButtonProps>`
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
-`;
-
-const Label = styled.label`
-  font-family: 'Noto Sans KR';
-  display: block;
-  font-size: 1rem;
-  margin: 10px 0;
-`;
-
-const LabelFile = styled.label`
-  font-family: 'Noto Sans KR';
-  display: block;
-  font-size: 1rem;
-  margin-top: 20px;
-  padding-bottom: 10px;
-`;
-
-const Input = styled.input`
-  font-family: 'Noto Sans KR';
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
-const DescriptionWrapper = styled.div`
-  position: relative;
-`;
-
-const InputExplain = styled.textarea`
-  font-family: 'Noto Sans KR';
-  width: 100%;
-  height: 100px;
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-  resize: none;
-  overflow-y: auto;
-`;
-
-const CharacterCount = styled.div`
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  font-size: 0.875rem;
-  color: #6b7280;
-`;
-
-const Button = styled.button`
-  background-color: var(--sub-color);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
-  &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
-  }
-`;
-
-const ImagePreviewWrapper = styled.div`
-  margin-top: 10px;
-  width: 50%;
-  height: 150px;
-  border: 2px dashed #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-`;
-
-const InputFile = styled.input`
-  border: 1px solid #ccc;
-  width: 60%;
-  padding: 2px;
-`;
-
-const FormItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 49%;
-`;
-
-const InputNumber = styled.input`
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const FormContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
 `;
