@@ -9,8 +9,8 @@ export const QUERY_KEYS = {
     },
     FILTER: {
       ACCOMMODATION_TYPE: 'accomodationType',
-      // USER_RATING: 'userRating',
-      // PET_TYPE: 'petTYPE',
+      USER_RATING: 'userRating',
+      PET_TYPE: 'petTYPE',
     },
   },
 } as const;

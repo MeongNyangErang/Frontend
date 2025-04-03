@@ -3,7 +3,7 @@ import BottomDrawer from '@components/common/BottomDrawer';
 import SubPageHeader from '@components/common/SubPageHeader';
 import { SearchFilterType, SearchFilterKey } from '@typings/search';
 import { SEARCH_FILTER_ITEMS } from '@constants/search';
-import RadioFilterOptions from './RadioFilterOptions';
+import RadioStyle from './RadioStyle';
 import {
   SContainer,
   SNavigatorWrap,
@@ -29,7 +29,7 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
     setFilterState(currentFilter);
   };
 
-  const onChangeRadio = (filterKey: SearchFilterKey) => (option: string) => {
+  const onClickRadio = (filterKey: SearchFilterKey) => (option: string) => {
     setFilterState((prev) => {
       const isCurrentOption = option === prev[filterKey];
       return {
@@ -61,10 +61,11 @@ const SearchFilter = ({ isOpen, onClose, currentFilter }: Props) => {
                 <SFilterItem key={key}>
                   <SItemName>{name}</SItemName>
                   {type === 'radio' && (
-                    <RadioFilterOptions
+                    <RadioStyle
                       options={options}
                       currentOption={filterState[key]}
-                      onChange={onChangeRadio(key)}
+                      filterKey={key}
+                      onClick={onClickRadio(key)}
                     />
                   )}
                 </SFilterItem>

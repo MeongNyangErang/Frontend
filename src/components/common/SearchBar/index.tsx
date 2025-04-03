@@ -128,9 +128,9 @@ const SearchBar = ({ currentQuery }: Props) => {
     if (currentQuery) {
       const { peopleCount, petCount, checkInDate, checkOutDate, location } =
         currentQuery;
-      setCheckInDate(stringToDate(checkInDate));
-      setCheckOutDate(stringToDate(checkOutDate));
-      setLocation(location);
+      setCheckInDate(stringToDate(checkInDate) || null);
+      setCheckOutDate(stringToDate(checkOutDate) || null);
+      setLocation(location || '');
       setPetCount(parseFloat(petCount) || 1);
       setPeopleCount(parseFloat(peopleCount) || 1);
     }

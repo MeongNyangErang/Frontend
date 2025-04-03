@@ -9,13 +9,12 @@ const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
-const UserMyPage = lazy(() => import('@pages/MyPage'));
+const UserMyPage = lazy(() => import('@pages/UserMyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
 const AccommodationPage = lazy(
-  () => import('@pages/mypage/host/LodgmentRegistration'),
+  () => import('@pages/host/LodgmentRegistration'),
 );
-
 
 const AppRouter = () => {
   return (
@@ -27,7 +26,7 @@ const AppRouter = () => {
           <Route path="search" element={<Search />} />
           <Route
             path="mypage/host/registerAccommodation"
-            element={<AccommodationPage />}
+            element={<AccommodationPage mode="create" />}
           />
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             {/* 일반유저만 접근 가능한 영역 */}

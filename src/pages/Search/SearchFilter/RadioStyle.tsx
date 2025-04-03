@@ -1,21 +1,35 @@
 import styled from 'styled-components';
+import { SearchFilterKey } from '@typings/search';
+import { QUERY_KEYS } from '@constants/queryKeys';
+import StarRating from '@components/common/StarRating';
 
 interface Props {
   options: readonly string[];
   currentOption: string;
-  onChange(option: string): void;
+  filterKey: SearchFilterKey;
+  onClick(option: string): void;
 }
 
-const RadioFilterOptions = ({ options, currentOption, onChange }: Props) => {
+const RadioStyle = ({ options, currentOption, filterKey, onClick }: Props) => {
+  const isNumberOptions = !Number.isNaN(Number(options[0]));
+  const isRating = filterKey === QUERY_KEYS.SEARCH.FILTER.USER_RATING;
+
   return (
     <SRadioArea>
       {options.map((option) => {
         return (
           <SButton
             key={option}
-            onClick={() => onChange(option)}
-            data-checked={option === currentOption}
+            onClick={() => onClick(option)}
+            data-checked={
+              !isNumberOptions
+                ? String(option === currentOption)
+                : !!currentOption
+                  ? String(Number(option) >= Number(currentOption))
+                  : 'false'
+            }
           >
+            {isRating && <StarRating rate={Number(option)} />}
             {option}
           </SButton>
         );
@@ -24,7 +38,7 @@ const RadioFilterOptions = ({ options, currentOption, onChange }: Props) => {
   );
 };
 
-export default RadioFilterOptions;
+export default RadioStyle;
 
 const SRadioArea = styled.div`
   display: flex;
@@ -38,6 +52,12 @@ const SButton = styled.button`
   align-items: center;
   gap: 10px;
   color: ${({ theme }) => theme.colors.gray700};
+
+  & .star-rating {
+    > span {
+      /* display: flex; */
+    }
+  }
 
   &[data-checked='true']::before {
     background-color: ${({ theme }) => theme.colors.main};
