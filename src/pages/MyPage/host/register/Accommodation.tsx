@@ -36,7 +36,7 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const LodgmentRegistration = ({
+const Accommodation = ({
   mode,
   accommodationId,
 }: {
@@ -349,7 +349,7 @@ const LodgmentRegistration = ({
   );
 };
 
-export default LodgmentRegistration;
+export default Accommodation;
 
 const Fieldset = styled.fieldset`
   font-family: 'Noto Sans KR';
