@@ -31,6 +31,6 @@ const ROUTES = {
     room: (roomId: string) => `/chat/${roomId}`,
   },
   notification: '/notification',
-};
+} as const;
 
 export default ROUTES;

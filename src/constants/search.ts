@@ -22,6 +22,13 @@ export const initialFilterState = {
 
 export const SEARCH_FILTER_ITEMS = [
   {
+    category: '동반 반려동물',
+    key: QUERY_KEYS.SEARCH.FILTER.PET_TYPE,
+    name: '동반 반려동물',
+    options: ['고양이', '소형견', '중형견', '대형견'],
+    type: 'square',
+  },
+  {
     category: '숙소유형',
     key: QUERY_KEYS.SEARCH.FILTER.ACCOMMODATION_TYPE,
     name: '숙소유형',
@@ -42,13 +49,6 @@ export const SEARCH_FILTER_ITEMS = [
     options: ACCOMMODATION_TAGS,
     type: 'capsule',
   },
-  {
-    category: '동반 반려동물',
-    key: QUERY_KEYS.SEARCH.FILTER.PET_TYPE,
-    name: '동반 반려동물',
-    options: ['고양이', '소형견', '중형견', '대형견'],
-    type: 'square',
-  },
 ] as const;
 
 export const SINGLE_SELECT_FILTER_KEY = [
@@ -57,10 +57,10 @@ export const SINGLE_SELECT_FILTER_KEY = [
 ] as const;
 
 export const FILTER_CATEGORIES = [
+  '동반 반려동물',
   '숙소유형',
   '가격',
   '사용자 평점',
   '#특징',
-  '동반 반려동물',
   '시설/서비스',
 ] as const;

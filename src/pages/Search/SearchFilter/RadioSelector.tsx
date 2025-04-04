@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import { SearchFilterKey } from '@typings/search';
 import { QUERY_KEYS } from '@constants/queryKeys';
@@ -34,8 +35,8 @@ const RadioSelector = ({
                   : 'false'
             }
           >
-            {isRating && <StarRating rate={Number(option)} />}
-            {option}
+            {isRating && <StarRating rate={option} readOnly={true} />}
+            {isRating ? `${option}점 이상` : option}
           </SButton>
         );
       })}
@@ -43,11 +44,12 @@ const RadioSelector = ({
   );
 };
 
-export default RadioSelector;
+export default memo(RadioSelector);
 
 const SRadioArea = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: start;
   gap: 20px;
   padding: 20px 0;
 `;
@@ -56,7 +58,11 @@ const SButton = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: ${({ theme }) => theme.colors.gray700};
+  color: ${({ theme }) => theme.colors.gray500};
+
+  &[data-checked='true'] {
+    color: ${({ theme }) => theme.colors.gray700};
+  }
 
   &[data-checked='true']::before {
     background-color: ${({ theme }) => theme.colors.main};

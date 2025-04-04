@@ -36,4 +36,5 @@ export const layouts = {
 
 export const shadow = {
   top: '0 -2px 10px rgba(0, 0, 0, 0.03)',
+  bottom: '0 2px 10px rgba(0, 0, 0, 0.03)',
 };

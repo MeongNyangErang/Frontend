@@ -15,6 +15,9 @@ const Search = () => {
   useEffect(() => {
     currentQueryRef.current = getSearchQuery(searchParams);
     currentFilterRef.current = getSearchFilter(searchParams);
+    if (isModalOpen) {
+      closeModal();
+    }
   }, [searchParams]);
 
   return (
@@ -25,6 +28,7 @@ const Search = () => {
       <SearchFilter
         isOpen={isModalOpen}
         onClose={closeModal}
+        currentQuery={currentQueryRef.current}
         currentFilter={currentFilterRef.current}
       />
     </>

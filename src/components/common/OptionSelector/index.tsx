@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { PET_SIZE_MAP } from '@constants/pet';
 import { QUERY_KEYS } from '@constants/queryKeys';
 import { SOptionSelectorWrap, SOptionSelectorButton } from './styles';
@@ -24,12 +25,13 @@ const OptionSelector = ({
   return (
     <SOptionSelectorWrap $variant={$variant}>
       {options.map((option, i) => {
-        const isSelected = currentValue.includes(option);
+        const isSelected = String(currentValue.includes(option));
+
         return (
           <SOptionSelectorButton
             $variant={$variant}
             key={i}
-            data-checked={String(isSelected)}
+            data-checked={isSelected}
             onClick={() => handleClick(option)}
           >
             {option}
@@ -43,4 +45,4 @@ const OptionSelector = ({
   );
 };
 
-export default OptionSelector;
+export default memo(OptionSelector);

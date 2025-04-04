@@ -14,13 +14,14 @@ export const getSearchQuery = (searchParams: URLSearchParams) => {
   const searchQuery = {} as SearchQuery;
 
   for (let key in BASE) {
-    searchQuery[key as keyof SearchQuery] = searchParams.get(key) || '';
+    const typedKey = BASE[key as keyof typeof BASE] as keyof SearchQuery;
+    searchQuery[typedKey] = searchParams.get(key) || '';
   }
 
   return searchQuery;
 };
 
-export const getSearchFilter = (searchParams: URLSearchParams) => {
+export const getSearchFilter = (searchParams: URLSearchParams | null) => {
   const searchFilter = {} as SearchFilterType;
 
   const isSingleSelectKey = (
@@ -30,7 +31,7 @@ export const getSearchFilter = (searchParams: URLSearchParams) => {
   };
 
   for (let key of Object.values(FILTER)) {
-    const currentValue = searchParams.get(key);
+    const currentValue = searchParams?.get(key) || undefined;
 
     if (isSingleSelectKey(key)) {
       searchFilter[key] = currentValue || '';
