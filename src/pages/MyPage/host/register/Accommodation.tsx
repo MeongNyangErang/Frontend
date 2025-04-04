@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useRegister from '@hooks/page/useRegister';
+import useRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from 'api/RegisterAddress';
 import axios from 'axios';
 import styled from 'styled-components';

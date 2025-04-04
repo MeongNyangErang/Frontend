@@ -16,6 +16,9 @@ const RegisterAccommodation = lazy(
   () => import('@pages/mypage/host/register/Accommodation'),
 );
 const RegisterRoom = lazy(() => import('@pages/mypage/host/register/Room'));
+const Reservation = lazy(
+  () => import('@pages/Accommodation/${accommodationId}/reservation'),
+);
 
 const AppRouter = () => {
   return (
@@ -30,6 +33,10 @@ const AppRouter = () => {
             element={<RegisterAccommodation mode="create" />}
           />
           <Route path="mypage/host/register/Room" element={<RegisterRoom />} />
+          <Route
+            path="accommodation/${accommodationId}/reservation"
+            element={<Reservation />}
+          />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             {/* 일반유저만 접근 가능한 영역 */}

@@ -9,13 +9,14 @@ const ROUTES = {
     user: {
       root: '/mypage/user',
       profile: '/mypage/user/profile',
-      reservation: '/mypage/user/reservation',
+      reservationList: '/mypage/user/reservation-list',
       reviews: '/mypage/user/reviews',
       wishlist: '/mypage/user/wishlist',
     },
     host: {
       root: '/mypage/host',
       profile: '/mypage/host/profile',
+      reservationList: '/mypage/host/reservation-list',
       reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
       registerAccommodation: '/mypage/host/register/accommodation',
@@ -23,7 +24,9 @@ const ROUTES = {
     },
   },
   search: '/search',
-  detail: (id: string) => `/accommodation/${id}`,
+  detail: (accommodationId: string) => `/accommodation/${accommodationId}`,
+  reservation: (accommodationId: string) =>
+    `/accommodation/${accommodationId}/reservation`,
   chat: {
     list: '/chat',
     room: (roomId: string) => `/chat/${roomId}`,

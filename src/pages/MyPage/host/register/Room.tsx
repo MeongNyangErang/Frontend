@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import useRegister from '@hooks/page/useRegister';
+import useRegister from '@hooks/page/useHostRegister';
 import axios from 'axios';
 import {
   SFieldset,
