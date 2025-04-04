@@ -3,25 +3,16 @@ import {
   Fragment,
   UIEventHandler,
   useRef,
-  useCallback,
   useEffect,
   memo,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { IoMdRefresh } from 'react-icons/io';
 import Button from '@components/common/Button';
 import BottomDrawer from '@components/common/BottomDrawer';
 import SubPageHeader from '@components/common/SubPageHeader';
 import OptionSelector from '@components/common/OptionSelector';
-import ROUTES from '@constants/routes';
-import { compareObjs, isAllValuesEmpty } from '@utils/compare';
-import { getSearchFilter } from '@utils/searchParams';
-import {
-  SearchFilterType,
-  SearchFilterKey,
-  SingleSelectFilterKey,
-  SearchQuery,
-} from '@typings/search';
+import useSearchFilter from '@hooks/page/useSearchFilter';
+import { SearchFilterType, SearchQuery } from '@typings/search';
 import { SEARCH_FILTER_ITEMS, FILTER_CATEGORIES } from '@constants/search';
 import RadioSelector from './RadioSelector';
 import FilterItemName from './FIlterItemName';
@@ -49,84 +40,31 @@ const SearchFilter = ({
   currentFilter,
   currentQuery,
 }: Props) => {
-  const [filterState, setFilterState] = useState(currentFilter);
+  const {
+    filterState,
+    isFilterEmpty,
+    isFilterChanged,
+    onClickFilterButton,
+    onToggleRadio,
+    onToggleOptions,
+    handleResetFilter,
+    updateFilterState,
+  } = useSearchFilter(currentFilter, currentQuery);
   const [activeFilterIndex, setActiveFilterIndex] = useState(-1);
   const [navStyle, setNavStyle] = useState({ width: 0, left: 0 });
-  const filterItems = useRef<number[]>([]);
+  const itemLocations = useRef<number[]>([]);
   const navAreaRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  const isFilterEmpty = isAllValuesEmpty(filterState);
-  const isFilterChanged = !compareObjs(currentFilter, filterState);
 
   const handleCloseDrawer = () => {
     onClose();
-    setFilterState(currentFilter);
+    updateFilterState(currentFilter);
   };
-
-  const onToggleRadio = useCallback(
-    (filterKey: SearchFilterKey) => (option: string) => {
-      setFilterState((prev) => {
-        const isCurrentOption = option === prev[filterKey];
-        return {
-          ...prev,
-          [filterKey]: isCurrentOption ? '' : option,
-        };
-      });
-    },
-    [],
-  );
-
-  const onToggleOptions = useCallback(
-    (filterKey: Exclude<SearchFilterKey, SingleSelectFilterKey>) =>
-      (option: string) => {
-        setFilterState((prev) => {
-          const currentValue = prev[filterKey];
-          const isOptionIncluded = currentValue.includes(option);
-          return {
-            ...prev,
-            [filterKey]: isOptionIncluded
-              ? currentValue.filter((v) => v !== option)
-              : [...currentValue, option],
-          };
-        });
-      },
-    [],
-  );
-
-  const handleResetFilter = () => {
-    setFilterState(getSearchFilter(null));
-  };
-
-  const onClickFilterButton = useCallback(() => {
-    if (!isFilterChanged) return;
-
-    console.log(filterState);
-
-    const params = new URLSearchParams();
-    for (let key in currentQuery) {
-      params.append(key, currentQuery[key as keyof SearchQuery]);
-    }
-
-    for (let key in filterState) {
-      const typedKey = key as SearchFilterKey;
-      const value1 = filterState[typedKey];
-      const value2 = currentFilter[typedKey];
-      if (Array.isArray(value1)) {
-        if (!value1.every((v, i) => v === value2[i]) && value1.length > 0)
-          params.append(key, value1.toString());
-      } else {
-        if (value1 !== value2 && value1 !== '') params.append(key, value1);
-      }
-    }
-
-    navigate(`${ROUTES.search}?${params.toString()}`);
-  }, [filterState, isFilterChanged, currentFilter, currentQuery, navigate]);
 
   const handleScroll: UIEventHandler<HTMLDivElement> = (e) => {
     const scrollTop = e.currentTarget.scrollTop;
-    for (let i = 0; i < filterItems.current.length - 1; i++) {
-      if (scrollTop <= filterItems.current[i]) {
+    for (let i = 0; i < itemLocations.current.length - 1; i++) {
+      if (scrollTop <= itemLocations.current[i]) {
         setActiveFilterIndex(i);
         break;
       }
@@ -134,7 +72,7 @@ const SearchFilter = ({
   };
 
   const scrollToActiveFilter = (index: number) => {
-    const location = filterItems.current[index];
+    const location = itemLocations.current[index];
     const target = scrollAreaRef.current;
     if (target) {
       target.scrollTo({ top: location, behavior: 'smooth' });
@@ -162,8 +100,13 @@ const SearchFilter = ({
   }, [activeFilterIndex]);
 
   useEffect(() => {
-    if (!isOpen) setFilterState({ ...currentFilter });
-    setActiveFilterIndex(isOpen ? 0 : -1);
+    if (!isOpen) {
+      updateFilterState({ ...currentFilter });
+      setActiveFilterIndex(-1);
+      return;
+    }
+
+    setActiveFilterIndex(0);
   }, [isOpen]);
 
   return (
@@ -196,7 +139,7 @@ const SearchFilter = ({
                   key={category}
                   ref={(el) => {
                     if (el) {
-                      filterItems.current[index] = el.offsetTop;
+                      itemLocations.current[index] = el.offsetTop;
                     }
                   }}
                 >
