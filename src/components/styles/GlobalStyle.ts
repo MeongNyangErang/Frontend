@@ -96,6 +96,8 @@ const GlobalStyle = createGlobalStyle`
     --gray-500: #9e9e9e;
     --gray-600: #757575;
     --gray-700: #424242;
+    --gray-800: #111111;
+    --star-yellow: #ffc107;
   }
 
 

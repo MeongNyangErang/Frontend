@@ -4,7 +4,7 @@ export const SearchBarWrapper = styled.div`
   display: flex;
   gap: 4px;
   width: 100%;
-  padding: 16px;
+  padding: 16px 0;
   flex-direction: column;
   color: #888;
 `;
