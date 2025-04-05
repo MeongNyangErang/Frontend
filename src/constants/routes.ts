@@ -16,7 +16,7 @@ const ROUTES = {
     host: {
       root: '/mypage/host',
       profile: '/mypage/host/profile',
-      reservationList: '/mypage/host/reservation-list',
+      reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
       registerAccommodation: '/mypage/host/register/accommodation',
       registerRoom: '/mypage/host/register/room',
