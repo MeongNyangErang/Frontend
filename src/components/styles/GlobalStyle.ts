@@ -84,6 +84,7 @@ const GlobalStyle = createGlobalStyle`
     :root {
     --main-color: #f03e5e;
     --sub-color: #F48E99;
+    --light-color:rgb(253, 244, 245);
     --info-color: #E6F0FA;
     --info-text-color: #3178C6;
     --wrap-bg-color: #FFF2F4;

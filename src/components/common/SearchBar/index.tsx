@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 import { locations } from '@constants/search';
 import { formatDate, stringToDate } from '@utils/formatter';
-import { BaseSearchState } from '@typings/search';
+import { SearchQuery } from '@typings/search';
 import {
   SearchBarWrapper,
   SInputBox,
@@ -26,10 +26,10 @@ import {
 import Modal from '../Modal';
 
 interface Props {
-  baseSearchState?: BaseSearchState;
+  currentQuery?: SearchQuery;
 }
 
-const SearchBar = ({ baseSearchState }: Props) => {
+const SearchBar = ({ currentQuery }: Props) => {
   const [location, setLocation] = useState('');
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
@@ -125,16 +125,16 @@ const SearchBar = ({ baseSearchState }: Props) => {
   };
 
   useEffect(() => {
-    if (baseSearchState) {
+    if (currentQuery) {
       const { peopleCount, petCount, checkInDate, checkOutDate, location } =
-        baseSearchState;
-      setCheckInDate(stringToDate(checkInDate));
-      setCheckOutDate(stringToDate(checkOutDate));
-      setLocation(location);
-      setPetCount(parseFloat(petCount));
-      setPeopleCount(parseFloat(peopleCount));
+        currentQuery;
+      setCheckInDate(stringToDate(checkInDate) || null);
+      setCheckOutDate(stringToDate(checkOutDate) || null);
+      setLocation(location || '');
+      setPetCount(parseFloat(petCount) || 1);
+      setPeopleCount(parseFloat(peopleCount) || 1);
     }
-  }, [baseSearchState]);
+  }, [currentQuery]);
 
   useEffect(() => {
     const handleClickOutside = (e: Event) => {

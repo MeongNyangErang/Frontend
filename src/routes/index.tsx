@@ -9,7 +9,7 @@ const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
-const UserMyPage = lazy(() => import('@pages/MyPage'));
+const UserMyPage = lazy(() => import('@pages/UserMyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
 const RegisterAccommodation = lazy(

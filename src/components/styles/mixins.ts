@@ -73,3 +73,19 @@ export const pageTitleStyle = css`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.gray700};
 `;
+
+export const noScrollBarStyle = css`
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const ellipsisStyle = css<{ $line: number }>`
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ $line }) => $line};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;

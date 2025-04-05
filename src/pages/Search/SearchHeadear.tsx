@@ -1,21 +1,20 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import SearchBar from '@components/common/SearchBar';
-import { BaseSearchState } from '@typings/search';
+import { SearchQuery } from '@typings/search';
 
 interface Props {
-  baseSearchState: BaseSearchState;
+  currentQuery: SearchQuery;
 }
 
-const SearchHeader = ({ baseSearchState }: Props) => {
+const SearchHeader = ({ currentQuery }: Props) => {
   return (
     <SSearchBarWrap>
-      <SearchBar baseSearchState={baseSearchState} />
+      <SearchBar currentQuery={currentQuery} />
     </SSearchBarWrap>
   );
 };
 
-export default SearchHeader;
+export default memo(SearchHeader);
 
-const SSearchBarWrap = styled.div`
-  margin-bottom: 20px;
-`;
+const SSearchBarWrap = styled.div``;

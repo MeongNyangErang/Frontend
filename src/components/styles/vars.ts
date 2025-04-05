@@ -1,6 +1,7 @@
 export const colors = {
   main: 'var(--main-color)',
   sub: 'var(--sub-color)',
+  light: 'var(--light-color)',
   wrapBg: 'var(--wrap-bg-color)',
   success: 'var(--success-color)',
   info: 'var(--info-color)',
@@ -32,3 +33,8 @@ export const layouts = {
   footerHeight: '200px',
   navHeight: '60px',
 } as const;
+
+export const shadow = {
+  top: '0 -2px 10px rgba(0, 0, 0, 0.03)',
+  bottom: '0 2px 10px rgba(0, 0, 0, 0.03)',
+};

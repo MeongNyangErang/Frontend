@@ -1,4 +1,7 @@
 import { http, HttpResponse } from 'msw';
+import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+import { accommodationsData } from './data/accommodations';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const handlers = [
@@ -63,5 +66,13 @@ export const handlers = [
   }),
   http.post(`${BASE_URL}/hosts/logout`, async () => {
     return HttpResponse.json({ message: '로그아웃 성공' });
+  }),
+  http.get(`${BASE_URL}/users/accommodations/search`, async () => {
+    const mockData: SearchAccommodationsResponse = {
+      code: 200,
+      data: accommodationsData,
+    };
+
+    return HttpResponse.json(mockData);
   }),
 ];

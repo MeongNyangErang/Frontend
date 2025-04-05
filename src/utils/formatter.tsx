@@ -16,6 +16,8 @@ export const formatDate = (date: Date) => {
 };
 
 export const stringToDate = (dateStr: string) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateStr)) return null;
   const [year, month, date] = dateStr.split('-').map(Number);
   return new Date(year, month - 1, date);
 };

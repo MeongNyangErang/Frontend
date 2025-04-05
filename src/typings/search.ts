@@ -1,9 +1,19 @@
 import { QUERY_KEYS } from '@constants/queryKeys';
+import { SINGLE_SELECT_FILTER_KEY } from '@constants/search';
 
-export type BaseSearchState = {
-  [QUERY_KEYS.SEARCH.CHECK_IN_DATE]: string;
-  [QUERY_KEYS.SEARCH.CHECK_OUT_DATE]: string;
-  [QUERY_KEYS.SEARCH.LOCATION]: string;
-  [QUERY_KEYS.SEARCH.PEOPLE_COUNT]: string;
-  [QUERY_KEYS.SEARCH.PET_COUNT]: string;
+type SearchQueryMap = typeof QUERY_KEYS.SEARCH.BASE;
+type SearchQueryKey = SearchQueryMap[keyof SearchQueryMap];
+
+export type SearchQuery = {
+  [K in SearchQueryKey]: string;
+};
+
+type SearchFilterMap = typeof QUERY_KEYS.SEARCH.FILTER;
+
+export type SearchFilterKey = SearchFilterMap[keyof SearchFilterMap];
+
+export type SingleSelectFilterKey = (typeof SINGLE_SELECT_FILTER_KEY)[number];
+
+export type SearchFilterType = {
+  [K in SearchFilterKey]: K extends SingleSelectFilterKey ? string : string[];
 };

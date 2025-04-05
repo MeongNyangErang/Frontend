@@ -16,7 +16,6 @@ const ROUTES = {
     host: {
       root: '/mypage/host',
       profile: '/mypage/host/profile',
-      reservationList: '/mypage/host/reservation-list',
       reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
       registerAccommodation: '/mypage/host/register/accommodation',
@@ -32,6 +31,6 @@ const ROUTES = {
     room: (roomId: string) => `/chat/${roomId}`,
   },
   notification: '/notification',
-};
+} as const;
 
 export default ROUTES;
