@@ -15,9 +15,8 @@ export const getSearchQuery = (searchParams: URLSearchParams) => {
 
   for (let key in BASE) {
     const typedKey = BASE[key as keyof typeof BASE] as keyof SearchQuery;
-    searchQuery[typedKey] = searchParams.get(key) || '';
+    searchQuery[typedKey] = searchParams.get(typedKey) || '';
   }
-
   return searchQuery;
 };
 

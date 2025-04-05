@@ -1,4 +1,6 @@
 import { http, HttpResponse } from 'msw';
+import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const handlers = [
@@ -63,5 +65,34 @@ export const handlers = [
   }),
   http.post(`${BASE_URL}/hosts/logout`, async () => {
     return HttpResponse.json({ message: '로그아웃 성공' });
+  }),
+  http.get(`${BASE_URL}/users/accommodations/search`, async () => {
+    const mockData: SearchAccommodationsResponse = {
+      code: 200,
+      data: {
+        content: [
+          {
+            accommodationId: 1,
+            name: '강아지와 함께하는 힐링 펜션',
+            thumbnailImageUrl: 'https://example.com/image1.jpg',
+            totalRating: 4.5,
+            minPrice: 80000,
+            type: 'PENSION',
+          },
+          {
+            accommodationId: 2,
+            name: '반려동물 가능 호텔',
+            thumbnailImageUrl: 'https://example.com/image2.jpg',
+            totalRating: 4.8,
+            minPrice: 120000,
+            type: 'HOTELRESORT',
+          },
+        ],
+        nextCursor: 3,
+        hasNext: true,
+      },
+    };
+
+    return HttpResponse.json(mockData);
   }),
 ];
