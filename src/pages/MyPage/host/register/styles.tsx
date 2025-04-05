@@ -31,7 +31,7 @@ export const SInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
   padding: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
@@ -235,4 +235,17 @@ export const SSInputFile = styled.input`
   border: 1px solid #ccc;
   width: 60%;
   padding: 2px;
+`;
+
+export const SErrorMessage = styled.p`
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  text-align: center;
 `;
