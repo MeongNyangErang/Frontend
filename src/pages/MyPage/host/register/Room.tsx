@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useRegister from '@hooks/page/useHostRegister';
 import axios from 'axios';
+
 import {
   SFieldset,
   SOptionSelectorWrapper,
@@ -17,6 +18,7 @@ import {
   SFormItem,
   SInputNumber,
   SFormContainer,
+  SErrorMessage,
 } from './styles';
 
 interface ButtonProps {
@@ -46,7 +48,7 @@ const petFacility = [
   '미끄럼 방지 바닥',
   '펜스 설치 공간',
   '캣 휠',
-  '빗',
+  '그루밍 브러쉬',
   '강아지 계단',
 ];
 const hashTag = [
@@ -75,6 +77,7 @@ const Room = () => {
   });
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutTime, setCheckOutTime] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
     useRegister<string>();
@@ -107,7 +110,14 @@ const Room = () => {
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const newName = e.target.value;
+    const regex = /^[a-zA-Z0-9가-힣()]*$/;
+    if (regex.test(newName)) {
+      setName(newName);
+      setErrorMessage('');
+    } else {
+      setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
+    }
   };
 
   const OptionSelector = ({
@@ -150,8 +160,32 @@ const Room = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    if (
+      !name ||
+      !description ||
+      !checkInTime ||
+      !checkOutTime ||
+      !prices.price
+    ) {
+      alert('모든 필드를 채워주세요.');
+      return;
+    }
 
+    if (
+      selectedFacility.length === 0 ||
+      selectedPetFacility.length === 0 ||
+      selectedHashTag.length === 0
+    ) {
+      alert('시설, 해시태그는 최소 1개 선택해주세요.');
+      return;
+    }
+
+    if (checkInTime < checkOutTime) {
+      alert('체크인은 체크인 아웃시간보다 나중이어야 합니다.');
+      return;
+    }
+
+    const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
     formData.append('facilityTypes', JSON.stringify(selectedFacility));
@@ -199,12 +233,15 @@ const Room = () => {
     <form onSubmit={handleSubmit}>
       <SFieldset>
         <SLabel>객실명</SLabel>
-        <SInput
-          type="text"
-          placeholder="숙소명을 입력해주세요"
-          value={name}
-          onChange={handleNameChange}
-        />
+        <div>
+          <SInput
+            type="text"
+            placeholder="숙소명을 입력해주세요"
+            value={name}
+            onChange={handleNameChange}
+          />
+          {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
+        </div>
 
         <SLabel>설명</SLabel>
         <SDescriptionWrapper>
@@ -225,6 +262,7 @@ const Room = () => {
               placeholder="체크인"
               value={checkInTime}
               onChange={(e) => setCheckInTime(e.target.value)}
+              required
             />
           </SFormItem>
           <SFormItem>
@@ -233,6 +271,7 @@ const Room = () => {
               placeholder="체크아웃"
               value={checkOutTime}
               onChange={(e) => setCheckOutTime(e.target.value)}
+              required
             />
           </SFormItem>
         </SFormContainer>
@@ -242,35 +281,37 @@ const Room = () => {
           <SFormItem>
             <SInputNumber
               type="number"
-              required
               placeholder="기준 인원"
               min="1"
               max="5"
+              required
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
-              required
               placeholder="최대 인원"
+              min="3"
               max="10"
+              required
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
-              required
               placeholder="기준 반려동물"
               min="1"
               max="5"
+              required
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
-              required
               placeholder="최대 반려동물"
+              min="3"
               max="10"
+              required
             />
           </SFormItem>
         </SFormContainer>
@@ -283,6 +324,7 @@ const Room = () => {
               value={prices.price}
               onChange={(e) => handleNumberChange(e, 'price')}
               placeholder="기본 금액"
+              required
             />
           </SFormItem>
           <SFormItem>
@@ -291,6 +333,7 @@ const Room = () => {
               value={prices.extraFee}
               onChange={(e) => handleNumberChange(e, 'extraFee')}
               placeholder="+ 공휴일/주말 금액"
+              required
             />
           </SFormItem>
           <SFormItem>
@@ -299,6 +342,7 @@ const Room = () => {
               value={prices.extraPeopleFee}
               onChange={(e) => handleNumberChange(e, 'extraPeopleFee')}
               placeholder="인원 추가 금액"
+              required
             />
           </SFormItem>
           <SFormItem>
@@ -307,6 +351,7 @@ const Room = () => {
               value={prices.extraPetFee}
               onChange={(e) => handleNumberChange(e, 'extraPetFee')}
               placeholder="반려동물 추가 금액"
+              required
             />
           </SFormItem>
         </SFormContainer>
@@ -337,6 +382,7 @@ const Room = () => {
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
+          required
         />
         {thumbnailPreview && (
           <SImagePreviewWrapper>

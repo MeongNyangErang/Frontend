@@ -17,17 +17,18 @@ import {
   SSInputFile,
   SSInputAddress,
   SSPreviewWrapper,
+  SErrorMessage,
+  ButtonContainer,
 } from './styles';
 
 interface ButtonProps {
   selected: boolean;
 }
 
-const accommodationType = ['전체', '호텔 리조트', '독채', '풀빌라', '펜션'];
 const facility = [
   '편의점',
   '공용 수영장',
-  '바비큐',
+  '공용 바비큐',
   '피트니스',
   '노래방',
   '와이파이',
@@ -43,7 +44,6 @@ const petFacility = [
   '놀이터',
   '샤워장',
   '수영장',
-  '미끄럼 방지 바닥',
   '펜스 설치 공간',
   '돌봄 서비스',
   '펫 푸드 제공',
@@ -70,14 +70,12 @@ const Accommodation = ({
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+  const [accommodationType, setAccommodationType] = useState<string | null>(
+    null,
+  );
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
   >([]);
-
-  const {
-    selectedRegister: selectedAccommodationType,
-    toggleRegister: selectAccommodationType,
-  } = useRegister<string>();
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
     useRegister<string>();
   const {
@@ -86,6 +84,7 @@ const Accommodation = ({
   } = useRegister<string>();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
     useRegister<string>();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -96,7 +95,14 @@ const Accommodation = ({
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const newName = e.target.value;
+    const regex = /^[a-zA-Z0-9가-힣()]*$/;
+    if (regex.test(newName)) {
+      setName(newName);
+      setErrorMessage('');
+    } else {
+      setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
+    }
   };
 
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,6 +158,10 @@ const Accommodation = ({
     }
   };
 
+  const handleClick = (value: string) => {
+    setAccommodationType(value);
+  };
+
   const handleAdditionalImagesChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -180,10 +190,23 @@ const Accommodation = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    if (!name || !description || !detailedAddress) {
+      alert('모든 필드를 채워주세요.');
+      return;
+    }
 
+    if (
+      selectedFacility.length === 0 ||
+      selectedPetFacility.length === 0 ||
+      selectedAllowPet.length === 0
+    ) {
+      alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
+      return;
+    }
+
+    const formData = new FormData();
     formData.append('name', name);
-    formData.append('type', selectedAccommodationType[0]);
+    formData.append('type', accommodationType || '');
     formData.append(
       'address',
       `${addressObj.areaAddress} ${addressObj.townAddress}`,
@@ -268,7 +291,7 @@ const Accommodation = ({
           value={name}
           onChange={handleNameChange}
         />
-
+        {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
         <SSLabel>설명</SSLabel>
         <SSDescriptionWrapper>
           <SSInputExplain
@@ -279,7 +302,6 @@ const Accommodation = ({
           />
           <SSCharacterCount>{description.length}/2000</SSCharacterCount>
         </SSDescriptionWrapper>
-
         <SSLabel>주소</SSLabel>
         <RegisterAddress
           setAddressObj={setAddressObj}
@@ -297,47 +319,63 @@ const Accommodation = ({
           value={detailedAddress}
           onChange={handleDetailAddress}
         />
-
         <SSLabel>숙소 유형</SSLabel>
-        <OptionSelector
-          options={accommodationType}
-          selectedOptions={selectedAccommodationType}
-          onSelect={selectAccommodationType}
-        />
-
+        <ButtonContainer>
+          <CheckInput
+            selected={accommodationType === '호텔 리조트'}
+            onClick={() => handleClick('호텔 리조트')}
+          >
+            호텔 리조트
+          </CheckInput>
+          <CheckInput
+            selected={accommodationType === '독채'}
+            onClick={() => handleClick('독채')}
+          >
+            독채
+          </CheckInput>
+          <CheckInput
+            selected={accommodationType === '풀빌라'}
+            onClick={() => handleClick('풀빌라')}
+          >
+            풀빌라
+          </CheckInput>
+          <CheckInput
+            selected={accommodationType === '펜션'}
+            onClick={() => handleClick('펜션')}
+          >
+            펜션
+          </CheckInput>
+        </ButtonContainer>
         <SSLabel>허용 반려동물</SSLabel>
         <OptionSelector
           options={allowPet}
           selectedOptions={selectedAllowPet}
           onSelect={selectAllowPet}
         />
-
         <SSLabel>편의시설</SSLabel>
         <OptionSelector
           options={facility}
           selectedOptions={selectedFacility}
           onSelect={selectFacility}
         />
-
         <SSLabel>반려동물 편의시설</SSLabel>
         <OptionSelector
           options={petFacility}
           selectedOptions={selectedPetFacility}
           onSelect={selectPetFacility}
         />
-
         <SSLabelFile>대표이미지</SSLabelFile>
         <SSInputFile
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
+          required
         />
         {thumbnailPreview && (
           <SSImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
           </SSImagePreviewWrapper>
         )}
-
         <SSLabelFile>이미지</SSLabelFile>
         <SSInputFile
           type="file"
@@ -345,7 +383,6 @@ const Accommodation = ({
           onChange={handleAdditionalImagesChange}
           accept="image/jpeg,image/jpg,image/png"
         />
-
         {additionalImagesPreview.length > 0 && (
           <SSPreviewWrapper>
             {additionalImagesPreview.map((preview, index) => (
@@ -355,7 +392,6 @@ const Accommodation = ({
             ))}
           </SSPreviewWrapper>
         )}
-
         <SSButton type="submit">
           {mode === 'create' ? '등록하기' : '수정하기'}
         </SSButton>
