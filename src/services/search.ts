@@ -31,7 +31,7 @@ export const searchAccommodations = async (
 
   if (cursor) params.append('cursor', cursor);
   const baseUrl = `users/accommodations/search?${params.toString()}`;
-  console.log(baseUrl, 'baseUrl');
+
   return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'get').then(
     (v) => {
       return v.data;

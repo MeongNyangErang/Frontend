@@ -16,6 +16,4 @@ const SearchHeader = ({ currentQuery }: Props) => {
 
 export default SearchHeader;
 
-const SSearchBarWrap = styled.div`
-  margin-bottom: 20px;
-`;
+const SSearchBarWrap = styled.div``;

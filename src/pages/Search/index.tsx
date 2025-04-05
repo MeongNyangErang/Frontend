@@ -5,6 +5,7 @@ import useToggleModal from '@hooks/ui/useToggleModal';
 import SearchHeader from './SearchHeadear';
 import SearchResult from './SearchResult';
 import SearchFilter from './SearchFilter';
+import SearchControls from './SearchControls';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -24,7 +25,7 @@ const Search = () => {
   return (
     <>
       <SearchHeader currentQuery={currentQueryRef.current} />
-      <button onClick={openModal}>filter</button>
+      <SearchControls onOpenFilter={openModal} />
       <SearchResult
         currentQuery={currentQueryRef.current}
         currentFilter={currentFilterRef.current}

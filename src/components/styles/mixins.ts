@@ -82,3 +82,10 @@ export const noScrollBarStyle = css`
     display: none;
   }
 `;
+
+export const ellipsisStyle = css<{ $line: number }>`
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ $line }) => $line};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
