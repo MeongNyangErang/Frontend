@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import useRegister from '@hooks/page/useRegister';
+import useRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from 'api/RegisterAddress';
 import axios from 'axios';
+import styled from 'styled-components';
+import {
+  SSFieldset,
+  SSOptionSelectorWrapper,
+  SSButton,
+  SSLabel,
+  SSInput,
+  SSLabelFile,
+  SSDescriptionWrapper,
+  SSInputExplain,
+  SSCharacterCount,
+  SSImagePreviewWrapper,
+  SSInputFile,
+  SSInputAddress,
+  SSPreviewWrapper,
+} from './styles';
 
 interface ButtonProps {
   selected: boolean;
@@ -36,7 +51,7 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const LodgmentRegistration = ({
+const Accommodation = ({
   mode,
   accommodationId,
 }: {
@@ -110,7 +125,7 @@ const LodgmentRegistration = ({
     onSelect: (option: string) => void;
   }) => {
     return (
-      <OptionSelectorWrapper>
+      <SSOptionSelectorWrapper>
         {options.map((option) => (
           <CheckInput
             key={option}
@@ -120,7 +135,7 @@ const LodgmentRegistration = ({
             {option}
           </CheckInput>
         ))}
-      </OptionSelectorWrapper>
+      </SSOptionSelectorWrapper>
     );
   };
 
@@ -245,86 +260,86 @@ const LodgmentRegistration = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Fieldset>
-        <Label>숙소명</Label>
-        <Input
+      <SSFieldset>
+        <SSLabel>숙소명</SSLabel>
+        <SSInput
           type="text"
           placeholder="숙소명을 입력해주세요"
           value={name}
           onChange={handleNameChange}
         />
 
-        <Label>설명</Label>
-        <DescriptionWrapper>
-          <InputExplain
+        <SSLabel>설명</SSLabel>
+        <SSDescriptionWrapper>
+          <SSInputExplain
             placeholder="숙소 설명을 작성해주세요"
             value={description}
             onChange={handleDescriptionChange}
             maxLength={2000}
           />
-          <CharacterCount>{description.length}/2000</CharacterCount>
-        </DescriptionWrapper>
+          <SSCharacterCount>{description.length}/2000</SSCharacterCount>
+        </SSDescriptionWrapper>
 
-        <Label>주소</Label>
+        <SSLabel>주소</SSLabel>
         <RegisterAddress
           setAddressObj={setAddressObj}
           postcodeScriptUrl={POSTCODE_SCRIPT_URL}
         />
-        <InputAddress
+        <SSInputAddress
           type="text"
           value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
           onClick={handleAddressClick}
           readOnly
         />
-        <InputAddress
+        <SSInputAddress
           type="text"
           placeholder="상세주소를 입력해주세요"
           value={detailedAddress}
           onChange={handleDetailAddress}
         />
 
-        <Label>숙소 유형</Label>
+        <SSLabel>숙소 유형</SSLabel>
         <OptionSelector
           options={accommodationType}
           selectedOptions={selectedAccommodationType}
           onSelect={selectAccommodationType}
         />
 
-        <Label>허용 반려동물</Label>
+        <SSLabel>허용 반려동물</SSLabel>
         <OptionSelector
           options={allowPet}
           selectedOptions={selectedAllowPet}
           onSelect={selectAllowPet}
         />
 
-        <Label>편의시설</Label>
+        <SSLabel>편의시설</SSLabel>
         <OptionSelector
           options={facility}
           selectedOptions={selectedFacility}
           onSelect={selectFacility}
         />
 
-        <Label>반려동물 편의시설</Label>
+        <SSLabel>반려동물 편의시설</SSLabel>
         <OptionSelector
           options={petFacility}
           selectedOptions={selectedPetFacility}
           onSelect={selectPetFacility}
         />
 
-        <LabelFile>대표이미지</LabelFile>
-        <InputFile
+        <SSLabelFile>대표이미지</SSLabelFile>
+        <SSInputFile
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
         />
         {thumbnailPreview && (
-          <ImagePreviewWrapper>
+          <SSImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
-          </ImagePreviewWrapper>
+          </SSImagePreviewWrapper>
         )}
 
-        <LabelFile>이미지</LabelFile>
-        <InputFile
+        <SSLabelFile>이미지</SSLabelFile>
+        <SSInputFile
           type="file"
           multiple
           onChange={handleAdditionalImagesChange}
@@ -332,38 +347,25 @@ const LodgmentRegistration = ({
         />
 
         {additionalImagesPreview.length > 0 && (
-          <PreviewWrapper>
+          <SSPreviewWrapper>
             {additionalImagesPreview.map((preview, index) => (
-              <ImagePreviewWrapper key={index}>
+              <SSImagePreviewWrapper key={index}>
                 <img src={preview} alt={`Additional preview ${index}`} />
-              </ImagePreviewWrapper>
+              </SSImagePreviewWrapper>
             ))}
-          </PreviewWrapper>
+          </SSPreviewWrapper>
         )}
 
-        <Button type="submit">
+        <SSButton type="submit">
           {mode === 'create' ? '등록하기' : '수정하기'}
-        </Button>
-      </Fieldset>
+        </SSButton>
+      </SSFieldset>
     </form>
   );
 };
 
-export default LodgmentRegistration;
+export default Accommodation;
 
-const Fieldset = styled.fieldset`
-  font-family: 'Noto Sans KR';
-  padding: 16px;
-  border: none;
-  display: flex;
-  flex-direction: column;
-`;
-
-const OptionSelectorWrapper = styled.div`
-  margin-bottom: 8px;
-`;
-
-// 선택 버튼
 const CheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
@@ -373,108 +375,4 @@ const CheckInput = styled.button<ButtonProps>`
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
-`;
-
-const Label = styled.label`
-  font-family: 'Noto Sans KR';
-  display: block;
-  font-size: 1rem;
-  margin: 10px 0;
-`;
-
-const LabelFile = styled.label`
-  font-family: 'Noto Sans KR';
-  display: block;
-  font-size: 1rem;
-  margin-top: 20px;
-  padding-bottom: 10px;
-`;
-
-const Input = styled.input`
-  font-family: 'Noto Sans KR';
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
-const DescriptionWrapper = styled.div`
-  position: relative;
-`;
-
-const InputExplain = styled.textarea`
-  font-family: 'Noto Sans KR';
-  width: 100%;
-  height: 100px;
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-  resize: none;
-  overflow-y: auto;
-`;
-
-const InputAddress = styled.input`
-  font-family: 'Noto Sans KR';
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 7px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
-const CharacterCount = styled.div`
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  font-size: 0.875rem;
-  color: #6b7280;
-`;
-
-const Button = styled.button`
-  background-color: var(--sub-color);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
-  &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
-  }
-`;
-
-const ImagePreviewWrapper = styled.div`
-  margin-top: 10px;
-  width: 50%;
-  height: 150px;
-  border: 2px dashed #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-`;
-
-const PreviewWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 10px;
-  justify-content: flex-start;
-`;
-
-const InputFile = styled.input`
-  border: 1px solid #ccc;
-  width: 60%;
-  padding: 2px;
 `;
