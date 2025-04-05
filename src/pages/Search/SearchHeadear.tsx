@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import SearchBar from '@components/common/SearchBar';
 import { SearchQuery } from '@typings/search';
@@ -14,6 +15,6 @@ const SearchHeader = ({ currentQuery }: Props) => {
   );
 };
 
-export default SearchHeader;
+export default memo(SearchHeader);
 
 const SSearchBarWrap = styled.div``;

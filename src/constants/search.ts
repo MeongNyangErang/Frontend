@@ -1,3 +1,4 @@
+import { formatDate } from '@utils/formatter';
 import { ACCOMMODATION_TAGS } from './accommodation';
 import { QUERY_KEYS } from './queryKeys';
 
@@ -64,3 +65,15 @@ export const FILTER_CATEGORIES = [
   '#특징',
   '시설/서비스',
 ] as const;
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+
+export const DEFAULT_SEARCH_QUERY = {
+  [QUERY_KEYS.SEARCH.BASE.CHECK_IN_DATE]: formatDate(today),
+  [QUERY_KEYS.SEARCH.BASE.CHECK_OUT_DATE]: formatDate(tomorrow),
+  [QUERY_KEYS.SEARCH.BASE.LOCATION]: '제주',
+  [QUERY_KEYS.SEARCH.BASE.PEOPLE_COUNT]: '1',
+  [QUERY_KEYS.SEARCH.BASE.PET_COUNT]: '1',
+};

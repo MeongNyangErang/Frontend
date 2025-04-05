@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
 import { FaStar } from 'react-icons/fa';
 import { SearchQuery, SearchFilterType } from '@typings/search';
@@ -87,4 +88,4 @@ const SearchResult = ({ currentQuery, currentFilter }: Props) => {
   );
 };
 
-export default SearchResult;
+export default memo(SearchResult);

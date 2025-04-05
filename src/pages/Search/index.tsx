@@ -1,7 +1,9 @@
-import { useRef, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { getSearchQuery, getSearchFilter } from '@utils/searchParams';
 import useToggleModal from '@hooks/ui/useToggleModal';
+import ROUTES from '@constants/routes';
+import { DEFAULT_SEARCH_QUERY } from '@constants/search';
 import SearchHeader from './SearchHeadear';
 import SearchResult from './SearchResult';
 import SearchFilter from './SearchFilter';
@@ -9,32 +11,43 @@ import SearchControls from './SearchControls';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
-  const currentQueryRef = useRef(getSearchQuery(searchParams));
-  const currentFilterRef = useRef(getSearchFilter(searchParams));
+  const [currentQuery, setCurrentQuery] = useState(
+    getSearchQuery(searchParams),
+  );
+  const [currentFilter, setCurrentFilter] = useState(
+    getSearchFilter(searchParams),
+  );
   const { isModalOpen, openModal, closeModal } = useToggleModal();
 
   useEffect(() => {
-    currentQueryRef.current = getSearchQuery(searchParams);
-    currentFilterRef.current = getSearchFilter(searchParams);
-
+    setCurrentQuery(getSearchQuery(searchParams));
+    setCurrentFilter(getSearchFilter(searchParams));
     if (isModalOpen) {
       closeModal();
     }
   }, [searchParams]);
 
+  if (searchParams.size === 0) {
+    const params = new URLSearchParams();
+    for (let key in DEFAULT_SEARCH_QUERY) {
+      params.append(
+        key,
+        DEFAULT_SEARCH_QUERY[key as keyof typeof DEFAULT_SEARCH_QUERY],
+      );
+    }
+    return <Navigate to={`${ROUTES.search}?${params.toString()}`} />;
+  }
+
   return (
     <>
-      <SearchHeader currentQuery={currentQueryRef.current} />
+      <SearchHeader currentQuery={currentQuery} />
       <SearchControls onOpenFilter={openModal} />
-      <SearchResult
-        currentQuery={currentQueryRef.current}
-        currentFilter={currentFilterRef.current}
-      />
+      <SearchResult currentQuery={currentQuery} currentFilter={currentFilter} />
       <SearchFilter
         isOpen={isModalOpen}
         onClose={closeModal}
-        currentQuery={currentQueryRef.current}
-        currentFilter={currentFilterRef.current}
+        currentQuery={currentQuery}
+        currentFilter={currentFilter}
       />
     </>
   );
