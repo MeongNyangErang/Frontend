@@ -10,7 +10,9 @@ const SLogin = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: ${({ theme }) => `72px ${theme.layouts.paddingX}`};
+  padding: 72px 0;
+  margin: 0 auto;
+  max-width: 380px;
 `;
 
 const SLogo = styled(Link)`
@@ -82,7 +84,6 @@ const SForm = styled.form`
   row-gap: 12px;
   padding-bottom: 44px;
   width: 100%;
-  max-width: 380px;
 
   input {
     ${inputStyle}

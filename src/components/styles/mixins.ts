@@ -6,9 +6,10 @@ export const buttonStyle = css`
   justify-content: center;
   align-items: center;
   padding: 8px 16px;
+  min-height: 36px;
   font-size: 14px;
   font-weight: 500;
-  border-radius: ${({ theme }) => theme.radius.sm};
+  border-radius: ${({ theme }) => theme.radius.md};
 `;
 
 export const inputStyle = css`

@@ -26,7 +26,7 @@ const SignUpProfileImage = ({
           profileImage={profileImage}
           onChange={onChange}
           width="50%"
-          maxWidth="200px"
+          maxWidth="180px"
         />
         <Button
           onClick={onClick}

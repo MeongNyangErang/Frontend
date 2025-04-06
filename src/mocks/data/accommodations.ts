@@ -16,7 +16,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
       totalRating: 4.0,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1003,
@@ -24,7 +24,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/Hb7qM4i.jpeg',
       totalRating: 4.5,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'HOTELRESORT',
     },
     {
       accommodationId: 1004,
@@ -32,7 +32,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/TX27XgD.jpeg',
       totalRating: 4.4,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1005,
@@ -40,7 +40,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
       totalRating: 4.2,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'FULLVILLA',
     },
     {
       accommodationId: 1006,
@@ -56,7 +56,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
       totalRating: 4.8,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'HOTELRESORT',
     },
     {
       accommodationId: 1008,
@@ -64,7 +64,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/gNgnRuZ.jpeg',
       totalRating: 4.1,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1009,
@@ -88,7 +88,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/fZtoWgy.jpeg',
       totalRating: 4.9,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1012,
@@ -96,7 +96,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/TX27XgD.jpeg',
       totalRating: 4.3,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'HOTELRESORT',
     },
     {
       accommodationId: 1013,
@@ -104,7 +104,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/TX27XgD.jpeg',
       totalRating: 4.1,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1014,
@@ -112,7 +112,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/TX27XgD.jpeg',
       totalRating: 4.2,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'FULLVILLA',
     },
     {
       accommodationId: 1015,
@@ -120,7 +120,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/Hb7qM4i.jpeg',
       totalRating: 4.4,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'DETACHEDHOUSE',
     },
     {
       accommodationId: 1016,
@@ -136,7 +136,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
       totalRating: 4.7,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'FULLVILLA',
     },
     {
       accommodationId: 1018,
@@ -144,7 +144,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/fZtoWgy.jpeg',
       totalRating: 4.6,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'HOTELRESORT',
     },
     {
       accommodationId: 1019,
@@ -160,7 +160,7 @@ export const accommodationsData = {
       thumbnailImageUrl: 'https://i.imgur.com/TX27XgD.jpeg',
       totalRating: 4.9,
       minPrice: 100000,
-      type: 'PENSION',
+      type: 'FULLVILLA',
     },
   ],
   nextCursor: 1021,
