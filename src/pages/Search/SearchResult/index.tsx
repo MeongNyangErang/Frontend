@@ -1,13 +1,15 @@
-import { memo } from 'react';
+import { memo, useEffect, useCallback, useState } from 'react';
 import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
+import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { SectionLayout } from '@components/layouts/SectionLayout';
 import { SearchQuery, SearchFilterType } from '@typings/search';
 import ROUTES from '@constants/routes';
 import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
+import { Accommodation } from '@typings/response/accommodations';
 
 import {
   SItems,
@@ -21,6 +23,7 @@ import {
   SRating,
   SPrice,
   SCapacity,
+  SItemsBottom,
 } from './styles';
 
 interface SearchResultProps {
@@ -29,37 +32,53 @@ interface SearchResultProps {
 }
 
 const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
-  const { data, isLoading, error } = useSearchAccommodations(
-    currentQuery,
-    currentFilter,
+  const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
+  const [cursor, setCursor] = useState<number | null>(null);
+  const {
+    data: { hasNext, nextCursor, content } = {},
+    isLoading,
+    error,
+  } = useSearchAccommodations(currentQuery, cursor, currentFilter);
+
+  const updateCursor = useCallback(() => {
+    if (nextCursor) setCursor(nextCursor);
+  }, [nextCursor]);
+
+  const observerTargetRef = useInfiniteScroll(
+    updateCursor,
+    !isLoading && !!hasNext,
   );
 
-  if (isLoading) {
-    return (
-      <MessageBox>
-        <Loader loading color="grayBorder" size={8} />
-      </MessageBox>
-    );
-  }
-  if (error) {
-    return <MessageBox>{error.message}</MessageBox>;
-  }
+  useEffect(() => {
+    if (!content) return;
+    setSearchedData((prev) => [...prev, ...content]);
+  }, [content]);
+
+  useEffect(() => {
+    setSearchedData([]);
+    setCursor(null);
+  }, [currentQuery, currentFilter]);
+
+  if (error) return <MessageBox>{error.message}</MessageBox>;
 
   return (
     <SectionLayout>
       <SItems>
-        {data?.content.map(
-          ({
-            type,
-            accommodationId,
-            name,
-            thumbnailImageUrl,
-            totalRating,
-            minPrice,
-          }) => {
+        {searchedData.map(
+          (
+            {
+              type,
+              accommodationId,
+              name,
+              thumbnailImageUrl,
+              totalRating,
+              minPrice,
+            },
+            index,
+          ) => {
             return (
               <SItem
-                key={accommodationId}
+                key={index}
                 to={`${ROUTES.detail(accommodationId.toString())}`}
               >
                 <SImageArea>
@@ -100,6 +119,9 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
           },
         )}
       </SItems>
+      <SItemsBottom ref={observerTargetRef}>
+        <Loader loading={isLoading} color="grayBorder" size={8} />
+      </SItemsBottom>
     </SectionLayout>
   );
 };
