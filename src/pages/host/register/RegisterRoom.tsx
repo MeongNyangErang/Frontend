@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import useRegister from '@hooks/page/useHostRegister';
+import useHostRegister from '@hooks/page/useHostRegister';
 import axios from 'axios';
 
 import {
@@ -64,7 +64,7 @@ const hashTag = [
   '감성숙소',
 ];
 
-const Room = () => {
+const RegisterRoom = () => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -80,13 +80,13 @@ const Room = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useRegister<string>();
+    useHostRegister<string>();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useRegister<string>();
+  } = useHostRegister<string>();
   const { selectedRegister: selectedHashTag, toggleRegister: selectHashTag } =
-    useRegister<string>();
+    useHostRegister<string>();
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -396,7 +396,7 @@ const Room = () => {
   );
 };
 
-export default Room;
+export default RegisterRoom;
 
 const SCheckInput = styled.button<ButtonProps>`
   background-color: #fff;

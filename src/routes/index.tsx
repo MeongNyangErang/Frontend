@@ -13,9 +13,9 @@ const UserMyPage = lazy(() => import('@pages/UserMyPage'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
 const RegisterAccommodation = lazy(
-  () => import('@pages/host/register/Accommodation'),
+  () => import('@pages/host/register/RegisterAccommodation'),
 );
-const RegisterRoom = lazy(() => import('@pages/host/register/Room'));
+const RegisterRoom = lazy(() => import('@pages/host/register/RegisterRoom'));
 const Reservation = lazy(
   () => import('@pages/Accommodation/${accommodationId}/reservation'),
 );

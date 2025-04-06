@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import useRegister from '@hooks/page/useHostRegister';
+import styled from 'styled-components';
+import useHostRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from 'api/RegisterAddress';
 import axios from 'axios';
-import styled from 'styled-components';
-import {
-  SSFieldset,
-  SSOptionSelectorWrapper,
-  SSButton,
-  SSLabel,
-  SSInput,
-  SSLabelFile,
-  SSDescriptionWrapper,
-  SSInputExplain,
-  SSCharacterCount,
-  SSImagePreviewWrapper,
-  SSInputFile,
-  SSInputAddress,
-  SSPreviewWrapper,
-  SErrorMessage,
-  ButtonContainer,
-} from './styles';
 
 interface ButtonProps {
   selected: boolean;
 }
 
+const accommodationType = ['전체', '호텔 리조트', '독채', '풀빌라', '펜션'];
 const facility = [
   '편의점',
   '공용 수영장',
-  '공용 바비큐',
+  '바비큐',
   '피트니스',
   '노래방',
   '와이파이',
@@ -44,6 +28,7 @@ const petFacility = [
   '놀이터',
   '샤워장',
   '수영장',
+  '미끄럼 방지 바닥',
   '펜스 설치 공간',
   '돌봄 서비스',
   '펫 푸드 제공',
@@ -51,7 +36,7 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const Accommodation = ({
+const AccommodationRegistration = ({
   mode,
   accommodationId,
 }: {
@@ -70,21 +55,22 @@ const Accommodation = ({
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
-  const [accommodationType, setAccommodationType] = useState<string | null>(
-    null,
-  );
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
   >([]);
+
+  const {
+    selectedRegister: selectedAccommodationType,
+    toggleRegister: selectAccommodationType,
+  } = useHostRegister<string>();
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useRegister<string>();
+    useHostRegister<string>();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useRegister<string>();
+  } = useHostRegister<string>();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
-    useRegister<string>();
-  const [errorMessage, setErrorMessage] = useState('');
+    useHostRegister<string>();
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -95,14 +81,7 @@ const Accommodation = ({
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
-    const regex = /^[a-zA-Z0-9가-힣()]*$/;
-    if (regex.test(newName)) {
-      setName(newName);
-      setErrorMessage('');
-    } else {
-      setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
-    }
+    setName(e.target.value);
   };
 
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +110,7 @@ const Accommodation = ({
     onSelect: (option: string) => void;
   }) => {
     return (
-      <SSOptionSelectorWrapper>
+      <OptionSelectorWrapper>
         {options.map((option) => (
           <CheckInput
             key={option}
@@ -141,7 +120,7 @@ const Accommodation = ({
             {option}
           </CheckInput>
         ))}
-      </SSOptionSelectorWrapper>
+      </OptionSelectorWrapper>
     );
   };
 
@@ -156,10 +135,6 @@ const Accommodation = ({
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleClick = (value: string) => {
-    setAccommodationType(value);
   };
 
   const handleAdditionalImagesChange = (
@@ -190,23 +165,10 @@ const Accommodation = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !detailedAddress) {
-      alert('모든 필드를 채워주세요.');
-      return;
-    }
-
-    if (
-      selectedFacility.length === 0 ||
-      selectedPetFacility.length === 0 ||
-      selectedAllowPet.length === 0
-    ) {
-      alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
-      return;
-    }
-
     const formData = new FormData();
+
     formData.append('name', name);
-    formData.append('type', accommodationType || '');
+    formData.append('type', selectedAccommodationType[0]);
     formData.append(
       'address',
       `${addressObj.areaAddress} ${addressObj.townAddress}`,
@@ -283,125 +245,125 @@ const Accommodation = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <SSFieldset>
-        <SSLabel>숙소명</SSLabel>
-        <SSInput
+      <Fieldset>
+        <Label>숙소명</Label>
+        <Input
           type="text"
           placeholder="숙소명을 입력해주세요"
           value={name}
           onChange={handleNameChange}
         />
-        {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
-        <SSLabel>설명</SSLabel>
-        <SSDescriptionWrapper>
-          <SSInputExplain
+
+        <Label>설명</Label>
+        <DescriptionWrapper>
+          <InputExplain
             placeholder="숙소 설명을 작성해주세요"
             value={description}
             onChange={handleDescriptionChange}
             maxLength={2000}
           />
-          <SSCharacterCount>{description.length}/2000</SSCharacterCount>
-        </SSDescriptionWrapper>
-        <SSLabel>주소</SSLabel>
+          <CharacterCount>{description.length}/2000</CharacterCount>
+        </DescriptionWrapper>
+
+        <Label>주소</Label>
         <RegisterAddress
           setAddressObj={setAddressObj}
           postcodeScriptUrl={POSTCODE_SCRIPT_URL}
         />
-        <SSInputAddress
+        <InputAddress
           type="text"
           value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
           onClick={handleAddressClick}
           readOnly
         />
-        <SSInputAddress
+        <InputAddress
           type="text"
           placeholder="상세주소를 입력해주세요"
           value={detailedAddress}
           onChange={handleDetailAddress}
         />
-        <SSLabel>숙소 유형</SSLabel>
-        <ButtonContainer>
-          <CheckInput
-            selected={accommodationType === '호텔 리조트'}
-            onClick={() => handleClick('호텔 리조트')}
-          >
-            호텔 리조트
-          </CheckInput>
-          <CheckInput
-            selected={accommodationType === '독채'}
-            onClick={() => handleClick('독채')}
-          >
-            독채
-          </CheckInput>
-          <CheckInput
-            selected={accommodationType === '풀빌라'}
-            onClick={() => handleClick('풀빌라')}
-          >
-            풀빌라
-          </CheckInput>
-          <CheckInput
-            selected={accommodationType === '펜션'}
-            onClick={() => handleClick('펜션')}
-          >
-            펜션
-          </CheckInput>
-        </ButtonContainer>
-        <SSLabel>허용 반려동물</SSLabel>
+
+        <Label>숙소 유형</Label>
+        <OptionSelector
+          options={accommodationType}
+          selectedOptions={selectedAccommodationType}
+          onSelect={selectAccommodationType}
+        />
+
+        <Label>허용 반려동물</Label>
         <OptionSelector
           options={allowPet}
           selectedOptions={selectedAllowPet}
           onSelect={selectAllowPet}
         />
-        <SSLabel>편의시설</SSLabel>
+
+        <Label>편의시설</Label>
         <OptionSelector
           options={facility}
           selectedOptions={selectedFacility}
           onSelect={selectFacility}
         />
-        <SSLabel>반려동물 편의시설</SSLabel>
+
+        <Label>반려동물 편의시설</Label>
         <OptionSelector
           options={petFacility}
           selectedOptions={selectedPetFacility}
           onSelect={selectPetFacility}
         />
-        <SSLabelFile>대표이미지</SSLabelFile>
-        <SSInputFile
+
+        <LabelFile>대표이미지</LabelFile>
+        <InputFile
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
-          required
         />
         {thumbnailPreview && (
-          <SSImagePreviewWrapper>
+          <ImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
-          </SSImagePreviewWrapper>
+          </ImagePreviewWrapper>
         )}
-        <SSLabelFile>이미지</SSLabelFile>
-        <SSInputFile
+
+        <LabelFile>이미지</LabelFile>
+        <InputFile
           type="file"
           multiple
           onChange={handleAdditionalImagesChange}
           accept="image/jpeg,image/jpg,image/png"
         />
+
         {additionalImagesPreview.length > 0 && (
-          <SSPreviewWrapper>
+          <PreviewWrapper>
             {additionalImagesPreview.map((preview, index) => (
-              <SSImagePreviewWrapper key={index}>
+              <ImagePreviewWrapper key={index}>
                 <img src={preview} alt={`Additional preview ${index}`} />
-              </SSImagePreviewWrapper>
+              </ImagePreviewWrapper>
             ))}
-          </SSPreviewWrapper>
+          </PreviewWrapper>
         )}
-        <SSButton type="submit">
+
+        <Button type="submit">
           {mode === 'create' ? '등록하기' : '수정하기'}
-        </SSButton>
-      </SSFieldset>
+        </Button>
+      </Fieldset>
     </form>
   );
 };
 
-export default Accommodation;
+export default AccommodationRegistration;
 
+const Fieldset = styled.fieldset`
+  font-family: 'Noto Sans KR';
+  padding: 16px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OptionSelectorWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+// 선택 버튼
 const CheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
@@ -411,4 +373,108 @@ const CheckInput = styled.button<ButtonProps>`
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
+`;
+
+const Label = styled.label`
+  font-family: 'Noto Sans KR';
+  display: block;
+  font-size: 1rem;
+  margin: 10px 0;
+`;
+
+const LabelFile = styled.label`
+  font-family: 'Noto Sans KR';
+  display: block;
+  font-size: 1rem;
+  margin-top: 20px;
+  padding-bottom: 10px;
+`;
+
+const Input = styled.input`
+  font-family: 'Noto Sans KR';
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+`;
+
+const DescriptionWrapper = styled.div`
+  position: relative;
+`;
+
+const InputExplain = styled.textarea`
+  font-family: 'Noto Sans KR';
+  width: 100%;
+  height: 100px;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+  resize: none;
+  overflow-y: auto;
+`;
+
+const InputAddress = styled.input`
+  font-family: 'Noto Sans KR';
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 7px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+`;
+
+const CharacterCount = styled.div`
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+`;
+
+const Button = styled.button`
+  background-color: var(--sub-color);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: auto;
+  &:hover {
+    background-color: var(--sub-color);
+    border: 1px solid #f03e5e;
+  }
+`;
+
+const ImagePreviewWrapper = styled.div`
+  margin-top: 10px;
+  width: 50%;
+  height: 150px;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const PreviewWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 10px;
+  justify-content: flex-start;
+`;
+
+const InputFile = styled.input`
+  border: 1px solid #ccc;
+  width: 60%;
+  padding: 2px;
 `;
