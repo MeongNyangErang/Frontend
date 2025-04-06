@@ -1,3 +1,4 @@
+import { media } from '@components/styles/responsive';
 import styled, { css } from 'styled-components';
 
 const verticalStyle = css`
@@ -8,8 +9,12 @@ const verticalStyle = css`
 
 const SWrap = styled.div`
   ${verticalStyle}
-  padding: ${({ theme }) =>
-    `${theme.layouts.paddingX} ${theme.layouts.paddingX} 60px`};
+  padding: ${({ theme }) => `${theme.layouts.paddingX} 0 60px`};
+
+  ${media.mobile} {
+    padding: ${({ theme }) =>
+      `${theme.layouts.paddingX} ${theme.layouts.paddingX} 60px`};
+  }
 `;
 
 const SForm = styled.form`

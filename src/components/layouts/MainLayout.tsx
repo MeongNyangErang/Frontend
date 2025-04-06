@@ -31,9 +31,7 @@ const SContent = styled.div`
 `;
 
 const SMain = styled.main`
-  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
   margin: 0 auto;
   min-height: ${({ theme }) =>
     `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
-  max-width: ${({ theme }) => theme.layouts.innerWidth};
 `;

@@ -4,10 +4,9 @@ import { getSearchQuery, getSearchFilter } from '@utils/searchParams';
 import useToggleModal from '@hooks/ui/useToggleModal';
 import ROUTES from '@constants/routes';
 import { DEFAULT_SEARCH_QUERY } from '@constants/search';
-import SearchHeader from './SearchHeadear';
+import SearchHeader from './SearchHeader';
 import SearchResult from './SearchResult';
 import SearchFilter from './SearchFilter';
-import SearchControls from './SearchControls';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -40,8 +39,7 @@ const Search = () => {
 
   return (
     <>
-      <SearchHeader currentQuery={currentQuery} />
-      <SearchControls onOpenFilter={openModal} />
+      <SearchHeader currentQuery={currentQuery} onOpenFilter={openModal} />
       <SearchResult currentQuery={currentQuery} currentFilter={currentFilter} />
       <SearchFilter
         isOpen={isModalOpen}

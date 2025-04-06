@@ -1,5 +1,5 @@
 import { SButton } from './styles';
-import { BeatLoader } from 'react-spinners';
+import Loader from '../Loader';
 
 interface ButtonProps {
   className?: string;
@@ -23,7 +23,7 @@ const Button = ({
   fullWidth,
   fixedHeight,
   disabled,
-  isLoading,
+  isLoading = false,
   type = 'button',
 }: ButtonProps) => {
   return (
@@ -38,18 +38,9 @@ const Button = ({
       disabled={disabled}
     >
       {!isLoading && children}
-      {isLoading && (
-        <BeatLoader loading={true} size={10} color={loaderColor[variant]} />
-      )}
+      {isLoading && <Loader loading={isLoading} size={8} color={variant} />}
     </SButton>
   );
 };
 
 export default Button;
-
-const loaderColor = {
-  main: '#fff',
-  grayBorder: 'var(--gray-600)',
-  mainBorder: 'var(--main-color)',
-  accent: 'var(--info-text-color)',
-};

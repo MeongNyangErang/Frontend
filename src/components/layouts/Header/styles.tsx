@@ -7,6 +7,8 @@ const SHeader = styled.header`
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 1000;
+  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
   width: 100%;
   height: ${({ theme }) => theme.layouts.headerHeight};
   background-color: #fff;
@@ -18,7 +20,6 @@ const SContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
   height: 100%;
   max-width: ${({ theme }) => theme.layouts.innerWidth};
 `;
@@ -68,7 +69,6 @@ const SUserMenu = styled.div`
 
 const SLoginButton = styled(Link)`
   ${buttonStyle}
-  margin-right: 8px;
   background-color: ${({ theme }) => theme.colors.main};
   color: #fff;
 `;

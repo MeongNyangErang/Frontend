@@ -87,8 +87,11 @@ const GlobalStyle = createGlobalStyle`
     --light-color:rgb(253, 244, 245);
     --info-color: #E6F0FA;
     --info-text-color: #3178C6;
-    --wrap-bg-color: #FFF2F4;
-    --overlay-color: rgba(0,0,0,0.3);
+    --purple-badge-color: #9b5de5;
+    --mint-badge-color: #00bb8f;
+    --orange-badge-color: #ff7f51;
+    --blue-badge-color: #3a86ff;
+    --overlay-color: rgba(0,0,0,0.2);
     --gray-100: #f5f5f5;
     --gray-200: #eeeeee;
     --gray-300: #e0e0e0;
