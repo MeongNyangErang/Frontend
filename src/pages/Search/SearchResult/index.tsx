@@ -1,14 +1,20 @@
-import { memo } from 'react';
-import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
+import { memo, useEffect, useCallback, useState } from 'react';
+import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
+import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
+import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
+import { SectionLayout } from '@components/layouts/SectionLayout';
 import { SearchQuery, SearchFilterType } from '@typings/search';
 import ROUTES from '@constants/routes';
-import { FaUser, FaDog } from 'react-icons/fa6';
+import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
+import MessageBox from '@components/common/MessageBox';
+import Loader from '@components/common/Loader';
+import { Accommodation } from '@typings/response/accommodations';
 
 import {
-  SResultWrap,
   SItems,
   SItem,
+  SItemTypeBadge,
   SImageArea,
   STextArea,
   SNameBox,
@@ -17,42 +23,68 @@ import {
   SRating,
   SPrice,
   SCapacity,
+  SItemsBottom,
 } from './styles';
 
-interface Props {
+interface SearchResultProps {
   currentQuery: SearchQuery;
   currentFilter: SearchFilterType;
 }
 
-const SearchResult = ({ currentQuery, currentFilter }: Props) => {
-  const { data, isLoading, error } = useSearchAccommodations(
-    currentQuery,
-    currentFilter,
+const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
+  const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
+  const [cursor, setCursor] = useState<number | null>(null);
+  const {
+    data: { hasNext, nextCursor, content } = {},
+    isLoading,
+    error,
+  } = useSearchAccommodations(currentQuery, cursor, currentFilter);
+
+  const updateCursor = useCallback(() => {
+    if (nextCursor) setCursor(nextCursor);
+  }, [nextCursor]);
+
+  const observerTargetRef = useInfiniteScroll(
+    updateCursor,
+    !isLoading && !!hasNext,
   );
 
-  if (isLoading) {
-    return <>loading...</>;
-  }
-  if (error) {
-    return <>error occurred</>;
-  }
+  useEffect(() => {
+    if (!content) return;
+    setSearchedData((prev) => [...prev, ...content]);
+  }, [content]);
+
+  useEffect(() => {
+    setSearchedData([]);
+    setCursor(null);
+  }, [currentQuery, currentFilter]);
+
+  if (error) return <MessageBox>{error.message}</MessageBox>;
+
   return (
-    <SResultWrap>
+    <SectionLayout>
       <SItems>
-        {data?.content.map(
-          ({
-            accommodationId,
-            name,
-            thumbnailImageUrl,
-            totalRating,
-            minPrice,
-          }) => {
+        {searchedData.map(
+          (
+            {
+              type,
+              accommodationId,
+              name,
+              thumbnailImageUrl,
+              totalRating,
+              minPrice,
+            },
+            index,
+          ) => {
             return (
               <SItem
-                key={accommodationId}
+                key={index}
                 to={`${ROUTES.detail(accommodationId.toString())}`}
               >
                 <SImageArea>
+                  <SItemTypeBadge $type={type}>
+                    {ACCOMMODATION_TYPE_MAP[type]}
+                  </SItemTypeBadge>
                   {thumbnailImageUrl ? (
                     <img src={thumbnailImageUrl} alt={name} />
                   ) : (
@@ -73,10 +105,13 @@ const SearchResult = ({ currentQuery, currentFilter }: Props) => {
                         <FaUser />2
                       </div>
                       <div>
-                        <FaDog />2
+                        <FaPaw />2
                       </div>
                     </SCapacity>
-                    <SPrice $line={1}>{minPrice.toLocaleString()}원</SPrice>
+                    <SPrice $line={1}>
+                      <span>1박/</span>
+                      {minPrice.toLocaleString()}원~
+                    </SPrice>
                   </SPriceBox>
                 </STextArea>
               </SItem>
@@ -84,7 +119,10 @@ const SearchResult = ({ currentQuery, currentFilter }: Props) => {
           },
         )}
       </SItems>
-    </SResultWrap>
+      <SItemsBottom ref={observerTargetRef}>
+        <Loader loading={isLoading} color="grayBorder" size={8} />
+      </SItemsBottom>
+    </SectionLayout>
   );
 };
 

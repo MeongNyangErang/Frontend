@@ -18,19 +18,18 @@ export default ProfileImage;
 
 const SProfileWrap = styled.div<{ $width: string }>`
   position: relative;
-  padding-bottom: 100%;
   width: ${({ $width }) => $width};
-  height: 0;
+  aspect-ratio: 1/1;
   background-color: #fff;
   border: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
   border-radius: 9999px;
 
   img {
     position: absolute;
-    left: 8px;
-    top: 8px;
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
+    left: 6px;
+    top: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
     border-radius: 9999px;
     object-fit: cover;
   }

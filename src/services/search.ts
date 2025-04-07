@@ -4,8 +4,8 @@ import { SearchAccommodationsResponse } from '@typings/response/accommodations';
 
 export const searchAccommodations = async (
   query: SearchQuery,
+  cursor: number | null,
   filter?: SearchFilterType,
-  cursor?: string,
 ) => {
   const isFilterEmpty =
     !filter ||
@@ -29,7 +29,7 @@ export const searchAccommodations = async (
     }
   }
 
-  if (cursor) params.append('cursor', cursor);
+  if (cursor) params.append('cursor', cursor.toString());
   const baseUrl = `users/accommodations/search?${params.toString()}`;
 
   return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'get').then(

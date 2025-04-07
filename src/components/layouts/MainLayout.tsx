@@ -2,19 +2,19 @@ import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './Header';
 import Footer from './Footer';
-import Nav from './Nav';
+import MobileNav from './MobileNav';
 
 const MainLayout = () => {
   return (
     <SContainer>
       <Header />
       <SContent>
-        <main>
+        <SMain>
           <Outlet />
-        </main>
+        </SMain>
         <Footer />
       </SContent>
-      <Nav />
+      <MobileNav />
     </SContainer>
   );
 };
@@ -22,31 +22,16 @@ const MainLayout = () => {
 export default MainLayout;
 
 const SContainer = styled.div`
-  position: relative;
-
-  > header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-
-  > nav {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999;
-  }
+  min-width: 320px;
 `;
 
 const SContent = styled.div`
   padding-top: ${({ theme }) => theme.layouts.headerHeight};
-  overflow-y: auto;
   height: 100vh;
+`;
 
-  > main {
-    min-height: ${({ theme }) =>
-      `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
-  }
+const SMain = styled.main`
+  margin: 0 auto;
+  min-height: ${({ theme }) =>
+    `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
 `;

@@ -1,21 +1,23 @@
-import { NavLink } from 'react-router-dom';
-import useLogout from '@hooks/auth/useLogout';
+import { Navigate } from 'react-router-dom';
+import useAuth from '@hooks/auth/useAuth';
+import MyPageLayout from '@components/layouts/MyPageLayout';
+import ProfileBox from '@components/common/myPage/ProfileBox';
+import MyPageOverview from '@components/common/myPage/MyPageOverview';
 import ROUTES from '@constants/routes';
 
 const HostMyPage = () => {
-  const { logout } = useLogout('host');
+  const { member } = useAuth();
+
+  if (!member || member.role !== 'host') return <Navigate to={ROUTES.home} />;
   return (
-    <>
-      호스트유저 마이페이지
-      <br />
-      <button onClick={logout}>로그아웃</button>
-      <br />
-      <NavLink to={ROUTES.myPage.host.registerAccommodation}>
-        숙소 등록하기
-      </NavLink>
-      <br />
-      <NavLink to={ROUTES.myPage.host.registerRoom}>객실 등록하기</NavLink>
-    </>
+    <MyPageLayout>
+      <ProfileBox
+        memberId={member.id}
+        role={member.role}
+        email={member.email}
+      />
+      <MyPageOverview role={member.role} />
+    </MyPageLayout>
   );
 };
 

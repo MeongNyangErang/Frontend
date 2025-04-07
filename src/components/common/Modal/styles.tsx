@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const SWrap = styled.div<{ $variant: 'full' | 'centered' }>`
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -31,7 +31,7 @@ const SModal = styled.div<{ $variant: 'full' | 'centered' }>`
     width: 80%;
     max-width: 450px;
     min-width: 280px;
-    min-height: 180px;
+    min-height: 160px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: ${theme.radius.md};
   `}
@@ -57,6 +57,7 @@ const SModalBody = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 24px 0;
 `;
 
 const SModalFooter = styled.footer``;

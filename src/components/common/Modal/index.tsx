@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
 import {
   SWrap,
@@ -27,19 +26,6 @@ const Modal = ({
   role,
   onClose,
 }: ModalProps) => {
-  useEffect(() => {
-    const mobileContainer = document.getElementById('mobile-container')!;
-    if (isOpen) {
-      mobileContainer.style.overflow = 'hidden';
-    } else {
-      mobileContainer.style.overflow = '';
-    }
-
-    return () => {
-      mobileContainer.style.overflow = '';
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (
