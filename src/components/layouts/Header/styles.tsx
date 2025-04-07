@@ -67,12 +67,6 @@ const SUserMenu = styled.div`
   gap: 12px;
 `;
 
-const SLoginButton = styled(Link)`
-  ${buttonStyle}
-  background-color: ${({ theme }) => theme.colors.main};
-  color: #fff;
-`;
-
 const SUserButton = styled(Link)`
   display: none;
 
@@ -129,7 +123,6 @@ export {
   SNavItem,
   SLogo,
   SUserMenu,
-  SLoginButton,
   SUserButton,
   SMyPageButton,
   SNotifyButton,

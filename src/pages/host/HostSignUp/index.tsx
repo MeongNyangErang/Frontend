@@ -2,7 +2,7 @@ import SignUpForm from '@components/common/SignUpForm';
 import useSignUp from '@hooks/page/useSignUp';
 import SignUpProfileImage from '@components/common/ProfileImage/SignUpProfileImage';
 import Modal from '@components/common/Modal';
-import { SSignUpWrap, SSignUpContainer } from '@pages/UserSignUp/styles';
+import { SSignUpWrap, SSignUpContainer } from '@pages/user/UserSignUp/styles';
 import SignUpDocuments from './SignUpDocuments';
 
 const HostSignUp = () => {

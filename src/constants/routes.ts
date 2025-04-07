@@ -9,6 +9,7 @@ const ROUTES = {
     user: {
       root: '/mypage/user',
       profile: '/mypage/user/profile',
+      myPet: 'mypage/user/my-pet',
       reservationList: '/mypage/user/reservation-list',
       reviews: '/mypage/user/reviews',
       wishlist: '/mypage/user/wishlist',

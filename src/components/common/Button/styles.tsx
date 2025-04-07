@@ -1,51 +1,47 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { buttonStyle } from '@components/styles/mixins';
+
+const variantStyles = {
+  main: css`
+    background-color: ${({ theme }) => theme.colors.main};
+    color: #fff;
+  `,
+  grayBorder: css`
+    background-color: #fff;
+    color: ${({ theme }) => theme.colors.gray500};
+    border: 1px solid ${({ theme }) => theme.colors.gray400};
+  `,
+  mainBorder: css`
+    background-color: #fff;
+    color: ${({ theme }) => theme.colors.main};
+    border: 1px solid ${({ theme }) => theme.colors.main};
+  `,
+  accent: css`
+    background-color: ${({ theme }) => theme.colors.info};
+    color: ${({ theme }) => theme.colors.infoText};
+  `,
+};
 
 const SButton = styled.button<{
   $variant: 'main' | 'grayBorder' | 'mainBorder' | 'accent';
-  $fullWidth: boolean | undefined;
+  $fullWidth?: boolean;
   $fontSize: string;
-  $fixedHeight: boolean | undefined;
+  $fixedHeight?: boolean;
 }>`
   ${buttonStyle}
 
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
-
   height: ${({ $fixedHeight }) => ($fixedHeight ? '48px' : 'auto')};
-
-  background-color: ${({ $variant, theme }) =>
-    $variant === 'main'
-      ? theme.colors.main
-      : $variant === 'accent'
-        ? theme.colors.info
-        : '#fff'};
-
   font-size: ${({ $fontSize }) => $fontSize};
+  transition: ${({ theme }) => theme.transition.default};
 
-  color: #fff;
+  ${({ $variant }) => variantStyles[$variant]}
 
-  ${({ $variant, theme }) =>
-    $variant === 'grayBorder' &&
-    `
-      color: ${theme.colors.gray500};
-      border: 1px solid ${theme.colors.gray500};
-    `}
+  &:hover {
+    filter: brightness(0.95);
+  }
 
-  ${({ $variant, theme }) =>
-    $variant === 'mainBorder' &&
-    `
-      color: ${theme.colors.main};
-      border: 1px solid ${theme.colors.main};
-    `}
-
-   ${({ $variant, theme }) =>
-    $variant === 'accent' &&
-    `
-      color: ${theme.colors.infoText};
-    `}
-
-
-    &:disabled {
+  &:disabled {
     color: ${({ theme }) => theme.colors.gray500};
     background-color: ${({ theme }) => theme.colors.gray200};
     border: none;
