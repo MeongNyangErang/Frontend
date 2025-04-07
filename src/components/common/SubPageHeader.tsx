@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { pageTitleStyle } from '@components/styles/mixins';
 import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
+import { media } from '@components/styles/responsive';
 
 interface Props {
   title: string;
@@ -29,6 +29,11 @@ const Swrap = styled.header`
   padding: ${({ theme }) => theme.layouts.paddingX};
   width: 100%;
 
+  ${media.tablet} {
+    justify-content: flex-start;
+    padding: 0;
+  }
+
   > button {
     position: absolute;
     top: 50%;
@@ -39,9 +44,19 @@ const Swrap = styled.header`
     padding: 12px 12px 12px 0;
     font-size: 20px;
     transform: translateY(-50%);
+
+    ${media.tablet} {
+      display: none;
+    }
   }
 
   > h2 {
-    ${pageTitleStyle}
+    font-size: 16px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.gray700};
+
+    ${media.tablet} {
+      font-size: 22px;
+    }
   }
 `;

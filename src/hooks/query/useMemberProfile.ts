@@ -1,5 +1,5 @@
-import useHostProfile from './useHostProfile';
-import useUserProfile from './useUserProfile';
+import useHostProfile from './host/useHostProfile';
+import useUserProfile from './user/useUserProfile';
 import { MemberRole } from '@typings/member';
 
 const useMemberProfile = (memberId: string, role: MemberRole) => {

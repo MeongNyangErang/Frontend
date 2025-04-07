@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { theme } from './theme';
 
 export const buttonStyle = css`
@@ -67,12 +67,6 @@ export const labelDotStyle = css`
     background-color: ${({ theme }) => theme.colors.main};
     transform: translate(100%, -100%);
   }
-`;
-
-export const pageTitleStyle = css`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.gray700};
 `;
 
 export const noScrollBarStyle = css`

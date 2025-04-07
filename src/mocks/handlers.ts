@@ -97,4 +97,37 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
+  http.get(`${BASE_URL}/users/pets`, async () => {
+    const petListData = {
+      code: 200,
+      data: [
+        {
+          petId: 123,
+          name: '콩',
+          birthDate: '2013-10-14',
+          type: '소형견',
+          personality: '내향적',
+          activityLevel: '많음',
+        },
+        {
+          petId: 1234,
+          name: '솜',
+          birthDate: '2016-10-14',
+          type: '고양이',
+          personality: '내향적',
+          activityLevel: '적음',
+        },
+        {
+          petId: 12345,
+          name: '라떼',
+          birthDate: '2020-10-14',
+          type: '중형견',
+          personality: '외향적',
+          activityLevel: '보통',
+        },
+      ],
+    };
+
+    return HttpResponse.json(petListData);
+  }),
 ];
