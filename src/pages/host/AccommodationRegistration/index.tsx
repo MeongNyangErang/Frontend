@@ -62,15 +62,15 @@ const AccommodationRegistration = ({
   const {
     selectedRegister: selectedAccommodationType,
     toggleRegister: selectAccommodationType,
-  } = useHostRegister<string>();
+  } = useHostRegister();
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useHostRegister<string>();
+    useHostRegister();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useHostRegister<string>();
+  } = useHostRegister();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
-    useHostRegister<string>();
+    useHostRegister();
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,

@@ -3,6 +3,8 @@ import useHostRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from 'api/RegisterAddress';
 import axios from 'axios';
 import styled from 'styled-components';
+import Header from '@components/common/RegisterHeader/index';
+import { IoCloudUploadOutline } from 'react-icons/io5';
 import {
   SSFieldset,
   SSOptionSelectorWrapper,
@@ -19,6 +21,7 @@ import {
   SSPreviewWrapper,
   SErrorMessage,
   ButtonContainer,
+  SSUploadContainer,
 } from './styles';
 
 interface ButtonProps {
@@ -77,14 +80,16 @@ const RegisterAccommodation = ({
     string[]
   >([]);
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useHostRegister<string>();
+    useHostRegister();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useHostRegister<string>();
+  } = useHostRegister();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
-    useHostRegister<string>();
+    useHostRegister();
   const [errorMessage, setErrorMessage] = useState('');
+  const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -155,6 +160,7 @@ const RegisterAccommodation = ({
         setThumbnailPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setThumbnailImageUploaded(true);
     }
   };
 
@@ -181,6 +187,7 @@ const RegisterAccommodation = ({
           reader.readAsDataURL(file);
           return reader.result as string;
         });
+        setImageUploaded(true);
       } else {
         alert('최대 3개의 이미지만 업로드 가능합니다.');
       }
@@ -284,6 +291,7 @@ const RegisterAccommodation = ({
   return (
     <form onSubmit={handleSubmit}>
       <SSFieldset>
+        <Header title="숙소 등록" />
         <SSLabel>숙소명</SSLabel>
         <SSInput
           type="text"
@@ -365,7 +373,14 @@ const RegisterAccommodation = ({
           onSelect={selectPetFacility}
         />
         <SSLabelFile>대표이미지</SSLabelFile>
+        {!thumbnailImageUploaded && (
+          <SSUploadContainer htmlFor="thumbnail-upload">
+            <UploadIcon />
+            이미지 업로드
+          </SSUploadContainer>
+        )}
         <SSInputFile
+          id="thumbnail-upload"
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
@@ -376,8 +391,16 @@ const RegisterAccommodation = ({
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
           </SSImagePreviewWrapper>
         )}
+
         <SSLabelFile>이미지</SSLabelFile>
+        {!imageUploaded && (
+          <SSUploadContainer htmlFor="image-upload">
+            <UploadIcon />
+            이미지 업로드
+          </SSUploadContainer>
+        )}
         <SSInputFile
+          id="image-upload"
           type="file"
           multiple
           onChange={handleAdditionalImagesChange}
@@ -405,10 +428,16 @@ export default RegisterAccommodation;
 const CheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
-  color: black;
+  color: var(--gray-600);
   padding: 7px 10px;
   margin-bottom: 10px;
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
+`;
+
+const UploadIcon = styled(IoCloudUploadOutline)`
+  font-size: 30px;
+  color: var(--gray-600);
+  margin-bottom: 5px;
 `;
