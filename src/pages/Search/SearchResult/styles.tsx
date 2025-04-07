@@ -180,6 +180,13 @@ const SPrice = styled.p<{ $line: number }>`
   }
 `;
 
+const SItemsBottom = styled.div`
+  padding: ${({ theme }) => theme.layouts.paddingX};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export {
   SItems,
   SItem,
@@ -192,4 +199,5 @@ export {
   SRating,
   SPrice,
   SCapacity,
+  SItemsBottom,
 };
