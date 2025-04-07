@@ -75,4 +75,26 @@ export const handlers = [
 
     return HttpResponse.json(mockData);
   }),
+  http.get(`${BASE_URL}/users/profile`, async () => {
+    const userProfileData = {
+      code: 200,
+      data: {
+        nickname: '유저123닉네임',
+        profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      },
+    };
+    return HttpResponse.json(userProfileData);
+  }),
+  http.get(`${BASE_URL}/hosts/profile`, async () => {
+    const userProfileData = {
+      code: 200,
+      data: {
+        nickname: '호스트123닉네임',
+        profileImageUrl: 'https://i.imgur.com/WrQthuy.jpeg',
+        name: '홍길동',
+        currentPhoneNumber: '01012345678',
+      },
+    };
+    return HttpResponse.json(userProfileData);
+  }),
 ];

@@ -5,10 +5,10 @@ import ProfileBox from '@components/common/myPage/ProfileBox';
 import MyPageOverview from '@components/common/myPage/MyPageOverview';
 import ROUTES from '@constants/routes';
 
-const HostMyPage = () => {
+const UserMyPage = () => {
   const { member } = useAuth();
 
-  if (!member || member.role !== 'host') return <Navigate to={ROUTES.home} />;
+  if (!member || member.role !== 'user') return <Navigate to={ROUTES.home} />;
   return (
     <MyPageLayout>
       <ProfileBox
@@ -21,4 +21,4 @@ const HostMyPage = () => {
   );
 };
 
-export default HostMyPage;
+export default UserMyPage;

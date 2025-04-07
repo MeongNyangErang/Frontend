@@ -90,3 +90,10 @@ export const ellipsisStyle = css<{ $line: number }>`
   -webkit-box-orient: vertical;
   overflow: hidden;
 `;
+
+export const oneLineStyle = css`
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
