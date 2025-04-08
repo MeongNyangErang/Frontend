@@ -44,7 +44,10 @@ const AppRouter = () => {
                 path="register/accommodation"
                 element={<RegisterAccommodation mode="create" />}
               />
-              <Route path="register/room" element={<RegisterRoom />} />
+              <Route
+                path="register/room"
+                element={<RegisterRoom mode="create" />}
+              />
             </Route>
           </Route>
         </Route>

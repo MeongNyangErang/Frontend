@@ -83,6 +83,7 @@ export const SButton = styled.button`
   margin: 30px 0;
   height: 40px;
   text-align: center;
+  font-weight: bold;
   &:hover {
     background-color: rgb(238, 46, 81);
   }
@@ -230,6 +231,7 @@ export const SSButton = styled.button`
   margin: 30px 0;
   height: 40px;
   text-align: center;
+  font-weight: bold;
   &:hover {
     background-color: rgb(238, 46, 81);
   }

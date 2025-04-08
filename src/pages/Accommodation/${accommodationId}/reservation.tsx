@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Header from '@components/common/RegisterHeader/index';
 
 interface ButtonProps {
   selected: boolean;
@@ -11,6 +12,7 @@ const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const {
+    accommodationName,
     roomId,
     checkInDate,
     checkOutDate,
@@ -104,6 +106,8 @@ const Reservation = () => {
 
   return (
     <SFieldset>
+      <Header title="예약" />
+      <SInputTittle value={accommodationName || ''} disabled />
       <Wrappers>
         <HalfWidth>
           <SLabel>체크인</SLabel>
@@ -159,28 +163,36 @@ const Reservation = () => {
           X
         </CheckInput>
       </ButtonContainer>
+      <SeparatorBox />
       <Wrappers>
         <HalfPay>
-          <SLabel>총 결제 금액</SLabel>
-          <SAmountText>{totalPrice}원</SAmountText>
+          <STotal>총 결제 금액</STotal>
         </HalfPay>
-        <HalfPay>
-          <SButton onClick={handlePayment}>결제하기</SButton>
-        </HalfPay>
+        <SAmountText>{totalPrice}원</SAmountText>
       </Wrappers>
+      <SButton onClick={handlePayment}>결제하기</SButton>
     </SFieldset>
   );
 };
 
 export default Reservation;
 
+const SInputTittle = styled.input`
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
 const Wrappers = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 const SLabelInfo = styled.div`
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 5px;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const HalfWidth = styled.div`
@@ -192,16 +204,17 @@ const HalfPay = styled.div`
 `;
 
 const SButton = styled.button`
-  background-color: var(--sub-color);
   color: white;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
+  height: 40px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+  background-color: #f03e5e;
   &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
+    background-color: rgb(235, 47, 81);
   }
 `;
 
@@ -212,11 +225,26 @@ const SFieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
+  background-color: white;
 `;
 
 const SLabel = styled.label`
   font-family: 'Noto Sans KR';
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+const STotal = styled.label`
+  font-family: 'Noto Sans KR';
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: block;
+  font-weight: bold;
+  font-size: 18px;
 `;
 
 const SInputCheck = styled.input`
@@ -232,10 +260,11 @@ const SInputText = styled.input`
 
 const SInputTel = styled.input`
   margin: 5px 2px;
+  font-size: 16px;
 `;
 
 const SAmountText = styled.p`
-  font-size: 1.2rem;
+  font-size: 18px;
   font-weight: bold;
   color: #f03e5e;
 `;
@@ -249,13 +278,13 @@ const AmountWrapper = styled.div`
 
 const SeparatorBox = styled.div`
   height: 2px;
-  background-color: #ccc;
+  background-color: var(--gray-100);
   margin: 15px 0;
 `;
 
 const SInputWrapper = styled.div`
   margin-bottom: 15px;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   width: 50%;
 `;
 
