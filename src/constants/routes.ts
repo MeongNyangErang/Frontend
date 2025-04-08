@@ -21,6 +21,7 @@ const ROUTES = {
       reviews: '/mypage/host/reviews',
       registerAccommodation: '/mypage/host/register/registerAccommodation',
       registerRoom: '/mypage/host/register/registerRoom',
+      roomList: '/mypage/host/register/RoomList',
     },
   },
   search: '/search',

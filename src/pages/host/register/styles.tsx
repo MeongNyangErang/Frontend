@@ -173,7 +173,7 @@ export const SSLabelFile = styled.label`
 export const SSInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-   height:40px;
+  height:40px;
   padding: 8px 12px;
   margin-bottom: 5px;
   border-radius: 4px;
@@ -194,7 +194,7 @@ export const SSInputExplain = styled.textarea`
   padding: 8px 12px;
   background-color: var(--gray-100);
    &:active {
-    background-color: var(--gray-200);
+  background-color: var(--gray-200);
   border-radius: 4px;
   font-size: 14px;
   resize: none;
@@ -204,7 +204,7 @@ export const SSInputExplain = styled.textarea`
 export const SSInputAddress = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-   height:40px;
+  height:40px;
   padding: 8px 12px;
   margin-bottom: 7px;
   background-color: var(--gray-100);

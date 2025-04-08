@@ -19,6 +19,7 @@ const RegisterRoom = lazy(() => import('@pages/host/register/RegisterRoom'));
 const Reservation = lazy(
   () => import('@pages/Accommodation/${accommodationId}/reservation'),
 );
+const RoomList = lazy(() => import('@pages/host/register/RoomList'));
 
 const AppRouter = () => {
   return (
@@ -48,6 +49,7 @@ const AppRouter = () => {
                 path="register/room"
                 element={<RegisterRoom mode="create" />}
               />
+              <Route path="register/roomList" element={<RoomList />} />
             </Route>
           </Route>
         </Route>
