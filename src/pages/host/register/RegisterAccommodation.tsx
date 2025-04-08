@@ -64,7 +64,7 @@ const RegisterAccommodation = ({
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [detailedAddress, setDetailedAddress] = useState('');
-  const [addressObj, setAddressObj] = useState({
+  const [address, setAddress] = useState({
     areaAddress: '',
     townAddress: '',
   });
@@ -197,8 +197,17 @@ const RegisterAccommodation = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !detailedAddress) {
-      alert('모든 필드를 채워주세요.');
+    if (!name || !description) {
+      alert('숙소 정보를 입력해주세요.');
+      return;
+    }
+    if (!detailedAddress) {
+      alert('상세주소를 입력해주세요.');
+      return;
+    }
+
+    if (!thumbnail) {
+      alert('대표이미지는 필수입니다.');
       return;
     }
 
@@ -214,10 +223,7 @@ const RegisterAccommodation = ({
     const formData = new FormData();
     formData.append('name', name);
     formData.append('type', accommodationType || '');
-    formData.append(
-      'address',
-      `${addressObj.areaAddress} ${addressObj.townAddress}`,
-    );
+    formData.append('address', `${address.areaAddress} ${address.townAddress}`);
     formData.append('detailedAddress', detailedAddress);
     formData.append('description', description);
     formData.append('latitude', latitude?.toString() || '');
@@ -267,26 +273,49 @@ const RegisterAccommodation = ({
   // 숙소 수정
   useEffect(() => {
     if (mode === 'edit' && accommodationId) {
-      axios
-        .get(`/api/v1/hosts/accommodations/${accommodationId}`)
-        .then((response) => {
+      const fetchAccommodationData = async () => {
+        try {
+          const response = await axios.get(
+            `/api/v1/hosts/accommodations/${accommodationId}`,
+          );
           const accommodation = response.data;
+
           setName(accommodation.name);
-          setDescription(accommodation.description);
-          setAddressObj({
+          setAccommodationType(accommodation.type);
+          setDescription(accommodation.description || '');
+          setAddress({
             areaAddress: accommodation.address.area,
             townAddress: accommodation.address.town,
           });
+          setDetailedAddress(accommodation.detailedAddress || '');
           setLatitude(accommodation.latitude);
           setLongitude(accommodation.longitude);
           setThumbnailPreview(accommodation.thumbnail);
-          setAdditionalImagesPreview(accommodation.additionalImages);
-        })
-        .catch((error) => {
+          setAdditionalImagesPreview(accommodation.additionalImages || []);
+          selectFacility(accommodation.facilityTypes || []);
+          selectPetFacility(accommodation.petFacilityTypes || []);
+          selectAllowPet(accommodation.allowPetTypes || []);
+          if (accommodation.thumbnail) {
+            setThumbnail(accommodation.thumbnail);
+          }
+
+          if (accommodation.additionalImages) {
+            setAdditionalImages(accommodation.additionalImages);
+          }
+        } catch (error) {
           console.error('Failed to fetch accommodation data:', error);
-        });
+          alert('숙소 데이터를 불러오는 데 실패했습니다.');
+        }
+      };
+      fetchAccommodationData();
     }
-  }, [mode, accommodationId]);
+  }, [
+    mode,
+    accommodationId,
+    selectFacility,
+    selectPetFacility,
+    selectAllowPet,
+  ]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -312,12 +341,12 @@ const RegisterAccommodation = ({
         </SSDescriptionWrapper>
         <SSLabel>주소</SSLabel>
         <RegisterAddress
-          setAddressObj={setAddressObj}
+          setAddress={setAddress}
           postcodeScriptUrl={POSTCODE_SCRIPT_URL}
         />
         <SSInputAddress
           type="text"
-          value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
+          value={`${address.areaAddress} ${address.townAddress}`}
           onClick={handleAddressClick}
           readOnly
         />
@@ -384,7 +413,6 @@ const RegisterAccommodation = ({
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
-          required
         />
         {thumbnailPreview && (
           <SSImagePreviewWrapper>

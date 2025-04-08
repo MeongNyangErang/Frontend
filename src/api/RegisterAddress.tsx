@@ -2,15 +2,12 @@ import React from 'react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 
 interface RegisterAddressProps {
-  setAddressObj: (address: {
-    areaAddress: string;
-    townAddress: string;
-  }) => void;
+  setAddress: (address: { areaAddress: string; townAddress: string }) => void;
   postcodeScriptUrl: string;
 }
 
 const RegisterAddress: React.FC<RegisterAddressProps> = ({
-  setAddressObj,
+  setAddress,
   postcodeScriptUrl,
 }) => {
   const open = useDaumPostcodePopup(postcodeScriptUrl);
@@ -31,7 +28,7 @@ const RegisterAddress: React.FC<RegisterAddressProps> = ({
 
       fullAddress = fullAddress.replace(localAddress, '');
 
-      setAddressObj({
+      setAddress({
         areaAddress: localAddress,
         townAddress: (fullAddress +=
           extraAddress !== '' ? `(${extraAddress})` : ''),

@@ -7,7 +7,10 @@ export const SFieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 100vh;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
 `;
 
 export const SOptionSelectorWrapper = styled.div`
@@ -72,16 +75,16 @@ export const SCharacterCount = styled.div`
 `;
 
 export const SButton = styled.button`
-  background-color: var(--sub-color);
+  background-color: #f03e5e;
   color: white;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
+  margin: 30px 0;
+  height: 40px;
+  text-align: center;
   &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
+    background-color: rgb(238, 46, 81);
   }
 `;
 
@@ -109,7 +112,7 @@ export const SInputFile = styled.input`
 export const SFormItem = styled.div`
   display: flex;
   flex-direction: column;
-  width: 49%;
+  width: 24%;
 `;
 
 export const SInputNumber = styled.input`
@@ -138,7 +141,10 @@ export const SSFieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 100vh;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
 `;
 
 export const SSOptionSelectorWrapper = styled.div`
@@ -216,16 +222,16 @@ export const SSCharacterCount = styled.div`
 `;
 
 export const SSButton = styled.button`
-  background-color: var(--sub-color);
+  background-color: #f03e5e;
   color: white;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
+  margin: 30px 0;
+  height: 40px;
+  text-align: center;
   &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
+    background-color: rgb(238, 46, 81);
   }
 `;
 

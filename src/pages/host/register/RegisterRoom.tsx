@@ -83,6 +83,12 @@ const RegisterRoom = ({
     extraPeopleFee: '',
     extraPetFee: '',
   });
+  const [counts, setCount] = useState({
+    standardPeopleCount: '',
+    maxPeopleCount: '',
+    standardPetCount: '',
+    maxPetCount: '',
+  });
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutTime, setCheckOutTime] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -110,12 +116,58 @@ const RegisterRoom = ({
     priceKey: keyof typeof prices,
   ) => {
     const rawValue = e.target.value.replace(/,/g, '');
+    const isNumeric = /^\d*$/.test(rawValue);
+
+    if (!isNumeric) {
+      alert('금액은 숫자만 입력할 수 있습니다.');
+      return;
+    }
+
     const formattedValue = new Intl.NumberFormat().format(Number(rawValue));
 
     setPrices((prevPrices) => ({
       ...prevPrices,
       [priceKey]: formattedValue,
     }));
+  };
+
+  const handleCountChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: keyof typeof counts,
+  ) => {
+    const rawValue = e.target.value;
+    const isNumeric = /^\d*$/.test(rawValue);
+
+    if (!isNumeric) {
+      alert('숫자만 입력할 수 있습니다.');
+      return;
+    }
+
+    const numericValue = Number(rawValue);
+    if (!isNaN(numericValue)) {
+      if (
+        key === 'maxPeopleCount' &&
+        numericValue < Number(counts.standardPeopleCount)
+      ) {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: (Number(counts.standardPeopleCount) + 1).toString(),
+        }));
+      } else if (
+        key === 'maxPetCount' &&
+        numericValue < Number(counts.standardPetCount)
+      ) {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: (Number(counts.standardPetCount) + 1).toString(),
+        }));
+      } else {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: numericValue.toString(),
+        }));
+      }
+    }
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,14 +222,33 @@ const RegisterRoom = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!name || !description) {
+      alert('객실 정보를 입력해주세요.');
+      return;
+    }
+
     if (
-      !name ||
-      !description ||
-      !checkInTime ||
-      !checkOutTime ||
-      !prices.price
+      !prices.price ||
+      !prices.extraFee ||
+      !prices.extraPeopleFee ||
+      !prices.extraPetFee
     ) {
-      alert('모든 필드를 채워주세요.');
+      alert('금액을 입력해주세요.');
+      return;
+    }
+
+    if (
+      !counts.standardPeopleCount ||
+      !counts.maxPeopleCount ||
+      !counts.standardPetCount ||
+      !counts.maxPetCount
+    ) {
+      alert('인원을 입력해주세요.');
+      return;
+    }
+
+    if (!thumbnail) {
+      alert('대표 이미지를 선택해주세요.');
       return;
     }
 
@@ -190,14 +261,23 @@ const RegisterRoom = ({
       return;
     }
 
-    if (checkInTime < checkOutTime) {
-      alert('체크인은 체크인 아웃시간보다 나중이어야 합니다.');
+    if (!checkInTime || !checkOutTime) {
+      alert('체크인, 체크아웃을 선택해주세요.');
+      return;
+    }
+
+    if (checkInTime >= checkOutTime) {
+      alert('체크인은 체크아웃 시간보다 나중이어야 합니다.');
       return;
     }
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
+    formData.append('standardPeopleCount', counts.standardPeopleCount);
+    formData.append('maxPeopleCount', counts.maxPeopleCount);
+    formData.append('standardPetCount', counts.standardPetCount);
+    formData.append('maxPetCount', counts.maxPetCount);
     formData.append('facilityTypes', JSON.stringify(selectedFacility));
     formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
     formData.append('hashTagTypes', JSON.stringify(selectedHashTag));
@@ -291,7 +371,6 @@ const RegisterRoom = ({
               placeholder="체크인"
               value={checkInTime}
               onChange={(e) => setCheckInTime(e.target.value)}
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -300,7 +379,6 @@ const RegisterRoom = ({
               placeholder="체크아웃"
               value={checkOutTime}
               onChange={(e) => setCheckOutTime(e.target.value)}
-              required
             />
           </SFormItem>
         </SFormContainer>
@@ -311,36 +389,32 @@ const RegisterRoom = ({
             <SInputNumber
               type="number"
               placeholder="기준 인원"
-              min="1"
-              max="5"
-              required
+              value={counts.standardPeopleCount}
+              onChange={(e) => handleCountChange(e, 'standardPeopleCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="최대 인원"
-              min="3"
-              max="10"
-              required
+              value={counts.maxPeopleCount}
+              onChange={(e) => handleCountChange(e, 'maxPeopleCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="기준 반려동물"
-              min="1"
-              max="5"
-              required
+              value={counts.standardPetCount}
+              onChange={(e) => handleCountChange(e, 'standardPetCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="최대 반려동물"
-              min="3"
-              max="10"
-              required
+              value={counts.maxPetCount}
+              onChange={(e) => handleCountChange(e, 'maxPetCount')}
             />
           </SFormItem>
         </SFormContainer>
@@ -353,7 +427,6 @@ const RegisterRoom = ({
               value={prices.price}
               onChange={(e) => handleNumberChange(e, 'price')}
               placeholder="기본 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -362,7 +435,6 @@ const RegisterRoom = ({
               value={prices.extraFee}
               onChange={(e) => handleNumberChange(e, 'extraFee')}
               placeholder="+ 공휴일/주말 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -371,7 +443,6 @@ const RegisterRoom = ({
               value={prices.extraPeopleFee}
               onChange={(e) => handleNumberChange(e, 'extraPeopleFee')}
               placeholder="인원 추가 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -380,7 +451,6 @@ const RegisterRoom = ({
               value={prices.extraPetFee}
               onChange={(e) => handleNumberChange(e, 'extraPetFee')}
               placeholder="반려동물 추가 금액"
-              required
             />
           </SFormItem>
         </SFormContainer>
@@ -418,7 +488,6 @@ const RegisterRoom = ({
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
-          required
         />
         {thumbnailPreview && (
           <SImagePreviewWrapper>
