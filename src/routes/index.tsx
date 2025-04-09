@@ -21,7 +21,11 @@ const RegisterRoom = lazy(() => import('@pages/host/register/Room'));
 const Reservation = lazy(
   () => import('@pages/Accommodation/${accommodationId}/reservation'),
 );
+
 const Chat = lazy(() => import('@pages/Chat/index'));
+const UserReservationList = lazy(
+  () => import('@pages/user/UserReservationList'),
+);
 
 const AppRouter = () => {
   return (
@@ -40,6 +44,10 @@ const AppRouter = () => {
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />
               <Route path="my-pet" element={<UserMyPet />} />
+              <Route
+                path="reservation-list"
+                element={<UserReservationList />}
+              />
             </Route>
           </Route>
 

@@ -1,6 +1,12 @@
 import { http, HttpResponse } from 'msw';
 import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+import { ReservationStatus } from '@typings/reservation';
 import { accommodationsData } from './data/accommodations';
+import {
+  reservedReservations,
+  canceledReservations,
+  completedReservations,
+} from './data/userReservationList';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -138,5 +144,33 @@ export const handlers = [
   }),
   http.delete(`${BASE_URL}/users/pets/:petId`, async () => {
     return HttpResponse.json({ message: '반려동물 정보 삭제 성공' });
+  }),
+  http.get(`${BASE_URL}/users/reservations`, async ({ request }) => {
+    const url = new URL(request.url);
+    const status = url.searchParams.get('status') as ReservationStatus;
+
+    let content;
+    switch (status) {
+      case 'reserved':
+        content = reservedReservations;
+        break;
+      case 'completed':
+        content = completedReservations;
+        break;
+      case 'canceled':
+        content = canceledReservations;
+        break;
+      default:
+        throw new Error('잘못된 status 입니다.');
+    }
+
+    const data = {
+      code: 200,
+      content,
+      cursor: 123,
+      hasNext: true,
+    };
+
+    return HttpResponse.json(data);
   }),
 ];
