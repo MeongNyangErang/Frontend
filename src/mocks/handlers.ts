@@ -130,4 +130,13 @@ export const handlers = [
 
     return HttpResponse.json(petListData);
   }),
+  http.post(`${BASE_URL}/users/pets`, async () => {
+    return HttpResponse.json({ message: '반려동물 등록 성공' });
+  }),
+  http.put(`${BASE_URL}/users/pets/:petId`, async () => {
+    return HttpResponse.json({ message: '반려동물 정보 수정 성공' });
+  }),
+  http.delete(`${BASE_URL}/users/pets/:petId`, async () => {
+    return HttpResponse.json({ message: '반려동물 정보 삭제 성공' });
+  }),
 ];

@@ -1,37 +1,36 @@
-import { useCallback, useState } from 'react';
-import { initialPetInfoState, PET_FORM_FIELDS } from '@constants/pet';
-import { PetInfo, PetInfoState, PetInfoKey, PetInfoValue } from '@typings/pet';
+import { memo } from 'react';
+import DatePicker from 'react-datepicker';
+import { PET_FORM_FIELDS } from '@constants/pet';
+import { PetInfo } from '@typings/pet';
 import OptionSelector from '@components/common/OptionSelector';
 import DropDownSelector from '@components/common/DropDownSelector';
 import Button from '@components/common/Button';
-import DatePicker from 'react-datepicker';
+import DatePickerInput from './DatePickerInput';
+import usePetForm from './usePetForm';
 import {
   SPetFormGroup,
   SPetFormWrap,
   SPetFormTitle,
   SPetFormInput,
+  SPetFormSubmitBox,
+  SPetFormError,
 } from './styles';
 
 interface PetFormProps {
   selectedPet: PetInfo | null;
+  onSuccess: () => void;
 }
 
-const PetForm = ({ selectedPet }: PetFormProps) => {
-  const [newInfo, setNewInfo] = useState<PetInfoState>(
-    selectedPet || initialPetInfoState,
-  );
-
-  const onClickOption = useCallback(
-    (key: PetInfoKey) => (value: PetInfoValue) => {
-      setNewInfo((prev) => ({ ...prev, [key]: value }));
-    },
-    [],
-  );
-
-  const onChangeInput = (key: PetInfoKey, value: PetInfoValue) => {
-    setNewInfo((prev) => ({ ...prev, [key]: value }));
-  };
-
+const PetForm = ({ selectedPet, onSuccess }: PetFormProps) => {
+  const {
+    newInfo,
+    isLoading,
+    error,
+    handleChangeDate,
+    handleSubmitPetForm,
+    onChangeInput,
+    onClickOption,
+  } = usePetForm({ selectedPet, onSuccess });
   return (
     <SPetFormWrap>
       <SPetFormTitle>반려동물 등록</SPetFormTitle>
@@ -56,10 +55,20 @@ const PetForm = ({ selectedPet }: PetFormProps) => {
                 <SPetFormInput
                   type="text"
                   value={newInfo[id]}
-                  onChange={(e) => onChangeInput('name', e.target.value)}
+                  onChange={(e) => onChangeInput('name', e.target.value.trim())}
                 />
               )}
-              {id === 'birthDate' && <DatePicker selected={new Date()} />}
+              {id === 'birthDate' && (
+                <DatePicker
+                  selected={
+                    newInfo.birthDate ? new Date(newInfo.birthDate) : null
+                  }
+                  dateFormat="yyyy-MM-dd"
+                  onChange={(date) => handleChangeDate(date)}
+                  customInput={<DatePickerInput />}
+                  maxDate={new Date()}
+                />
+              )}
               {(id === 'personality' || id === 'activityLevel') && (
                 <DropDownSelector
                   onClick={onClickOption(id)}
@@ -71,19 +80,23 @@ const PetForm = ({ selectedPet }: PetFormProps) => {
           </SPetFormGroup>
         );
       })}
-      <Button
-        onClick={() => {
-          console.log(newInfo);
-        }}
-        variant="main"
-        fontSize="16px"
-        fullWidth
-        fixedHeight
-      >
-        등록하기
-      </Button>
+      <SPetFormSubmitBox>
+        <Button
+          onClick={handleSubmitPetForm}
+          disabled={Object.values(newInfo).some((v) => !v)}
+          variant="main"
+          fontSize="16px"
+          type="submit"
+          isLoading={isLoading}
+          fullWidth
+          fixedHeight
+        >
+          등록하기
+        </Button>
+        <SPetFormError>{error}</SPetFormError>
+      </SPetFormSubmitBox>
     </SPetFormWrap>
   );
 };
 
-export default PetForm;
+export default memo(PetForm);

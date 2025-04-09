@@ -17,6 +17,10 @@ const SDropDownButton = styled.button`
   }
 `;
 
+const SDropDownPlaceholder = styled.span`
+  color: ${({ theme }) => theme.colors.gray500};
+`;
+
 const SDropDownOptions = styled.div`
   position: absolute;
   z-index: 2;
@@ -44,4 +48,5 @@ export {
   SDropDownButton,
   SDropDownOptions,
   SDropDownOption,
+  SDropDownPlaceholder,
 };

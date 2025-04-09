@@ -1,17 +1,14 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useMyPetList from '@hooks/query/user/useMyPetList';
 import SubPageHeader from '@components/common/SubPageHeader';
 import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
-import Modal from '@components/common/Modal';
 import Button from '@components/common/Button';
 import ROUTES from '@constants/routes';
 import dogProfile from '@assets/images/profile/profileDog.png';
 import catProfile from '@assets/images/profile/profileCat.png';
 import { getAge } from '@utils/formatter';
-import useToggleModal from '@hooks/ui/useToggleModal';
-import { PetInfo } from '@typings/pet';
+import useUserMyPet from '@hooks/page/useUserMyPet';
+import UserMyPetModals from './UserMyPetModals';
 import {
   PET_TYPE_MAP,
   PET_ACTIVITY_LEVEL_MAP,
@@ -25,24 +22,21 @@ import {
   SItemImageBox,
   SItemTextBox,
   SItemButtonBox,
-  SItemEditButton,
+  SItemButton,
   SUserEmptyBox,
 } from './styles';
-import PetForm from './PetForm';
 
 const UserMyPet = () => {
+  const {
+    data,
+    error,
+    isLoading,
+    openForm,
+    handleEditItem,
+    handleClickDeleteButton,
+    ...rest
+  } = useUserMyPet();
   const navigate = useNavigate();
-  const { data: { data } = {}, error, isLoading } = useMyPetList();
-  const [selectedPet, setSelectedPet] = useState<PetInfo | null>(null);
-  const { isModalOpen, openModal, closeModal } = useToggleModal();
-
-  const updateSelectedPet = (pet: PetInfo) => {
-    setSelectedPet(pet);
-  };
-
-  const resetSelectedPet = () => {
-    setSelectedPet(null);
-  };
 
   return (
     <>
@@ -90,9 +84,14 @@ const UserMyPet = () => {
                       </div>
                     </SItemTextBox>
                     <SItemButtonBox>
-                      <SItemEditButton onClick={() => updateSelectedPet(pet)}>
+                      <SItemButton onClick={() => handleEditItem(pet)}>
                         편집
-                      </SItemEditButton>
+                      </SItemButton>
+                      <SItemButton
+                        onClick={() => handleClickDeleteButton(pet.petId)}
+                      >
+                        삭제
+                      </SItemButton>
                     </SItemButtonBox>
                   </SUserMyPetItem>
                 );
@@ -106,18 +105,11 @@ const UserMyPet = () => {
             <span>반려동물을 등록하고 맞춤 숙소 추천을 받아보세요!</span>
           </SUserEmptyBox>
         )}
-        <Button onClick={openModal} fontSize="13px" variant="grayBorder">
+        <Button onClick={openForm} fontSize="13px" variant="grayBorder">
           등록하기
         </Button>
       </SUserMyPetWrap>
-      <Modal
-        onClose={closeModal}
-        isOpen={isModalOpen}
-        variant="full"
-        closeType="x"
-      >
-        <PetForm selectedPet={selectedPet} />
-      </Modal>
+      <UserMyPetModals {...rest} />
     </>
   );
 };

@@ -53,7 +53,6 @@ export const PET_FORM_FIELDS = [
 ] as const;
 
 export const initialPetInfoState = {
-  petId: undefined,
   name: '',
   birthDate: '',
   type: '',

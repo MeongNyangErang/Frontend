@@ -28,7 +28,7 @@ const SUserEmptyBox = styled.div`
 
 const SUserMyPetStatus = styled.div`
   padding-top: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   width: 100%;
   font-size: 13px;
   color: ${({ theme }) => theme.colors.gray600};
@@ -60,7 +60,7 @@ const SUserMyPetItem = styled.div`
   align-items: center;
   flex-wrap: wrap;
   column-gap: ${({ theme }) => theme.layouts.paddingX};
-  row-gap: 8px;
+  row-gap: ${({ theme }) => theme.layouts.paddingX};
   padding: ${({ theme }) => theme.layouts.paddingX};
   border: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
   border-radius: ${({ theme }) => theme.radius.md};
@@ -124,27 +124,52 @@ const SItemButtonBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 2px;
 
   ${media.desktop} {
     width: 100%;
   }
 `;
 
-const SItemEditButton = styled.button`
+const SItemButton = styled.button`
   position: relative;
-  padding: 4px 6px;
+  padding: 4px 8px;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.gray500};
 
-  &::before {
+  &:hover {
+    color: ${({ theme }) => theme.colors.gray700};
+  }
+
+  &:last-child::before {
     content: '';
     position: absolute;
-    left: 50%;
-    bottom: 2px;
-    width: 28px;
-    height: 1px;
+    left: -1px;
+    top: 50%;
+    width: 1px;
+    height: 14px;
     background-color: ${({ theme }) => theme.colors.gray300};
-    transform: translateX(-50%);
+    transform: translateY(-50%);
+  }
+`;
+
+const SDeleteConfirmation = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 16px;
+    width: 100%;
+  }
+
+  > span {
+    padding-top: 12px;
+    color: ${({ theme }) => theme.colors.main};
   }
 `;
 
@@ -156,6 +181,7 @@ export {
   SItemImageBox,
   SItemTextBox,
   SItemButtonBox,
-  SItemEditButton,
+  SItemButton,
   SUserEmptyBox,
+  SDeleteConfirmation,
 };

@@ -12,7 +12,6 @@ export interface PetInfo {
 }
 
 export interface PetInfoState {
-  petId: number | undefined;
   name: string;
   birthDate: string;
   type: '' | PetType;

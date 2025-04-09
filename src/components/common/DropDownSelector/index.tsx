@@ -5,6 +5,7 @@ import {
   SDropDownButton,
   SDropDownOptions,
   SDropDownOption,
+  SDropDownPlaceholder,
 } from './styles';
 
 interface NameValueObject {
@@ -34,7 +35,9 @@ const DropDownSelector = ({
   return (
     <SDropDownSelectorWrap ref={targetRef}>
       <SDropDownButton onClick={toggleIsOpen}>
-        {!value && '옵션을 선택해주세요'}
+        {!value && (
+          <SDropDownPlaceholder>옵션을 선택해주세요.</SDropDownPlaceholder>
+        )}
         {value &&
           (isObject
             ? (options as NameValueObject[]).find(
