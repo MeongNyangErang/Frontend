@@ -11,10 +11,10 @@ const SMyPageWrap = styled.div`
 
 const SMyPageContainer = styled.div`
   margin: 0 auto;
-  padding-top: 20px;
+  padding-top: 0;
   max-width: ${({ theme }) => theme.layouts.innerWidth};
 
-  ${media.tablet} {
+  ${media.desktop} {
     padding-top: 60px;
   }
 `;
@@ -63,7 +63,7 @@ const SMyPageMenuLink = styled(NavLink)`
   }
 
   &.active {
-    color: ${({ theme }) => theme.colors.sub};
+    color: ${({ theme }) => theme.colors.main};
   }
 `;
 

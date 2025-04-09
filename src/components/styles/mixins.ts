@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { css } from 'styled-components';
 import { theme } from './theme';
 
 export const buttonStyle = css`
@@ -17,7 +17,7 @@ export const inputStyle = css`
   width: 100%;
   height: 48px;
   font-size: 14px;
-  border-radius: ${theme.radius.sm};
+  border-radius: ${theme.radius.md};
   outline: none;
 `;
 

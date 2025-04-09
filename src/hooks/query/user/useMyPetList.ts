@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyPetList } from '@services/pets';
+import { getMyPetList } from '@services/pet';
 
 const useMyPetList = () => {
   return useQuery({
