@@ -88,19 +88,20 @@ const Reservation = () => {
         hasvehicle,
         totalPrice: totalPrice.replace(/[^0-9]/g, ''),
       };
+      const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
       const response = await axios.post(
-        '/api/v1/users/reservations',
+        `${BASE_URL}/accommodation/$%7BaccommodationId%7D/reservation`,
         paymentData,
       );
       if (response.status === 200) {
-        alert('결제가 완료되었습니다!');
+        alert('예약이 완료되었습니다!');
       } else {
-        alert('결제 처리에 실패했습니다.');
+        alert('예약이 실패했습니다.');
       }
     } catch (error) {
       console.error('결제 API 호출 중 오류 발생:', error);
-      alert('결제 처리에 오류가 발생했습니다.');
+      alert('오류가 발생했습니다.');
     }
   };
 

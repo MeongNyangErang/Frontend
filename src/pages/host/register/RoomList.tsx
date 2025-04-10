@@ -18,27 +18,27 @@ interface Room {
 
 const RoomList: React.FC = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
-
-  const fetchRooms = async () => {
-    try {
-      const response = await axios.get('/api/v1/hosts/rooms');
-      if (response.data.code === 200) {
-        setRoomList(response.data.data.content);
-      } else {
-        console.log('객실을 불러오는 데 실패했습니다.');
-      }
-    } catch (error) {
-      console.log('서버 오류가 발생했습니다.');
-    } finally {
-      console.log('객실 로딩이 완료되었습니다.');
-    }
-  };
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/register/roomList`);
+        if (response.data.code === 200) {
+          setRoomList(response.data.data);
+        } else {
+          console.log('객실을 불러오는 데 실패했습니다.');
+        }
+      } catch (error) {
+        console.log('서버 오류가 발생했습니다.');
+      } finally {
+        console.log('객실 로딩이 완료되었습니다.');
+      }
+    };
     fetchRooms();
-  }, []);
+  }, [BASE_URL]);
 
-  const navigate = useNavigate();
   const openRegisterPage = () => {
     navigate('/register');
   };
@@ -47,7 +47,7 @@ const RoomList: React.FC = () => {
     return price.toLocaleString();
   };
 
-  if (roomList.length === 0) {
+  if (!roomList || roomList.length === 0) {
     return (
       <div>
         <NoRoomsMessage>등록된 객실이 없습니다</NoRoomsMessage>
@@ -94,17 +94,17 @@ export default RoomList;
 const HotelContainer = styled.div`
   font-family: 'Noto Sans KR';
   display: flex;
-  margin: 20px auto;
+  margin: 0 auto;
   width: 100%;
-  max-width: 760px;
+  max-width: 1024px;
   min-width: 320px;
-  padding: 10px;
+  padding: 16px;
   border-bottom: 1px solid #e0e0e0;
 `;
 
 const Thumbnail = styled.img`
-  width: 450px;
-  height: auto;
+  width: 500px;
+  height: 150px;
   object-fit: cover;
   margin-right: 20px;
 `;
@@ -113,12 +113,10 @@ const HotelTitle = styled.h2`
   font-size: 20px;
   font-weight: bold;
   color: var(--gray-700);
-  margin-bottom: 5px;
 `;
 
 const HotelInfo = styled.div`
   display: grid;
-  gap: 5px;
   width: 100%;
 `;
 
@@ -140,7 +138,6 @@ const InfoRow = styled.div`
 `;
 
 const InfoCharge = styled.p`
-  margin: 0;
   font-size: 16px;
   font-weight: bold;
   color: var(--gray-700);

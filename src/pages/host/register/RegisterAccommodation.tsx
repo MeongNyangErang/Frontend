@@ -54,13 +54,8 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const RegisterAccommodation = ({
-  mode,
-  accommodationId,
-}: {
-  mode: 'create' | 'edit';
-  accommodationId?: string;
-}) => {
+const RegisterAccommodation = () => {
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [detailedAddress, setDetailedAddress] = useState('');
@@ -76,6 +71,7 @@ const RegisterAccommodation = ({
   const [accommodationType, setAccommodationType] = useState<string | null>(
     null,
   );
+
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
   >([]);
@@ -90,6 +86,42 @@ const RegisterAccommodation = ({
   const [errorMessage, setErrorMessage] = useState('');
   const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const [accommodationId, setAccommodationId] = useState<string | null>(null);
+
+  const POSTCODE_SCRIPT_URL =
+    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+  const VITE_GEO_API_KEY = import.meta.env.VITE_GEO_API_KEY;
+
+  const geocodeAddress = async (address: string, apiKey: string) => {
+    try {
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+      const response = await axios.get(url);
+
+      if (response.data.status === 'OK') {
+        const location = response.data.results[0].geometry.location;
+        return { lat: location.lat, lng: location.lng };
+      } else {
+        console.error('Geocoding failed:', response.data.status);
+        return { lat: null, lng: null };
+      }
+    } catch (error) {
+      console.error('Error geocoding address:', error);
+      return { lat: null, lng: null };
+    }
+  };
+
+  const handleAddressChange = async (newAddress: {
+    areaAddress: string;
+    townAddress: string;
+  }) => {
+    setAddress(newAddress);
+    const fullAddress = `${newAddress.areaAddress} ${newAddress.townAddress}`;
+
+    const { lat, lng } = await geocodeAddress(fullAddress, VITE_GEO_API_KEY);
+    setLatitude(lat);
+    setLongitude(lng);
+  };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -101,10 +133,10 @@ const RegisterAccommodation = ({
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    const regex = /^[a-zA-Z0-9가-힣()]*$/;
+    const regex = /^[가-힣a-zA-Z0-9\s]+$/;
+
     if (regex.test(newName)) {
       setName(newName);
-      setErrorMessage('');
     } else {
       setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
     }
@@ -113,9 +145,6 @@ const RegisterAccommodation = ({
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDetailedAddress(e.target.value);
   };
-
-  const POSTCODE_SCRIPT_URL =
-    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
   const handleAddressClick = () => {
     document.getElementById('addressButton')?.click();
@@ -205,18 +234,16 @@ const RegisterAccommodation = ({
       alert('상세주소를 입력해주세요.');
       return;
     }
-
-    if (!thumbnail) {
-      alert('대표이미지는 필수입니다.');
-      return;
-    }
-
     if (
       selectedFacility.length === 0 ||
       selectedPetFacility.length === 0 ||
       selectedAllowPet.length === 0
     ) {
       alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
+      return;
+    }
+    if (!thumbnail) {
+      alert('대표이미지는 필수입니다.');
       return;
     }
 
@@ -242,15 +269,9 @@ const RegisterAccommodation = ({
 
     try {
       let response;
-      if (mode === 'create') {
-        response = await axios.post('/api/v1/hosts/accommodations', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-      } else if (mode === 'edit' && accommodationId) {
+      if (accommodationId) {
         response = await axios.put(
-          `/api/v1/hosts/accommodations/${accommodationId}`,
+          `${BASE_URL}/register/accommodation`,
           formData,
           {
             headers: {
@@ -258,28 +279,38 @@ const RegisterAccommodation = ({
             },
           },
         );
-      }
 
-      if (response?.status === 200) {
-        console.log('API Response:', response.data);
+        if (response?.status === 200) {
+          alert('숙소 정보가 수정되었습니다.');
+        }
       } else {
-        alert('숙소 등록/수정에 실패했습니다.');
+        response = await axios.post(
+          `${BASE_URL}/register/accommodation`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        if (response?.status === 200) {
+          alert('숙소 정보가 등록되었습니다.');
+          setAccommodationId(response.data.id);
+        }
       }
     } catch (error) {
-      console.error('An error occurred while making the API call:', error);
+      console.error('API를 불러오는데 오류가 발생했습니다:', error);
     }
   };
 
-  // 숙소 수정
   useEffect(() => {
-    if (mode === 'edit' && accommodationId) {
-      const fetchAccommodationData = async () => {
-        try {
-          const response = await axios.get(
-            `/api/v1/hosts/accommodations/${accommodationId}`,
-          );
+    const fetchAccommodationData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/register/accommodation`);
+        console.log(response);
+        if (response.data) {
           const accommodation = response.data;
-
+          setAccommodationId(accommodation.id);
           setName(accommodation.name);
           setAccommodationType(accommodation.type);
           setDescription(accommodation.description || '');
@@ -295,27 +326,20 @@ const RegisterAccommodation = ({
           selectFacility(accommodation.facilityTypes || []);
           selectPetFacility(accommodation.petFacilityTypes || []);
           selectAllowPet(accommodation.allowPetTypes || []);
-          if (accommodation.thumbnail) {
-            setThumbnail(accommodation.thumbnail);
-          }
-
-          if (accommodation.additionalImages) {
-            setAdditionalImages(accommodation.additionalImages);
-          }
-        } catch (error) {
-          console.error('Failed to fetch accommodation data:', error);
-          alert('숙소 데이터를 불러오는 데 실패했습니다.');
+          setRegistered(true);
         }
-      };
+      } catch (error) {
+        console.error('Failed to fetch accommodation data:', error);
+        alert('숙소 데이터를 불러오는 데 실패했습니다.');
+      }
+    };
+
+    if (!accommodationId) {
+      setRegistered(false);
+    } else {
       fetchAccommodationData();
     }
-  }, [
-    mode,
-    accommodationId,
-    selectFacility,
-    selectPetFacility,
-    selectAllowPet,
-  ]);
+  }, [accommodationId]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -341,7 +365,7 @@ const RegisterAccommodation = ({
         </SSDescriptionWrapper>
         <SSLabel>주소</SSLabel>
         <RegisterAddress
-          setAddress={setAddress}
+          setAddress={handleAddressChange}
           postcodeScriptUrl={POSTCODE_SCRIPT_URL}
         />
         <SSInputAddress
@@ -444,7 +468,7 @@ const RegisterAccommodation = ({
           </SSPreviewWrapper>
         )}
         <SSButton type="submit">
-          {mode === 'create' ? '등록하기' : '수정하기'}
+          {registered ? '수정하기' : '등록하기'}
         </SSButton>
       </SSFieldset>
     </form>

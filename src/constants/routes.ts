@@ -1,3 +1,5 @@
+import AccommodationList from '@pages/host/register/AccommodationList';
+
 const ROUTES = {
   home: '/',
   logIn: '/logIn',
