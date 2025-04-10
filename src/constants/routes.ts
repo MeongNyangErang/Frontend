@@ -1,3 +1,5 @@
+import AccommodationList from '@pages/host/register/AccommodationList';
+
 const ROUTES = {
   home: '/',
   logIn: '/logIn',
@@ -19,8 +21,9 @@ const ROUTES = {
       profile: '/mypage/host/profile',
       reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
-      registerAccommodation: '/mypage/host/register/accommodation',
-      registerRoom: '/mypage/host/register/room',
+      registerAccommodation: '/mypage/host/register/registerAccommodation',
+      registerRoom: '/mypage/host/register/registerRoom',
+      roomList: '/mypage/host/register/RoomList',
     },
   },
   search: '/search',

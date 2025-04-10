@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
 
-const useRegister = <T extends string>(initialState: T[] = []) => {
-  const [selectedRegister, setSelectedRegister] = useState<T[]>(initialState);
+const useHostRegister = (initialState: string[] = []) => {
+  const [selectedRegister, setSelectedRegister] =
+    useState<string[]>(initialState);
 
-  const toggleRegister = useCallback((option: T) => {
+  const toggleRegister = useCallback((option: string) => {
     setSelectedRegister((prevState) =>
       prevState.includes(option)
         ? prevState.filter((item) => item !== option)
@@ -14,4 +15,4 @@ const useRegister = <T extends string>(initialState: T[] = []) => {
   return { selectedRegister, toggleRegister };
 };
 
-export default useRegister;
+export default useHostRegister;

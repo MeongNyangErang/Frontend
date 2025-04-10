@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import useRegister from '@hooks/page/useHostRegister';
+import useHostRegister from '@hooks/page/useHostRegister';
 import axios from 'axios';
-
+import Header from '@components/common/RegisterHeader/index';
+import { IoCloudUploadOutline } from 'react-icons/io5';
 import {
   SFieldset,
   SOptionSelectorWrapper,
@@ -19,6 +20,7 @@ import {
   SInputNumber,
   SFormContainer,
   SErrorMessage,
+  SSUploadContainer,
 } from './styles';
 
 interface ButtonProps {
@@ -64,7 +66,13 @@ const hashTag = [
   '감성숙소',
 ];
 
-const Room = () => {
+const RegisterRoom = ({
+  mode,
+  accommodationId,
+}: {
+  mode: string;
+  accommodationId?: string;
+}) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -75,18 +83,25 @@ const Room = () => {
     extraPeopleFee: '',
     extraPetFee: '',
   });
+  const [counts, setCount] = useState({
+    standardPeopleCount: '',
+    maxPeopleCount: '',
+    standardPetCount: '',
+    maxPetCount: '',
+  });
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutTime, setCheckOutTime] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
 
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useRegister<string>();
+    useHostRegister();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useRegister<string>();
+  } = useHostRegister();
   const { selectedRegister: selectedHashTag, toggleRegister: selectHashTag } =
-    useRegister<string>();
+    useHostRegister();
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -101,12 +116,58 @@ const Room = () => {
     priceKey: keyof typeof prices,
   ) => {
     const rawValue = e.target.value.replace(/,/g, '');
+    const isNumeric = /^\d*$/.test(rawValue);
+
+    if (!isNumeric) {
+      alert('금액은 숫자만 입력할 수 있습니다.');
+      return;
+    }
+
     const formattedValue = new Intl.NumberFormat().format(Number(rawValue));
 
     setPrices((prevPrices) => ({
       ...prevPrices,
       [priceKey]: formattedValue,
     }));
+  };
+
+  const handleCountChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: keyof typeof counts,
+  ) => {
+    const rawValue = e.target.value;
+    const isNumeric = /^\d*$/.test(rawValue);
+
+    if (!isNumeric) {
+      alert('숫자만 입력할 수 있습니다.');
+      return;
+    }
+
+    const numericValue = Number(rawValue);
+    if (!isNaN(numericValue)) {
+      if (
+        key === 'maxPeopleCount' &&
+        numericValue < Number(counts.standardPeopleCount)
+      ) {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: (Number(counts.standardPeopleCount) + 1).toString(),
+        }));
+      } else if (
+        key === 'maxPetCount' &&
+        numericValue < Number(counts.standardPetCount)
+      ) {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: (Number(counts.standardPetCount) + 1).toString(),
+        }));
+      } else {
+        setCount((prevCount) => ({
+          ...prevCount,
+          [key]: numericValue.toString(),
+        }));
+      }
+    }
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,20 +215,40 @@ const Room = () => {
         setThumbnailPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setThumbnailImageUploaded(true);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!name || !description) {
+      alert('객실 정보를 입력해주세요.');
+      return;
+    }
+
     if (
-      !name ||
-      !description ||
-      !checkInTime ||
-      !checkOutTime ||
-      !prices.price
+      !prices.price ||
+      !prices.extraFee ||
+      !prices.extraPeopleFee ||
+      !prices.extraPetFee
     ) {
-      alert('모든 필드를 채워주세요.');
+      alert('금액을 입력해주세요.');
+      return;
+    }
+
+    if (
+      !counts.standardPeopleCount ||
+      !counts.maxPeopleCount ||
+      !counts.standardPetCount ||
+      !counts.maxPetCount
+    ) {
+      alert('인원을 입력해주세요.');
+      return;
+    }
+
+    if (!thumbnail) {
+      alert('대표 이미지를 선택해주세요.');
       return;
     }
 
@@ -180,14 +261,23 @@ const Room = () => {
       return;
     }
 
-    if (checkInTime < checkOutTime) {
-      alert('체크인은 체크인 아웃시간보다 나중이어야 합니다.');
+    if (!checkInTime || !checkOutTime) {
+      alert('체크인, 체크아웃을 선택해주세요.');
+      return;
+    }
+
+    if (checkInTime >= checkOutTime) {
+      alert('체크인은 체크아웃 시간보다 나중이어야 합니다.');
       return;
     }
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
+    formData.append('standardPeopleCount', counts.standardPeopleCount);
+    formData.append('maxPeopleCount', counts.maxPeopleCount);
+    formData.append('standardPetCount', counts.standardPetCount);
+    formData.append('maxPetCount', counts.maxPetCount);
     formData.append('facilityTypes', JSON.stringify(selectedFacility));
     formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
     formData.append('hashTagTypes', JSON.stringify(selectedHashTag));
@@ -205,9 +295,10 @@ const Room = () => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
-    {
-      try {
-        let response;
+
+    try {
+      let response;
+      if (mode === 'create') {
         response = await axios.post(
           '/api/v1/hosts/accommodations/{accommodationId}/rooms',
           formData,
@@ -223,15 +314,33 @@ const Room = () => {
         } else {
           alert('숙소 등록/수정에 실패했습니다.');
         }
-      } catch (error) {
-        console.error('An error occurred while making the API call:', error);
       }
+    } catch (error) {
+      console.error('An error occurred while making the API call:', error);
     }
   };
+
+  useEffect(() => {
+    if (mode === 'edit') {
+      axios
+        .put(`/api/v1/hosts/accommodations/{accommodationId}/rooms/{roomId}`)
+        .then((response) => {
+          const accommodation = response.data;
+          setName(accommodation.name);
+          setDescription(accommodation.description);
+          setThumbnailPreview(accommodation.thumbnail);
+        })
+
+        .catch((error) => {
+          console.error('Failed to fetch accommodation data:', error);
+        });
+    }
+  }, [mode]);
 
   return (
     <form onSubmit={handleSubmit}>
       <SFieldset>
+        <Header title="객실 등록" />
         <SLabel>객실명</SLabel>
         <div>
           <SInput
@@ -262,7 +371,6 @@ const Room = () => {
               placeholder="체크인"
               value={checkInTime}
               onChange={(e) => setCheckInTime(e.target.value)}
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -271,7 +379,6 @@ const Room = () => {
               placeholder="체크아웃"
               value={checkOutTime}
               onChange={(e) => setCheckOutTime(e.target.value)}
-              required
             />
           </SFormItem>
         </SFormContainer>
@@ -282,36 +389,32 @@ const Room = () => {
             <SInputNumber
               type="number"
               placeholder="기준 인원"
-              min="1"
-              max="5"
-              required
+              value={counts.standardPeopleCount}
+              onChange={(e) => handleCountChange(e, 'standardPeopleCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="최대 인원"
-              min="3"
-              max="10"
-              required
+              value={counts.maxPeopleCount}
+              onChange={(e) => handleCountChange(e, 'maxPeopleCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="기준 반려동물"
-              min="1"
-              max="5"
-              required
+              value={counts.standardPetCount}
+              onChange={(e) => handleCountChange(e, 'standardPetCount')}
             />
           </SFormItem>
           <SFormItem>
             <SInputNumber
               type="number"
               placeholder="최대 반려동물"
-              min="3"
-              max="10"
-              required
+              value={counts.maxPetCount}
+              onChange={(e) => handleCountChange(e, 'maxPetCount')}
             />
           </SFormItem>
         </SFormContainer>
@@ -324,7 +427,6 @@ const Room = () => {
               value={prices.price}
               onChange={(e) => handleNumberChange(e, 'price')}
               placeholder="기본 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -333,7 +435,6 @@ const Room = () => {
               value={prices.extraFee}
               onChange={(e) => handleNumberChange(e, 'extraFee')}
               placeholder="+ 공휴일/주말 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -342,7 +443,6 @@ const Room = () => {
               value={prices.extraPeopleFee}
               onChange={(e) => handleNumberChange(e, 'extraPeopleFee')}
               placeholder="인원 추가 금액"
-              required
             />
           </SFormItem>
           <SFormItem>
@@ -351,7 +451,6 @@ const Room = () => {
               value={prices.extraPetFee}
               onChange={(e) => handleNumberChange(e, 'extraPetFee')}
               placeholder="반려동물 추가 금액"
-              required
             />
           </SFormItem>
         </SFormContainer>
@@ -377,12 +476,18 @@ const Room = () => {
           onSelect={selectHashTag}
         />
 
-        <SLabelFile>대표이미지</SLabelFile>
+        <SLabelFile>대표 이미지</SLabelFile>
+        {!thumbnailImageUploaded && (
+          <SSUploadContainer htmlFor="thumbnail-upload">
+            <UploadIcon />
+            이미지 업로드
+          </SSUploadContainer>
+        )}
         <SInputFile
+          id="thumbnail-upload"
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
-          required
         />
         {thumbnailPreview && (
           <SImagePreviewWrapper>
@@ -396,15 +501,21 @@ const Room = () => {
   );
 };
 
-export default Room;
+export default RegisterRoom;
 
 const SCheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
-  color: black;
+  color: var(--gray-600);
   padding: 7px 10px;
   margin-bottom: 10px;
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
+`;
+
+const UploadIcon = styled(IoCloudUploadOutline)`
+  font-size: 30px;
+  color: var(--gray-600);
+  margin-bottom: 5px;
 `;
