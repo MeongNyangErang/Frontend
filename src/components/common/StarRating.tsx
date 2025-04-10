@@ -2,19 +2,19 @@ import styled from 'styled-components';
 import { memo } from 'react';
 import Rating from '@mui/material/Rating';
 
-interface Props {
+interface StarRatingProps {
   rate: number | string;
-  readOnly?: boolean;
+  $readOnly?: boolean;
 }
 
-const StarRating = ({ rate, readOnly = false }: Props) => {
+const StarRating = ({ rate, $readOnly = false }: StarRatingProps) => {
   const value = Number(rate);
   return (
     <StyledRating
       defaultValue={value}
       precision={0.5}
       sx={{ fontSize: 22 }}
-      readOnly
+      readOnly={$readOnly}
     />
   );
 };

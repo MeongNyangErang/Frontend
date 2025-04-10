@@ -35,7 +35,7 @@ const RadioSelector = ({
                   : 'false'
             }
           >
-            {isRating && <StarRating rate={option} readOnly={true} />}
+            {isRating && <StarRating rate={option} $readOnly />}
             {isRating ? `${option}점 이상` : option}
           </SButton>
         );

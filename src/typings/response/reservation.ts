@@ -1,15 +1,4 @@
-export interface UserReservationItem {
-  reservationDate: string;
-  accommodationName: string;
-  roomName: string;
-  checkInDate: string;
-  checkOutDate: string;
-  checkInTime: string;
-  checkOutTime: string;
-  peopleCount: number;
-  petCount: number;
-  totalPrice: number;
-}
+import { UserReservationItem } from '@typings/reservation';
 
 export interface UserReservationListResponse {
   code: number;

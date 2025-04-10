@@ -1,5 +1,6 @@
 export const reservedReservations = [
   {
+    reservationId: '1',
     reservationDate: '2025-04-01',
     accommodationName: '행복한 발자국 리조트',
     roomName: '디럭스 펫 스위트',
@@ -12,6 +13,7 @@ export const reservedReservations = [
     totalPrice: 180000,
   },
   {
+    reservationId: '2',
     reservationDate: '2025-04-02',
     accommodationName: '포근한 꼬리 인',
     roomName: '스탠다드룸',
@@ -24,6 +26,7 @@ export const reservedReservations = [
     totalPrice: 160000,
   },
   {
+    reservationId: '3',
     reservationDate: '2025-04-03',
     accommodationName: '멍멍쉼터',
     roomName: '패밀리룸',
@@ -36,6 +39,7 @@ export const reservedReservations = [
     totalPrice: 250000,
   },
   {
+    reservationId: '4',
     reservationDate: '2025-04-04',
     accommodationName: '펫토피아 스테이',
     roomName: '오션뷰룸',
@@ -48,6 +52,7 @@ export const reservedReservations = [
     totalPrice: 220000,
   },
   {
+    reservationId: '5',
     reservationDate: '2025-04-05',
     accommodationName: '바크 호텔',
     roomName: '스위트룸',
@@ -63,6 +68,7 @@ export const reservedReservations = [
 
 export const completedReservations = [
   {
+    reservationId: '6',
     reservationDate: '2025-03-01',
     accommodationName: '반려의 쉼터',
     roomName: '디럭스룸',
@@ -75,6 +81,7 @@ export const completedReservations = [
     totalPrice: 170000,
   },
   {
+    reservationId: '7',
     reservationDate: '2025-03-05',
     accommodationName: '퍼피하우스',
     roomName: '스탠다드룸',
@@ -87,6 +94,7 @@ export const completedReservations = [
     totalPrice: 130000,
   },
   {
+    reservationId: '8',
     reservationDate: '2025-03-10',
     accommodationName: '냥이와휴',
     roomName: '패밀리룸',
@@ -102,6 +110,7 @@ export const completedReservations = [
 
 export const canceledReservations = [
   {
+    reservationId: '9',
     reservationDate: '2025-02-20',
     accommodationName: '멍냥리조트',
     roomName: '오션뷰룸',
@@ -114,6 +123,7 @@ export const canceledReservations = [
     totalPrice: 190000,
   },
   {
+    reservationId: '10',
     reservationDate: '2025-02-25',
     accommodationName: '동물의숲펜션',
     roomName: '로프트룸',
