@@ -162,7 +162,6 @@ const SearchFilter = ({
                             $variant={type}
                             onClick={onToggleOptions(key)}
                             options={options}
-                            name={key}
                             currentValue={filterState[key]}
                           />
                         )}

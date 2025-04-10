@@ -33,7 +33,7 @@ const Modal = ({
       <SWrap $variant={variant}>
         <SModal $variant={variant}>
           {closeType !== 'none' && (
-            <SModalHeader>
+            <SModalHeader $closeType={closeType}>
               <button onClick={onClose}>
                 {closeType === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
               </button>

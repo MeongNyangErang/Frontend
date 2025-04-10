@@ -33,3 +33,23 @@ export const parseNewLine = (text: string) => {
     );
   });
 };
+
+export const getAge = (birthDate: string) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(birthDate))
+    throw new Error('YYYY-MM-DD 형식이 아닙니다.');
+
+  const today = new Date();
+  const birthDay = new Date(birthDate);
+  let age = today.getFullYear() - birthDay.getFullYear();
+
+  if (
+    birthDay.getMonth() > today.getMonth() ||
+    (birthDay.getMonth() === today.getMonth() &&
+      birthDay.getDate() > today.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+};

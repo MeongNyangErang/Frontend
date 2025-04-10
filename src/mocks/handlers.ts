@@ -97,4 +97,46 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
+  http.get(`${BASE_URL}/users/pets`, async () => {
+    const petListData = {
+      code: 200,
+      data: [
+        {
+          petId: 123,
+          name: '콩',
+          birthDate: '2013-10-14',
+          type: 'SMALL_DOG',
+          personality: 'INTROVERT',
+          activityLevel: 'HIGH',
+        },
+        {
+          petId: 1234,
+          name: '솜',
+          birthDate: '2016-10-14',
+          type: 'CAT',
+          personality: 'INTROVERT',
+          activityLevel: 'LOW',
+        },
+        {
+          petId: 12345,
+          name: '라떼',
+          birthDate: '2020-10-14',
+          type: 'MEDIUM_DOG',
+          personality: 'EXTROVERT',
+          activityLevel: 'MEDIUM',
+        },
+      ],
+    };
+
+    return HttpResponse.json(petListData);
+  }),
+  http.post(`${BASE_URL}/users/pets`, async () => {
+    return HttpResponse.json({ message: '반려동물 등록 성공' });
+  }),
+  http.put(`${BASE_URL}/users/pets/:petId`, async () => {
+    return HttpResponse.json({ message: '반려동물 정보 수정 성공' });
+  }),
+  http.delete(`${BASE_URL}/users/pets/:petId`, async () => {
+    return HttpResponse.json({ message: '반려동물 정보 삭제 성공' });
+  }),
 ];
