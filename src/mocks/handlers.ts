@@ -167,10 +167,19 @@ export const handlers = [
     const data = {
       code: 200,
       content,
-      cursor: 123,
+      cursor: Math.ceil(Math.random() * 10),
       hasNext: true,
     };
 
     return HttpResponse.json(data);
+  }),
+  http.patch(
+    `${BASE_URL}/users/reservations/:reservationId/cancel`,
+    async () => {
+      return HttpResponse.json({ message: '예약 취소 성공' });
+    },
+  ),
+  http.post(`${BASE_URL}/users/reviews`, async () => {
+    return HttpResponse.json({ message: '리뷰 등록 성공' });
   }),
 ];

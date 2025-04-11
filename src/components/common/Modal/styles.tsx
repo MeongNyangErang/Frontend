@@ -17,6 +17,7 @@ const SWrap = styled.div<{ $variant: 'full' | 'centered' }>`
 const SModal = styled.div<{ $variant: 'full' | 'centered' }>`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   overflow-y: auto;
   background-color: #fff;
@@ -24,11 +25,11 @@ const SModal = styled.div<{ $variant: 'full' | 'centered' }>`
   ${({ $variant, theme }) =>
     $variant === 'centered' &&
     `
+    overflow-y: auto;
     padding: 24px;
     width: 80%;
-    max-width: 450px;
+    max-width: 400px;
     min-width: 280px;
-    min-height: 160px;
     max-height: 600px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: ${theme.radius.md};

@@ -11,3 +11,7 @@ export const getUserReservationList = async (
     : `users/reservations?status=${status}`;
   return fetchCall<UserReservationListResponse>(url, 'get');
 };
+
+export const cancelReservation = async (reservationId: string) => {
+  return await fetchCall(`users/reservations/${reservationId}/cancel`, 'patch');
+};
