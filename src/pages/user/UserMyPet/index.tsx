@@ -80,7 +80,9 @@ const UserMyPet = () => {
                       <p>{PET_TYPE_MAP[type]}</p>
                       <div>
                         <span>{PET_PERONALITY_MAP[personality]}</span>
-                        <span>{PET_ACTIVITY_LEVEL_MAP[activityLevel]}</span>
+                        <span>
+                          활동량 {PET_ACTIVITY_LEVEL_MAP[activityLevel]}
+                        </span>
                       </div>
                     </SItemTextBox>
                     <SItemButtonBox>

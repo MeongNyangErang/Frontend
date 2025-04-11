@@ -2,31 +2,53 @@ import styled from 'styled-components';
 import { memo } from 'react';
 import Rating from '@mui/material/Rating';
 
-interface Props {
+interface StarRatingProps {
   rate: number | string;
-  readOnly?: boolean;
+  $readOnly?: boolean;
+  onChange?: (value: number) => void;
+  size?: string;
+  $mainColor?: boolean;
 }
 
-const StarRating = ({ rate, readOnly = false }: Props) => {
+const StarRating = ({
+  rate,
+  $readOnly = false,
+  onChange,
+  size = '2em',
+  $mainColor = false,
+}: StarRatingProps) => {
   const value = Number(rate);
+  const handleChange = (value: number | null) => {
+    if (!onChange || !value) return;
+    onChange(value);
+  };
   return (
     <StyledRating
-      defaultValue={value}
+      $mainColor={$mainColor}
+      value={value}
+      onChange={(_, newValue) => handleChange(newValue)}
       precision={0.5}
-      sx={{ fontSize: 22 }}
-      readOnly
+      sx={{ fontSize: size }}
+      readOnly={$readOnly}
     />
   );
 };
 
 export default memo(StarRating);
 
-const StyledRating = styled(Rating)`
-  font-size: 30px;
+const StyledRating = styled(Rating)<{ $mainColor: boolean }>`
   & .MuiRating-iconFilled {
-    color: ${({ theme }) => theme.colors.starYellow};
+    color: ${({ theme, $mainColor }) =>
+      $mainColor ? theme.colors.main : theme.colors.starYellow};
   }
   & .MuiRating-iconEmpty {
     color: ${({ theme }) => theme.colors.gray300};
+  }
+  & .MuiRating-iconHover,
+  .MuiRating-iconFocus,
+  .MuiRating-iconActive {
+    transform: none !important;
+    width: 1em !important;
+    height: 1em !important;
   }
 `;

@@ -121,7 +121,7 @@ const SPetFormGroup = styled.div`
   }
 
   .react-datepicker__day--keyboard-selected {
-    background-color: ${({ theme }) => theme.colors.light};
+    background-color: transparent !important;
     border-radius: 9999px;
   }
 

@@ -8,10 +8,11 @@ const useMyPetList = () => {
     queryFn: getMyPetList,
     staleTime: 1000 * 5 * 60,
   });
-  const invalidateMyPetList = () =>
+  const refreshMyPetList = () => {
     queryClicent.invalidateQueries({ queryKey: ['my-pet-list'] });
+  };
 
-  return { ...result, invalidateMyPetList };
+  return { ...result, refreshMyPetList };
 };
 
 export default useMyPetList;

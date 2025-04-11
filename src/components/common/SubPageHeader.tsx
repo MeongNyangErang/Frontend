@@ -53,7 +53,7 @@ const Swrap = styled.header`
   }
 
   > h2 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     color: ${({ theme }) => theme.colors.gray700};
 

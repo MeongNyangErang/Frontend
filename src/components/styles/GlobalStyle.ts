@@ -80,6 +80,10 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
   }
 
+  em {
+    font-style: normal;
+  }
+
 /* ------------------ 전역 변수 (CSS 변수) ------------------ */
     :root {
     --main-color: #f03e5e;

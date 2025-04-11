@@ -125,6 +125,10 @@ const SItemButtonBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2px;
+  width: 100%;
+  ${media.mobile} {
+    width: auto;
+  }
 
   ${media.desktop} {
     width: 100%;

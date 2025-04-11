@@ -4,7 +4,7 @@ import { PetInfoState, PetInfo, PetInfoKey, PetInfoValue } from '@typings/pet';
 import { initialPetInfoState } from '@constants/pet';
 import useIsLoading from '@hooks/ui/useIsLoading';
 import useError from '@hooks/ui/useError';
-import { formatDate } from '@utils/formatter';
+import { formatDate } from '@utils/date';
 import { editMyPet, registerMyPet } from '@services/pet';
 
 interface UsePetFormProps {

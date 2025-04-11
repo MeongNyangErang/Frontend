@@ -32,7 +32,7 @@ const MyPageLayout = () => {
               {menu.map(({ name, path }) => {
                 return (
                   <SMyPageMenuLink to={path} key={name}>
-                    {name}
+                    <span>{name}</span>
                   </SMyPageMenuLink>
                 );
               })}

@@ -4,7 +4,7 @@ import Loader from '@components/common/Loader';
 const LoadingPage = () => {
   return (
     <SLoadingPageWrap>
-      <Loader color="mainBorder" size={15} loading />
+      <Loader color="mainBorder" size={12} loading />
     </SLoadingPageWrap>
   );
 };
