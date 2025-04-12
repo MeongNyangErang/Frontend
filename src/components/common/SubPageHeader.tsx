@@ -1,19 +1,21 @@
 import styled from 'styled-components';
-import { pageTitleStyle } from '@components/styles/mixins';
 import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
+import { media } from '@components/styles/responsive';
 
 interface Props {
   title: string;
-  onClick(): void;
-  style: 'x' | 'arrow';
+  style: 'x' | 'arrow' | 'noButton';
+  onClick?: () => void;
 }
 
 const SubPageHeader = ({ title, onClick, style }: Props) => {
   return (
     <Swrap>
-      <button onClick={onClick}>
-        {style === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
-      </button>
+      {style !== 'noButton' && (
+        <button onClick={onClick}>
+          {style === 'x' ? <FaXmark /> : <FaArrowLeftLong />}
+        </button>
+      )}
       <h2>{title}</h2>
     </Swrap>
   );
@@ -26,22 +28,37 @@ const Swrap = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${({ theme }) => theme.layouts.paddingX};
+  padding: ${({ theme }) => `${theme.layouts.paddingX} 0`};
   width: 100%;
+
+  ${media.desktop} {
+    justify-content: flex-start;
+    padding: 0;
+  }
 
   > button {
     position: absolute;
     top: 50%;
-    left: ${({ theme }) => theme.layouts.paddingX};
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 12px 12px 12px 0;
-    font-size: 20px;
+    font-size: 18px;
     transform: translateY(-50%);
+
+    ${media.desktop} {
+      display: none;
+    }
   }
 
   > h2 {
-    ${pageTitleStyle}
+    font-size: 18px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.gray700};
+
+    ${media.desktop} {
+      font-size: 22px;
+    }
   }
 `;

@@ -1,42 +1,56 @@
 import { memo } from 'react';
 import { PET_SIZE_MAP } from '@constants/pet';
-import { QUERY_KEYS } from '@constants/queryKeys';
 import { SOptionSelectorWrap, SOptionSelectorButton } from './styles';
 
 interface Props {
-  $variant: 'square' | 'capsule';
-  options: readonly string[];
-  name?: string;
+  $variant: 'squareFixed' | 'squareResponsive' | 'capsule';
+  options: readonly string[] | readonly { name: string; value: string }[];
   currentValue: string[];
   onClick: (value: string) => void;
 }
 
 const OptionSelector = ({
   $variant,
-  name,
   options,
   currentValue,
   onClick,
 }: Props) => {
   const handleClick = (option: (typeof options)[number]) => {
-    onClick(option);
+    onClick(typeof option === 'string' ? option : option.value);
   };
 
   return (
     <SOptionSelectorWrap $variant={$variant}>
-      {options.map((option, i) => {
-        const isSelected = String(currentValue.includes(option));
+      {options.map((option) => {
+        const selected =
+          typeof option === 'string'
+            ? currentValue.includes(option)
+            : currentValue.includes(option.value);
 
-        return (
+        return typeof option === 'string' ? (
           <SOptionSelectorButton
             $variant={$variant}
-            key={i}
-            data-checked={isSelected}
+            key={option}
+            data-checked={selected}
             onClick={() => handleClick(option)}
           >
             {option}
-            {name === QUERY_KEYS.SEARCH.FILTER.PET_TYPE && (
+            {Object.keys(PET_SIZE_MAP).includes(option) && (
               <span>{PET_SIZE_MAP[option as keyof typeof PET_SIZE_MAP]}</span>
+            )}
+          </SOptionSelectorButton>
+        ) : (
+          <SOptionSelectorButton
+            $variant={$variant}
+            key={option.name}
+            data-checked={selected}
+            onClick={() => handleClick(option.value)}
+          >
+            {option.name}
+            {Object.keys(PET_SIZE_MAP).includes(option.name) && (
+              <span>
+                {PET_SIZE_MAP[option.name as keyof typeof PET_SIZE_MAP]}
+              </span>
             )}
           </SOptionSelectorButton>
         );

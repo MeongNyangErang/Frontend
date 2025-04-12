@@ -2,13 +2,19 @@ import { ReactNode, useEffect, useState, useRef } from 'react';
 import { SBottomDrawerWrap, SDrawerOverlay, SDrawerBody } from './styles';
 import Portal from '../Portal';
 
-interface Props {
+interface BottomDrawerProps {
   children: ReactNode;
   isOpen: boolean;
   fullHeight?: boolean;
+  maxWidth?: string;
 }
 
-const BottomDrawer = ({ children, isOpen, fullHeight }: Props) => {
+const BottomDrawer = ({
+  children,
+  isOpen,
+  fullHeight,
+  maxWidth = '760px',
+}: BottomDrawerProps) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -27,7 +33,11 @@ const BottomDrawer = ({ children, isOpen, fullHeight }: Props) => {
     <Portal selector="drawer-root">
       <SBottomDrawerWrap>
         <SDrawerOverlay />
-        <SDrawerBody $visible={visible} $fullHeight={fullHeight}>
+        <SDrawerBody
+          $visible={visible}
+          $fullHeight={fullHeight}
+          $maxWidth={maxWidth}
+        >
           {children}
         </SDrawerBody>
       </SBottomDrawerWrap>

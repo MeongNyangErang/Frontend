@@ -5,11 +5,13 @@ const LoadingPage = lazy(() => import('@pages/LoadingPage'));
 const PrivateRoute = lazy(() => import('@components/common/PrivateRoute'));
 const PublicRoute = lazy(() => import('@components/common/PublicRoute'));
 const MainLayout = lazy(() => import('@components/layouts/MainLayout'));
+const MyPageLayout = lazy(() => import('@components/layouts/MyPageLayout'));
 const Home = lazy(() => import('@pages/Home'));
 const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/user/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/user/UserMyPage'));
+const UserMyPet = lazy(() => import('@pages/user/UserMyPet'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
 const RegisterAccommodation = lazy(
@@ -22,6 +24,11 @@ const Reservation = lazy(
 const RoomList = lazy(() => import('@pages/host/register/RoomList'));
 const DetailAccommodation = lazy(
   () => import('@pages/host/register/DetailAccommodation'),
+);
+
+const Chat = lazy(() => import('@pages/Chat/index'));
+const UserReservationList = lazy(
+  () => import('@pages/user/UserReservationList'),
 );
 
 const AppRouter = () => {
@@ -46,11 +53,18 @@ const AppRouter = () => {
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
-            <Route path="/mypage/user" element={<UserMyPage />} />
+            <Route path="/mypage/user" element={<MyPageLayout />}>
+              <Route index element={<UserMyPage />} />
+              <Route path="my-pet" element={<UserMyPet />} />
+              <Route
+                path="reservation-list"
+                element={<UserReservationList />}
+              />
+            </Route>
           </Route>
 
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
-            <Route path="/mypage/host">
+            <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
               <Route
                 path="register/room"
@@ -59,6 +73,11 @@ const AppRouter = () => {
 
               <Route path="register/roomList" element={<RoomList />} />
             </Route>
+          </Route>
+
+          <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:roomId" element={<Chat />} />
           </Route>
         </Route>
 

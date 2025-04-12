@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import profileDefault from '@assets/images/user/profileDefault.png';
+import profileDefault from '@assets/images/profile/profileUser.png';
 
 interface Props {
   imageUrl: string | null;

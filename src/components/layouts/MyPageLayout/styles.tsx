@@ -11,10 +11,10 @@ const SMyPageWrap = styled.div`
 
 const SMyPageContainer = styled.div`
   margin: 0 auto;
-  padding-top: 20px;
+  padding-top: 0;
   max-width: ${({ theme }) => theme.layouts.innerWidth};
 
-  ${media.tablet} {
+  ${media.desktop} {
     padding-top: 60px;
   }
 `;
@@ -46,29 +46,55 @@ const SMyPageMenuBar = styled.aside`
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      row-gap: 8px;
+      row-gap: 6px;
     }
   }
 `;
 
 const SMyPageMenuLink = styled(NavLink)`
-  padding: ${({ theme }) => `12px ${theme.layouts.paddingX}`};
+  padding: ${({ theme }) => `6px ${theme.layouts.paddingX}`};
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   color: ${({ theme }) => theme.colors.gray600};
   transition: ${({ theme }) => theme.transition.default};
+
+  > span {
+    position: relative;
+    display: flex;
+    line-height: 1;
+  }
 
   &:not(.active):hover {
     color: ${({ theme }) => theme.colors.gray800};
   }
 
   &.active {
-    color: ${({ theme }) => theme.colors.sub};
+    color: ${({ theme }) => theme.colors.gray700};
+    font-weight: 500;
+
+    > span {
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 4px;
+        height: 4px;
+        background-color: ${({ theme }) => theme.colors.main};
+        border-radius: 9999px;
+        transform: translate(6px, -100%);
+      }
+    }
   }
 `;
 
 const SMyPageContents = styled.div`
+  padding-top: 12px;
   padding-bottom: 30px;
+
+  ${media.desktop} {
+    padding-top: 0;
+  }
 `;
 
 export {

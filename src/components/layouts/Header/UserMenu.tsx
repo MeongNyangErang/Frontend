@@ -25,7 +25,7 @@ const UserMenu = () => {
           fontSize="14px"
           variant="grayBorder"
         >
-          로그인 / 회원가입
+          로그인
         </Button>
       ) : (
         <>

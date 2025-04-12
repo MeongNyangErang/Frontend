@@ -80,17 +80,25 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
   }
 
+  em {
+    font-style: normal;
+  }
+
 /* ------------------ 전역 변수 (CSS 변수) ------------------ */
     :root {
     --main-color: #f03e5e;
     --sub-color: #F48E99;
     --light-color:rgb(253, 244, 245);
-    --info-color: #E6F0FA;
-    --info-text-color: #3178C6;
+    --info-color: #DCEEFB;
+    --info-text-color: #1E6FD9;
     --purple-badge-color: #9b5de5;
     --mint-badge-color: #00bb8f;
     --orange-badge-color: #ff7f51;
     --blue-badge-color: #3a86ff;
+    --light-red-bg-color: #fff3f5;
+    --light-red-txt-color: #ff7b92;
+    --light-orange-bg-color: #fdf5eb;
+    --light-orange-txt-color: #f29c70;
     --overlay-color: rgba(0,0,0,0.2);
     --gray-100: #f5f5f5;
     --gray-200: #eeeeee;

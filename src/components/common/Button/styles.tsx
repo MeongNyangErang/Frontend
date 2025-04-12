@@ -10,6 +10,7 @@ const variantStyles = {
     background-color: #fff;
     color: ${({ theme }) => theme.colors.gray500};
     border: 1px solid ${({ theme }) => theme.colors.gray400};
+    box-shadow: 0 2px 4px rgba(120, 120, 120, 0.05);
   `,
   mainBorder: css`
     background-color: #fff;

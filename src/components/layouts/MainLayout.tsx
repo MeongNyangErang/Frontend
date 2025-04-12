@@ -22,6 +22,8 @@ const MainLayout = () => {
 export default MainLayout;
 
 const SContainer = styled.div`
+  overflow-x: hidden;
+  width: 100%;
   min-width: 320px;
 `;
 

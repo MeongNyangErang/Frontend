@@ -10,6 +10,10 @@ export const colors = {
   orangeBage: 'var(--orange-badge-color)',
   blueBage: 'var(--blue-badge-color)',
   mintBage: 'var(--mint-badge-color)',
+  lightOrangeBg: 'var(--light-orange-bg-color)',
+  lightOrangeTxt: 'var(--light-orange-txt-color)',
+  lightRedBg: 'var(--light-red-bg-color)',
+  lightRedTxt: 'var(--light-red-txt-color)',
   gray100: 'var(--gray-100)',
   gray200: 'var(--gray-200)',
   gray300: 'var(--gray-300)',
@@ -41,6 +45,7 @@ export const layouts = {
 export const shadow = {
   top: '0 -2px 10px rgba(0, 0, 0, 0.03)',
   bottom: '0 2px 10px rgba(0, 0, 0, 0.03)',
+  card: `0 2px 6px rgba(160, 160, 160, 0.06);`,
 };
 
 export const transition = {
