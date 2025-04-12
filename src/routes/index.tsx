@@ -26,6 +26,8 @@ const Chat = lazy(() => import('@pages/Chat/index'));
 const UserReservationList = lazy(
   () => import('@pages/user/UserReservationList'),
 );
+const UserReviews = lazy(() => import('@pages/user/UserReviews'));
+const UserWishList = lazy(() => import('@pages/user/UserWishList'));
 
 const AppRouter = () => {
   return (
@@ -48,6 +50,8 @@ const AppRouter = () => {
                 path="reservation-list"
                 element={<UserReservationList />}
               />
+              <Route path="reviews" element={<UserReviews />} />
+              <Route path="wishlist" element={<UserWishList />} />
             </Route>
           </Route>
 

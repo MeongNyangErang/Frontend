@@ -38,7 +38,7 @@ const SMyPageMenuBar = styled.aside`
       font-size: 20px;
       font-weight: 500;
       padding-bottom: ${({ theme }) => theme.layouts.paddingX};
-      margin-bottom: 4px;
+      margin-bottom: 12px;
       border-bottom: ${({ theme }) => `1.5px solid ${theme.colors.gray300}`};
     }
 
@@ -52,7 +52,7 @@ const SMyPageMenuBar = styled.aside`
 `;
 
 const SMyPageMenuLink = styled(NavLink)`
-  padding: ${({ theme }) => `6px ${theme.layouts.paddingX}`};
+  padding: ${({ theme }) => `8px ${theme.layouts.paddingX}`};
   font-size: 16px;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.gray600};

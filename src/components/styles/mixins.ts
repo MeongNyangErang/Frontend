@@ -5,8 +5,8 @@ export const buttonStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 16px;
-  min-height: 36px;
+  padding: 6px 16px;
+  min-height: 34px;
   font-size: 14px;
   font-weight: 500;
   border-radius: ${({ theme }) => theme.radius.md};

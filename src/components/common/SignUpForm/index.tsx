@@ -6,9 +6,9 @@ import {
   SInput,
   SMessage,
 } from '@components/styles/formStyles';
+import SignUpHeader from '../SignUpHeader';
 import { SWrap, SForm } from './styles';
 import EmailVerification from './EmailVerification';
-import SubPageHeader from '../SubPageHeader';
 import Button from '../Button';
 
 const SignUpForm = <T extends 'user' | 'host'>({
@@ -37,7 +37,7 @@ const SignUpForm = <T extends 'user' | 'host'>({
 
   return (
     <>
-      <SubPageHeader title={title} onClick={onPrev} style="arrow" />
+      <SignUpHeader title={title} onClick={onPrev} />
       <SWrap>
         <SForm>
           {fields.map(({ name, id, placeholder, type }) => {
