@@ -357,4 +357,11 @@ export const handlers = [
     };
     return HttpResponse.json(data);
   }),
+  http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    return HttpResponse.json({ message: '리뷰 수정 성공' });
+  }),
+  http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    console.log('working');
+    return HttpResponse.json({ message: '리뷰 삭제 성공' });
+  }),
 ];
