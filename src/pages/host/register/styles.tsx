@@ -6,35 +6,46 @@ export const SFieldset = styled.fieldset`
   border: none;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
 `;
 
 export const SOptionSelectorWrapper = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 `;
 
 export const SLabel = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 1rem;
-  margin: 10px 0;
+  font-size: 14px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: var(--gray-600);
 `;
 
 export const SLabelFile = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 1rem;
+  font-size: 14px;
   margin-top: 20px;
   padding-bottom: 10px;
+  color: var(--gray-600);
 `;
 
 export const SInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  padding: 8px;
+  height:40px;
+  padding: 8px 12px;
   margin-bottom: 5px;
-  border: 1px solid #d1d5db;
+  background-color: var(--gray-100);
+  &:active {
+    background-color: var(--gray-200);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 14px;
 `;
 
 export const SDescriptionWrapper = styled.div`
@@ -45,10 +56,12 @@ export const SInputExplain = styled.textarea`
   font-family: 'Noto Sans KR';
   width: 100%;
   height: 100px;
-  padding: 8px;
-  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  background-color: var(--gray-100);
+    &:active {
+    background-color: var(--gray-200);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 14px;
   resize: none;
   overflow-y: auto;
 `;
@@ -62,28 +75,29 @@ export const SCharacterCount = styled.div`
 `;
 
 export const SButton = styled.button`
-  background-color: var(--sub-color);
+  background-color: #f03e5e;
   color: white;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
+  margin: 30px 0;
+  height: 40px;
+  text-align: center;
+  font-weight: bold;
   &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
+    background-color: rgb(238, 46, 81);
   }
 `;
 
 export const SImagePreviewWrapper = styled.div`
-  margin-top: 10px;
-  width: 50%;
-  height: 150px;
+  width: 30%;
+  height: 130px;
   border: 2px dashed #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
+  margin-bottom: 10px;
 
   img {
     max-width: 100%;
@@ -93,21 +107,22 @@ export const SImagePreviewWrapper = styled.div`
 `;
 
 export const SInputFile = styled.input`
-  border: 1px solid #ccc;
-  width: 60%;
-  padding: 2px;
+  display: none;
 `;
 
 export const SFormItem = styled.div`
   display: flex;
   flex-direction: column;
-  width: 49%;
+  width: 24%;
 `;
 
 export const SInputNumber = styled.input`
-  padding: 8px;
+  padding: 8px 12px;
+  height: 40px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  background-color: var(--gray-100);
+    &:active {
+    background-color: var(--gray-200);
   border-radius: 4px;
   cursor: pointer;
 `;
@@ -120,42 +135,52 @@ export const SFormContainer = styled.div`
 `;
 
 /* 숙소 Style */
-
 export const SSFieldset = styled.fieldset`
   font-family: 'Noto Sans KR';
   padding: 16px;
   border: none;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
 `;
 
 export const SSOptionSelectorWrapper = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 `;
 
 export const SSLabel = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 1rem;
-  margin: 10px 0;
+  font-size: 14px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: var(--gray-600);
 `;
 
 export const SSLabelFile = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 1rem;
+  font-size: 14px;
   margin-top: 20px;
   padding-bottom: 10px;
+  color: var(--gray-600);
 `;
 
 export const SSInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #d1d5db;
+  height:40px;
+  padding: 8px 12px;
+  margin-bottom: 5px;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 14px;
+  background-color: var(--gray-100);
+    &:active {
+    background-color: var(--gray-200);
 `;
 
 export const SSDescriptionWrapper = styled.div`
@@ -166,10 +191,12 @@ export const SSInputExplain = styled.textarea`
   font-family: 'Noto Sans KR';
   width: 100%;
   height: 100px;
-  padding: 8px;
-  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  background-color: var(--gray-100);
+   &:active {
+  background-color: var(--gray-200);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 14px;
   resize: none;
   overflow-y: auto;
 `;
@@ -177,11 +204,14 @@ export const SSInputExplain = styled.textarea`
 export const SSInputAddress = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  padding: 8px;
+  height:40px;
+  padding: 8px 12px;
   margin-bottom: 7px;
-  border: 1px solid #d1d5db;
+  background-color: var(--gray-100);
+    &:active {
+    background-color: var(--gray-200);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 14px;
 `;
 
 export const SSCharacterCount = styled.div`
@@ -189,32 +219,33 @@ export const SSCharacterCount = styled.div`
   bottom: 8px;
   right: 8px;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--gray-600);
 `;
 
 export const SSButton = styled.button`
-  background-color: var(--sub-color);
+  background-color: #f03e5e;
   color: white;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  margin-left: auto;
+  margin: 30px 0;
+  height: 40px;
+  text-align: center;
+  font-weight: bold;
   &:hover {
-    background-color: var(--sub-color);
-    border: 1px solid #f03e5e;
+    background-color: rgb(238, 46, 81);
   }
 `;
 
 export const SSImagePreviewWrapper = styled.div`
-  margin-top: 10px;
-  width: 50%;
-  height: 150px;
+  width: 30%;
+  height: 130px;
   border: 2px dashed #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
+  margin-bottom: 10px;
 
   img {
     max-width: 100%;
@@ -232,9 +263,27 @@ export const SSPreviewWrapper = styled.div`
 `;
 
 export const SSInputFile = styled.input`
-  border: 1px solid #ccc;
-  width: 60%;
-  padding: 2px;
+  display: none;
+`;
+
+export const SSUploadContainer = styled.label`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  padding: 28px;
+  font-size: 12px;
+  background-color: var(--gray-100);
+  border: 1px solid #ddd;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  color: var(--gray-600);
+
+  &:hover {
+    background-color: var(--gray-200);
+  }
 `;
 
 export const SErrorMessage = styled.p`

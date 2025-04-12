@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import useRegister from '@hooks/page/useHostRegister';
+import useHostRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from 'api/RegisterAddress';
 import axios from 'axios';
 import styled from 'styled-components';
+import Header from '@components/common/RegisterHeader/index';
+import { IoCloudUploadOutline } from 'react-icons/io5';
 import {
   SSFieldset,
   SSOptionSelectorWrapper,
@@ -19,6 +21,7 @@ import {
   SSPreviewWrapper,
   SErrorMessage,
   ButtonContainer,
+  SSUploadContainer,
 } from './styles';
 
 interface ButtonProps {
@@ -51,17 +54,12 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
-const Accommodation = ({
-  mode,
-  accommodationId,
-}: {
-  mode: 'create' | 'edit';
-  accommodationId?: string;
-}) => {
+const RegisterAccommodation = () => {
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [detailedAddress, setDetailedAddress] = useState('');
-  const [addressObj, setAddressObj] = useState({
+  const [address, setAddress] = useState({
     areaAddress: '',
     townAddress: '',
   });
@@ -73,18 +71,57 @@ const Accommodation = ({
   const [accommodationType, setAccommodationType] = useState<string | null>(
     null,
   );
+
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
   >([]);
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
-    useRegister<string>();
+    useHostRegister();
   const {
     selectedRegister: selectedPetFacility,
     toggleRegister: selectPetFacility,
-  } = useRegister<string>();
+  } = useHostRegister();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
-    useRegister<string>();
+    useHostRegister();
   const [errorMessage, setErrorMessage] = useState('');
+  const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const [accommodationId, setAccommodationId] = useState<string | null>(null);
+
+  const POSTCODE_SCRIPT_URL =
+    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+  const VITE_GEO_API_KEY = import.meta.env.VITE_GEO_API_KEY;
+
+  const geocodeAddress = async (address: string, apiKey: string) => {
+    try {
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+      const response = await axios.get(url);
+
+      if (response.data.status === 'OK') {
+        const location = response.data.results[0].geometry.location;
+        return { lat: location.lat, lng: location.lng };
+      } else {
+        console.error('Geocoding failed:', response.data.status);
+        return { lat: null, lng: null };
+      }
+    } catch (error) {
+      console.error('Error geocoding address:', error);
+      return { lat: null, lng: null };
+    }
+  };
+
+  const handleAddressChange = async (newAddress: {
+    areaAddress: string;
+    townAddress: string;
+  }) => {
+    setAddress(newAddress);
+    const fullAddress = `${newAddress.areaAddress} ${newAddress.townAddress}`;
+
+    const { lat, lng } = await geocodeAddress(fullAddress, VITE_GEO_API_KEY);
+    setLatitude(lat);
+    setLongitude(lng);
+  };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -96,10 +133,10 @@ const Accommodation = ({
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    const regex = /^[a-zA-Z0-9가-힣()]*$/;
+    const regex = /^[가-힣a-zA-Z0-9\s]+$/;
+
     if (regex.test(newName)) {
       setName(newName);
-      setErrorMessage('');
     } else {
       setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
     }
@@ -108,9 +145,6 @@ const Accommodation = ({
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDetailedAddress(e.target.value);
   };
-
-  const POSTCODE_SCRIPT_URL =
-    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
   const handleAddressClick = () => {
     document.getElementById('addressButton')?.click();
@@ -155,6 +189,7 @@ const Accommodation = ({
         setThumbnailPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setThumbnailImageUploaded(true);
     }
   };
 
@@ -181,6 +216,7 @@ const Accommodation = ({
           reader.readAsDataURL(file);
           return reader.result as string;
         });
+        setImageUploaded(true);
       } else {
         alert('최대 3개의 이미지만 업로드 가능합니다.');
       }
@@ -190,11 +226,14 @@ const Accommodation = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !detailedAddress) {
-      alert('모든 필드를 채워주세요.');
+    if (!name || !description) {
+      alert('숙소 정보를 입력해주세요.');
       return;
     }
-
+    if (!detailedAddress) {
+      alert('상세주소를 입력해주세요.');
+      return;
+    }
     if (
       selectedFacility.length === 0 ||
       selectedPetFacility.length === 0 ||
@@ -203,14 +242,15 @@ const Accommodation = ({
       alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
       return;
     }
+    if (!thumbnail) {
+      alert('대표이미지는 필수입니다.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('type', accommodationType || '');
-    formData.append(
-      'address',
-      `${addressObj.areaAddress} ${addressObj.townAddress}`,
-    );
+    formData.append('address', `${address.areaAddress} ${address.townAddress}`);
     formData.append('detailedAddress', detailedAddress);
     formData.append('description', description);
     formData.append('latitude', latitude?.toString() || '');
@@ -229,15 +269,9 @@ const Accommodation = ({
 
     try {
       let response;
-      if (mode === 'create') {
-        response = await axios.post('/api/v1/hosts/accommodations', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-      } else if (mode === 'edit' && accommodationId) {
+      if (accommodationId) {
         response = await axios.put(
-          `/api/v1/hosts/accommodations/${accommodationId}`,
+          `${BASE_URL}/register/accommodation`,
           formData,
           {
             headers: {
@@ -245,45 +279,72 @@ const Accommodation = ({
             },
           },
         );
-      }
 
-      if (response?.status === 200) {
-        console.log('API Response:', response.data);
+        if (response?.status === 200) {
+          alert('숙소 정보가 수정되었습니다.');
+        }
       } else {
-        alert('숙소 등록/수정에 실패했습니다.');
+        response = await axios.post(
+          `${BASE_URL}/register/accommodation`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        if (response?.status === 200) {
+          alert('숙소 정보가 등록되었습니다.');
+          setAccommodationId(response.data.id);
+        }
       }
     } catch (error) {
-      console.error('An error occurred while making the API call:', error);
+      console.error('API를 불러오는데 오류가 발생했습니다:', error);
     }
   };
 
-  // 숙소 수정
   useEffect(() => {
-    if (mode === 'edit' && accommodationId) {
-      axios
-        .get(`/api/v1/hosts/accommodations/${accommodationId}`)
-        .then((response) => {
+    const fetchAccommodationData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/register/accommodation`);
+        console.log(response);
+        if (response.data) {
           const accommodation = response.data;
+          setAccommodationId(accommodation.id);
           setName(accommodation.name);
-          setDescription(accommodation.description);
-          setAddressObj({
+          setAccommodationType(accommodation.type);
+          setDescription(accommodation.description || '');
+          setAddress({
             areaAddress: accommodation.address.area,
             townAddress: accommodation.address.town,
           });
+          setDetailedAddress(accommodation.detailedAddress || '');
           setLatitude(accommodation.latitude);
           setLongitude(accommodation.longitude);
           setThumbnailPreview(accommodation.thumbnail);
-          setAdditionalImagesPreview(accommodation.additionalImages);
-        })
-        .catch((error) => {
-          console.error('Failed to fetch accommodation data:', error);
-        });
+          setAdditionalImagesPreview(accommodation.additionalImages || []);
+          selectFacility(accommodation.facilityTypes || []);
+          selectPetFacility(accommodation.petFacilityTypes || []);
+          selectAllowPet(accommodation.allowPetTypes || []);
+          setRegistered(true);
+        }
+      } catch (error) {
+        console.error('Failed to fetch accommodation data:', error);
+        alert('숙소 데이터를 불러오는 데 실패했습니다.');
+      }
+    };
+
+    if (!accommodationId) {
+      setRegistered(false);
+    } else {
+      fetchAccommodationData();
     }
-  }, [mode, accommodationId]);
+  }, [accommodationId]);
 
   return (
     <form onSubmit={handleSubmit}>
       <SSFieldset>
+        <Header title="숙소 등록" />
         <SSLabel>숙소명</SSLabel>
         <SSInput
           type="text"
@@ -304,12 +365,12 @@ const Accommodation = ({
         </SSDescriptionWrapper>
         <SSLabel>주소</SSLabel>
         <RegisterAddress
-          setAddressObj={setAddressObj}
+          setAddress={handleAddressChange}
           postcodeScriptUrl={POSTCODE_SCRIPT_URL}
         />
         <SSInputAddress
           type="text"
-          value={`${addressObj.areaAddress} ${addressObj.townAddress}`}
+          value={`${address.areaAddress} ${address.townAddress}`}
           onClick={handleAddressClick}
           readOnly
         />
@@ -365,19 +426,33 @@ const Accommodation = ({
           onSelect={selectPetFacility}
         />
         <SSLabelFile>대표이미지</SSLabelFile>
+        {!thumbnailImageUploaded && (
+          <SSUploadContainer htmlFor="thumbnail-upload">
+            <UploadIcon />
+            이미지 업로드
+          </SSUploadContainer>
+        )}
         <SSInputFile
+          id="thumbnail-upload"
           type="file"
           onChange={handleThumbnailChange}
           accept="image/jpeg,image/jpg,image/png"
-          required
         />
         {thumbnailPreview && (
           <SSImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
           </SSImagePreviewWrapper>
         )}
+
         <SSLabelFile>이미지</SSLabelFile>
+        {!imageUploaded && (
+          <SSUploadContainer htmlFor="image-upload">
+            <UploadIcon />
+            이미지 업로드
+          </SSUploadContainer>
+        )}
         <SSInputFile
+          id="image-upload"
           type="file"
           multiple
           onChange={handleAdditionalImagesChange}
@@ -393,22 +468,28 @@ const Accommodation = ({
           </SSPreviewWrapper>
         )}
         <SSButton type="submit">
-          {mode === 'create' ? '등록하기' : '수정하기'}
+          {registered ? '수정하기' : '등록하기'}
         </SSButton>
       </SSFieldset>
     </form>
   );
 };
 
-export default Accommodation;
+export default RegisterAccommodation;
 
 const CheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
-  color: black;
+  color: var(--gray-600);
   padding: 7px 10px;
   margin-bottom: 10px;
   margin-right: 5px;
   cursor: pointer;
   border-radius: 20px;
+`;
+
+const UploadIcon = styled(IoCloudUploadOutline)`
+  font-size: 30px;
+  color: var(--gray-600);
+  margin-bottom: 5px;
 `;

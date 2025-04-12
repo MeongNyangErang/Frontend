@@ -15,11 +15,15 @@ const UserMyPet = lazy(() => import('@pages/user/UserMyPet'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
 const RegisterAccommodation = lazy(
-  () => import('@pages/host/register/Accommodation'),
+  () => import('@pages/host/register/RegisterAccommodation'),
 );
-const RegisterRoom = lazy(() => import('@pages/host/register/Room'));
+const RegisterRoom = lazy(() => import('@pages/host/register/RegisterRoom'));
 const Reservation = lazy(
   () => import('@pages/Accommodation/${accommodationId}/reservation'),
+);
+const RoomList = lazy(() => import('@pages/host/register/RoomList'));
+const DetailAccommodation = lazy(
+  () => import('@pages/host/register/DetailAccommodation'),
 );
 
 const Chat = lazy(() => import('@pages/Chat/index'));
@@ -36,8 +40,16 @@ const AppRouter = () => {
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route
-            path="accommodation/${accommodationId}/reservation"
+            path="accommodation/:accommodationId/reservation"
             element={<Reservation />}
+          />
+          <Route
+            path="register/accommodation"
+            element={<RegisterAccommodation />}
+          />
+          <Route
+            path="register/detailAccommodation"
+            element={<DetailAccommodation />}
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
@@ -55,10 +67,11 @@ const AppRouter = () => {
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
               <Route
-                path="register/accommodation"
-                element={<RegisterAccommodation mode="create" />}
+                path="register/room"
+                element={<RegisterRoom mode="create" />}
               />
-              <Route path="register/room" element={<RegisterRoom />} />
+
+              <Route path="register/roomList" element={<RoomList />} />
             </Route>
           </Route>
 

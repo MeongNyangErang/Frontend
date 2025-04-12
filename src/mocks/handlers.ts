@@ -103,6 +103,174 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
+
+  // 객실 목록
+  http.get(`${BASE_URL}/register/roomList`, async () => {
+    const roomListData = {
+      code: 200,
+      data: [
+        {
+          roomId: '1',
+          name: '해변 근처 럭셔리 리조트',
+          description:
+            '바다 전망을 즐길 수 있는 고급 리조트입니다. 가족 단위 여행에 적합합니다.',
+          price: 150000,
+          thumbnailUrl: 'https://i.imgur.com/WrQthuy.jpeg',
+          standardPeopleCount: 3,
+          maxPeopleCount: 8,
+          standardPetCount: 2,
+          maxPetCount: 5,
+        },
+      ],
+    };
+    return HttpResponse.json(roomListData);
+  }),
+
+  // 예약 페이지
+  http.post(
+    `${BASE_URL}/accommodation/:accommodationId/reservation`,
+    async () => {
+      return HttpResponse.json({ message: '예약이 완료되었습니다' });
+    },
+  ),
+
+  // 숙소
+  http.post(`${BASE_URL}/register/accommodation`, async () => {
+    return HttpResponse.json({
+      message: '숙소 등록이 완료되었습니다',
+      id: 'accommodationId',
+    });
+  }),
+  http.put(`${BASE_URL}/register/accommodation`, async () => {
+    return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
+  }),
+  http.get(`${BASE_URL}/register/accommodation`, async () => {
+    const accommodationData = {
+      code: 200,
+      id: '1',
+      name: '서울 중심가 호텔 리조트',
+      type: '호텔 리조트',
+      description: '서울 중심가에 위치한 최고급 호텔 리조트입니다.',
+      address: {
+        area: '서울특별시',
+        town: '강남구',
+      },
+      detailedAddress: '서울특별시 강남구 테헤란로 100',
+      latitude: 37.5665,
+      longitude: 126.978,
+      facilityTypes: ['편의점', '공용 수영장', '피트니스'],
+      petFacilityTypes: ['대형 운동장', '전용 마당'],
+      allowPetTypes: ['소형견', '고양이'],
+      thumbnail: 'https://i.imgur.com/TuefC4N.jpeg',
+      additionalImages: ['https://i.imgur.com/TuefC4N.jpeg'],
+    };
+    return HttpResponse.json(accommodationData);
+  }),
+
+  // 숙소 상세페이지
+  http.get(`${BASE_URL}/register/detailAccommodation`, async () => {
+    const detailAccommodationData = {
+      accommodationsId: 1,
+      name: '광안리 위더스오션',
+      description:
+        '이곳은 바다 전망이 아름다운 숙소입니다. 가족 단위 여행이나 친구들과 함께 편안하게 지낼 수 있는 공간입니다.',
+      address: '부산광역시 수영구 광안해변로 200',
+      detailedAddress: '상세주소',
+      totalRating: 4.5,
+      type: 'PENSION',
+      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      accommodationImages: [
+        'https://i.imgur.com/TuefC4N.jpeg',
+        'https://i.imgur.com/TuefC4N.jpeg',
+      ],
+      accommodationFacility: [
+        '무료 Wi-Fi',
+        '조식 서비스',
+        '수영장',
+        '주차 공간',
+        '회의실',
+      ],
+      accommodationPetFacility: [
+        '반려동물 동반 가능',
+        '반려동물 전용 침대',
+        '애견 놀이터',
+      ],
+      allowPet: ['고양이'],
+      latitude: 35.1585,
+      longitude: 129.1669,
+      review: [
+        {
+          reviewId: 1,
+          reviewRating: 4.5,
+          content: '너무 좋았어요! 바다 전망이 최고였고, 직원들이 친절했어요.',
+          createdAt: '2025-04-11',
+        },
+        {
+          reviewId: 2,
+          reviewRating: 4.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-08-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+      ],
+      rooms: [
+        {
+          roomId: 1,
+          roomName: '디럭스 오션뷰',
+          roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
+          price: 200000,
+          standardPeople: 2,
+          maxPeople: 4,
+          standardPetCount: 1,
+          maxPetCount: 2,
+          extraPeopleFee: 20000,
+          extraPetFee: 10000,
+          extraFee: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+        },
+        {
+          roomId: 2,
+          roomName: '디럭스 오션뷰',
+          roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
+          price: 200000,
+          standardPeople: 2,
+          maxPeople: 4,
+          standardPetCount: 1,
+          maxPetCount: 2,
+          extraPeopleFee: 20000,
+          extraPetFee: 10000,
+          extraFee: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+        },
+      ],
+    };
+    return HttpResponse.json({
+      detailAccommodationData,
+    });
+
   http.get(`${BASE_URL}/users/pets`, async () => {
     const petListData = {
       code: 200,
