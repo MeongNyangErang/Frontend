@@ -138,57 +138,60 @@ const DetailAccommodation = () => {
             <SectionTitle>객실선택</SectionTitle>
             {accommodation.rooms && accommodation.rooms.length > 0 ? (
               <RoomContainer>
-                {accommodation.rooms.map((room) => (
-                  <RoomCard key={room.roomId}>
-                    <RoomInfoLeft>
-                      <RoomImage
-                        src={
-                          room.roomImageUrl && room.roomImageUrl.length > 0
-                            ? room.roomImageUrl[0]
-                            : 'default-room-image.jpg'
-                        }
-                        alt={room.roomName}
-                      />
-                      <RoomName>{room.roomName}</RoomName>
-                      <RoomInfo>
-                        <Count>
-                          인원 {room.standardPeople}명 / 최대 {room.maxPeople}명
-                        </Count>
-                        <Count>
-                          반려동물 {room.standardPetCount}마리 / 최대{' '}
-                          {room.maxPetCount}마리
-                        </Count>
-                      </RoomInfo>
-                    </RoomInfoLeft>
-                    <RoomInfoRight>
-                      <All>
-                        <RoomTitle>숙박</RoomTitle>
-                        <Detail onClick={() => {}}>상세보기</Detail>
-                      </All>
-                      <RoomInfo>
-                        <Check>
-                          체크인 {room.checkInTime} ~ 체크아웃{' '}
-                          {room.checkOutTime}
-                        </Check>
-                      </RoomInfo>
-                      <RoomInfo>
-                        <CheckInfo>[1인 / 1마리 추가요금]</CheckInfo>
-                        <Check>
-                          인원 {room.extraPeopleFee.toLocaleString()}
-                        </Check>
-                        <Check>
-                          반려동물 {room.extraPetFee.toLocaleString()}
-                        </Check>
-                      </RoomInfo>
-                      <RoomInfo>
-                        {/* <Price>{room.extraFee}</Price>
-                         */}
-                        <Price>{room.price.toLocaleString()}</Price>
-                      </RoomInfo>
-                      <RoomButton>예약하기</RoomButton>
-                    </RoomInfoRight>
-                  </RoomCard>
-                ))}
+                {accommodation.rooms
+                  .slice(0, showAllRooms ? accommodation.rooms.length : 2)
+                  .map((room) => (
+                    <RoomCard key={room.roomId}>
+                      <RoomInfoLeft>
+                        <RoomImage
+                          src={
+                            room.roomImageUrl && room.roomImageUrl.length > 0
+                              ? room.roomImageUrl[0]
+                              : 'default-room-image.jpg'
+                          }
+                          alt={room.roomName}
+                        />
+                        <RoomName>{room.roomName}</RoomName>
+                        <RoomInfo>
+                          <Count>
+                            인원 {room.standardPeople}명 / 최대 {room.maxPeople}
+                            명
+                          </Count>
+                          <Count>
+                            반려동물 {room.standardPetCount}마리 / 최대{' '}
+                            {room.maxPetCount}마리
+                          </Count>
+                        </RoomInfo>
+                      </RoomInfoLeft>
+                      <RoomInfoRight>
+                        <All>
+                          <RoomTitle>숙박</RoomTitle>
+                          <Detail onClick={() => {}}>상세보기</Detail>
+                        </All>
+                        <RoomInfo>
+                          <Check>
+                            체크인 {room.checkInTime} ~ 체크아웃{' '}
+                            {room.checkOutTime}
+                          </Check>
+                        </RoomInfo>
+                        <RoomInfo>
+                          <CheckInfo>[1인 / 1마리 추가요금]</CheckInfo>
+                          <Check>
+                            인원 {room.extraPeopleFee.toLocaleString()}
+                          </Check>
+                          <Check>
+                            반려동물 {room.extraPetFee.toLocaleString()}
+                          </Check>
+                        </RoomInfo>
+                        <RoomInfo>
+                          {/* <Price>{room.extraFee}</Price>
+                           */}
+                          <Price>{room.price.toLocaleString()}</Price>
+                        </RoomInfo>
+                        <RoomButton>예약하기</RoomButton>
+                      </RoomInfoRight>
+                    </RoomCard>
+                  ))}
               </RoomContainer>
             ) : (
               <p>현재 방이 없습니다</p>

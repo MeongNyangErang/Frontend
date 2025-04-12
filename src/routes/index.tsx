@@ -36,14 +36,6 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/reservation"
             element={<Reservation />}
           />
-          <Route
-            path="register/accommodation"
-            element={<RegisterAccommodation />}
-          />
-          <Route
-            path="register/detailAccommodation"
-            element={<DetailAccommodation />}
-          />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<UserMyPage />} />
@@ -55,6 +47,14 @@ const AppRouter = () => {
               <Route
                 path="register/room"
                 element={<RegisterRoom mode="create" />}
+              />
+              <Route
+                path="register/accommodation"
+                element={<RegisterAccommodation />}
+              />
+              <Route
+                path="register/detailAccommodation"
+                element={<DetailAccommodation />}
               />
 
               <Route path="register/roomList" element={<RoomList />} />

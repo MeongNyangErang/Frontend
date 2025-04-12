@@ -259,6 +259,21 @@ export const handlers = [
           checkInTime: '15:00',
           checkOutTime: '11:00',
         },
+        {
+          roomId: 2,
+          roomName: '디럭스 오션뷰',
+          roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
+          price: 200000,
+          standardPeople: 2,
+          maxPeople: 4,
+          standardPetCount: 1,
+          maxPetCount: 2,
+          extraPeopleFee: 20000,
+          extraPetFee: 10000,
+          extraFee: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+        },
       ],
     };
     return HttpResponse.json({
