@@ -35,7 +35,7 @@ const RadioSelector = ({
                   : 'false'
             }
           >
-            {isRating && <StarRating rate={option} $readOnly />}
+            {isRating && <StarRating rate={option} $readOnly size="1.8em" />}
             {isRating ? `${option}점 이상` : option}
           </SButton>
         );
@@ -51,7 +51,6 @@ const SRadioArea = styled.div`
   flex-direction: column;
   align-items: start;
   gap: 20px;
-  padding: 20px 0;
 `;
 
 const SButton = styled.button`

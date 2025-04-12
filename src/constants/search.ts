@@ -27,7 +27,7 @@ export const SEARCH_FILTER_ITEMS = [
     key: QUERY_KEYS.SEARCH.FILTER.PET_TYPE,
     name: '동반 반려동물',
     options: ['고양이', '소형견', '중형견', '대형견'],
-    type: 'square',
+    type: 'squareFixed',
   },
   {
     category: '숙소유형',

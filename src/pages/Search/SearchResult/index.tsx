@@ -65,20 +65,17 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     <SectionLayout>
       <SItems>
         {searchedData.map(
-          (
-            {
-              type,
-              accommodationId,
-              name,
-              thumbnailImageUrl,
-              totalRating,
-              minPrice,
-            },
-            index,
-          ) => {
+          ({
+            type,
+            accommodationId,
+            name,
+            thumbnailImageUrl,
+            totalRating,
+            minPrice,
+          }) => {
             return (
               <SItem
-                key={index}
+                key={accommodationId}
                 to={`${ROUTES.detail(accommodationId.toString())}`}
               >
                 <SImageArea>

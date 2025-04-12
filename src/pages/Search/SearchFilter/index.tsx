@@ -1,15 +1,8 @@
-import {
-  useState,
-  Fragment,
-  UIEventHandler,
-  useRef,
-  useEffect,
-  memo,
-} from 'react';
+import { useState, UIEventHandler, useRef, useEffect, memo } from 'react';
 import { IoMdRefresh } from 'react-icons/io';
+import { FaXmark } from 'react-icons/fa6';
 import Button from '@components/common/Button';
 import BottomDrawer from '@components/common/BottomDrawer';
-import SubPageHeader from '@components/common/SubPageHeader';
 import OptionSelector from '@components/common/OptionSelector';
 import useSearchFilter from '@hooks/page/useSearchFilter';
 import { SearchFilterType, SearchQuery } from '@typings/search';
@@ -19,12 +12,14 @@ import FilterItemName from './FIlterItemName';
 import {
   SContainer,
   SControlBox,
+  SFilterHeader,
   SResetButton,
   SScrollArea,
   SNavigator,
   SNavIndicator,
   SFilterItems,
   SFilterItem,
+  SItemContent,
 } from './styles';
 
 interface Props {
@@ -110,13 +105,14 @@ const SearchFilter = ({
   }, [isOpen]);
 
   return (
-    <BottomDrawer isOpen={isOpen}>
+    <BottomDrawer isOpen={isOpen} maxWidth="560px">
       <SContainer>
-        <SubPageHeader
-          onClick={handleCloseDrawer}
-          title="필터"
-          style="x"
-        ></SubPageHeader>
+        <SFilterHeader>
+          <button onClick={handleCloseDrawer}>
+            <FaXmark />
+          </button>
+          <div>필터</div>
+        </SFilterHeader>
         <SNavigator ref={navAreaRef}>
           <div>
             {FILTER_CATEGORIES.map((category, index) => (
@@ -148,7 +144,7 @@ const SearchFilter = ({
                     (item) => item.category === category,
                   ).map(({ type, options, key }) => {
                     return (
-                      <Fragment key={key}>
+                      <SItemContent key={key}>
                         {type === 'radio' && (
                           <RadioSelector
                             options={options}
@@ -157,7 +153,7 @@ const SearchFilter = ({
                             onClick={onToggleRadio(key)}
                           />
                         )}
-                        {(type === 'capsule' || type === 'square') && (
+                        {(type === 'capsule' || type === 'squareFixed') && (
                           <OptionSelector
                             $variant={type}
                             onClick={onToggleOptions(key)}
@@ -165,7 +161,7 @@ const SearchFilter = ({
                             currentValue={filterState[key]}
                           />
                         )}
-                      </Fragment>
+                      </SItemContent>
                     );
                   })}
                 </SFilterItem>
