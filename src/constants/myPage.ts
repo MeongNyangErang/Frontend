@@ -10,7 +10,7 @@ export const USER_MY_PAGE_MENU = [
 
 export const HOST_MY_PAGE_MENU = [
   { name: '예약 내역', path: ROUTES.myPage.host.reservation },
-  { name: '리뷰 내역역', path: ROUTES.myPage.host.reviews },
+  { name: '리뷰 내역', path: ROUTES.myPage.host.reviews },
   { name: '숙소 관리', path: ROUTES.myPage.host.registerAccommodation },
   { name: '객실 관리', path: ROUTES.myPage.host.registerRoom },
   { name: '내 정보 관리', path: ROUTES.myPage.host.profile },

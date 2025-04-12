@@ -9,6 +9,7 @@ const SProfileBoxWrap = styled.div`
   align-items: center;
   flex-direction: column;
   row-gap: 16px;
+  margin-top: 24px;
   min-height: 170px;
 
   > span {
@@ -21,6 +22,10 @@ const SProfileBoxWrap = styled.div`
     border: ${({ theme }) => `1px solid ${theme.colors.gray300}`};
     border-radius: 12px;
     row-gap: 0;
+  }
+
+  ${media.desktop} {
+    padding-top: 0;
   }
 `;
 
@@ -78,13 +83,13 @@ const SEditButton = styled(Link)`
   padding: 12px 20px;
   width: 100%;
   border-radius: 8px;
-  color: #ff7b92;
   font-weight: 500;
-  background-color: #fff3f5;
+  color: ${({ theme }) => theme.colors.lightOrangeTxt};
+  background-color: ${({ theme }) => theme.colors.lightOrangeBg};
 
   &:last-child {
-    color: #f29c70;
-    background-color: #fdf5eb;
+    color: ${({ theme }) => theme.colors.lightRedTxt};
+    background-color: ${({ theme }) => theme.colors.lightRedBg};
   }
 
   ${media.tablet} {

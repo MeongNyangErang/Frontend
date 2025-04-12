@@ -15,14 +15,18 @@ const SDrawerOverlay = styled.div`
   background-color: ${({ theme }) => theme.colors.overlay};
 `;
 
-const SDrawerBody = styled.div<{ $visible: boolean; $fullHeight?: boolean }>`
+const SDrawerBody = styled.div<{
+  $visible: boolean;
+  $fullHeight?: boolean;
+  $maxWidth: string;
+}>`
   overflow: hidden;
   position: absolute;
   left: 50%;
   bottom: 0;
   z-index: 1;
   width: 100%;
-  max-width: 760px;
+  max-width: ${({ $maxWidth }) => $maxWidth};
   height: ${({ $fullHeight }) => ($fullHeight ? '100%' : 'calc(100% - 20px)')};
   background-color: #fff;
   border-top-right-radius: ${({ $fullHeight }) =>

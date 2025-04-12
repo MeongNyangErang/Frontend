@@ -6,7 +6,7 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   variant: 'main' | 'grayBorder' | 'mainBorder' | 'accent';
-  fontSize: string;
+  fontSize?: string;
   type?: 'button' | 'submit' | 'reset';
   fullWidth?: boolean;
   fixedHeight?: boolean;
@@ -19,7 +19,7 @@ const Button = ({
   children,
   onClick,
   variant,
-  fontSize,
+  fontSize = '14px',
   fullWidth,
   fixedHeight,
   disabled,

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTES from '@constants/routes';
 import { HOST_MY_PAGE_MENU, USER_MY_PAGE_MENU } from '@constants/myPage';
@@ -16,7 +16,7 @@ interface MyPageLayoutProps {
   children: ReactNode;
 }
 
-const MyPageLayout = ({ children }: MyPageLayoutProps) => {
+const MyPageLayout = () => {
   const { member } = useAuth();
   const menu = member?.role === 'user' ? USER_MY_PAGE_MENU : HOST_MY_PAGE_MENU;
 
@@ -32,13 +32,15 @@ const MyPageLayout = ({ children }: MyPageLayoutProps) => {
               {menu.map(({ name, path }) => {
                 return (
                   <SMyPageMenuLink to={path} key={name}>
-                    {name}
+                    <span>{name}</span>
                   </SMyPageMenuLink>
                 );
               })}
             </div>
           </SMyPageMenuBar>
-          <SMyPageContents>{children}</SMyPageContents>
+          <SMyPageContents>
+            <Outlet />
+          </SMyPageContents>
         </SMyPageGrid>
       </SMyPageContainer>
     </SMyPageWrap>

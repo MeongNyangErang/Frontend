@@ -17,7 +17,7 @@ export const inputStyle = css`
   width: 100%;
   height: 48px;
   font-size: 14px;
-  border-radius: ${theme.radius.sm};
+  border-radius: ${theme.radius.md};
   outline: none;
 `;
 
@@ -67,12 +67,6 @@ export const labelDotStyle = css`
     background-color: ${({ theme }) => theme.colors.main};
     transform: translate(100%, -100%);
   }
-`;
-
-export const pageTitleStyle = css`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.gray700};
 `;
 
 export const noScrollBarStyle = css`
