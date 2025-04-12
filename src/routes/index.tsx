@@ -32,6 +32,9 @@ const UserReservationList = lazy(
 );
 const UserReviews = lazy(() => import('@pages/user/UserReviews'));
 const UserWishList = lazy(() => import('@pages/user/UserWishList'));
+const DetailRoom = lazy(
+  () => import('@pages/Accommodation/${accommodationId}'),
+);
 
 const AppRouter = () => {
   return (
@@ -44,6 +47,10 @@ const AppRouter = () => {
           <Route
             path="accommodation/:accommodationId/reservation"
             element={<Reservation />}
+          />
+          <Route
+            path="/accommodation/${accommodationId}"
+            element={<DetailRoom />}
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
