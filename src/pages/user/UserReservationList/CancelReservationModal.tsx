@@ -20,6 +20,11 @@ const CancelModal = ({
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, resetError, updateError } = useError();
 
+  const handleClose = () => {
+    resetError();
+    onClose();
+  };
+
   const handleCancelReservation = async () => {
     if (!reservationToCancel) return;
     if (error) resetError();
@@ -44,11 +49,12 @@ const CancelModal = ({
       variant="centered"
       isOpen={!!reservationToCancel}
       closeType="x"
-      onClose={onClose}
+      onClose={handleClose}
     >
-      <SMessage>예약을 취소하시겠어요?</SMessage>
+      <SMessage>예약을 정말 취소하시나요?</SMessage>
+      <SError>{error}</SError>
       <SButtons>
-        <Button variant="grayBorder" disabled={isLoading} onClick={onClose}>
+        <Button variant="grayBorder" disabled={isLoading} onClick={handleClose}>
           취소
         </Button>
         <Button
@@ -68,6 +74,11 @@ export default CancelModal;
 const SMessage = styled.div`
   padding-top: 0px;
   margin-bottom: 20px;
+`;
+
+const SError = styled.div`
+  padding: 8px 0;
+  color: ${({ theme }) => theme.colors.main};
 `;
 
 const SButtons = styled.div`

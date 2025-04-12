@@ -7,8 +7,8 @@ import {
   RESERVATION_STATUS_MAP,
 } from '@constants/reservation';
 import useUserReservationListPage from '@hooks/page/useUserReservationListPage';
-import CancelModal from './CancelModal';
-import ReviewModal from './ReviewModal';
+import CancelReservationModal from './CancelReservationModal';
+import RegisterReviewModal from '@components/common/RegisterReviewModal';
 import ReservationItem from './ReservationItem';
 import {
   STab,
@@ -99,12 +99,13 @@ const UserReservationList = () => {
           {isLoading && <Loader loading size={8} color="grayBorder" />}
         </SListBottom>
       </SReservationListWrap>
-      <ReviewModal
+      <RegisterReviewModal
+        type="write"
         reservationToReview={reservationToReview}
         onClose={onCloseReviewModal}
         onSuccess={onSuccessPostReview}
       />
-      <CancelModal
+      <CancelReservationModal
         reservationToCancel={reservationToCancel}
         onClose={onCloseCancelModal}
         onSuccess={onSuccessCancelReservation}
