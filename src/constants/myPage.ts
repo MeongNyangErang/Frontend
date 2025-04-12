@@ -25,7 +25,7 @@ export const USER_OVERVEIW_LIST = [
   {
     name: '찜한 숙소',
     desc: '찜해둔 숙소 목록을 확인 할 수 있어요.',
-    path: ROUTES.myPage.user.reservationList,
+    path: ROUTES.myPage.user.wishlist,
   },
   {
     name: '내 리뷰',
