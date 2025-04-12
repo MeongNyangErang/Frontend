@@ -1,4 +1,4 @@
-import { formatDate } from '@utils/formatter';
+import { formatDate } from '@utils/date';
 import { ACCOMMODATION_TAGS } from './accommodation';
 import { QUERY_KEYS } from './queryKeys';
 

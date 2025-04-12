@@ -11,7 +11,7 @@ const useUserMyPet = () => {
     data: { data } = {},
     error,
     isLoading,
-    invalidateMyPetList,
+    refreshMyPetList,
   } = useMyPetList();
   const [selectedPet, setSelectedPet] = useState<PetInfo | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -58,7 +58,7 @@ const useUserMyPet = () => {
     startDeleteLoading();
     try {
       await deleteMyPet(selectedId);
-      invalidateMyPetList();
+      refreshMyPetList();
       handleCompeleteDelete();
     } catch (error) {
       updateDeleteError('에러가 발생했습니다. 다시 시도해주세요.');
@@ -70,7 +70,7 @@ const useUserMyPet = () => {
   const onSuccessSubmitPetForm = useCallback(() => {
     closeForm();
     resetSelectedPet();
-    invalidateMyPetList();
+    refreshMyPetList();
   }, [resetSelectedPet]);
 
   return {
