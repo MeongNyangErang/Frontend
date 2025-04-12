@@ -23,5 +23,5 @@
       "@recoil/*": ["recoil/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/react-star-ratings.d.ts"]
 }

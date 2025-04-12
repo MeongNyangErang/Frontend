@@ -128,8 +128,12 @@ export const handlers = [
     },
   ),
 
+  // 숙소
   http.post(`${BASE_URL}/register/accommodation`, async () => {
-    return HttpResponse.json({ message: '숙소 등록이 완료되었습니다' });
+    return HttpResponse.json({
+      message: '숙소 등록이 완료되었습니다',
+      id: 'accommodationId',
+    });
   }),
   http.put(`${BASE_URL}/register/accommodation`, async () => {
     return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
@@ -151,9 +155,114 @@ export const handlers = [
       facilityTypes: ['편의점', '공용 수영장', '피트니스'],
       petFacilityTypes: ['대형 운동장', '전용 마당'],
       allowPetTypes: ['소형견', '고양이'],
-      thumbnail: 'https://example.com/images/thumbnail1.jpg',
-      additionalImages: ['https://example.com/images/additional1.jpg'],
+      thumbnail: 'https://i.imgur.com/TuefC4N.jpeg',
+      additionalImages: ['https://i.imgur.com/TuefC4N.jpeg'],
     };
     return HttpResponse.json(accommodationData);
+  }),
+
+  // 숙소 상세페이지
+  http.get(`${BASE_URL}/register/detailAccommodation`, async () => {
+    const detailAccommodationData = {
+      accommodationsId: 1,
+      name: '광안리 위더스오션',
+      description:
+        '이곳은 바다 전망이 아름다운 숙소입니다. 가족 단위 여행이나 친구들과 함께 편안하게 지낼 수 있는 공간입니다.',
+      address: '부산광역시 수영구 광안해변로 200',
+      detailedAddress: '상세주소',
+      totalRating: 4.5,
+      type: 'PENSION',
+      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      accommodationImages: [
+        'https://i.imgur.com/TuefC4N.jpeg',
+        'https://i.imgur.com/TuefC4N.jpeg',
+      ],
+      accommodationFacility: [
+        '무료 Wi-Fi',
+        '조식 서비스',
+        '수영장',
+        '주차 공간',
+        '회의실',
+      ],
+      accommodationPetFacility: [
+        '반려동물 동반 가능',
+        '반려동물 전용 침대',
+        '애견 놀이터',
+      ],
+      allowPet: ['고양이'],
+      latitude: 35.1585,
+      longitude: 129.1669,
+      review: [
+        {
+          reviewId: 1,
+          reviewRating: 4.5,
+          content: '너무 좋았어요! 바다 전망이 최고였고, 직원들이 친절했어요.',
+          createdAt: '2025-04-11',
+        },
+        {
+          reviewId: 2,
+          reviewRating: 4.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-08-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+        {
+          reviewId: 3,
+          reviewRating: 3.0,
+          content:
+            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
+          createdAt: '2025-02-11',
+        },
+      ],
+      rooms: [
+        {
+          roomId: 1,
+          roomName: '디럭스 오션뷰',
+          roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
+          price: 200000,
+          standardPeople: 2,
+          maxPeople: 4,
+          standardPetCount: 1,
+          maxPetCount: 2,
+          extraPeopleFee: 20000,
+          extraPetFee: 10000,
+          extraFee: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+        },
+        {
+          roomId: 2,
+          roomName: '디럭스 오션뷰',
+          roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
+          price: 200000,
+          standardPeople: 2,
+          maxPeople: 4,
+          standardPetCount: 1,
+          maxPetCount: 2,
+          extraPeopleFee: 20000,
+          extraPetFee: 10000,
+          extraFee: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+        },
+      ],
+    };
+    return HttpResponse.json({
+      detailAccommodationData,
+    });
   }),
 ];

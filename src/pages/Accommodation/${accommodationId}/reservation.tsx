@@ -11,6 +11,20 @@ interface ButtonProps {
 const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  /*
+  const mockData = {
+    accommodationId: '12345',
+    accommodationName: 'Luxury Beach Resort',
+    roomId: 'A101',
+    checkInDate: '2025-04-15',
+    checkOutDate: '2025-04-20',
+    peopleCount: 2,
+    petCount: 1,
+    totalPrice: '250,000',
+  };
+  */
+
   const {
     accommodationName,
     roomId,
@@ -19,7 +33,7 @@ const Reservation = () => {
     peopleCount,
     petCount,
     totalPrice,
-  } = location.state || {};
+  } = location.state || {}; /*mockData*/
 
   useEffect(() => {
     if (
@@ -48,6 +62,7 @@ const Reservation = () => {
   const [hasvehicle, setHasvehicle] = useState<string | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
   const [reserverName, setReserverName] = useState('');
+  const [formError, setFormError] = useState<string>('');
 
   const handleReserverPhoneNumber = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -65,9 +80,11 @@ const Reservation = () => {
   };
 
   const handleReserverName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[가-힣]*$/;
-    if (regex.test(e.target.value) || e.target.value === '') {
-      setReserverName(e.target.value);
+    const inputValue = e.target.value;
+
+    const koreanRegex = /^[가-힣]*$/;
+    if (koreanRegex.test(inputValue)) {
+      setReserverName(inputValue);
     }
   };
 
@@ -76,7 +93,28 @@ const Reservation = () => {
   };
 
   const handlePayment = async () => {
+    if (!reserverName || !/^[가-힣]+$/.test(reserverName)) {
+      setFormError('성명을 올바르게 입력해주세요.');
+      return;
+    }
+
+    if (
+      !reserverPhoneNumber ||
+      !/^\d{3}-\d{3,4}-\d{4}$/.test(reserverPhoneNumber)
+    ) {
+      setFormError('휴대폰 번호를 올바르게 입력해주세요.');
+      return;
+    }
+
+    if (!hasvehicle) {
+      setFormError('주차 여부를 선택해주세요.');
+      return;
+    }
+
     try {
+      const sanitizedTotalPrice = totalPrice
+        ? totalPrice.replace(/[^0-9]/g, '')
+        : '0';
       const paymentData = {
         roomId,
         checkInDate,
@@ -86,12 +124,12 @@ const Reservation = () => {
         reserverName,
         reserverPhoneNumber,
         hasvehicle,
-        totalPrice: totalPrice.replace(/[^0-9]/g, ''),
+        totalPrice: sanitizedTotalPrice,
       };
       const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
       const response = await axios.post(
-        `${BASE_URL}/accommodation/$%7BaccommodationId%7D/reservation`,
+        `${BASE_URL}/accommodation/:accommodationId/reservation`,
         paymentData,
       );
       if (response.status === 200) {
@@ -129,6 +167,7 @@ const Reservation = () => {
       </AmountWrapper>
       <SeparatorBox />
       <SLabelInfo>예약자 정보</SLabelInfo>
+      {formError && <ErrorText>{formError}</ErrorText>}
       <SLabel>성명</SLabel>
       <SInputWrapper>
         <SInputTel
@@ -136,7 +175,6 @@ const Reservation = () => {
           placeholder="성명을 입력해주세요"
           value={reserverName}
           onChange={handleReserverName}
-          required
         />
       </SInputWrapper>
       <SLabel>휴대폰 번호</SLabel>
@@ -146,7 +184,6 @@ const Reservation = () => {
           placeholder="번호를 입력해주세요"
           value={reserverPhoneNumber}
           onChange={handleReserverPhoneNumber}
-          required
         />
       </SInputWrapper>
       <SLabel>주차 여부</SLabel>
@@ -164,6 +201,7 @@ const Reservation = () => {
           X
         </CheckInput>
       </ButtonContainer>
+
       <SeparatorBox />
       <Wrappers>
         <HalfPay>
@@ -177,9 +215,16 @@ const Reservation = () => {
 };
 
 export default Reservation;
+const ErrorText = styled.p`
+  color: red;
+  font-size: 15px;
+  margin: 5px 0;
+  font-family: 'Noto Sans KR';
+`;
 
 const SInputTittle = styled.input`
-  font-size: 20px;
+  margin-top: 20px;
+  font-size: 25px;
   margin-bottom: 15px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -235,8 +280,9 @@ const SFieldset = styled.fieldset`
 
 const SLabel = styled.label`
   font-family: 'Noto Sans KR';
-  margin-bottom: 10px;
   margin-top: 10px;
+  margin-bottom: 3px;
+  font-size: 16px;
 `;
 
 const STotal = styled.label`
@@ -249,18 +295,18 @@ const STotal = styled.label`
 `;
 
 const SInputCheck = styled.input`
+  margin-left: 15px;
   margin-top: 5px;
-  margin-bottom: 15px;
   font-weight: bold;
+  font-size: 16px;
 `;
 
 const SInputText = styled.input`
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: 10px;
 `;
 
 const SInputTel = styled.input`
-  margin: 5px 2px;
+  margin: 7px 2px;
   font-size: 16px;
 `;
 

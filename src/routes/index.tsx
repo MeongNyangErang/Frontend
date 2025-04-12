@@ -20,6 +20,9 @@ const Reservation = lazy(
   () => import('@pages/Accommodation/${accommodationId}/reservation'),
 );
 const RoomList = lazy(() => import('@pages/host/register/RoomList'));
+const DetailAccommodation = lazy(
+  () => import('@pages/host/register/DetailAccommodation'),
+);
 
 const AppRouter = () => {
   return (
@@ -30,12 +33,16 @@ const AppRouter = () => {
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route
-            path="accommodation/${accommodationId}/reservation"
+            path="accommodation/:accommodationId/reservation"
             element={<Reservation />}
           />
           <Route
             path="register/accommodation"
             element={<RegisterAccommodation />}
+          />
+          <Route
+            path="register/detailAccommodation"
+            element={<DetailAccommodation />}
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
@@ -45,11 +52,11 @@ const AppRouter = () => {
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
             <Route path="/mypage/host">
               <Route index element={<HostMyPage />} />
-
               <Route
                 path="register/room"
                 element={<RegisterRoom mode="create" />}
               />
+
               <Route path="register/roomList" element={<RoomList />} />
             </Route>
           </Route>
