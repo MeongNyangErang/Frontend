@@ -104,7 +104,6 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
-
   // 객실 목록
   http.get(`${BASE_URL}/register/roomList`, async () => {
     const roomListData = {
@@ -126,7 +125,6 @@ export const handlers = [
     };
     return HttpResponse.json(roomListData);
   }),
-
   // 예약 페이지
   http.post(
     `${BASE_URL}/accommodation/:accommodationId/reservation`,
@@ -134,7 +132,6 @@ export const handlers = [
       return HttpResponse.json({ message: '예약이 완료되었습니다' });
     },
   ),
-
   // 숙소
   http.post(`${BASE_URL}/register/accommodation`, async () => {
     return HttpResponse.json({
@@ -167,7 +164,6 @@ export const handlers = [
     };
     return HttpResponse.json(accommodationData);
   }),
-
   // 숙소 상세페이지
   http.get(`${BASE_URL}/register/detailAccommodation`, async () => {
     const detailAccommodationData = {
@@ -271,6 +267,7 @@ export const handlers = [
     return HttpResponse.json({
       detailAccommodationData,
     });
+  }),
 
   http.get(`${BASE_URL}/users/pets`, async () => {
     const petListData = {
