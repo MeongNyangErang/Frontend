@@ -7,6 +7,7 @@ import {
   canceledReservations,
   completedReservations,
 } from './data/userReservationList';
+import { userReviews } from './data/userReviews';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -335,7 +336,7 @@ export const handlers = [
     const data = {
       code: 200,
       content,
-      cursor: Math.ceil(Math.random() * 10),
+      cursor: Math.ceil(Math.random() * 100),
       hasNext: true,
     };
 
@@ -349,5 +350,14 @@ export const handlers = [
   ),
   http.post(`${BASE_URL}/users/reviews`, async () => {
     return HttpResponse.json({ message: '리뷰 등록 성공' });
+  }),
+  http.get(`${BASE_URL}/users/reviews`, async () => {
+    const data = {
+      code: 200,
+      content: userReviews,
+      cursor: Math.ceil(Math.random() * 100),
+      hasNext: true,
+    };
+    return HttpResponse.json(data);
   }),
 ];

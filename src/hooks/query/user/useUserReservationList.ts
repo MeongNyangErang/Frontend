@@ -7,18 +7,9 @@ const useUserReservationList = (
   cursor: number | undefined,
 ) => {
   const queryClient = useQueryClient();
+
   const refreshReservationList = async () => {
     await queryClient.invalidateQueries({
-      predicate: (query) => {
-        const queryKey = query.queryKey;
-        return (
-          Array.isArray(queryKey) &&
-          queryKey[0] === 'user-reservation-list' &&
-          queryKey[1] === 'reserved'
-        );
-      },
-    });
-    await queryClient.refetchQueries({
       predicate: (query) => {
         const queryKey = query.queryKey;
         return (

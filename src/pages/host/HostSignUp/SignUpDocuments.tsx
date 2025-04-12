@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import SubPageHeader from '@components/common/SubPageHeader';
+import SignUpHeader from '@components/common/SignUpHeader';
 import { SFormGroup, SInputBox, SMessage } from '@components/styles/formStyles';
 import {
   inputStyle,
@@ -50,7 +50,7 @@ const SignUpDocuments = ({
   );
   return (
     <>
-      <SubPageHeader title="호스트 회원 가입" style="arrow" onClick={onPrev} />
+      <SignUpHeader title="호스트 회원 가입" onClick={onPrev} />
       <SWrap>
         <SDesc>
           안전한 숙소 예약 환경을 위하여
