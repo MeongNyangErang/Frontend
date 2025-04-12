@@ -47,7 +47,7 @@ const PetForm = ({ selectedPet, onSuccess }: PetFormProps) => {
                 <OptionSelector
                   onClick={onClickOption(id)}
                   options={field.options}
-                  $variant="square"
+                  $variant="squareResponsive"
                   currentValue={[newInfo[id]]}
                 />
               )}

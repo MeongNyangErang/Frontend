@@ -3,7 +3,7 @@ import { PET_SIZE_MAP } from '@constants/pet';
 import { SOptionSelectorWrap, SOptionSelectorButton } from './styles';
 
 interface Props {
-  $variant: 'square' | 'capsule';
+  $variant: 'squareFixed' | 'squareResponsive' | 'capsule';
   options: readonly string[] | readonly { name: string; value: string }[];
   currentValue: string[];
   onClick: (value: string) => void;

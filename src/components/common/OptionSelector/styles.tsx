@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
-const SOptionSelectorWrap = styled.div<{ $variant: 'square' | 'capsule' }>`
+const SOptionSelectorWrap = styled.div<{
+  $variant: 'squareFixed' | 'squareResponsive' | 'capsule';
+}>`
   ${({ $variant }) =>
     $variant === 'capsule' &&
     css`
@@ -11,7 +13,7 @@ const SOptionSelectorWrap = styled.div<{ $variant: 'square' | 'capsule' }>`
     `}
 
   ${({ $variant }) =>
-    $variant === 'square' &&
+    $variant.includes('square') &&
     css`
       display: flex;
       align-items: center;
@@ -19,7 +21,13 @@ const SOptionSelectorWrap = styled.div<{ $variant: 'square' | 'capsule' }>`
     `}
 `;
 
-const squareStyle = css`
+const squareFixedStyle = css`
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+`;
+
+const squareResponsiveStyle = css`
   width: 25%;
   aspect-ratio: 1;
   border-radius: 12px;
@@ -31,7 +39,9 @@ const capsuleStyle = css`
   border-radius: 9999px;
 `;
 
-const SOptionSelectorButton = styled.button<{ $variant: 'square' | 'capsule' }>`
+const SOptionSelectorButton = styled.button<{
+  $variant: 'squareFixed' | 'squareResponsive' | 'capsule';
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,7 +51,8 @@ const SOptionSelectorButton = styled.button<{ $variant: 'square' | 'capsule' }>`
   border: ${({ theme }) => `1px solid ${theme.colors.gray400}`};
   background-color: #fff;
 
-  ${({ $variant }) => $variant === 'square' && squareStyle}
+  ${({ $variant }) => $variant === 'squareFixed' && squareFixedStyle}
+  ${({ $variant }) => $variant === 'squareResponsive' && squareResponsiveStyle}
   ${({ $variant }) => $variant === 'capsule' && capsuleStyle}
 
   &[data-checked='true'] {

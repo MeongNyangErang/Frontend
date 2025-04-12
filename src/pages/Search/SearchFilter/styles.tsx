@@ -10,6 +10,31 @@ const SContainer = styled.div`
   background-color: #fff;
 `;
 
+const SFilterHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: ${({ theme }) => `20px ${theme.layouts.paddingX} 20px`};
+
+  > div {
+    font-weight: 500;
+  }
+
+  > button {
+    position: absolute;
+    left: ${({ theme }) => theme.layouts.paddingX};
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    transform: translateY(-50%);
+  }
+`;
+
 const contorlBoxSize = '72px';
 
 const SControlBox = styled.div`
@@ -122,8 +147,13 @@ const SItemName = styled.div`
   }
 `;
 
+const SItemContent = styled.div`
+  padding: 20px 0 28px;
+`;
+
 export {
   SContainer,
+  SFilterHeader,
   SControlBox,
   SResetButton,
   SScrollArea,
@@ -132,4 +162,5 @@ export {
   SFilterItems,
   SFilterItem,
   SItemName,
+  SItemContent,
 };
