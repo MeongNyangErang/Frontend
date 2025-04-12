@@ -10,7 +10,7 @@ interface Props {
   isEmailCodeRequested: boolean;
   isLoading: boolean;
   onRequestCode(): Promise<boolean>;
-  onVerifyCode(code: string, timeLeft: number): Promise<boolean>;
+  onVerifyCode(code: string, timeLeft: number): Promise<boolean | undefined>;
 }
 
 const EmailVerification = ({

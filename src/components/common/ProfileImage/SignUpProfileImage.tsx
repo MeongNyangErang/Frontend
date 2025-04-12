@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import ProfileImageUploader from '@components/common/ProfileImage/ProfileImageUploader';
-import SubPageHeader from '@components/common/SubPageHeader';
+import SignUpHeader from '../SignUpHeader';
 import Button from '@components/common/Button';
 import { FileFormatFields } from '@typings/signUp';
 
@@ -19,7 +19,7 @@ const SignUpProfileImage = ({
 }: Props) => {
   return (
     <>
-      <SubPageHeader title="프로필 이미지" onClick={onPrev} style="arrow" />
+      <SignUpHeader title="프로필 이미지" onClick={onPrev} />
       <SWrap>
         <SSubTitle>프로필 이미지 등록(선택)</SSubTitle>
         <ProfileImageUploader
