@@ -9,6 +9,8 @@ const UserSignUp = () => {
     step,
     formData,
     formError,
+    successMessage,
+    handleConfirmSuccessMessage,
     updateError,
     onChangeStep,
     onChangeInput,
@@ -51,6 +53,15 @@ const UserSignUp = () => {
           {formError.emailCode.split('\n').map((line, i) => {
             return <div key={i}>{line}</div>;
           })}
+        </Modal>
+        <Modal
+          isOpen={!!successMessage}
+          closeType="x"
+          variant="centered"
+          role="confirm"
+          onClose={handleConfirmSuccessMessage}
+        >
+          {successMessage}
         </Modal>
       </SSignUpContainer>
     </SSignUpWrap>

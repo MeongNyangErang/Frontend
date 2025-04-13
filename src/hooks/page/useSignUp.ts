@@ -44,6 +44,8 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     submit: false,
   });
   const [isEmailCodeRequested, setIsEmailCodeRequested] = useState(false);
+
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const goToLogin = useCallback(() => {
@@ -103,6 +105,11 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     },
     [],
   );
+
+  const handleConfirmSuccessMessage = () => {
+    setSuccessMessage('');
+    goToLogin();
+  };
 
   const onCheckEmail = useCallback(async () => {
     startLoading('email');
@@ -199,7 +206,9 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     startLoading('submit');
     try {
       await submitFn(formData);
-      goToLogin();
+      setSuccessMessage(
+        '회원 가입에 성공했습니다.\n로그인 화면으로 이동합니다.',
+      );
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
@@ -218,9 +227,11 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     formError,
     checkStatus,
     loading,
+    successMessage,
     isEmailCodeRequested,
     goToLogin,
     updateError,
+    handleConfirmSuccessMessage,
     onChangeStep,
     onChangeInput,
     onChangeFileData,
