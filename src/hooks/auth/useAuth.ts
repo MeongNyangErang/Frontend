@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { memberAtom } from '@recoil/authAtom';
 import { AppMember } from '@typings/member';

@@ -1,25 +1,24 @@
-import { CommonFormData, SignUpFormData } from '@typings/signUp';
-import { MemberRole } from '@typings/member';
 import { fetchCall } from './api';
 
-export const signupUser = async (formData: CommonFormData) => {
-  const { profileImage, ...rest } = formData;
-  const data = profileImage === null ? rest : { ...rest, profileImage };
-  return await fetchCall('users/signup', 'post', data);
+export const signupUser = async (formData: FormData) => {
+  return await fetchCall('users/signup', 'post', formData);
 };
 
-export const signupHost = async (formData: SignUpFormData) => {
-  const { profileImage, ...rest } = formData;
-  const data = profileImage === null ? rest : { ...rest, profileImage };
-  return await fetchCall('hotsts/signup', 'post', data);
+export const signupHost = async (formData: FormData) => {
+  return await fetchCall('hosts/signup', 'post', formData);
 };
 
 export const checkNicknameDuplicate = async (nickname: string) => {
-  return await fetchCall('nickname/check', 'get', { nickname });
+  return await fetchCall(`nickname/check?nickname=${nickname}`, 'get');
 };
 
-export const checkEmailDuplicate = async (email: string, role: MemberRole) => {
-  return await fetchCall('nickname/check', 'get', { email, role });
+export const checkUserEmailDuplicate = async (email: string) => {
+  console.log(email, 'email');
+  return await fetchCall(`email/check/user?email=${email}`, 'get');
+};
+
+export const checkHostEmailDuplicate = async (email: string) => {
+  return await fetchCall(`email/check/host?email=${email}`, 'get');
 };
 
 export const getVerificationCode = async (email: string) => {

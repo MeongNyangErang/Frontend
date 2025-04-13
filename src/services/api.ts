@@ -43,10 +43,15 @@ async function fetchCall<T>(
   method: 'get' | 'post' | 'put' | 'delete' | 'patch',
   data?: any,
 ): Promise<T> {
+  const isFormData = data instanceof FormData;
+
+  console.log(isFormData, 'isFormData');
+
   const config = {
     url,
     method,
     ...(data && { data }),
+    headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
   };
   return axiosInstance(config);
 }

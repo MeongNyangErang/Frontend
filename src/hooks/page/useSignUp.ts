@@ -16,7 +16,8 @@ import {
 import { validateOnChange } from '@utils/validateSignUp';
 import ROUTES from '@constants/routes';
 import {
-  checkEmailDuplicate,
+  checkHostEmailDuplicate,
+  checkUserEmailDuplicate,
   checkNicknameDuplicate,
   confirmVerificationCode,
   getVerificationCode,
@@ -113,17 +114,19 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
 
   const onCheckEmail = useCallback(async () => {
     startLoading('email');
+    const checkFn =
+      type === 'user' ? checkUserEmailDuplicate : checkHostEmailDuplicate;
     try {
-      const res = await checkEmailDuplicate(formData.email, type);
+      const res = await checkFn(formData.email);
       console.log(res);
-      // setCheckStatus((prev) => ({ ...prev, email: true }));
+      setCheckStatus((prev) => ({ ...prev, email: true }));
     } catch (e) {
       console.log(e);
       updateError('email', '사용 할 수 없는 이메일 입니다.');
     } finally {
       endLoading('email');
     }
-  }, []);
+  }, [formData]);
 
   const onCheckNickname = useCallback(async () => {
     startLoading('nickname');
@@ -136,7 +139,7 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     } finally {
       endLoading('nickname');
     }
-  }, []);
+  }, [formData]);
 
   const onRequestCode = useCallback(async () => {
     if (!isEmailCodeRequested) setIsEmailCodeRequested(true);
@@ -152,7 +155,7 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
       } else {
         updateError(
           'emailCode',
-          '인증번호 요청에 실패했습니다. 다시 시도해주세요.',
+          '인증번호 요청에 실패했습니다.\n다시 시도해주세요.',
         );
       }
       return false;
@@ -190,22 +193,53 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
         if (error instanceof AxiosError) {
           updateError('emailCode', error.message);
         } else {
-          updateError('emailCode', '인증에 실패했습니다. 다시 시도해주세요.');
+          updateError('emailCode', '인증에 실패했습니다.\n다시 시도해주세요.');
         }
         return false;
       } finally {
         endLoading('emailCode');
       }
     },
-    [checkStatus.emailCode],
+    [checkStatus.emailCode, formData],
   );
 
   const onSubmit = useCallback(async () => {
+    const data = { ...formData };
+    Object.entries(formData).forEach(([key, value]) => {
+      if (
+        !value ||
+        [
+          'businessRegistration',
+          'accommodationPermit',
+          'profileImage',
+        ].includes(key)
+      ) {
+        delete data[key as keyof typeof data];
+      }
+    });
+
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+
+    const formDataToRequest = new FormData();
+    const infoType = type === 'user' ? 'userInfo' : 'hostInfo';
+    formDataToRequest.append(infoType, blob);
+    formDataToRequest.append('profileImage', formData.profileImage!);
+    if (formData.accommodationPermit && formData.businessRegistration) {
+      formDataToRequest.append(
+        'businessLicense',
+        formData.businessRegistration!,
+      );
+      formDataToRequest.append('submitDocument', formData.accommodationPermit!);
+    }
+
+    // const debugObj = Object.fromEntries(data.entries());
+    // console.log(debugObj, 'data');
+
     const submitFn = type === 'user' ? signupUser : signupHost;
 
     startLoading('submit');
     try {
-      await submitFn(formData);
+      await submitFn(formDataToRequest);
       setSuccessMessage(
         '회원 가입에 성공했습니다.\n로그인 화면으로 이동합니다.',
       );
@@ -214,7 +248,7 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
       if (error instanceof AxiosError) {
         updateError('submit', error.message);
       } else {
-        updateError('submit', '회원가입에 실패했습니다. 다시 시도해주세요.');
+        updateError('submit', '회원가입에 실패했습니다.\n다시 시도해주세요.');
       }
     } finally {
       endLoading('submit');
