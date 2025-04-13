@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import axios from 'axios';
+import { HiEllipsisVertical } from 'react-icons/hi2';
 
 interface Room {
   roomId: number;
@@ -23,6 +24,7 @@ const RoomList: React.FC = () => {
   const [hasNext, setHasNext] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const [dropdownOpenId, setDropdownOpenId] = useState<number | null>(null);
 
   const fetchRooms = async () => {
     if (!hasNext || isLoading) return;
@@ -33,7 +35,7 @@ const RoomList: React.FC = () => {
 
       const response = await axios.get(`${BASE_URL}/register/roomList`, {
         params: {
-          cursor: lastRoomId, // 마지막 roomId를 커서로 전달
+          cursor: lastRoomId,
           size: 10,
         },
       });
@@ -52,6 +54,20 @@ const RoomList: React.FC = () => {
   useEffect(() => {
     fetchRooms();
   }, [BASE_URL]);
+
+  const deleteRoom = async (roomId: number) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/register/roomList`);
+      if (response.data.code === 200) {
+        setRoomList((prev) => prev.filter((room) => room.roomId !== roomId));
+      } else {
+        alert('삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('삭제 중 오류 발생:', error);
+      alert('서버 오류로 삭제에 실패했습니다.');
+    }
+  };
 
   useEffect(() => {
     if (!observerRef.current) return;
@@ -96,7 +112,28 @@ const RoomList: React.FC = () => {
         <HotelContainer key={room.roomId}>
           <Thumbnail src={room.thumbnailUrl} />
           <HotelInfo>
-            <HotelTitle>{room.name}</HotelTitle>
+            <HeaderRow>
+              <HotelTitle>{room.name}</HotelTitle>
+              <DropdownWrapper>
+                <MoreButton
+                  onClick={() =>
+                    setDropdownOpenId(
+                      dropdownOpenId === room.roomId ? null : room.roomId,
+                    )
+                  }
+                >
+                  <HiEllipsisVertical />
+                </MoreButton>
+                {dropdownOpenId === room.roomId && (
+                  <DropdownMenu>
+                    <DropdownItem onClick={() => deleteRoom(room.roomId)}>
+                      삭제하기
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </DropdownWrapper>
+            </HeaderRow>
+
             <InfoItem>{room.description}</InfoItem>
             <InfoItem>
               기준 {room.standardPeopleCount}인 / 최대 {room.maxPeopleCount}명
@@ -129,30 +166,29 @@ const HotelContainer = styled.div`
   width: 100%;
   max-width: 1024px;
   min-width: 320px;
-  padding: 16px;
+  padding: 10px 16px;
   border-bottom: 1px solid #e0e0e0;
 `;
 
 const Thumbnail = styled.img`
   width: 500px;
-  height: 150px;
+  height: 120px;
   object-fit: cover;
   margin-right: 20px;
 `;
 
-const HotelTitle = styled.h2`
-  font-size: 20px;
+const HotelTitle = styled.p`
+  margin-bottom: 10px;
+  font-size: 18px;
   font-weight: bold;
   color: var(--gray-700);
 `;
 
 const HotelInfo = styled.div`
-  display: grid;
   width: 100%;
 `;
 
 const InfoItem = styled.p`
-  margin: 0;
   font-size: 14px;
   color: var(--gray-600);
   text-align: left;
@@ -160,6 +196,7 @@ const InfoItem = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
+  margin: 0 0 10px 0;
 `;
 
 const InfoRow = styled.div`
@@ -191,7 +228,7 @@ const NoRoomsMessage = styled.div`
 
 const RegisterButton = styled.button`
   font-family: 'Noto Sans KR';
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 20px auto;
   width: 100%;
@@ -208,4 +245,47 @@ const Add = styled(IoMdAdd)`
   font-weight: bold;
   font-size: 24px;
   margin-right: 5px;
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const MoreButton = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--gray-700);
+`;
+
+const DropdownMenu = styled.ul`
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  list-style: none;
+  padding: 5px 0;
+  min-width: 100px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const DropdownItem = styled.li`
+  padding: 5px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  &:hover {
+    background-color: #f8f8f8;
+  }
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

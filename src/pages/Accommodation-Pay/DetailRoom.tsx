@@ -23,7 +23,7 @@ interface DetailRoomData {
   hashtagTypes: [];
 }
 
-const AccommodationId = () => {
+const DetailRoom = () => {
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -103,7 +103,7 @@ const AccommodationId = () => {
   );
 };
 
-export default AccommodationId;
+export default DetailRoom;
 
 const Container = styled.div`
   font-family: 'Noto Sans KR';

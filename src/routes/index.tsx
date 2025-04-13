@@ -14,17 +14,20 @@ const UserMyPage = lazy(() => import('@pages/user/UserMyPage'));
 const UserMyPet = lazy(() => import('@pages/user/UserMyPet'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
 const Search = lazy(() => import('@pages/Search'));
+
 const RegisterAccommodation = lazy(
-  () => import('@pages/host/register/RegisterAccommodation'),
+  () => import('@pages/host/HostRegister/RegisterAccommodation'),
 );
-const RegisterRoom = lazy(() => import('@pages/host/register/RegisterRoom'));
-const Reservation = lazy(
-  () => import('@pages/Accommodation/${accommodationId}/reservation'),
+const RegisterRoom = lazy(
+  () => import('@pages/host/HostRegister/RegisterRoom'),
 );
-const RoomList = lazy(() => import('@pages/host/register/RoomList'));
 const DetailAccommodation = lazy(
-  () => import('@pages/host/register/DetailAccommodation'),
+  () => import('@pages/Accommodation-Pay/DetailAccommodation'),
 );
+const DetailRoom = lazy(() => import('@pages/Accommodation-Pay/DetailRoom'));
+const RoomReview = lazy(() => import('@pages/Accommodation-Pay/RoomReview'));
+const Reservation = lazy(() => import('@pages/Accommodation-Pay/Reservation'));
+const RoomList = lazy(() => import('@pages/host/HostList/RoomList'));
 
 const Chat = lazy(() => import('@pages/Chat/index'));
 const UserReservationList = lazy(
@@ -32,10 +35,6 @@ const UserReservationList = lazy(
 );
 const UserReviews = lazy(() => import('@pages/user/UserReviews'));
 const UserWishList = lazy(() => import('@pages/user/UserWishList'));
-const DetailRoom = lazy(
-  () => import('@pages/Accommodation/${accommodationId}'),
-);
-const RoomReview = lazy(() => import('@pages/host/register/RoomReview'));
 
 const AppRouter = () => {
   return (
@@ -46,12 +45,20 @@ const AppRouter = () => {
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route
-            path="accommodation/:accommodationId/reservation"
+            path="/accommodation-pay/:detailAccommodation"
+            element={<DetailAccommodation />}
+          />
+          <Route
+            path="/accommodation-Pay/detailRoom"
+            element={<DetailRoom />}
+          />
+          <Route
+            path="/accommodation-pay/reservation"
             element={<Reservation />}
           />
           <Route
-            path="/accommodation/${accommodationId}"
-            element={<DetailRoom />}
+            path="/accommodation-pay/roomreview"
+            element={<RoomReview />}
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
@@ -70,17 +77,15 @@ const AppRouter = () => {
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
-              <Route path="register/room" element={<RegisterRoom />} />
               <Route
-                path="register/accommodation"
+                path="hostregister/registeraccommodation"
                 element={<RegisterAccommodation />}
               />
               <Route
-                path="register/detailAccommodation"
-                element={<DetailAccommodation />}
+                path="hostregister/registerroom"
+                element={<RegisterRoom />}
               />
-              <Route path="/register/roomReview" element={<RoomReview />} />
-              <Route path="register/roomList" element={<RoomList />} />
+              <Route path="hostlist/roomList" element={<RoomList />} />
             </Route>
           </Route>
 

@@ -21,7 +21,7 @@ import {
   SFormContainer,
   SErrorMessage,
   SSUploadContainer,
-} from './styles';
+} from '@pages/host/HostRegister/styles';
 
 interface ButtonProps {
   selected: boolean;

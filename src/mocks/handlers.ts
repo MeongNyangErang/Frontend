@@ -105,6 +105,9 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
+  http.delete(`${BASE_URL}/register/roomList`, async () => {
+    return HttpResponse.json({ code: 200, message: '객실 삭제 성공' });
+  }),
   http.get(`${BASE_URL}/register/roomList`, async () => {
     const roomListData = {
       code: 200,
