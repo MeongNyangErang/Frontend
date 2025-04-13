@@ -374,7 +374,7 @@ export const handlers = [
     return HttpResponse.json(data);
   }),
   http.delete(
-    `${BASE_URL}/wishlist/accommodations/:accommodationId`,
+    `${BASE_URL}/users/wishlist/accommodations/:accommodationId`,
     async () => {
       return HttpResponse.json({ message: '찜 해제제 성공' });
     },

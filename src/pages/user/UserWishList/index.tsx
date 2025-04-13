@@ -1,14 +1,16 @@
-import { useCallback, useState, useEffect } from 'react';
-import { FaRegHeart } from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
 import SubPageHeader from '@components/common/SubPageHeader';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
-import useWishlist from '@hooks/query/user/useWishlist';
-import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
-import { WishlistItem } from '@typings/wishlist';
+import StarRating from '@components/common/StarRating';
+import Modal from '@components/common/Modal';
+import ROUTES from '@constants/routes';
+import { floorToHalf } from '@utils/formatter';
+import useWishlistPage from '@hooks/page/useWishlistPage';
 import {
   SWishlistWrap,
   SWishItem,
+  SWishItemLink,
   SThumbnailBox,
   SInfoBox,
   SWishButton,
@@ -16,42 +18,18 @@ import {
 } from './styles';
 
 const UserWishList = () => {
-  const [currentCursor, setCurrentCusor] = useState<undefined | number>(
-    undefined,
-  );
-
-  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-
-  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
-
   const {
-    data: { data: { content, nextCursor, hasNext } = {} } = {},
+    currentCursor,
+    wishlist,
     isLoading,
+    isFirstLoaded,
+    isDeleteLoading,
     error,
-    refreshWishlist,
-  } = useWishlist(currentCursor);
-
-  const updateCurrentCursor = useCallback(() => {
-    if (!nextCursor) return;
-    console.log(nextCursor);
-    setCurrentCusor(nextCursor);
-  }, [nextCursor]);
-
-  const observerTargetRef = useInfiniteScroll(
-    updateCurrentCursor,
-    !isLoading && !!hasNext && isFirstLoaded,
-  );
-
-  useEffect(() => {
-    if (!content) return;
-    setWishlist((prev) => [...prev, ...content]);
-  }, [content]);
-
-  useEffect(() => {
-    if (!isLoading && !isFirstLoaded) {
-      setIsFirstLoaded(true);
-    }
-  }, [isLoading, isFirstLoaded]);
+    deleteError,
+    observerTargetRef,
+    handleDeleteWishItem,
+    resetError,
+  } = useWishlistPage();
 
   return (
     <>
@@ -68,33 +46,53 @@ const UserWishList = () => {
         <SWishlistWrap>
           {wishlist.map(
             ({
-              wishlistId,
               accommodationId,
               accommodationName,
               petScore,
               userScore,
               thumbnailImageUrl,
               address,
-            }) => (
-              <SWishItem key={wishlistId}>
-                <SThumbnailBox>
-                  <img src={thumbnailImageUrl} alt={accommodationName} />
-                </SThumbnailBox>
-                <SInfoBox>
-                  <h3>{accommodationName}</h3>
-                  <p>{address}</p>
-                </SInfoBox>
-                <SWishButton>
-                  <FaRegHeart />
-                </SWishButton>
-              </SWishItem>
-            ),
+            }) => {
+              const rating = floorToHalf((petScore + userScore) / 2);
+              return (
+                <SWishItem key={Math.random().toString()}>
+                  <SWishItemLink to={ROUTES.detail(accommodationId)}>
+                    <SThumbnailBox>
+                      <img src={thumbnailImageUrl} alt={accommodationName} />
+                    </SThumbnailBox>
+                    <SInfoBox>
+                      <h3>{accommodationName}</h3>
+                      <p>{address}</p>
+                      <div>
+                        <StarRating rate={rating} size="1.4em" $readOnly />
+                        <em>{rating}</em>
+                      </div>
+                    </SInfoBox>
+                  </SWishItemLink>
+                  <SWishButton
+                    onClick={() => handleDeleteWishItem(accommodationId)}
+                    disabled={isDeleteLoading}
+                  >
+                    <FaHeart />
+                  </SWishButton>
+                </SWishItem>
+              );
+            },
           )}
         </SWishlistWrap>
       )}
       <SWishlistBottom ref={isFirstLoaded ? observerTargetRef : null}>
         {isLoading && <Loader loading size={8} color="grayBorder" />}
       </SWishlistBottom>
+      <Modal
+        isOpen={!!deleteError}
+        variant="centered"
+        closeType="none"
+        onClose={resetError}
+        role="alert"
+      >
+        {deleteError}
+      </Modal>
     </>
   );
 };
