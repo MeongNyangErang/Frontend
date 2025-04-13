@@ -23,6 +23,7 @@ const ROUTES = {
       registerRoom: '/mypage/host/register/registerRoom',
       roomList: '/mypage/host/register/roomList',
       detailAccommodation: '/mypage/host/register/detailAccommodation',
+      RoomReview: '/mypage/host/register/roomReview',
     },
   },
   search: '/search',

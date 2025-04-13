@@ -8,6 +8,7 @@ import {
   completedReservations,
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
+import ProfileImage from '@components/common/ProfileImage/ProfileImage';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -340,33 +341,49 @@ export const handlers = [
   http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     console.log('working');
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
-
-    http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
-      const roomDetaiData = {
-        roomId: 1,
-        name: 'Cozy Mountain Cabin',
-        description:
-          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-        standardPeopleCount: 2,
-        maxPeopleCount: 4,
-        standardPetCount: 1,
-        maxPetCount: 2,
-        price: 120000,
-        extraPeopleFee: 30000,
-        extraPetFee: 15000,
-        checkInTime: '15:00',
-        checkOutTime: '11:00',
-        thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-        FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
-        PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
-        hashtagTypes: [
-          'MountainRetreat',
-          'CozyStay',
-          'PetFriendly',
-          'RomanticGetaway',
-        ],
-      };
-      return HttpResponse.json(roomDetaiData);
-    });
+  }),
+  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
+    const roomDetaiData = {
+      roomId: 1,
+      name: 'Cozy Mountain Cabin',
+      description:
+        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+      standardPeopleCount: 2,
+      maxPeopleCount: 4,
+      standardPetCount: 1,
+      maxPetCount: 2,
+      price: 120000,
+      extraPeopleFee: 30000,
+      extraPetFee: 15000,
+      checkInTime: '15:00',
+      checkOutTime: '11:00',
+      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
+      PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
+      hashtagTypes: [
+        'MountainRetreat',
+        'CozyStay',
+        'PetFriendly',
+        'RomanticGetaway',
+      ],
+    };
+    return HttpResponse.json(roomDetaiData);
+  }),
+  http.get(`${BASE_URL}/register/roomReview`, async () => {
+    const roomReview = {
+      nickname: '김멍냥',
+      profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      roomName: '오션 더블A',
+      totalRating: 4.6,
+      content:
+        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+      reviewImages: [
+        'https://i.imgur.com/WrQthuy.jpeg',
+        'https://i.imgur.com/WrQthuy.jpeg',
+        'https://i.imgur.com/WrQthuy.jpeg',
+      ],
+      createdAt: '2025-03-23',
+    };
+    return HttpResponse.json(roomReview);
   }),
 ];
