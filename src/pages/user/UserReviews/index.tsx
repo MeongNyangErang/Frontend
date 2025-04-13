@@ -1,14 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import SubPageHeader from '@components/common/SubPageHeader';
 import StarRating from '@components/common/StarRating';
 import Button from '@components/common/Button';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
-import useUserReviews from '@hooks/query/user/userUserReviews';
-import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
-import { UserReview } from '@typings/review';
+import RegisterReviewModal from '@components/common/RegisterReviewModal';
+import useUserReviewsPage from '@hooks/page/useUserReviewsPage';
 import ReviewImageGallery from './ReviewImageGallery';
+import DeleteReviewModal from './DeleteReviewModal';
 import {
   SReviews,
   SReview,
@@ -22,31 +21,20 @@ import {
 } from './styles';
 
 const UserReviews = () => {
-  const [currentCursor, setCurrentCursor] = useState<undefined | number>(
-    undefined,
-  );
-
-  const [reviews, setReviews] = useState<UserReview[]>([]);
-
   const {
-    data: { content, cursor, hasNext } = {},
+    reviews,
+    reviewToEdit,
+    reviewIdToDelete,
     isLoading,
     error,
-  } = useUserReviews(currentCursor);
-
-  const updateCurrentCursor = useCallback(() => {
-    setCurrentCursor(cursor);
-  }, [cursor]);
-
-  const observeTargetRef = useInfiniteScroll(
-    updateCurrentCursor,
-    !isLoading && !!hasNext,
-  );
-
-  useEffect(() => {
-    if (!content) return;
-    setReviews((prev) => [...prev, ...content]);
-  }, [content]);
+    observeTargetRef,
+    handleClickDeleteButton,
+    handleClickEditButton,
+    onCloseDeleteModal,
+    onCloseEditModal,
+    onSuccessDeleteReview,
+    onSuccessEditReview,
+  } = useUserReviewsPage();
 
   return (
     <>
@@ -88,10 +76,18 @@ const UserReviews = () => {
                       <STextBox>{content}</STextBox>
                     </SContentBox>
                     <SButtonBox>
-                      <Button variant="grayBorder" fontSize="13px">
+                      <Button
+                        variant="grayBorder"
+                        fontSize="13px"
+                        onClick={() => handleClickDeleteButton(reviewId)}
+                      >
                         <FaTrash /> 리뷰 삭제
                       </Button>
-                      <Button variant="grayBorder" fontSize="13px">
+                      <Button
+                        variant="grayBorder"
+                        fontSize="13px"
+                        onClick={() => handleClickEditButton(review)}
+                      >
                         <FaPencilAlt /> 리뷰 수정
                       </Button>
                     </SButtonBox>
@@ -103,6 +99,17 @@ const UserReviews = () => {
           <SReivewsBottom ref={observeTargetRef}>
             {isLoading && <Loader loading color="grayBorder" size={8} />}
           </SReivewsBottom>
+          <DeleteReviewModal
+            reviewId={reviewIdToDelete}
+            onClose={onCloseDeleteModal}
+            onSuccess={onSuccessDeleteReview}
+          />
+          <RegisterReviewModal
+            type="edit"
+            onClose={onCloseEditModal}
+            onSuccess={onSuccessEditReview}
+            reviewToEdit={reviewToEdit}
+          />
         </>
       )}
     </>

@@ -5,6 +5,14 @@ export interface UserReviewForm {
   images?: File[];
 }
 
+export interface UserReviewEditForm {
+  userRating: number;
+  petFriendlyRating: number;
+  content?: string;
+  newImages?: File[];
+  deletedImages?: number[];
+}
+
 export interface UserReveiwImage {
   imageId: number;
   imageUrl: string;

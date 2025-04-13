@@ -333,6 +333,7 @@ export const handlers = [
     };
     return HttpResponse.json(data);
   }),
+<<<<<<< HEAD
   http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
     const roomDetaiData = {
       roomId: 1,
@@ -391,5 +392,13 @@ export const handlers = [
       checkOutTime: '11:30',
     };
     return HttpResponse.json(accommodationData);
+=======
+  http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    return HttpResponse.json({ message: '리뷰 수정 성공' });
+  }),
+  http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    console.log('working');
+    return HttpResponse.json({ message: '리뷰 삭제 성공' });
+>>>>>>> 93ac23663cc31977886fbd559f21df971ec1b94b
   }),
 ];
