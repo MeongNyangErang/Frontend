@@ -333,40 +333,40 @@ export const handlers = [
     };
     return HttpResponse.json(data);
   }),
-<<<<<<<<< Temporary merge branch 1
+
   http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     return HttpResponse.json({ message: '리뷰 수정 성공' });
   }),
   http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     console.log('working');
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
-=========
-  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
-    const roomDetaiData = {
-      roomId: 1,
-      name: 'Cozy Mountain Cabin',
-      description:
-        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-      standardPeopleCount: 2,
-      maxPeopleCount: 4,
-      standardPetCount: 1,
-      maxPetCount: 2,
-      price: 120000,
-      extraPeopleFee: 30000,
-      extraPetFee: 15000,
-      checkInTime: '15:00',
-      checkOutTime: '11:00',
-      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-      FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
-      PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
-      hashtagTypes: [
-        'MountainRetreat',
-        'CozyStay',
-        'PetFriendly',
-        'RomanticGetaway',
-      ],
-    };
-    return HttpResponse.json(roomDetaiData);
->>>>>>>>> Temporary merge branch 2
+
+    http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
+      const roomDetaiData = {
+        roomId: 1,
+        name: 'Cozy Mountain Cabin',
+        description:
+          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+        standardPeopleCount: 2,
+        maxPeopleCount: 4,
+        standardPetCount: 1,
+        maxPetCount: 2,
+        price: 120000,
+        extraPeopleFee: 30000,
+        extraPetFee: 15000,
+        checkInTime: '15:00',
+        checkOutTime: '11:00',
+        thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
+        PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
+        hashtagTypes: [
+          'MountainRetreat',
+          'CozyStay',
+          'PetFriendly',
+          'RomanticGetaway',
+        ],
+      };
+      return HttpResponse.json(roomDetaiData);
+    });
   }),
 ];
