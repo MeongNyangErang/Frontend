@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback, useState } from 'react';
+import { Axios, AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
   SignUpFormData,
@@ -14,6 +15,14 @@ import {
 } from '@constants/signUp/form';
 import { validateOnChange } from '@utils/validateSignUp';
 import ROUTES from '@constants/routes';
+import {
+  checkEmailDuplicate,
+  checkNicknameDuplicate,
+  confirmVerificationCode,
+  getVerificationCode,
+  signupHost,
+  signupUser,
+} from '@services/signup';
 
 const useSignUp = <T extends 'user' | 'host'>(type: T) => {
   const [step, setStep] = useState(1);
@@ -95,41 +104,60 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
     [],
   );
 
-  const onCheckEmail = useCallback(() => {
+  const onCheckEmail = useCallback(async () => {
+    startLoading('email');
     try {
-      // 이메일 중복확인 api
-      setCheckStatus((prev) => ({ ...prev, email: true }));
+      const res = await checkEmailDuplicate(formData.email, type);
+      console.log(res);
+      // setCheckStatus((prev) => ({ ...prev, email: true }));
     } catch (e) {
       console.log(e);
-      updateError('email', '이메일 중복 에러');
+      updateError('email', '사용 할 수 없는 이메일 입니다.');
+    } finally {
+      endLoading('email');
     }
   }, []);
 
-  const onCheckNickname = useCallback(() => {
+  const onCheckNickname = useCallback(async () => {
+    startLoading('nickname');
     try {
-      // 닉네임 중복확인 api
+      await checkNicknameDuplicate(formData.nickname);
       setCheckStatus((prev) => ({ ...prev, nickname: true }));
     } catch (e) {
       console.log(e);
-      updateError('nickname', '닉네임 중복 에러');
+      updateError('nickname', '사용 할 수 없는 닉네임 입니다.');
+    } finally {
+      endLoading('nickname');
     }
   }, []);
 
   const onRequestCode = useCallback(async () => {
     if (!isEmailCodeRequested) setIsEmailCodeRequested(true);
+    updateError('emailCode', '');
+
+    startLoading('emailCode');
     try {
-      //이메일 인증 코드 요청 api
-      // formData.email 필요
+      await getVerificationCode(formData.email);
       return true;
     } catch (error) {
-      updateError('emailCode', '');
+      if (error instanceof AxiosError) {
+        updateError('emailCode', error.message);
+      } else {
+        updateError(
+          'emailCode',
+          '인증번호 요청에 실패했습니다. 다시 시도해주세요.',
+        );
+      }
       return false;
+    } finally {
+      endLoading('emailCode');
     }
   }, [formData, isEmailCodeRequested]);
 
   const onVerifyCode = useCallback(
     async (code: string, timeLeft: number) => {
       if (checkStatus.emailCode) return;
+      updateError('emailCode', '');
 
       if (!code) {
         updateError('emailCode', '인증번호를 입력해주세요');
@@ -144,21 +172,44 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
         return false;
       }
 
+      startLoading('emailCode');
+
       try {
-        //이메일 인증 코드 확인 api
+        await confirmVerificationCode(formData.email, code);
         setCheckStatus((prev) => ({ ...prev, emailCode: true }));
         return true;
       } catch (error) {
+        console.log(error);
+        if (error instanceof AxiosError) {
+          updateError('emailCode', error.message);
+        } else {
+          updateError('emailCode', '인증에 실패했습니다. 다시 시도해주세요.');
+        }
         return false;
+      } finally {
+        endLoading('emailCode');
       }
     },
     [checkStatus.emailCode],
   );
 
-  const onSubmit = useCallback(() => {
-    console.log(formData);
+  const onSubmit = useCallback(async () => {
+    const submitFn = type === 'user' ? signupUser : signupHost;
+
+    startLoading('submit');
     try {
-    } catch (error) {}
+      await submitFn(formData);
+      goToLogin();
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        updateError('submit', error.message);
+      } else {
+        updateError('submit', '회원가입에 실패했습니다. 다시 시도해주세요.');
+      }
+    } finally {
+      endLoading('submit');
+    }
   }, [formData]);
 
   const result = {
