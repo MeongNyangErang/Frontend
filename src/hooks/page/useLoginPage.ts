@@ -1,28 +1,14 @@
 import { useState, useCallback } from 'react';
 import useToggleModal from '@hooks/ui/useToggleModal';
 import { MemberRole } from '@typings/member';
+import useIsLoading from '@hooks/ui/useIsLoading';
+import useError from '@hooks/ui/useError';
 
 const useLoginPage = () => {
   const { isModalOpen, openModal, closeModal } = useToggleModal();
   const [currentType, setCurrentType] = useState<MemberRole>('user');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const startLoading = useCallback(() => {
-    setIsLoading(true);
-  }, []);
-
-  const endLoading = useCallback(() => {
-    setIsLoading(false);
-  }, []);
-
-  const showError = useCallback((message: string) => {
-    setError(message);
-  }, []);
-
-  const resetError = useCallback(() => {
-    setError('');
-  }, []);
+  const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
+  const { error, resetError, updateError } = useError();
 
   const changeTab = useCallback((type: MemberRole) => {
     setCurrentType(type);
@@ -36,9 +22,9 @@ const useLoginPage = () => {
     openModal,
     closeModal,
     changeTab,
-    startLoading,
-    endLoading,
-    showError,
+    startIsLoading,
+    endIsLoading,
+    updateError,
     resetError,
   };
 };

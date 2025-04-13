@@ -9,26 +9,23 @@ import {
 } from '@utils/storage';
 import { STORAGE_KEYS } from '@constants/storageKey';
 
-const memberKey = STORAGE_KEYS.MEMBER;
+const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
 
 const useAuth = () => {
   const [member, setMember] = useRecoilState(memberAtom);
 
-  const setCurrentMember = useCallback(
-    (member: AppMember) => {
-      setMember(member);
-      setLocalStorage(memberKey, member);
-    },
-    [setMember],
-  );
+  const setCurrentMember = (member: AppMember) => {
+    setMember(member);
+    setLocalStorage(accessTokenKey, member);
+  };
 
-  const removeMember = useCallback(() => {
+  const removeMember = () => {
     setMember(null);
-    removeLocalStorage(memberKey);
-  }, [setMember]);
+    removeLocalStorage(accessTokenKey);
+  };
 
   useEffect(() => {
-    const storedMember = getLocalStorage<AppMember>(memberKey);
+    const storedMember = getLocalStorage<AppMember>(accessTokenKey);
     if (storedMember) setMember(storedMember);
   }, []);
 
