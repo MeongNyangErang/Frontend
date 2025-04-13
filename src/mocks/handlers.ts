@@ -333,7 +333,14 @@ export const handlers = [
     };
     return HttpResponse.json(data);
   }),
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
+  http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    return HttpResponse.json({ message: '리뷰 수정 성공' });
+  }),
+  http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
+    console.log('working');
+    return HttpResponse.json({ message: '리뷰 삭제 성공' });
+=========
   http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
     const roomDetaiData = {
       roomId: 1,
@@ -360,45 +367,6 @@ export const handlers = [
       ],
     };
     return HttpResponse.json(roomDetaiData);
-  }),
-  http.post(`${BASE_URL}/register/room`, async () => {
-    return HttpResponse.json({
-      message: '숙소 등록이 완료되었습니다',
-      id: 'roomId',
-    });
-  }),
-  http.put(`${BASE_URL}/register/room`, async () => {
-    return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
-  }),
-  http.get(`${BASE_URL}/register/room`, async () => {
-    const accommodationData = {
-      code: 200,
-      id: 1,
-      name: '서울 중심가 호텔 리조트',
-      description: '서울 중심가에 위치한 최고급 호텔 리조트입니다.',
-      standardPeopleCount: 2,
-      maxPeopleCount: 4,
-      standardPetCount: 3,
-      maxPetCount: 5,
-      extraPeopleFee: 23000,
-      extraPetFee: 3000,
-      extraFee: 3000,
-      price: 30000,
-      facilityTypes: ['편의점', '공용 수영장', '피트니스'],
-      petFacilityTypes: ['대형 운동장', '전용 마당'],
-      hashTagTypes: ['사우나', '운동장'],
-      thumbnail: 'https://i.imgur.com/TuefC4N.jpeg',
-      checkInTime: '15:30',
-      checkOutTime: '11:30',
-    };
-    return HttpResponse.json(accommodationData);
-=======
-  http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
-    return HttpResponse.json({ message: '리뷰 수정 성공' });
-  }),
-  http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
-    console.log('working');
-    return HttpResponse.json({ message: '리뷰 삭제 성공' });
->>>>>>> 93ac23663cc31977886fbd559f21df971ec1b94b
+>>>>>>>>> Temporary merge branch 2
   }),
 ];
