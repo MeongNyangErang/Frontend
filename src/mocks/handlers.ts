@@ -109,7 +109,7 @@ export const handlers = [
       code: 200,
       data: [
         {
-          roomId: '1',
+          roomId: 1,
           name: '해변 근처 럭셔리 리조트',
           description:
             '바다 전망을 즐길 수 있는 고급 리조트입니다. 가족 단위 여행에 적합합니다.',
@@ -121,6 +121,8 @@ export const handlers = [
           maxPetCount: 5,
         },
       ],
+      nextCursor: '1',
+      hasNext: true,
     };
     return HttpResponse.json(roomListData);
   }),
@@ -357,5 +359,37 @@ export const handlers = [
       ],
     };
     return HttpResponse.json(roomDetaiData);
+  }),
+  http.post(`${BASE_URL}/register/room`, async () => {
+    return HttpResponse.json({
+      message: '숙소 등록이 완료되었습니다',
+      id: 'roomId',
+    });
+  }),
+  http.put(`${BASE_URL}/register/room`, async () => {
+    return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
+  }),
+  http.get(`${BASE_URL}/register/room`, async () => {
+    const accommodationData = {
+      code: 200,
+      id: 1,
+      name: '서울 중심가 호텔 리조트',
+      description: '서울 중심가에 위치한 최고급 호텔 리조트입니다.',
+      standardPeopleCount: 2,
+      maxPeopleCount: 4,
+      standardPetCount: 3,
+      maxPetCount: 5,
+      extraPeopleFee: 23000,
+      extraPetFee: 3000,
+      extraFee: 3000,
+      price: 30000,
+      facilityTypes: ['편의점', '공용 수영장', '피트니스'],
+      petFacilityTypes: ['대형 운동장', '전용 마당'],
+      hashTagTypes: ['사우나', '운동장'],
+      thumbnail: 'https://i.imgur.com/TuefC4N.jpeg',
+      checkInTime: '15:30',
+      checkOutTime: '11:30',
+    };
+    return HttpResponse.json(accommodationData);
   }),
 ];

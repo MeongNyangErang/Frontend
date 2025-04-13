@@ -69,10 +69,7 @@ const AppRouter = () => {
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
-              <Route
-                path="register/room"
-                element={<RegisterRoom mode="create" />}
-              />
+              <Route path="register/room" element={<RegisterRoom />} />
               <Route
                 path="register/accommodation"
                 element={<RegisterAccommodation />}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
@@ -20,24 +20,55 @@ const RoomList: React.FC = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
+  const [hasNext, setHasNext] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const fetchRooms = async () => {
+    if (!hasNext || isLoading) return;
+    setIsLoading(true);
+    try {
+      const lastRoomId =
+        roomList.length > 0 ? roomList[roomList.length - 1].roomId : null;
+
+      const response = await axios.get(`${BASE_URL}/register/roomList`, {
+        params: {
+          cursor: lastRoomId, // 마지막 roomId를 커서로 전달
+          size: 10,
+        },
+      });
+      if (response.data.code === 200) {
+        setRoomList(response.data.data);
+      } else {
+        console.log('객실을 불러오는 데 실패했습니다.');
+      }
+    } catch (error) {
+      console.log('서버 오류가 발생했습니다.');
+    } finally {
+      console.log('객실 로딩이 완료되었습니다.');
+    }
+  };
 
   useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/register/roomList`);
-        if (response.data.code === 200) {
-          setRoomList(response.data.data);
-        } else {
-          console.log('객실을 불러오는 데 실패했습니다.');
-        }
-      } catch (error) {
-        console.log('서버 오류가 발생했습니다.');
-      } finally {
-        console.log('객실 로딩이 완료되었습니다.');
-      }
-    };
     fetchRooms();
   }, [BASE_URL]);
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNext && !isLoading) {
+          fetchRooms();
+        }
+      },
+      { threshold: 1 },
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [observerRef.current, hasNext, isLoading]);
 
   const openRegisterPage = () => {
     navigate('/register');
