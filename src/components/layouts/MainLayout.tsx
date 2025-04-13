@@ -29,7 +29,7 @@ const SContainer = styled.div`
 
 const SContent = styled.div`
   padding-top: ${({ theme }) => theme.layouts.headerHeight};
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const SMain = styled.main`

@@ -26,8 +26,8 @@ const ROUTES = {
     },
   },
   search: '/search',
-  detail: (accommodationId: string) => `/accommodation/${accommodationId}`,
-  reservation: (accommodationId: string) =>
+  detail: (accommodationId: number) => `/accommodation/${accommodationId}`,
+  reservation: (accommodationId: number) =>
     `/accommodation/${accommodationId}/reservation`,
   chat: {
     list: '/chat',

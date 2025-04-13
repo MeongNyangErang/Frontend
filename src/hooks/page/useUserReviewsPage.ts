@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import useUserReviews from '@hooks/query/user/userUserReviews';
+import useUserReviews from '@hooks/query/user/useUserReviews';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { UserReview } from '@typings/review';
 
@@ -10,6 +10,7 @@ const useUserReviewsPage = () => {
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [reviewToEdit, setReviewToEdit] = useState<null | UserReview>(null);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<null | string>(null);
+  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
     data: { content, cursor, hasNext } = {},
@@ -24,7 +25,7 @@ const useUserReviewsPage = () => {
 
   const observeTargetRef = useInfiniteScroll(
     updateCurrentCursor,
-    !isLoading && !!hasNext,
+    !isLoading && !!hasNext && isFirstLoaded,
   );
 
   const handleClickDeleteButton = (reviewId: string) => {
@@ -64,10 +65,17 @@ const useUserReviewsPage = () => {
     setReviews((prev) => [...prev, ...content]);
   }, [content]);
 
+  useEffect(() => {
+    if (!isLoading && !isFirstLoaded) {
+      setIsFirstLoaded(true);
+    }
+  }, [isLoading, isFirstLoaded]);
+
   return {
     reviews,
     reviewToEdit,
     reviewIdToDelete,
+    isFirstLoaded,
     isLoading,
     error,
     observeTargetRef,

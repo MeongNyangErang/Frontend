@@ -91,6 +91,8 @@ const SMyPageMenuLink = styled(NavLink)`
 const SMyPageContents = styled.div`
   padding-top: 12px;
   padding-bottom: 30px;
+  min-height: ${({ theme }) =>
+    `calc(100vh - ${theme.layouts.headerHeight} - ${theme.layouts.footerHeight})`};
 
   ${media.desktop} {
     padding-top: 0;

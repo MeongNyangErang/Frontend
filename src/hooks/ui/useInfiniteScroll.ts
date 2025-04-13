@@ -12,7 +12,11 @@ const useInfiniteScroll = (callback: () => void, enabled: boolean) => {
       }
     });
 
-    observer.observe(observerTargetRef.current);
+    setTimeout(() => {
+      if (observerTargetRef.current) {
+        observer.observe(observerTargetRef.current);
+      }
+    }, 100);
 
     return () => observer.disconnect();
   }, [enabled, callback]);
