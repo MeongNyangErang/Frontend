@@ -30,7 +30,7 @@ const UserWishList = () => {
     handleDeleteWishItem,
     resetError,
   } = useWishlistPage();
-
+  console.log(wishlist);
   return (
     <>
       <SubPageHeader title="찜한 숙소" style="noButton" />
@@ -48,12 +48,11 @@ const UserWishList = () => {
             ({
               accommodationId,
               accommodationName,
-              petScore,
-              userScore,
+              totalRating,
               thumbnailImageUrl,
               address,
             }) => {
-              const rating = floorToHalf((petScore + userScore) / 2);
+              const rating = Number.isNaN(totalRating) ? 0 : totalRating;
               return (
                 <SWishItem key={Math.random().toString()}>
                   <SWishItemLink to={ROUTES.detail(accommodationId)}>

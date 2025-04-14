@@ -14,7 +14,8 @@ axiosInstance.interceptors.request.use(
     // 요청 헤더에 인증 토큰 추가
     const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      const realToken = JSON.parse(token);
+      config.headers.Authorization = `Bearer ${realToken}`;
     }
     return config;
   },
@@ -43,10 +44,13 @@ async function fetchCall<T>(
   method: 'get' | 'post' | 'put' | 'delete' | 'patch',
   data?: any,
 ): Promise<T> {
+  const isFormData = data instanceof FormData;
+
   const config = {
     url,
     method,
     ...(data && { data }),
+    headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
   };
   return axiosInstance(config);
 }

@@ -1,6 +1,6 @@
 import useSignUp from '@hooks/page/useSignUp';
 
-interface CommonFormData {
+export interface CommonFormData {
   email: string;
   password: string;
   passwordCheck: string;
@@ -44,7 +44,7 @@ export interface SignUpLoading {
 }
 
 export type SignUpFormError = Record<
-  Exclude<keyof CommonFormData, 'profileImage'> | 'emailCode',
+  Exclude<keyof CommonFormData, 'profileImage'> | 'emailCode' | 'submit',
   string
 > &
   Partial<Record<keyof OptionalFormData, string>>;

@@ -24,6 +24,7 @@ const commonFormError = {
   password: '',
   passwordCheck: '',
   nickname: '',
+  submit: '',
 };
 
 export const userSignUpFormError = {

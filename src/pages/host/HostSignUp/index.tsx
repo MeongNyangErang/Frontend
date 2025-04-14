@@ -8,10 +8,12 @@ import SignUpDocuments from './SignUpDocuments';
 const HostSignUp = () => {
   const {
     step,
-    onChangeStep,
-    goToLogin,
     formData,
     formError,
+    successMessage,
+    handleConfirmSuccessMessage,
+    onChangeStep,
+    goToLogin,
     updateError,
     onChangeInput,
     onChangeFileData,
@@ -63,6 +65,15 @@ const HostSignUp = () => {
           {formError.emailCode.split('\n').map((line, i) => {
             return <div key={i}>{line}</div>;
           })}
+        </Modal>
+        <Modal
+          isOpen={!!successMessage}
+          closeType="x"
+          variant="centered"
+          role="confirm"
+          onClose={handleConfirmSuccessMessage}
+        >
+          {successMessage}
         </Modal>
       </SSignUpContainer>
     </SSignUpWrap>

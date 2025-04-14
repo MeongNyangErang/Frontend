@@ -33,9 +33,9 @@ const Login = () => {
     openModal,
     closeModal,
     changeTab,
-    startLoading,
-    endLoading,
-    showError,
+    startIsLoading,
+    endIsLoading,
+    updateError,
     resetError,
   } = useLoginPage();
 
@@ -62,9 +62,9 @@ const Login = () => {
         <LoginForm
           memberType={currentType}
           isLoading={isLoading}
-          onStart={startLoading}
-          onEnd={endLoading}
-          onError={showError}
+          onStart={startIsLoading}
+          onEnd={endIsLoading}
+          onError={updateError}
         />
         <SSocialArea>
           <SSocialButton $variant="yellow">

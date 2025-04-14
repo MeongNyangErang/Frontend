@@ -13,8 +13,7 @@ import {
   SEditButton,
 } from './styles';
 
-interface ProfileBoxInterface {
-  memberId: string;
+interface ProfileBoxProps {
   email: string;
   role: 'user' | 'host';
 }
@@ -32,8 +31,8 @@ const HOST_EDIT_LIST = [
   { name: '내 정보 관리', path: ROUTES.myPage.host.profile, icon: <FaEdit /> },
 ] as const;
 
-const ProfileBox = ({ memberId, email, role }: ProfileBoxInterface) => {
-  const { data: { data } = {}, isLoading } = useMemberProfile(memberId, role);
+const ProfileBox = ({ email, role }: ProfileBoxProps) => {
+  const { data, isLoading } = useMemberProfile(role);
   const editList = role === 'user' ? USER_EDIT_LIST : HOST_EDIT_LIST;
 
   if (isLoading) {
@@ -44,6 +43,7 @@ const ProfileBox = ({ memberId, email, role }: ProfileBoxInterface) => {
     );
   }
 
+  console.log(data);
   return (
     <SProfileBoxWrap>
       <SProfileArea>

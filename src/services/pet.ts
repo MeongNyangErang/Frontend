@@ -1,9 +1,9 @@
+import { PetInfoList } from '@typings/pet';
 import { fetchCall } from './api';
-import { MyPetListResponse } from '@typings/response/pet';
 import { PetInfoState } from '@typings/pet';
 
 export const getMyPetList = async () => {
-  return await fetchCall<MyPetListResponse>('users/pets', 'get');
+  return await fetchCall<PetInfoList>('users/pets', 'get');
 };
 
 export const registerMyPet = async (petInfo: PetInfoState) => {

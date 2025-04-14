@@ -2,12 +2,8 @@ import { UserReviewEditForm, UserReviewForm } from '@typings/review';
 import { UserReviewsResponse } from '@typings/response/review';
 import { fetchCall } from './api';
 
-export const postNewReview = async (
-  review: UserReviewForm,
-  reservationId: string,
-) => {
-  const data = { reservationId, ...review };
-  return await fetchCall(`users/reviews`, 'post', data);
+export const postNewReview = async (review: FormData) => {
+  return await fetchCall(`users/reviews`, 'post', review);
 };
 
 export const getUserReviews = async (cursor?: number) => {
@@ -19,9 +15,6 @@ export const deleteReview = async (reviewId: string) => {
   return await fetchCall(`users/reviews/${reviewId}`, 'delete');
 };
 
-export const editReview = async (
-  reviewId: string,
-  editedReview: UserReviewEditForm,
-) => {
+export const editReview = async (reviewId: string, editedReview: FormData) => {
   return await fetchCall(`users/reviews/${reviewId}`, 'put', editedReview);
 };

@@ -1,5 +1,4 @@
 import Button from '@components/common/Button';
-import Modal from '@components/common/Modal';
 import useLoginForm from '@hooks/page/useLoginForm';
 import { MemberRole } from '@typings/member';
 import { SForm } from './styles';

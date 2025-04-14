@@ -10,10 +10,10 @@ function validateName(name: string) {
 }
 
 function validatePhoneNumber(phoneNumber: string) {
-  const regex = /^(01[016789]\d{7,8}|0\d{1,2}\d{7,8}|1[5789]00\d{4})$/;
-  if (!phoneNumber) return '연락처를 입력해주세요.';
-  if (!regex.test(phoneNumber))
-    return '-를 제외한 올바른 연락처를 입력해주세요.';
+  // const regex = /^(01[016789]\d{7,8}|0\d{1,2}\d{7,8}|1[5789]00\d{4})$/;
+  // if (!phoneNumber) return '연락처를 입력해주세요.';
+  // if (!regex.test(phoneNumber))
+  //   return '-를 제외한 올바른 연락처를 입력해주세요.';
   return '';
 }
 
