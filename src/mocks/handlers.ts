@@ -8,11 +8,7 @@ import {
   completedReservations,
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
-
-import ProfileImage from '@components/common/ProfileImage/ProfileImage';
-
 import { wishlist } from './data/wishlist';
-
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,10 +23,7 @@ export const handlers = [
       email: 'user123@test.com',
       password: 'user123#',
       data: {
-        id: 'user-1',
-        email: 'user123@test.com',
-        role: 'user',
-        status: 'active',
+        accessToken: 123,
       },
     };
 
@@ -58,10 +51,7 @@ export const handlers = [
       email: 'host123@test.com',
       password: 'host123#',
       data: {
-        id: 'host-1',
-        email: 'host123@test.com',
-        role: 'host',
-        status: 'active',
+        accessToken: 2134,
       },
     };
 
@@ -415,5 +405,4 @@ export const handlers = [
       return HttpResponse.json({ message: '찜 등록 성공' });
     },
   ),
-
 ];

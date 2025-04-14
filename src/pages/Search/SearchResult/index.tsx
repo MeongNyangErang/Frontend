@@ -76,7 +76,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
             return (
               <SItem
                 key={accommodationId}
-                to={`${ROUTES.detail(accommodationId.toString())}`}
+                to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
               >
                 <SImageArea>
                   <SItemTypeBadge $type={type}>

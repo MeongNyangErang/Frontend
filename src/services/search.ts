@@ -30,9 +30,9 @@ export const searchAccommodations = async (
   }
 
   if (cursor) params.append('cursor', cursor.toString());
-  const baseUrl = `search/accommodations?${params.toString()}`;
+  const baseUrl = `users/accommodations/search?${params.toString()}`;
 
-  return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'post').then(
+  return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'get').then(
     (v) => v.data,
   );
 };

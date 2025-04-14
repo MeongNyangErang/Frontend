@@ -19,17 +19,21 @@ const ROUTES = {
       profile: '/mypage/host/profile',
       reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
-      registerAccommodation: '/mypage/host/hostregister/registeraccommodation',
-      registerRoom: '/mypage/host/hostregister/registerroom',
-      roomList: '/mypage/host/hostlist/roomList',
-      detailAccommodation: '/mypage/host/hostregister/detailAccommodation',
-      RoomReview: '/mypage/host/hostregister/roomReview',
+      registerAccommodation: '/mypage/host/register-accommodation',
+      registerRoom: '/mypage/host/register-room',
+      roomList: '/mypage/host/room-list',
     },
   },
   search: '/search',
-  detail: (accommodationId: number) => `/accommodation/${accommodationId}`,
-  reservation: (accommodationId: number) =>
-    `/accommodation/${accommodationId}/reservation`,
+  accommodationDetail: {
+    root: (accommodationId: number) => `/accommodation/${accommodationId}`,
+    room: (accommodationId: number, roomId: number) =>
+      `/accommodation/${accommodationId}/room/${roomId}`,
+    review: (accommodationId: number) =>
+      `/accommodation/${accommodationId}/review`,
+    reservation: (accommodationId: number) =>
+      `/accommodation/${accommodationId}/reservation`,
+  },
   chat: {
     list: '/chat',
     room: (roomId: string) => `/chat/${roomId}`,
