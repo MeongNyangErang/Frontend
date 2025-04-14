@@ -9,6 +9,7 @@ import {
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
 import { wishlist } from './data/wishlist';
+import { chatList } from './data/chatList';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -405,4 +406,16 @@ export const handlers = [
       return HttpResponse.json({ message: '찜 등록 성공' });
     },
   ),
+  http.get(`${BASE_URL}/chats`, async () => {
+    const data = {
+      content: chatList,
+      page: 1,
+      size: 20,
+      totalElements: 123,
+      totalPages: 7,
+      first: true,
+      last: false,
+    };
+    return HttpResponse.json(data);
+  }),
 ];

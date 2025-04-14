@@ -7,16 +7,12 @@ import { SChatWrap, SChatContiner } from './styles';
 
 const Chat = () => {
   const { roomId } = useParams();
-  const isMobile = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
+  const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
 
-  if (isMobile) {
-    return roomId ? (
+  if (isTablet) {
+    return (
       <SChatWrap>
-        <ChatRoom />
-      </SChatWrap>
-    ) : (
-      <SChatWrap>
-        <ChatList />
+        <SChatContiner>{roomId ? <ChatRoom /> : <ChatList />} </SChatContiner>
       </SChatWrap>
     );
   }
