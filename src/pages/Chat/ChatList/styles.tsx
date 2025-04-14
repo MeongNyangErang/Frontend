@@ -1,14 +1,19 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { media } from '@components/styles/responsive';
-import { oneLineStyle } from '@components/styles/mixins';
+import { BREAK_POINTS, media } from '@components/styles/responsive';
+import { noScrollBarStyle, oneLineStyle } from '@components/styles/mixins';
 
 const SChatListWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
   height: 100%;
+
+  ${media.tablet} {
+    padding: 0;
+  }
 `;
 
 const SChatTitle = styled.h2`
@@ -26,6 +31,10 @@ const SChatListContainer = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
+
+  ${`@media (max-width:${BREAK_POINTS.tablet})`} {
+    ${noScrollBarStyle}
+  }
 `;
 
 const SChatListBox = styled.div`

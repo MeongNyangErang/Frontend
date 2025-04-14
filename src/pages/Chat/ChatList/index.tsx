@@ -37,9 +37,14 @@ const ChatList = () => {
               lastMessageTime,
               partnerImageUrl,
               partnerName,
+              partnerId,
               unreadCount,
             }) => (
-              <SChatListItem key={chatRoomId} to={ROUTES.chat.room(chatRoomId)}>
+              <SChatListItem
+                key={chatRoomId}
+                to={ROUTES.chat.room(chatRoomId)}
+                state={{ partnerName, partnerImageUrl, partnerId }}
+              >
                 <SItemImage>
                   <img src={partnerImageUrl} alt="프로필 이미지" />
                 </SItemImage>

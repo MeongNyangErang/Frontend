@@ -90,7 +90,7 @@ const AppRouter = () => {
 
           <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>
             <Route path="/chat" element={<Chat />} />
-            <Route path="/chat/:roomId" element={<Chat />} />
+            <Route path="/chat/:chatRoomId" element={<Chat />} />
           </Route>
         </Route>
 

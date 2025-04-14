@@ -1,4 +1,4 @@
-import { ChatItem } from '@typings/chat';
+import { ChatItem, PreviousChatMessage } from '@typings/chat';
 
 export interface ChatListResponse {
   content: ChatItem[];
@@ -8,4 +8,11 @@ export interface ChatListResponse {
   totalPages: number;
   first: boolean;
   last: boolean;
+}
+
+export interface PreviousChatMessagesResponse {
+  code: number;
+  messages: PreviousChatMessage[];
+  nextCursorId: number;
+  hasNext: boolean;
 }
