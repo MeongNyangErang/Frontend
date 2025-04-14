@@ -27,26 +27,22 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    const token = getLocalStorage<string>(accessTokenKey);
-    if (!token) return;
-
-    if (isTokenExpired(token)) {
-      removeMember();
-      return;
-    }
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const role = payload.role;
-
-    const getMemberInfo = async () => {
-      try {
-        const getInfoFn = role === 'host' ? getHostProfile : getUserProfile;
-        const { data } = await getInfoFn();
-      } catch {
-        removeMember();
-      }
-    };
-
+    // const token = getLocalStorage<string>(accessTokenKey);
+    // if (!token) return;
+    // if (isTokenExpired(token)) {
+    //   removeMember();
+    //   return;
+    // }
+    // const payload = JSON.parse(atob(token.split('.')[1]));
+    // const role = payload.role;
+    // const getMemberInfo = async () => {
+    //   try {
+    //     const getInfoFn = role === 'host' ? getHostProfile : getUserProfile;
+    //     const { data } = await getInfoFn();
+    //   } catch {
+    //     removeMember();
+    //   }
+    // };
     // getMemberInfo()
   }, []);
 

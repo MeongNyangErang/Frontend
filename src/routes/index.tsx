@@ -12,29 +12,31 @@ const UserSignUp = lazy(() => import('@pages/user/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/user/UserMyPage'));
 const UserMyPet = lazy(() => import('@pages/user/UserMyPet'));
+const UserReservationList = lazy(
+  () => import('@pages/user/UserReservationList'),
+);
+const UserReviews = lazy(() => import('@pages/user/UserReviews'));
+const UserWishList = lazy(() => import('@pages/user/UserWishList'));
 const HostMyPage = lazy(() => import('@pages/host/HostMyPage'));
-const Search = lazy(() => import('@pages/Search'));
-
 const RegisterAccommodation = lazy(
   () => import('@pages/host/HostRegister/RegisterAccommodation'),
 );
 const RegisterRoom = lazy(
   () => import('@pages/host/HostRegister/RegisterRoom'),
 );
+const HostRoomList = lazy(() => import('@pages/host/HostList/RoomList'));
 const DetailAccommodation = lazy(
-  () => import('@pages/Accommodation-Pay/DetailAccommodation'),
+  () => import('@pages/Accommodation/DetailAccommodation'),
 );
-const DetailRoom = lazy(() => import('@pages/Accommodation-Pay/DetailRoom'));
-const RoomReview = lazy(() => import('@pages/Accommodation-Pay/RoomReview'));
-const Reservation = lazy(() => import('@pages/Accommodation-Pay/Reservation'));
-const RoomList = lazy(() => import('@pages/host/HostList/RoomList'));
+
+const Search = lazy(() => import('@pages/Search'));
+const DetailRoom = lazy(() => import('@pages/Accommodation/DetailRoom'));
+const AccommodationReview = lazy(
+  () => import('@pages/Accommodation/RoomReview'),
+);
+const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 
 const Chat = lazy(() => import('@pages/Chat/index'));
-const UserReservationList = lazy(
-  () => import('@pages/user/UserReservationList'),
-);
-const UserReviews = lazy(() => import('@pages/user/UserReviews'));
-const UserWishList = lazy(() => import('@pages/user/UserWishList'));
 
 const AppRouter = () => {
   return (
@@ -45,20 +47,20 @@ const AppRouter = () => {
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route
-            path="/accommodation-pay/:detailAccommodation"
+            path="accommodation/:accommodationId"
             element={<DetailAccommodation />}
           />
           <Route
-            path="/accommodation-Pay/detailRoom"
+            path="accommodation/:accommodationId/room/:roomId"
             element={<DetailRoom />}
           />
           <Route
-            path="/accommodation-pay/reservation"
+            path="accommodation/:accommodationId/reservation"
             element={<Reservation />}
           />
           <Route
-            path="/accommodation-pay/roomreview"
-            element={<RoomReview />}
+            path="accommodation/:accommodationId/review"
+            element={<AccommodationReview />}
           />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
@@ -78,14 +80,11 @@ const AppRouter = () => {
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
               <Route
-                path="hostregister/registeraccommodation"
+                path="register-accommodation"
                 element={<RegisterAccommodation />}
               />
-              <Route
-                path="hostregister/registerroom"
-                element={<RegisterRoom />}
-              />
-              <Route path="hostlist/roomList" element={<RoomList />} />
+              <Route path="register-room" element={<RegisterRoom />} />
+              <Route path="room-list" element={<HostRoomList />} />
             </Route>
           </Route>
 

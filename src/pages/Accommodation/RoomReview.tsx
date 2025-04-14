@@ -79,7 +79,7 @@ export default RoomReview;
 
 const Card = styled.div`
   font-family: 'Noto Sans KR';
-  border-bottom: 1px solid #;
+  border-bottom: 1px solid #000;
   padding: 16px;
   margin: 0 auto;
   width: 100%;
