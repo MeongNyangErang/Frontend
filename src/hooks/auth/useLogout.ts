@@ -9,8 +9,8 @@ const useLogout = (memberType: MemberRole) => {
   const navigate = useNavigate();
 
   const logout = async () => {
-    const logoutFn = memberType === 'user' ? logoutUser : logoutHost;
-    await logoutFn();
+    // const logoutFn = memberType === 'user' ? logoutUser : logoutHost;
+    // await logoutFn();
     removeMember();
     navigate(ROUTES.home, { replace: true });
   };

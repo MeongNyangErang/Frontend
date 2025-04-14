@@ -4,6 +4,5 @@ export interface WishlistItem {
   accommodationName: string;
   thumbnailImageUrl: string;
   address: string;
-  petScore: number;
-  userScore: number;
+  totalRating: number;
 }

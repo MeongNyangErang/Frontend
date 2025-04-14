@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getHostProfile } from '@services/auth';
 
-const useHostProfile = (hostId: string) => {
+const useHostProfile = () => {
   return useQuery({
-    queryKey: ['hostProfile', hostId],
-    queryFn: () => getHostProfile(hostId),
+    queryKey: ['hostProfile'],
+    queryFn: () => getHostProfile(),
     staleTime: 1000 * 60 * 30,
   });
 };

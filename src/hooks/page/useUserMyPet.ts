@@ -7,12 +7,7 @@ import { PetInfo } from '@typings/pet';
 import { deleteMyPet } from '@services/pet';
 
 const useUserMyPet = () => {
-  const {
-    data: { data } = {},
-    error,
-    isLoading,
-    refreshMyPetList,
-  } = useMyPetList();
+  const { data, error, isLoading, refreshMyPetList } = useMyPetList();
   const [selectedPet, setSelectedPet] = useState<PetInfo | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const {

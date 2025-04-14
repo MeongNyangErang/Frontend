@@ -7,8 +7,8 @@ export const getUserReservationList = async (
   cursor: number | undefined,
 ) => {
   const url = cursor
-    ? `users/reservations?status=${status}&cursor=${cursor}`
-    : `users/reservations?status=${status}`;
+    ? `users/reservations?status=${status.toUpperCase()}&cursor=${cursor}`
+    : `users/reservations?status=${status.toUpperCase()}`;
   return fetchCall<UserReservationListResponse>(url, 'get');
 };
 

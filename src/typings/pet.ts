@@ -11,6 +11,8 @@ export interface PetInfo {
   activityLevel: PetActivityLevel;
 }
 
+export type PetInfoList = PetInfo[];
+
 export interface PetInfoState {
   name: string;
   birthDate: string;

@@ -10,11 +10,7 @@ const UserMyPage = () => {
   if (!member || member.role !== 'user') return <Navigate to={ROUTES.home} />;
   return (
     <>
-      <ProfileBox
-        memberId={member.id}
-        role={member.role}
-        email={member.email}
-      />
+      <ProfileBox role={member.role} email={member.email} />
       <MyPageOverview role={member.role} />
     </>
   );

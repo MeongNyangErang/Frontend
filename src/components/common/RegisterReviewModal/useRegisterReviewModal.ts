@@ -8,6 +8,7 @@ import {
   UserReviewEditForm,
 } from '@typings/review';
 import { postNewReview, editReview } from '@services/review';
+import useUserReviews from '@hooks/query/user/useUserReviews';
 import {
   MAX_IMAGE_COUNT,
   MAX_TEXT_LENGTH,
@@ -34,6 +35,7 @@ const useReviewModal = ({
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError, resetError } = useError();
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const { refreshUserReviews } = useUserReviews(undefined);
   const isValidToSubmit = review.userRating && review.petFriendlyRating;
 
   const onChangeStarRates = useCallback(
@@ -123,14 +125,48 @@ const useReviewModal = ({
     if (!isValidToSubmit) return;
     if (error) resetError();
 
-    const data = { ...review };
+    const data = { ...review } as any;
     deleteEmptyValueFromData(data, ['content', 'images']);
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'images') {
+        delete data[key];
+      }
+    });
+
+    data['reservationId'] = reservationId;
+
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+
+    const formData = new FormData();
+
+    formData.append('reviewRequest', blob);
+    if (review.images) {
+      review.images.map((img) => {
+        formData.append('images', img);
+      });
+    }
+
+    // const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+
+    // const formDataToRequest = new FormData();
+    // const infoType = type === 'user' ? 'userInfo' : 'hostInfo';
+    // formDataToRequest.append(infoType, blob);
+    // formDataToRequest.append('profileImage', formData.profileImage!);
+    // if (formData.accommodationPermit && formData.businessRegistration) {
+    //   formDataToRequest.append(
+    //     'businessLicense',
+    //     formData.businessRegistration!,
+    //   );
+    //   formDataToRequest.append('submitDocument', formData.accommodationPermit!);
+    // }
 
     startIsLoading();
     try {
-      await postNewReview(data, reservationId!);
+      await postNewReview(formData);
       resetReview();
       onSuccess();
+      refreshUserReviews();
     } catch (error) {
       if (error instanceof AxiosError) {
         updateError(error.message);
@@ -150,15 +186,28 @@ const useReviewModal = ({
       userRating: review.userRating,
       petFriendlyRating: review.petFriendlyRating,
       content: review.content,
-      newImages: [...(review.images ? review.images : [])],
       deletedImageId: [...imagesToDelete],
     };
+
+    const newImages = [...(review.images ? review.images : [])];
+
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+
+    const formData = new FormData();
+
+    formData.append('request', blob);
+
+    if (newImages.length > 0) {
+      newImages.map((img) => {
+        formData.append('newimages', img);
+      });
+    }
 
     deleteEmptyValueFromData(data, ['content', 'images']);
 
     startIsLoading();
     try {
-      await editReview(reviewToEdit?.reviewId!, data);
+      await editReview(reviewToEdit?.reviewId!, formData);
 
       resetReview();
       onSuccess();

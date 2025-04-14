@@ -17,7 +17,7 @@ const useWishlistPage = () => {
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
-    data: { data: { content, nextCursor, hasNext } = {} } = {},
+    data: { content, nextCursor, hasNext } = {},
     isLoading,
     error,
     refreshWishlist,
