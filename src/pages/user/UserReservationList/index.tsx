@@ -27,6 +27,7 @@ const UserReservationList = () => {
     reservationList,
     reservationToReview,
     reservationToCancel,
+    isFirstLoaded,
     infiniteScrolltargetRef,
     error,
     isLoading,
@@ -74,28 +75,26 @@ const UserReservationList = () => {
             {error.message}
           </MessageBox>
         )}
-        {!error &&
-          (reservationList.length === 0 ? (
-            <MessageBox variant="white" fontSize={13}>
-              조회된 예약 내역이 없습니다.
-            </MessageBox>
-          ) : (
-            <SReservationList>
-              {reservationList.map((reservation) => {
-                const { reservationId } = reservation;
-                return (
-                  <ReservationItem
-                    key={reservationId}
-                    currentTab={currentTab}
-                    reservation={reservation}
-                    onClickReviewButton={onClickReviewButton}
-                    onClickCancelButton={onClickCancelButton}
-                  />
-                );
-              })}
-            </SReservationList>
-          ))}
-        <SListBottom ref={infiniteScrolltargetRef}>
+        {!error && isFirstLoaded && reservationList.length === 0 && (
+          <MessageBox>예약 내역이 없습니다.</MessageBox>
+        )}
+        {!error && (
+          <SReservationList>
+            {reservationList.map((reservation) => {
+              const { reservationId } = reservation;
+              return (
+                <ReservationItem
+                  key={reservationId}
+                  currentTab={currentTab}
+                  reservation={reservation}
+                  onClickReviewButton={onClickReviewButton}
+                  onClickCancelButton={onClickCancelButton}
+                />
+              );
+            })}
+          </SReservationList>
+        )}
+        <SListBottom ref={isFirstLoaded ? infiniteScrolltargetRef : null}>
           {isLoading && <Loader loading size={8} color="grayBorder" />}
         </SListBottom>
       </SReservationListWrap>

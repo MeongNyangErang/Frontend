@@ -38,4 +38,8 @@ const getAge = (birthDate: string) => {
   return age;
 };
 
-export { formatSecondsToTime, parseNewLine, getAge };
+const floorToHalf = (number: number) => {
+  return Math.floor(number * 2) / 2;
+};
+
+export { formatSecondsToTime, parseNewLine, getAge, floorToHalf };

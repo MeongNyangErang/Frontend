@@ -19,6 +19,7 @@ const useUserReservationListPage = () => {
   const [reservationToCancel, setReservationToCancel] = useState<null | string>(
     null,
   );
+  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
     data: { cursor, content: reservationItems, hasNext = false } = {},
@@ -34,7 +35,7 @@ const useUserReservationListPage = () => {
 
   const infiniteScrolltargetRef = useInfiniteScroll(
     updateCurrentCursor,
-    !isLoading && hasNext,
+    !isLoading && hasNext && isFirstLoaded,
   );
 
   const refreshPage = () => {
@@ -88,11 +89,18 @@ const useUserReservationListPage = () => {
     }
   }, [reservationItems]);
 
+  useEffect(() => {
+    if (!isLoading && !isFirstLoaded) {
+      setIsFirstLoaded(true);
+    }
+  }, [isLoading, isFirstLoaded]);
+
   return {
     currentTab,
     reservationList,
     reservationToReview,
     reservationToCancel,
+    isFirstLoaded,
     infiniteScrolltargetRef,
     error,
     isLoading,

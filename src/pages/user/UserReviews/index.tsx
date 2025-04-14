@@ -25,6 +25,7 @@ const UserReviews = () => {
     reviews,
     reviewToEdit,
     reviewIdToDelete,
+    isFirstLoaded,
     isLoading,
     error,
     observeTargetRef,
@@ -43,6 +44,9 @@ const UserReviews = () => {
         <MessageBox>
           {error.message || '에러가 발생했습니다. 새로고침 해주세요.'}
         </MessageBox>
+      )}
+      {!error && isFirstLoaded && reviews.length === 0 && (
+        <MessageBox>작성한 리뷰가 없습니다.</MessageBox>
       )}
       {!error && (
         <>
@@ -96,7 +100,7 @@ const UserReviews = () => {
               );
             })}
           </SReviews>
-          <SReivewsBottom ref={observeTargetRef}>
+          <SReivewsBottom ref={isFirstLoaded ? observeTargetRef : null}>
             {isLoading && <Loader loading color="grayBorder" size={8} />}
           </SReivewsBottom>
           <DeleteReviewModal

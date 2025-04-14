@@ -8,7 +8,11 @@ import {
   completedReservations,
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
+
 import ProfileImage from '@components/common/ProfileImage/ProfileImage';
+
+import { wishlist } from './data/wishlist';
+
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -345,6 +349,7 @@ export const handlers = [
     console.log('working');
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
   }),
+
   http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
     const roomDetaiData = {
       roomId: 1,
@@ -389,4 +394,26 @@ export const handlers = [
     };
     return HttpResponse.json(roomReview);
   }),
+
+  http.get(`${BASE_URL}/users/wishlist/accommodations`, async () => {
+    const data = {
+      code: 200,
+      data: { content: wishlist, nextCursor: 123, hasNext: true },
+    };
+
+    return HttpResponse.json(data);
+  }),
+  http.delete(
+    `${BASE_URL}/users/wishlist/accommodations/:accommodationId`,
+    async () => {
+      return HttpResponse.json({ message: '찜 해제제 성공' });
+    },
+  ),
+  http.post(
+    `${BASE_URL}/wishlist/accommodations/:accommodationId`,
+    async () => {
+      return HttpResponse.json({ message: '찜 등록 성공' });
+    },
+  ),
+
 ];
