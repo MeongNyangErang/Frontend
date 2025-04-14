@@ -8,7 +8,11 @@ import {
   completedReservations,
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
+
+import ProfileImage from '@components/common/ProfileImage/ProfileImage';
+
 import { wishlist } from './data/wishlist';
+
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -105,13 +109,15 @@ export const handlers = [
     };
     return HttpResponse.json(userProfileData);
   }),
-  // 객실 목록
+  http.delete(`${BASE_URL}/register/roomList`, async () => {
+    return HttpResponse.json({ code: 200, message: '객실 삭제 성공' });
+  }),
   http.get(`${BASE_URL}/register/roomList`, async () => {
     const roomListData = {
       code: 200,
       data: [
         {
-          roomId: '1',
+          roomId: 1,
           name: '해변 근처 럭셔리 리조트',
           description:
             '바다 전망을 즐길 수 있는 고급 리조트입니다. 가족 단위 여행에 적합합니다.',
@@ -123,17 +129,17 @@ export const handlers = [
           maxPetCount: 5,
         },
       ],
+      nextCursor: '1',
+      hasNext: true,
     };
     return HttpResponse.json(roomListData);
   }),
-  // 예약 페이지
   http.post(
     `${BASE_URL}/accommodation/:accommodationId/reservation`,
     async () => {
       return HttpResponse.json({ message: '예약이 완료되었습니다' });
     },
   ),
-  // 숙소
   http.post(`${BASE_URL}/register/accommodation`, async () => {
     return HttpResponse.json({
       message: '숙소 등록이 완료되었습니다',
@@ -165,7 +171,6 @@ export const handlers = [
     };
     return HttpResponse.json(accommodationData);
   }),
-  // 숙소 상세페이지
   http.get(`${BASE_URL}/register/detailAccommodation`, async () => {
     const detailAccommodationData = {
       accommodationsId: 1,
@@ -177,26 +182,26 @@ export const handlers = [
       totalRating: 4.5,
       type: 'PENSION',
       thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-      accommodationImages: [
+      accommodationImagesUrls: [
         'https://i.imgur.com/TuefC4N.jpeg',
         'https://i.imgur.com/TuefC4N.jpeg',
       ],
-      accommodationFacility: [
+      accommodationFacilities: [
         '무료 Wi-Fi',
         '조식 서비스',
         '수영장',
         '주차 공간',
         '회의실',
       ],
-      accommodationPetFacility: [
+      accommodationPetFacilities: [
         '반려동물 동반 가능',
         '반려동물 전용 침대',
         '애견 놀이터',
       ],
-      allowPet: ['고양이'],
+      allowPets: ['고양이'],
       latitude: 35.1585,
       longitude: 129.1669,
-      review: [
+      reviews: [
         {
           reviewId: 1,
           reviewRating: 4.5,
@@ -210,36 +215,15 @@ export const handlers = [
             '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
           createdAt: '2025-08-11',
         },
-        {
-          reviewId: 3,
-          reviewRating: 3.0,
-          content:
-            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
-          createdAt: '2025-02-11',
-        },
-        {
-          reviewId: 3,
-          reviewRating: 3.0,
-          content:
-            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
-          createdAt: '2025-02-11',
-        },
-        {
-          reviewId: 3,
-          reviewRating: 3.0,
-          content:
-            '숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.숙소는 깔끔하고, 조식도 맛있었어요. 하지만 방이 조금 좁았습니다.',
-          createdAt: '2025-02-11',
-        },
       ],
-      rooms: [
+      roomDetails: [
         {
           roomId: 1,
           roomName: '디럭스 오션뷰',
           roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
           price: 200000,
-          standardPeople: 2,
-          maxPeople: 4,
+          standardPeopleCount: 2,
+          maxPeopleCount: 4,
           standardPetCount: 1,
           maxPetCount: 2,
           extraPeopleFee: 20000,
@@ -253,8 +237,8 @@ export const handlers = [
           roomName: '디럭스 오션뷰',
           roomImageUrl: ['https://i.imgur.com/TuefC4N.jpeg'],
           price: 200000,
-          standardPeople: 2,
-          maxPeople: 4,
+          standardPeopleCount: 2,
+          maxPeopleCount: 4,
           standardPetCount: 1,
           maxPetCount: 2,
           extraPeopleFee: 20000,
@@ -269,7 +253,6 @@ export const handlers = [
       detailAccommodationData,
     });
   }),
-
   http.get(`${BASE_URL}/users/pets`, async () => {
     const petListData = {
       code: 200,
@@ -358,6 +341,7 @@ export const handlers = [
     };
     return HttpResponse.json(data);
   }),
+
   http.put(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     return HttpResponse.json({ message: '리뷰 수정 성공' });
   }),
@@ -365,6 +349,52 @@ export const handlers = [
     console.log('working');
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
   }),
+
+  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
+    const roomDetaiData = {
+      roomId: 1,
+      name: 'Cozy Mountain Cabin',
+      description:
+        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+      standardPeopleCount: 2,
+      maxPeopleCount: 4,
+      standardPetCount: 1,
+      maxPetCount: 2,
+      price: 120000,
+      extraPeopleFee: 30000,
+      extraPetFee: 15000,
+      checkInTime: '15:00',
+      checkOutTime: '11:00',
+      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
+      PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
+      hashtagTypes: [
+        'MountainRetreat',
+        'CozyStay',
+        'PetFriendly',
+        'RomanticGetaway',
+      ],
+    };
+    return HttpResponse.json(roomDetaiData);
+  }),
+  http.get(`${BASE_URL}/register/roomReview`, async () => {
+    const roomReview = {
+      nickname: '김멍냥',
+      profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      roomName: '오션 더블A',
+      totalRating: 4.6,
+      content:
+        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+      reviewImages: [
+        'https://i.imgur.com/WrQthuy.jpeg',
+        'https://i.imgur.com/WrQthuy.jpeg',
+        'https://i.imgur.com/WrQthuy.jpeg',
+      ],
+      createdAt: '2025-03-23',
+    };
+    return HttpResponse.json(roomReview);
+  }),
+
   http.get(`${BASE_URL}/users/wishlist/accommodations`, async () => {
     const data = {
       code: 200,
@@ -385,4 +415,5 @@ export const handlers = [
       return HttpResponse.json({ message: '찜 등록 성공' });
     },
   ),
+
 ];

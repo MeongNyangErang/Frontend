@@ -12,19 +12,6 @@ const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  /*
-  const mockData = {
-    accommodationId: '12345',
-    accommodationName: 'Luxury Beach Resort',
-    roomId: 'A101',
-    checkInDate: '2025-04-15',
-    checkOutDate: '2025-04-20',
-    peopleCount: 2,
-    petCount: 1,
-    totalPrice: '250,000',
-  };
-  */
-
   const {
     accommodationName,
     roomId,
@@ -33,7 +20,7 @@ const Reservation = () => {
     peopleCount,
     petCount,
     totalPrice,
-  } = location.state || {}; /*mockData*/
+  } = location.state || {};
 
   useEffect(() => {
     if (

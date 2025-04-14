@@ -21,7 +21,7 @@ import {
   SFormContainer,
   SErrorMessage,
   SSUploadContainer,
-} from './styles';
+} from '@pages/host/HostRegister/styles';
 
 interface ButtonProps {
   selected: boolean;
@@ -66,13 +66,8 @@ const hashTag = [
   '감성숙소',
 ];
 
-const RegisterRoom = ({
-  mode,
-  accommodationId,
-}: {
-  mode: string;
-  accommodationId?: string;
-}) => {
+const RegisterRoom = () => {
+  const [roomId, setRoomId] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -91,8 +86,13 @@ const RegisterRoom = ({
   });
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutTime, setCheckOutTime] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [priceError, setPriceError] = useState('');
+  const [peopleCountError, setPeopleCountError] = useState('');
+  const [thumbnailError, setThumbnailError] = useState('');
+  const [registered, setRegistered] = useState(false);
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
     useHostRegister();
@@ -222,9 +222,15 @@ const RegisterRoom = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description) {
-      alert('객실 정보를 입력해주세요.');
-      return;
+    if (
+      !counts.standardPeopleCount ||
+      !counts.maxPeopleCount ||
+      !counts.standardPetCount ||
+      !counts.maxPetCount
+    ) {
+      setPeopleCountError('인원을 입력해주세요.');
+    } else {
+      setPeopleCountError('');
     }
 
     if (
@@ -233,23 +239,15 @@ const RegisterRoom = ({
       !prices.extraPeopleFee ||
       !prices.extraPetFee
     ) {
-      alert('금액을 입력해주세요.');
-      return;
-    }
-
-    if (
-      !counts.standardPeopleCount ||
-      !counts.maxPeopleCount ||
-      !counts.standardPetCount ||
-      !counts.maxPetCount
-    ) {
-      alert('인원을 입력해주세요.');
-      return;
+      setPriceError('금액을 입력해주세요.');
+    } else {
+      setPriceError('');
     }
 
     if (!thumbnail) {
-      alert('대표 이미지를 선택해주세요.');
-      return;
+      setThumbnailError('대표 이미지를 선택해주세요.');
+    } else {
+      setThumbnailError('');
     }
 
     if (
@@ -261,12 +259,17 @@ const RegisterRoom = ({
       return;
     }
 
+    if (!name || !description) {
+      alert('객실 정보를 입력해주세요.');
+      return;
+    }
+
     if (!checkInTime || !checkOutTime) {
       alert('체크인, 체크아웃을 선택해주세요.');
       return;
     }
 
-    if (checkInTime >= checkOutTime) {
+    if (checkInTime <= checkOutTime) {
       alert('체크인은 체크아웃 시간보다 나중이어야 합니다.');
       return;
     }
@@ -281,61 +284,91 @@ const RegisterRoom = ({
     formData.append('facilityTypes', JSON.stringify(selectedFacility));
     formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
     formData.append('hashTagTypes', JSON.stringify(selectedHashTag));
-    formData.append('extraPeopleFee', prices.extraPeopleFee.replace(/,/g, ''));
-    formData.append('extraPetFee', prices.extraPetFee.replace(/,/g, ''));
-    formData.append('extraFee', prices.extraFee.replace(/,/g, ''));
-    formData.append('price', prices.price.replace(/,/g, ''));
+    formData.append(
+      'extraPeopleFee',
+      String(prices.extraPeopleFee).replace(/,/g, ''),
+    );
+    formData.append(
+      'extraPetFee',
+      String(prices.extraPetFee).replace(/,/g, ''),
+    );
+    formData.append('extraFee', String(prices.extraFee).replace(/,/g, ''));
+    formData.append('price', String(prices.price).replace(/,/g, ''));
     formData.append('checkInTime', checkInTime || '');
     formData.append('checkOutTime', checkOutTime || '');
 
     if (thumbnail) {
       formData.append('thumbnail', thumbnail);
     }
-    console.log('=== Form Data to be Sent ===');
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
 
     try {
       let response;
-      if (mode === 'create') {
-        response = await axios.post(
-          '/api/v1/hosts/accommodations/{accommodationId}/rooms',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+      if (roomId) {
+        response = await axios.put(`${BASE_URL}/register/room`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-        );
+        });
 
         if (response?.status === 200) {
-          console.log('API Response:', response.data);
-        } else {
-          alert('숙소 등록/수정에 실패했습니다.');
+          alert('숙소 정보가 수정되었습니다.');
+        }
+      } else {
+        response = await axios.post(`${BASE_URL}/register/room`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        if (response?.status === 200) {
+          alert('숙소 정보가 등록되었습니다.');
+          setRoomId(response.data.id);
         }
       }
     } catch (error) {
-      console.error('An error occurred while making the API call:', error);
+      console.error('API를 불러오는데 오류가 발생했습니다:', error);
     }
   };
 
   useEffect(() => {
-    if (mode === 'edit') {
-      axios
-        .put(`/api/v1/hosts/accommodations/{accommodationId}/rooms/{roomId}`)
-        .then((response) => {
-          const accommodation = response.data;
-          setName(accommodation.name);
-          setDescription(accommodation.description);
-          setThumbnailPreview(accommodation.thumbnail);
-        })
-
-        .catch((error) => {
-          console.error('Failed to fetch accommodation data:', error);
-        });
+    const fetchRoomData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/register/room`);
+        console.log(response);
+        if (response.data) {
+          const room = response.data;
+          setRoomId(room.id);
+          setName(room.name);
+          setDescription(room.description);
+          setPrices({
+            price: room.price,
+            extraFee: room.extraFee,
+            extraPeopleFee: room.extraPeopleFee,
+            extraPetFee: room.extraPetFee,
+          });
+          setCount({
+            standardPeopleCount: room.standardPeopleCount,
+            maxPeopleCount: room.maxPeopleCount,
+            standardPetCount: room.standardPetCount,
+            maxPetCount: room.maxPetCount,
+          });
+          setCheckInTime(room.checkInTime);
+          setCheckOutTime(room.checkOutTime);
+          setThumbnailPreview(room.thumbnail);
+          selectFacility(room.facilityTypes || []);
+          selectPetFacility(room.petFacilityTypes || []);
+          selectHashTag(room.hashTagTypes || []);
+          setRegistered(true);
+        }
+      } catch (error) {
+        console.error('Failed to fetch room data:', error);
+      }
+    };
+    if (!roomId) {
+      setRegistered(false);
+    } else {
+      fetchRoomData();
     }
-  }, [mode]);
+  }, [roomId]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -349,8 +382,8 @@ const RegisterRoom = ({
             value={name}
             onChange={handleNameChange}
           />
-          {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
         </div>
+        {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
 
         <SLabel>설명</SLabel>
         <SDescriptionWrapper>
@@ -418,6 +451,7 @@ const RegisterRoom = ({
             />
           </SFormItem>
         </SFormContainer>
+        {peopleCountError && <SErrorMessage>{peopleCountError}</SErrorMessage>}
 
         <SLabel>추가 금액</SLabel>
         <SFormContainer>
@@ -454,6 +488,7 @@ const RegisterRoom = ({
             />
           </SFormItem>
         </SFormContainer>
+        {priceError && <SErrorMessage>{priceError}</SErrorMessage>}
 
         <SLabel>편의시설</SLabel>
         <OptionSelector
@@ -494,8 +529,9 @@ const RegisterRoom = ({
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
           </SImagePreviewWrapper>
         )}
+        {thumbnailError && <SErrorMessage>{thumbnailError}</SErrorMessage>}
 
-        <SButton type="submit">등록하기</SButton>
+        <SButton type="submit">{registered ? '수정하기' : '등록하기'}</SButton>
       </SFieldset>
     </form>
   );

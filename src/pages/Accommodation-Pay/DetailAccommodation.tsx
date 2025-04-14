@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
@@ -13,15 +14,15 @@ interface DetailData {
   detailedAddress: string;
   type: string;
   thumbnailUrl: string;
-  accommodationImages: string[];
+  accommodationImagesUrls: string[];
   totalRating: string;
-  accommodationFacility: string[];
-  accommodationPetFacility: string[];
-  allowPet: string[];
+  accommodationFacilities: string[];
+  accommodationPetFacilities: string[];
+  allowPets: string[];
   latitude: number;
   longitude: number;
-  review: ReviewData[];
-  rooms: RoomData[];
+  reviews: ReviewData[];
+  roomDetails: RoomData[];
 }
 
 interface RoomData {
@@ -50,7 +51,34 @@ interface ReviewData {
 const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
+  const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const publicHolidays = ['2025-01-01', '2025-12-25'];
+
+  const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  const isHoliday = (date: Date) => {
+    const dateString = date.toISOString().split('T')[0];
+    return publicHolidays.includes(dateString);
+  };
+
+  const getRoomPrice = (room: RoomData) => {
+    const today = new Date();
+    const isWeekendDay = isWeekend(today);
+    const isHolidayDay = isHoliday(today);
+
+    let finalPrice = room.price;
+
+    if (isWeekendDay || isHolidayDay) {
+      finalPrice += room.extraFee;
+    }
+
+    return finalPrice;
+  };
 
   useEffect(() => {
     const getAccommodationDetails = async () => {
@@ -62,7 +90,7 @@ const DetailAccommodation = () => {
         if (response.status === 200) {
           const accommodationData = response.data.detailAccommodationData;
 
-          const sortedReviews = accommodationData.review.sort(
+          const sortedReviews = accommodationData.reviews.sort(
             (a: ReviewData, b: ReviewData) => {
               const dateA = new Date(a.createdAt).getTime();
               const dateB = new Date(b.createdAt).getTime();
@@ -88,57 +116,66 @@ const DetailAccommodation = () => {
     setShowAllRooms(!showAllRooms);
   };
 
+  const handleAllReviews = () => {
+    navigate('/');
+  };
+
+  const handleRoomviews = () => {
+    navigate('/');
+  };
+
   return (
     <Container>
       {accommodation && (
         <>
           <TumbnailImage src={accommodation.thumbnailUrl} />
-          <Content>
-            <AccommodationName>
-              {accommodation.name}
-              <Text>{accommodation.totalRating}</Text>
-            </AccommodationName>
+          <AccommodationName>
+            {accommodation.name}
+            <Text>{accommodation.totalRating}</Text>
+          </AccommodationName>
 
-            <Title>{accommodation.type}</Title>
-            <Title>{accommodation.allowPet}</Title>
+          <Title>{accommodation.type}</Title>
+          <Title>{accommodation.allowPets}</Title>
 
-            <Section>
-              <All>
-                <Real>리얼 리뷰</Real>
-                <SeeAllButton onClick={() => {}}>전체보기</SeeAllButton>
-              </All>
-              {accommodation.review && accommodation.review.length > 0 ? (
-                <ReviewContainer>
-                  {accommodation.review.map((review, index) => (
-                    <ReviewCard key={`review-${review.reviewId}-${index}`}>
-                      <All>
-                        <ReviewRatingWrapper>
-                          <StarRatings
-                            rating={review.reviewRating}
-                            starRatedColor="#ffc107"
-                            numberOfStars={5}
-                            name="rating"
-                            starDimension="20px"
-                            starSpacing="1px"
-                          />
-                        </ReviewRatingWrapper>
-                        <ReviewDate>{review.createdAt}</ReviewDate>
-                      </All>
-                      <ReviewContent>
-                        <ReviewText>{review.content}</ReviewText>
-                      </ReviewContent>
-                    </ReviewCard>
-                  ))}
-                </ReviewContainer>
-              ) : (
-                <p>아직 리뷰가 없습니다</p>
-              )}
-            </Section>
+          <Section>
+            <All>
+              <Real>리얼 리뷰</Real>
+              <SeeAllButton onClick={handleAllReviews}>전체보기</SeeAllButton>
+            </All>
+            {accommodation.reviews && accommodation.reviews.length > 0 ? (
+              <ReviewContainer>
+                {accommodation.reviews.map((review, index) => (
+                  <ReviewCard key={`review-${review.reviewId}-${index}`}>
+                    <All>
+                      <ReviewRatingWrapper>
+                        <StarRatings
+                          rating={review.reviewRating}
+                          starRatedColor="#ffc107"
+                          numberOfStars={5}
+                          name="rating"
+                          starDimension="20px"
+                          starSpacing="1px"
+                        />
+                      </ReviewRatingWrapper>
+                      <ReviewDate>{review.createdAt}</ReviewDate>
+                    </All>
+                    <ReviewContent>
+                      <ReviewText>{review.content}</ReviewText>
+                    </ReviewContent>
+                  </ReviewCard>
+                ))}
+              </ReviewContainer>
+            ) : (
+              <p>아직 리뷰가 없습니다</p>
+            )}
+          </Section>
 
-            <SectionTitle>객실선택</SectionTitle>
-            {accommodation.rooms && accommodation.rooms.length > 0 ? (
-              <RoomContainer>
-                {accommodation.rooms.map((room) => (
+          <SectionTitle>객실선택</SectionTitle>
+          {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
+            <RoomContainer>
+              {accommodation.roomDetails
+                .slice(0, showAllRooms ? accommodation.roomDetails.length : 2)
+                .map((room) => (
                   <RoomCard key={room.roomId}>
                     <RoomInfoLeft>
                       <RoomImage
@@ -163,7 +200,7 @@ const DetailAccommodation = () => {
                     <RoomInfoRight>
                       <All>
                         <RoomTitle>숙박</RoomTitle>
-                        <Detail onClick={() => {}}>상세보기</Detail>
+                        <Detail onClick={handleRoomviews}>상세보기</Detail>
                       </All>
                       <RoomInfo>
                         <Check>
@@ -181,79 +218,79 @@ const DetailAccommodation = () => {
                         </Check>
                       </RoomInfo>
                       <RoomInfo>
-                        {/* <Price>{room.extraFee}</Price>
-                         */}
-                        <Price>{room.price.toLocaleString()}</Price>
+                        <Price>
+                          {(room.price + room.extraFee).toLocaleString()}
+                        </Price>
                       </RoomInfo>
                       <RoomButton>예약하기</RoomButton>
                     </RoomInfoRight>
                   </RoomCard>
                 ))}
-              </RoomContainer>
-            ) : (
-              <p>현재 방이 없습니다</p>
-            )}
-            <Open onClick={handleShowMoreRooms}>
-              {showAllRooms ? '접기' : '더보기'}
-            </Open>
+            </RoomContainer>
+          ) : (
+            <p>현재 방이 없습니다</p>
+          )}
+          <Open onClick={handleShowMoreRooms}>
+            {showAllRooms ? '접기' : '더보기'}
+          </Open>
 
-            <SectionTitle>숙소 소개</SectionTitle>
-            <AccommodationDescription>
-              <QuotesL /> <br />
-              {accommodation.description} <br />
-              <QuotesR />
-            </AccommodationDescription>
+          <SectionTitle>숙소 소개</SectionTitle>
+          <AccommodationDescription>
+            <QuotesL /> <br />
+            {accommodation.description} <br />
+            <QuotesR />
+          </AccommodationDescription>
 
-            <ImageTitle>
-              <Queen />
-              <br />
-              {accommodation.name}
-            </ImageTitle>
-            {accommodation.accommodationImages &&
-            accommodation.accommodationImages.length > 0 ? (
-              accommodation.accommodationImages.map((image, index) => (
-                <AccommodationImage
-                  key={index}
-                  src={image}
-                  alt={`Accommodation image ${index + 1}`}
-                />
-              ))
-            ) : (
-              <p>이미지가 없습니다</p>
-            )}
+          <ImageTitle>
+            <Queen />
+            <br />
+            {accommodation.name}
+          </ImageTitle>
+          {accommodation.accommodationImagesUrls &&
+          accommodation.accommodationImagesUrls.length > 0 ? (
+            accommodation.accommodationImagesUrls.map((image, index) => (
+              <AccommodationImage
+                key={index}
+                src={image}
+                alt={`Accommodation image ${index + 1}`}
+              />
+            ))
+          ) : (
+            <p>이미지가 없습니다</p>
+          )}
 
-            <SectionTitle>숙소 편의시설</SectionTitle>
-            <Facility>
-              {accommodation.accommodationFacility.map((facility, index) => (
-                <FacilityItem key={index}>{facility}</FacilityItem>
-              ))}
-            </Facility>
-            <SectionTitle>반려동물 편의시설</SectionTitle>
-            <Facility>
-              {accommodation.accommodationPetFacility.map((facility, index) => (
-                <FacilityItem key={index}>{facility}</FacilityItem>
-              ))}
-            </Facility>
+          <SectionTitle>숙소 편의시설</SectionTitle>
+          <Facility>
+            {accommodation.accommodationFacilities.map((facility, index) => (
+              <FacilityItem key={index}>{facility}</FacilityItem>
+            ))}
+          </Facility>
+          <SectionTitle>반려동물 편의시설</SectionTitle>
+          <Facility>
+            {accommodation.accommodationPetFacilities.map((facility, index) => (
+              <FacilityItem key={index}>{facility}</FacilityItem>
+            ))}
+          </Facility>
 
-            <SectionTitle>위치</SectionTitle>
-            <Address>{accommodation.address}</Address>
-            <Address>{accommodation.detailedAddress}</Address>
-            {/* 
+          <SectionTitle>위치</SectionTitle>
+          <Address>{accommodation.address}</Address>
+          <Address>{accommodation.detailedAddress}</Address>
+          {/* 
             <Address>
               {accommodation.latitude}
               {accommodation.longitude}
             </Address>
             */}
 
-            <SectionTitle>환불규정</SectionTitle>
-            <Refund>
-              ■ 체크인 10일 전: 100% 환불 <br />
-              ■ 체크인 7일 전: 90% 환불 <br />
-              ■ 체크인 5일 전: 70% 환불 <br />
-              ■ 체크인 3일 전: 50% 환불 <br />
-              ■ 체크인 1일 전: 20% 환불 <br />■ 체크인 당일 및 NO-SHOW: 환불불가
-            </Refund>
-          </Content>
+          <SectionTitle>취소 및 환불 규정</SectionTitle>
+          <Refund>
+            ■ 체크인일 기준 3일 전까지 : 100% 환불 <br />
+            ■ 체크인일 기준 2일 전까지 : 최초 1일 숙박 요금의 70% 환불
+            <br />
+            ■ 체크인일 기준 1일 전까지 : 최초 1일 숙박 요금의 50% 환불 <br />
+            ■ 체크인일 당일 및 No-Show : 최초 1일 숙박 요금 환불불가 <br />■ 각
+            구매한 상품별 별도의 취소 규정이 적용되오니 참고 부탁드립니다
+          </Refund>
         </>
       )}
     </Container>
@@ -282,11 +319,12 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 16px;
+  margin-top: 10px;
 `;
 
 const AccommodationImage = styled.img`
   width: 100%;
+  height: 300px;
   object-fit: cover;
   margin-top: 10px;
   border-radius: 4px;
@@ -295,25 +333,26 @@ const AccommodationImage = styled.img`
 const ImageTitle = styled.p`
   text-align: center;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 22px;
   margin-top: 20px;
 `;
 
 const TumbnailImage = styled.img`
   width: 100%;
+  height: 300px;
   object-fit: cover;
   border-radius: 4px;
 `;
 
 const AccommodationName = styled.h2`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: var(--gray-700);
-  margin-bottom: 10px;
+  margin: 15px 0;
 `;
 
 const Title = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   color: var(--gray-600);
   border: 1px solid #e0e0e0;
   padding: 5px 10px;
@@ -325,14 +364,14 @@ const Title = styled.div`
 `;
 
 const RoomTitle = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   color: var(--gray-700);
   font-weight: bold;
   margin-bottom: 5px;
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
   color: var(--gray-700);
   font-weight: bold;
   margin-top: 20px;
@@ -340,7 +379,7 @@ const SectionTitle = styled.h3`
 `;
 
 const Real = styled.h3`
-  font-size: 20px;
+  font-size: 16px;
   color: var(--gray-700);
   font-weight: bold;
   margin: 10px 5px;
@@ -360,38 +399,39 @@ const RoomInfoLeft = styled.div`
 
 const RoomInfoRight = styled.div`
   width: 50%;
-  height: 280px;
+  height: 250px;
   border: 1px solid #e0e0e0;
   padding: 16px;
   border-radius: 20px;
 `;
 
 const Count = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   margin-top: 5px;
   color: var(--gray-700);
 `;
 
 const Check = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   margin-top: 5px;
   color: var(--gray-700);
 `;
 
 const CheckInfo = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   margin-top: 10px;
   color: var(--gray-700);
   font-weight: bold;
 `;
 
 const Price = styled.p`
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   color: var(--gray-700);
   text-align: right;
   margin-right: 0;
   margin-bottom: 5px;
+  border-top: 1px dotted #e0e0e0;
 `;
 
 const RoomButton = styled.div`
@@ -401,14 +441,15 @@ const RoomButton = styled.div`
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
   margin-left: auto;
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
-  &:hover{
-  background:rgb(237, 43, 79);
+  &:hover {
+    background: rgb(237, 43, 79);
+  }
 `;
 
 const Open = styled.button`
@@ -418,7 +459,7 @@ const Open = styled.button`
   background: rgb(253, 244, 245);
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 16px;
   color: #f03e5e;
 `;
 
@@ -436,7 +477,7 @@ const Facility = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eeeeee;
 `;
 
 const FacilityItem = styled.div`
@@ -468,22 +509,22 @@ const Address = styled.p`
 const RoomCard = styled.div`
   display: flex;
   width: 100%;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #eeeeee;
   border-radius: 8px;
   justify-content: space-between;
   padding-bottom: 30px;
 `;
 
 const RoomImage = styled.img`
-  width: 100%;
-  height: 200px;
+  width: 90%;
+  height: 180px;
   object-fit: cover;
   border-radius: 8px;
 `;
 
 const RoomName = styled.p`
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 16px;
   color: var(--gray-700);
   font-weight: bold;
 `;
@@ -524,10 +565,9 @@ const ReviewText = styled.p`
   text-overflow: ellipsis;
   white-space: normal;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  font-size: 16px;
-  padding-top: 5px;
+  font-size: 14px;
 `;
 
 const ReviewCard = styled.div`
@@ -548,13 +588,8 @@ const ReviewContainer = styled.div`
   white-space: nowrap;
 `;
 
-const ReviewRating = styled.p`
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #ffc107;
-`;
 const ReviewDate = styled.p`
-  font-size: 1.1rem;
+  font-size: 14px;
   font-weight: bold;
   color: var(--gray-700);
 `;
@@ -576,7 +611,7 @@ const Section = styled.div`
 const SeeAllButton = styled.button`
   color: var(--gray-600);
   font-weight: bold;
-  font-size: 18px;
+  font-size: 14px;
   cursor: pointer;
   margin: 10px 5px;
 `;
@@ -584,7 +619,7 @@ const SeeAllButton = styled.button`
 const Detail = styled.button`
   color: var(--gray-700);
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   margin: 3px;
 `;

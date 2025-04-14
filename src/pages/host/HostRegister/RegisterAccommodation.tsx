@@ -22,7 +22,7 @@ import {
   SErrorMessage,
   ButtonContainer,
   SSUploadContainer,
-} from './styles';
+} from '@pages/host/HostRegister/styles';
 
 interface ButtonProps {
   selected: boolean;
