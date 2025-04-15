@@ -6,12 +6,14 @@ import { InfiniteData } from '@tanstack/react-query';
 import { PreviousChatMessagesResponse } from '@typings/response/chat';
 import { sendChatImage } from '@services/chat';
 import { createStompClient } from '@services/socket';
+import { initialChatError } from '@constants/chat';
 
 const useChatMessages = (chatRoomId: number | undefined) => {
   const stompClientRef = useRef(createStompClient());
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
-  const [sendingError, setSendingError] = useState({ message: '', image: '' });
+  const [pendingMessage, setPendingMessage] = useState<null | string>(null);
+  const [chatError, setChatError] = useState({ ...initialChatError });
   const { data, isFetchingNextPage, hasNextPage, error, fetchNextPage } =
     usePreviousChatMessages(chatRoomId);
   const pages = (
@@ -22,16 +24,31 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     [data],
   );
   const enableToFetch = hasNextPage && !isFetchingNextPage && !error;
-  const scrollRef = useInfiniteScroll(fetchNextPage, enableToFetch);
+  const infiniteScrollRef = useInfiniteScroll(fetchNextPage, enableToFetch);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isInitialScrollRef = useRef(true);
+  const pendingCallbackRef = useRef<{ onSuccess?: () => void } | null>(null);
 
-  const sendMessage = (content: string) => {
+  const resetError = () => {
+    setChatError({ ...initialChatError });
+  };
+
+  const updateError = (key: keyof typeof initialChatError, text: string) => {
+    setChatError((prev) => ({
+      ...prev,
+      [key]: text,
+    }));
+  };
+
+  const updatePendingMessage = (message: string) => {
+    setPendingMessage(message);
+  };
+
+  const sendMessage = (content: string, onSuccess: () => void) => {
     const client = stompClientRef.current;
 
     if (!client || !client.connected) {
-      setSendingError((prev) => ({
-        ...prev,
-        message: '메세지 전송에 실패했습니다.',
-      }));
+      updateError('messageSending', '메세지 전송에 실패했습니다.');
       return;
     }
 
@@ -39,22 +56,51 @@ const useChatMessages = (chatRoomId: number | undefined) => {
       destination: `/app/chats/send/${chatRoomId}`,
       body: JSON.stringify({ content }),
     });
+
+    updatePendingMessage(content);
+    pendingCallbackRef.current = { onSuccess };
   };
 
-  const sendImage = async (imageFile: File) => {
+  const sendImage = async (imageFile: File, onSuccess: () => void) => {
     if (!chatRoomId) return;
     const formData = new FormData();
     formData.append('imageFile', imageFile);
 
     try {
       await sendChatImage(chatRoomId, formData);
+      onSuccess();
     } catch (error) {
-      setSendingError((prev) => ({
-        ...prev,
-        image: '이미지 전송에 실패했습니다.',
-      }));
+      updateError('imageSending', '이미지 전송에 실패했습니다.');
     }
   };
+
+  useEffect(() => {
+    if (!pendingMessage) return;
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.content === pendingMessage) {
+      pendingCallbackRef.current?.onSuccess?.();
+    } else {
+      updateError('messageSending', '메세지 전송에 실패했습니다.');
+    }
+    setPendingMessage(null);
+    pendingCallbackRef.current = null;
+  }, [messages]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const target = scrollContainerRef.current;
+      if (
+        target &&
+        isInitialScrollRef.current &&
+        previousMessages?.length > 0
+      ) {
+        isInitialScrollRef.current = false;
+        target.scrollTop = target.scrollHeight;
+      }
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, [previousMessages]);
 
   useEffect(() => {
     if (previousMessages) {
@@ -71,34 +117,54 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   useEffect(() => {
     if (!chatRoomId) return;
 
+    let subscription: any;
+
     const stompClient = stompClientRef.current;
     stompClient.onConnect = () => {
       setIsConnected(true);
-      stompClient.subscribe(`subscribe/chats/${chatRoomId}`, (message) => {
-        const { senderType, content, createdAt }: NewChatMessage = JSON.parse(
-          message.body,
-        );
-        const newMessage = { senderType, content, created_at: createdAt };
-        setMessages((prev) => [...prev, newMessage]);
-      });
+      subscription = stompClient.subscribe(
+        `subscribe/chats/${chatRoomId}`,
+        (message) => {
+          const { senderType, content, createdAt }: NewChatMessage = JSON.parse(
+            message.body,
+          );
+          const newMessage = { senderType, content, created_at: createdAt };
+          setMessages((prev) => [...prev, newMessage]);
+        },
+      );
+    };
+
+    stompClient.onStompError = (frame) => {
+      console.log('STOMP error', frame);
+      updateError('stomp', '채팅 연결에 실패했습니다. 다시 시도해주세요.');
+    };
+
+    stompClient.onWebSocketError = (frame) => {
+      console.log('WebSocket error', frame);
+      updateError('socket', '채팅 연결에 실패했습니다. 다시 시도해주세요.');
     };
 
     stompClient.activate();
 
     return () => {
       stompClient.deactivate();
+      subscription?.unsubscribe();
       setIsConnected(false);
       setMessages([]);
+      resetError();
+      isInitialScrollRef.current = true;
     };
   }, [chatRoomId]);
 
   return {
     messages,
     isConnected,
-    scrollRef,
-    sendingError,
+    chatError,
+    infiniteScrollRef,
+    scrollContainerRef,
     sendMessage,
     sendImage,
+    updateError,
   };
 };
 

@@ -44,7 +44,7 @@ const SEmptyChatRoomMessage = styled.div`
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: contain;
-    opacity: 0.25;
+    opacity: 0.15;
     transform: translate(-50%, -50%);
   }
 

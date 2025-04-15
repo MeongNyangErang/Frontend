@@ -9,8 +9,6 @@ export const createStompClient = () => {
   const client = new Client({
     webSocketFactory: () => new SockJS(socketUrl),
     reconnectDelay: 5000,
-    onConnect: (frame) => {},
-    onStompError: (frame) => {},
   });
 
   return client;

@@ -194,6 +194,8 @@ const SImagePreivewBox = styled.div`
   }
 `;
 
+const SErrorMessage = styled.div``;
+
 export {
   SChatRoomWrap,
   SChatContainer,
@@ -209,4 +211,5 @@ export {
   SImageButton,
   SSubmitButton,
   SImagePreivewBox,
+  SErrorMessage,
 };
