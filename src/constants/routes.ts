@@ -36,7 +36,7 @@ const ROUTES = {
   },
   chat: {
     list: '/chat',
-    room: (roomId: string) => `/chat/${roomId}`,
+    room: (roomId: number) => `/chat/${roomId}`,
   },
   notification: '/notification',
 } as const;

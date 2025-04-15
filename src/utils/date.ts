@@ -35,9 +35,33 @@ const formatDateStrToStrWithDay = (dateStr: string) => {
   return `${year}.${month}.${day}(${dayName})`;
 };
 
+const formatDateOrTime = (dateStr: string) => {
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '';
+  const today = new Date();
+  const isToday =
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate();
+  if (isToday) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  if (date.getFullYear() === today.getFullYear()) return `${month}.${day}`;
+
+  return `${date.getFullYear()}.${month}.${day}`;
+};
+
 export {
   formatDate,
   stringToDate,
   formatDateStrToKorean,
   formatDateStrToStrWithDay,
+  formatDateOrTime,
 };

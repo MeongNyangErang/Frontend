@@ -9,6 +9,8 @@ import {
 } from './data/userReservationList';
 import { userReviews } from './data/userReviews';
 import { wishlist } from './data/wishlist';
+import { chatList } from './data/chatList';
+import { previouseChatMessages } from './data/previousChatMessages';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -432,5 +434,29 @@ export const handlers = [
       checkOutDate: '2025-03-09',
     };
     return HttpResponse.json([ReservationList]);
+  }),
+
+  http.get(`${BASE_URL}/chats`, async () => {
+    const data = {
+      content: chatList,
+      page: 1,
+      size: 20,
+      totalElements: 123,
+      totalPages: 7,
+      first: true,
+      last: false,
+    };
+    return HttpResponse.json(data);
+  }),
+  http.get(`${BASE_URL}/chats/:chatRoomId/messages`, async () => {
+    const response = {
+      code: 200,
+      messages: previouseChatMessages,
+      nextCursorId: 100,
+      hasNext: true,
+    };
+
+    return HttpResponse.json(response);
+
   }),
 ];
