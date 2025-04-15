@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import useAuth from '@hooks/auth/useAuth';
-import ProfileBox from '@components/common/myPage/ProfileBox';
-import MyPageOverview from '@components/common/myPage/MyPageOverview';
+import ProfileBox from '@components/layouts/MyPageLayout/ProfileBox';
+import MyPageOverview from '@components/layouts/MyPageLayout/MyPageOverview';
 import ROUTES from '@constants/routes';
 
 const UserMyPage = () => {
