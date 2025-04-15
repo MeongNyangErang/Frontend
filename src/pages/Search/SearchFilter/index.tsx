@@ -5,7 +5,7 @@ import Button from '@components/common/Button';
 import BottomDrawer from '@components/common/BottomDrawer';
 import OptionSelector from '@components/common/OptionSelector';
 import useSearchFilter from '@hooks/page/useSearchFilter';
-import { SearchFilterType, SearchQuery } from '@typings/search';
+import { SearchFilterType, SearchBaseType } from '@typings/search';
 import { SEARCH_FILTER_ITEMS, FILTER_CATEGORIES } from '@constants/search';
 import RadioSelector from './RadioSelector';
 import FilterItemName from './FIlterItemName';
@@ -26,7 +26,7 @@ interface Props {
   isOpen: boolean;
   onClose(): void;
   currentFilter: SearchFilterType;
-  currentQuery: SearchQuery;
+  currentQuery: SearchBaseType;
 }
 
 const SearchFilter = ({

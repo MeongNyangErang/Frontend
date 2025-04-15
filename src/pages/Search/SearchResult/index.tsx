@@ -4,7 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { SectionLayout } from '@components/layouts/SectionLayout';
-import { SearchQuery, SearchFilterType } from '@typings/search';
+import { SearchBaseType, SearchFilterType } from '@typings/search';
 import ROUTES from '@constants/routes';
 import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import MessageBox from '@components/common/MessageBox';
@@ -27,7 +27,7 @@ import {
 } from './styles';
 
 interface SearchResultProps {
-  currentQuery: SearchQuery;
+  currentQuery: SearchBaseType;
   currentFilter: SearchFilterType;
 }
 
