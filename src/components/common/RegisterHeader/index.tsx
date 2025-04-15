@@ -16,9 +16,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
   return (
     <HeaderTitle>
+      {/*
       <BackSpace onClick={handleBackClick}>
         <FaArrowLeftLong />
       </BackSpace>
+       */}
       <Title>{title}</Title>
     </HeaderTitle>
   );
@@ -41,9 +43,10 @@ const BackSpace = styled.button`
 `;
 
 const Title = styled.h1`
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--gray-700);'
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--gray-700);
 `;
 
 export default Header;

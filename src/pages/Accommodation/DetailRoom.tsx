@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { MdOutlinePets } from 'react-icons/md';
 import { IoTimeOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 interface DetailRoomData {
   name: String;
@@ -26,6 +27,7 @@ interface DetailRoomData {
 const DetailRoom = () => {
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -37,6 +39,10 @@ const DetailRoom = () => {
 
     fetchRoomDetails();
   }, []);
+
+  const handleAllReserve = () => {
+    navigate('/accommodation/:accommodationId/reservation');
+  };
 
   if (!roomDetails) return null;
 
@@ -98,7 +104,7 @@ const DetailRoom = () => {
           ))}
         </FacilityList>
       )}
-      <Reserve>예약하기</Reserve>
+      <Reserve onClick={handleAllReserve}>예약하기</Reserve>
     </Container>
   );
 };
@@ -135,10 +141,12 @@ const RoomTitle = styled.h1`
   margin-top: 10px;
   font-weight: bold;
   font-size: 20px;
+  color: var(--gray-700);
 `;
 
 const Check = styled.p`
-  font-size: 13px;
+  font-size: 16px;
+  margin-top: 3px;
 `;
 
 const Fee = styled.p`
@@ -169,8 +177,8 @@ const FacilityList = styled.div`
 
 const FacilityItem = styled.div`
   padding: 5px 12px;
-  color: var(--gray-700);
-  border: 1px solid rgb(251, 187, 193);
+  color: var(--gray-500);
+  border: 1px solid #bdbdbd;
   border-radius: 15px;
   font-size: 14px;
 `;
@@ -192,4 +200,7 @@ const Reserve = styled.button`
   font-weight: bold;
   text-align: center;
   margin-top: 25px;
+  &:hover {
+    background: rgb(234, 51, 85);
+  }
 `;
