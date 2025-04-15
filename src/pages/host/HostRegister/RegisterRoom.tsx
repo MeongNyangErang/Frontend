@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useHostRegister from '@hooks/page/useHostRegister';
-import axios from 'axios';
 import Header from '@components/common/RegisterHeader/index';
 import { IoCloudUploadOutline } from 'react-icons/io5';
+import { fetchCall } from 'services/api';
 import {
   SFieldset,
   SOptionSelectorWrapper,
@@ -27,6 +27,38 @@ interface ButtonProps {
   selected: boolean;
 }
 
+interface RoomResponse {
+  data: {
+    id: string;
+    name: string;
+    type: string;
+    description: string | null;
+    address: {
+      area: string;
+      town: string;
+    };
+    detailedAddress: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    thumbnail: string | null;
+    additionalImages: string[];
+    facilityTypes: string[];
+    petFacilityTypes: string[];
+    hashTagTypes: string[];
+
+    price: string;
+    extraFee: string;
+    extraPeopleFee: string;
+    extraPetFee: string;
+    standardPeopleCount: string;
+    maxPeopleCount: string;
+    standardPetCount: string;
+    maxPetCount: string;
+    checkInTime: string;
+    checkOutTime: string;
+  };
+}
+
 const facility = [
   '스타일러',
   '냉장고',
@@ -45,7 +77,6 @@ const petFacility = [
   '배변 용품',
   '장난감',
   '침대',
-  '드라이룸',
   '캣 타워',
   '미끄럼 방지 바닥',
   '펜스 설치 공간',
@@ -302,27 +333,18 @@ const RegisterRoom = () => {
     }
 
     try {
-      let response;
+      let response: RoomResponse;
       if (roomId) {
-        response = await axios.put(`${BASE_URL}/register/room`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        if (response?.status === 200) {
-          alert('숙소 정보가 수정되었습니다.');
-        }
+        response = await fetchCall(
+          `/hosts/accommodations/{accommodationId}/rooms/{roomId}`,
+          'put',
+          formData,
+        );
+        alert('숙소 정보가 수정되었습니다.');
       } else {
-        response = await axios.post(`${BASE_URL}/register/room`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        if (response?.status === 200) {
-          alert('숙소 정보가 등록되었습니다.');
-          setRoomId(response.data.id);
-        }
+        response = await fetchCall(`/hosts/rooms`, 'post', formData);
+        alert('숙소 정보가 등록되었습니다.');
+        setRoomId(response.data.id);
       }
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
@@ -332,42 +354,39 @@ const RegisterRoom = () => {
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/register/room`);
-        console.log(response);
-        if (response.data) {
-          const room = response.data;
-          setRoomId(room.id);
-          setName(room.name);
-          setDescription(room.description);
-          setPrices({
-            price: room.price,
-            extraFee: room.extraFee,
-            extraPeopleFee: room.extraPeopleFee,
-            extraPetFee: room.extraPetFee,
-          });
-          setCount({
-            standardPeopleCount: room.standardPeopleCount,
-            maxPeopleCount: room.maxPeopleCount,
-            standardPetCount: room.standardPetCount,
-            maxPetCount: room.maxPetCount,
-          });
-          setCheckInTime(room.checkInTime);
-          setCheckOutTime(room.checkOutTime);
-          setThumbnailPreview(room.thumbnail);
-          selectFacility(room.facilityTypes || []);
-          selectPetFacility(room.petFacilityTypes || []);
-          selectHashTag(room.hashTagTypes || []);
-          setRegistered(true);
-        }
+        const response: RoomResponse = await fetchCall(
+          `/hosts/rooms/{roomId}`,
+          'get',
+        );
+        const room = response.data;
+        setRoomId(room.id);
+        setName(room.name);
+        setDescription(room.description ?? '');
+        setPrices({
+          price: room.price,
+          extraFee: room.extraFee,
+          extraPeopleFee: room.extraPeopleFee,
+          extraPetFee: room.extraPetFee,
+        });
+        setCount({
+          standardPeopleCount: room.standardPeopleCount,
+          maxPeopleCount: room.maxPeopleCount,
+          standardPetCount: room.standardPetCount,
+          maxPetCount: room.maxPetCount,
+        });
+        setCheckInTime(room.checkInTime);
+        setCheckOutTime(room.checkOutTime);
+        setThumbnailPreview(room.thumbnail);
+        (room.facilityTypes || []).forEach(selectFacility);
+        (room.petFacilityTypes || []).forEach(selectPetFacility);
+        (room.hashTagTypes || []).forEach(selectHashTag);
+        setRegistered(true);
       } catch (error) {
-        console.error('Failed to fetch room data:', error);
+        console.error('데이터 불러오기 실패:', error);
       }
     };
-    if (!roomId) {
-      setRegistered(false);
-    } else {
-      fetchRoomData();
-    }
+
+    if (roomId) fetchRoomData();
   }, [roomId]);
 
   return (
@@ -542,7 +561,7 @@ export default RegisterRoom;
 const SCheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
-  color: var(--gray-600);
+  color: ${(props) => (props.selected ? '#f03e5e' : '#757575')};
   padding: 7px 10px;
   margin-bottom: 10px;
   margin-right: 5px;

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
+import { FaStar } from 'react-icons/fa';
 
 interface RoomReviewData {
   nickname: String;
@@ -16,6 +17,7 @@ interface RoomReviewData {
 const RoomReview = () => {
   const [roomReview, setRoomReview] = useState<RoomReviewData | null>(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -32,7 +34,10 @@ const RoomReview = () => {
 
   return (
     <Card>
-      <Title>리얼 리뷰</Title>
+      <Title>
+        <Star />
+        리얼 리뷰
+      </Title>
       {roomReview ? (
         <>
           <Header>
@@ -48,7 +53,7 @@ const RoomReview = () => {
           <Rating>
             <StarRatings
               rating={roomReview.totalRating}
-              starRatedColor="#ffc107"
+              starRatedColor="#f03e5e"
               numberOfStars={5}
               name="rating"
               starDimension="17px"
@@ -67,7 +72,12 @@ const RoomReview = () => {
             </ReviewImageContainer>
           )}
           <RoomName>[ {roomReview.roomName} ]</RoomName>
-          <Content>{roomReview.content}</Content>
+          <Content isExpanded={isExpanded}>{roomReview.content}</Content>
+          {roomReview.content.length > 100 && (
+            <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? '접기' : '더보기'}
+            </ToggleButton>
+          )}
         </>
       ) : (
         <NoReviewMessage>등록된 리뷰가 없습니다.</NoReviewMessage>
@@ -94,11 +104,12 @@ const Title = styled.h1`
   margin-bottom: 15px;
   border-bottom: 1px solid #e0e0e0;
   position: relative;
+`;
 
-  &::before {
-    content: '⭐';
-    margin-right: 3px;
-  }
+const Star = styled(FaStar)`
+  color: #f03e5e;
+  margin-right: 5px;
+  font-size: 22px;
 `;
 
 const Header = styled.div`
@@ -139,15 +150,24 @@ const RoomName = styled.div`
 
 const Rating = styled.div`
   font-size: 14px;
-  color: #f5a623;
+  color: #f03e5e;
   margin-bottom: 5px;
 `;
 
-const Content = styled.p`
+const Content = styled.p<{ isExpanded: boolean }>`
   font-size: 15px;
   color: var(--gray-700);
   margin-bottom: 10px;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ isExpanded }) => (isExpanded ? 'unset' : 3)};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+`;
+
+const ToggleButton = styled.button`
+  color: var(--gray-600);
 `;
 
 const ReviewImage = styled.img`

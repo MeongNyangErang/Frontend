@@ -117,11 +117,15 @@ const DetailAccommodation = () => {
   };
 
   const handleAllReviews = () => {
-    navigate('/');
+    navigate('/accommodation/:accommodationId/review');
   };
 
   const handleRoomviews = () => {
-    navigate('/');
+    navigate('/accommodation/:accommodationId/room/:roomId');
+  };
+
+  const handleAllReserve = () => {
+    navigate('/accommodation/:accommodationId/reservation');
   };
 
   return (
@@ -150,10 +154,10 @@ const DetailAccommodation = () => {
                       <ReviewRatingWrapper>
                         <StarRatings
                           rating={review.reviewRating}
-                          starRatedColor="#ffc107"
+                          starRatedColor="#f03e5e"
                           numberOfStars={5}
                           name="rating"
-                          starDimension="20px"
+                          starDimension="17px"
                           starSpacing="1px"
                         />
                       </ReviewRatingWrapper>
@@ -222,7 +226,9 @@ const DetailAccommodation = () => {
                           {(room.price + room.extraFee).toLocaleString()}
                         </Price>
                       </RoomInfo>
-                      <RoomButton>예약하기</RoomButton>
+                      <RoomButton onClick={handleAllReserve}>
+                        예약하기
+                      </RoomButton>
                     </RoomInfoRight>
                   </RoomCard>
                 ))}
@@ -488,7 +494,7 @@ const FacilityItem = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   &::before {
-    content: '✓';
+    content: '✔';
     margin-right: 7px;
   }
 `;
@@ -534,20 +540,20 @@ const RoomInfo = styled.div`
 `;
 
 const QuotesL = styled(RiDoubleQuotesL)`
-  color: var(--gray-600);
+  color: var(--gray-500);
   margin: 5px 0;
   font-size: 20px;
 `;
 
 const QuotesR = styled(RiDoubleQuotesR)`
-  color: var(--gray-600);
+  color: var(--gray-500);
   margin-top: 10px;
   font-size: 20px;
 `;
 
 const Queen = styled(GiChessQueen)`
   color: var(--gray-700);
-  font-size: 60px;
+  font-size: 50px;
 `;
 
 const ReviewContent = styled.div`
@@ -571,7 +577,7 @@ const ReviewText = styled.p`
 `;
 
 const ReviewCard = styled.div`
-  padding: 10px;
+  padding: 12px;
   border-radius: 15px;
   width: 500px;
   margin-right: 20px;
@@ -592,6 +598,7 @@ const ReviewDate = styled.p`
   font-size: 14px;
   font-weight: bold;
   color: var(--gray-700);
+  padding-right: 5px;
 `;
 
 const Text = styled.span`
@@ -599,7 +606,7 @@ const Text = styled.span`
   padding: 0px 10px;
   border-radius: 20px;
   color: white;
-  background: #ffc107;
+  background: #ff7b92;
 `;
 
 const Section = styled.div`
@@ -617,7 +624,7 @@ const SeeAllButton = styled.button`
 `;
 
 const Detail = styled.button`
-  color: var(--gray-700);
+  color: var(--gray-600);
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
