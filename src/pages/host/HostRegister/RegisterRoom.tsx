@@ -336,17 +336,13 @@ const RegisterRoom = () => {
       let response: RoomResponse;
       if (roomId) {
         response = await fetchCall(
-          `${BASE_URL}/register/room`,
+          `/hosts/accommodations/{accommodationId}/rooms/{roomId}`,
           'put',
           formData,
         );
         alert('숙소 정보가 수정되었습니다.');
       } else {
-        response = await fetchCall(
-          `${BASE_URL}/register/room`,
-          'post',
-          formData,
-        );
+        response = await fetchCall(`/hosts/rooms`, 'post', formData);
         alert('숙소 정보가 등록되었습니다.');
         setRoomId(response.data.id);
       }
@@ -359,7 +355,7 @@ const RegisterRoom = () => {
     const fetchRoomData = async () => {
       try {
         const response: RoomResponse = await fetchCall(
-          `${BASE_URL}/register/room`,
+          `/hosts/rooms/{roomId}`,
           'get',
         );
         const room = response.data;

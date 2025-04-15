@@ -30,24 +30,22 @@ interface ButtonProps {
 }
 
 interface AccommodationResponse {
-  data: {
-    id: string;
-    name: string;
-    type: string;
-    description: string | null;
-    address: {
-      area: string;
-      town: string;
-    };
-    detailedAddress: string | null;
-    latitude: number | null;
-    longitude: number | null;
-    thumbnail: string | null;
-    additionalImages: string[];
-    facilityTypes: string[];
-    petFacilityTypes: string[];
-    allowPetTypes: string[];
+  id: string;
+  name: string;
+  type: string;
+  description: string | null;
+  address: {
+    area: string;
+    town: string;
   };
+  detailedAddress: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  thumbnail: string | null;
+  additionalImages: string[];
+  facilityTypes: string[];
+  petFacilityTypes: string[];
+  allowPetTypes: string[];
 }
 
 const facility = [
@@ -77,7 +75,6 @@ const petFacility = [
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
 const RegisterAccommodation = () => {
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [detailedAddress, setDetailedAddress] = useState('');
@@ -275,46 +272,78 @@ const RegisterAccommodation = () => {
         return;
       }
 
+      const ACCOMMODATION_MAP = {
+        '호텔 리조트': 'HOTEL_RESORT',
+        풀빌라: 'FULL_VILLA',
+        펜션: 'PENSION',
+        독채: 'DETACHED_HOUSE',
+      };
+      const FACILITY_TYPES = {
+        '무료 주차': 'FREE_PARKING',
+        노래방: 'KARAOKE_ROOM',
+        피트니스: 'FITNESS',
+        족구장: 'FOOT_VOLLEYBALL_COURT',
+        주차장: 'PARKING_LOT',
+        조식: 'BREAKFAST',
+        '픽업 서비스': 'PICKUP',
+        바베큐: 'BARBECUE',
+        유료주차: 'PAID_PARKING',
+        '공용 수영장': 'PUBLIC_SWIMMING_POOL',
+        편의점: 'CONVENIENCE_STORE',
+        와이파이: 'WIFI',
+      };
+      const PETFACILITY_TYPE = {
+        샤워장: 'SHOWER_ROOM',
+        '대형 운동장': 'EXERCISE_AREA',
+        '돌봄 서비스': 'CARE_SERVICE',
+        '인근 동물병원': 'NEARBY_HOSPITAL',
+        '펜스 설치 공간': 'FENCE_AREA',
+        '펫 푸드 제공': 'PET_FOOD',
+        드라이룸: 'DRY_ROOM',
+        놀이터: 'PLAYGROUND',
+        수영장: 'SWIMMING_POOL',
+      };
+
+      const ALLOWPET_TYPES = {
+        대형견: 'LARGE_DOG',
+        중형견: 'MEDIUM_DOG',
+        소형견: 'SMALL_DOG',
+        고양이: 'CAT',
+      };
+
       const formData = new FormData();
-      formData.append('name', name);
-      formData.append('type', accommodationType || '');
-      formData.append(
-        'address',
-        `${address.areaAddress} ${address.townAddress}`,
+
+      const blob = new Blob(
+        [
+          JSON.stringify({
+            name,
+            type: ACCOMMODATION_MAP['호텔 리조트'],
+            address: `${address.areaAddress} ${address.townAddress}`,
+            detailedAddress,
+            description,
+            latitude: latitude?.toString() || '',
+            longitude: longitude?.toString() || '',
+            facilityTypes: FACILITY_TYPES['무료 주차'],
+            petFacilityTypes: PETFACILITY_TYPE['샤워장'],
+            allowPetTypes: ALLOWPET_TYPES['대형견'],
+          }),
+        ],
+        {
+          type: 'application/json',
+        },
       );
-      formData.append('detailedAddress', detailedAddress);
-      formData.append('description', description);
-      formData.append('latitude', latitude?.toString() || '');
-      formData.append('longitude', longitude?.toString() || '');
-      formData.append('facilityTypes', JSON.stringify(selectedFacility));
-      formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
-      formData.append('allowPetTypes', JSON.stringify(selectedAllowPet));
-
-      if (thumbnail) {
-        formData.append('thumbnail', thumbnail);
-      }
-
-      additionalImages.forEach((image, index) => {
-        formData.append(`additionalImages[${index}]`, image);
-      });
+      formData.append('request', blob);
+      formData.append('thumbnail', thumbnail);
 
       try {
         let response: AccommodationResponse;
         if (accommodationId) {
-          response = await fetchCall(
-            `${BASE_URL}/register-accommodation`,
-            'put',
-            formData,
-          );
+          response = await fetchCall(`/hosts/accommodations`, 'put', formData);
           alert('숙소 정보가 수정되었습니다.');
         } else {
-          response = await fetchCall(
-            `${BASE_URL}/register-accommodation`,
-            'post',
-            formData,
-          );
+          response = await fetchCall(`/hosts/accommodations`, 'post', formData);
           alert('숙소 정보가 등록되었습니다.');
-          setAccommodationId(response.data.id);
+          setAccommodationId(response.id);
         }
       } catch (error) {
         console.error('API를 불러오는데 오류가 발생했습니다:', error);
@@ -326,12 +355,11 @@ const RegisterAccommodation = () => {
     const fetchAccommodationData = async () => {
       try {
         const response: AccommodationResponse = await fetchCall(
-          `${BASE_URL}/register-accommodation`,
+          `/hosts/accommodations`,
           'get',
         );
-
-        if (response.data) {
-          const accommodation = response.data;
+        if (response) {
+          const accommodation = response;
           setAccommodationId(accommodation.id);
           setName(accommodation.name);
           setAccommodationType(accommodation.type);
@@ -356,12 +384,8 @@ const RegisterAccommodation = () => {
       }
     };
 
-    if (!accommodationId) {
-      setRegistered(false);
-    } else {
-      fetchAccommodationData();
-    }
-  }, [accommodationId]);
+    fetchAccommodationData();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>
