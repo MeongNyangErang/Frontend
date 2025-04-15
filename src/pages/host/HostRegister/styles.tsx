@@ -20,10 +20,9 @@ export const SOptionSelectorWrapper = styled.div`
 export const SLabel = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 14px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  color: var(--gray-600);
+  font-size: 16px;
+  margin: 7px 0;
+  color: var(--gray-700);
 `;
 
 export const SLabelFile = styled.label`
@@ -38,7 +37,7 @@ export const SLabelFile = styled.label`
 export const SInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  height:40px;
+  height: 45px;
   padding: 8px 12px;
   margin-bottom: 5px;
   background-color: var(--gray-100);
@@ -81,7 +80,7 @@ export const SButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   margin: 30px 0;
-  height: 40px;
+  height: 45px;
   text-align: center;
   font-weight: bold;
   &:hover {
@@ -155,16 +154,15 @@ export const SSOptionSelectorWrapper = styled.div`
 export const SSLabel = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 14px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  color: var(--gray-600);
+  font-size: 16px;
+  margin: 7px 0;
+  color: var(--gray-700);
 `;
 
 export const SSLabelFile = styled.label`
   font-family: 'Noto Sans KR';
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 20px;
   padding-bottom: 10px;
   color: var(--gray-600);
@@ -173,7 +171,7 @@ export const SSLabelFile = styled.label`
 export const SSInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  height:40px;
+  height:45px;
   padding: 8px 12px;
   margin-bottom: 5px;
   border-radius: 4px;
@@ -229,7 +227,7 @@ export const SSButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   margin: 30px 0;
-  height: 40px;
+  height: 45px;
   text-align: center;
   font-weight: bold;
   &:hover {

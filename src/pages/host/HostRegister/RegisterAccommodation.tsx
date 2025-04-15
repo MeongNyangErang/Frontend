@@ -1,6 +1,7 @@
+import { fetchCall } from 'services/api';
 import React, { useState, useEffect } from 'react';
 import useHostRegister from '@hooks/page/useHostRegister';
-import RegisterAddress from 'api/RegisterAddress';
+import RegisterAddress from '@pages/host/HostRegister/RegisterAddress';
 import axios from 'axios';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader/index';
@@ -28,6 +29,27 @@ interface ButtonProps {
   selected: boolean;
 }
 
+interface AccommodationResponse {
+  data: {
+    id: string;
+    name: string;
+    type: string;
+    description: string | null;
+    address: {
+      area: string;
+      town: string;
+    };
+    detailedAddress: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    thumbnail: string | null;
+    additionalImages: string[];
+    facilityTypes: string[];
+    petFacilityTypes: string[];
+    allowPetTypes: string[];
+  };
+}
+
 const facility = [
   '편의점',
   '공용 수영장',
@@ -43,9 +65,9 @@ const facility = [
 ];
 const petFacility = [
   '대형 운동장',
-  '전용 마당',
   '놀이터',
   '샤워장',
+  '드라이룸',
   '수영장',
   '펜스 설치 공간',
   '돌봄 서비스',
@@ -88,6 +110,8 @@ const RegisterAccommodation = () => {
   const [imageUploaded, setImageUploaded] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [accommodationId, setAccommodationId] = useState<string | null>(null);
+  const [addressError, setAddressError] = useState('');
+  const [infoError, setInfoError] = useState('');
 
   const POSTCODE_SCRIPT_URL =
     '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -226,88 +250,86 @@ const RegisterAccommodation = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description) {
-      alert('숙소 정보를 입력해주세요.');
-      return;
+    if (!description) {
+      setInfoError('숙소 설명을 입력해주세요.');
+    } else {
+      setInfoError('');
     }
+
     if (!detailedAddress) {
-      alert('상세주소를 입력해주세요.');
-      return;
-    }
-    if (
-      selectedFacility.length === 0 ||
-      selectedPetFacility.length === 0 ||
-      selectedAllowPet.length === 0
-    ) {
-      alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
-      return;
-    }
-    if (!thumbnail) {
-      alert('대표이미지는 필수입니다.');
-      return;
-    }
+      setAddressError('주소를 입력해주세요.');
+    } else {
+      setAddressError('');
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('type', accommodationType || '');
-    formData.append('address', `${address.areaAddress} ${address.townAddress}`);
-    formData.append('detailedAddress', detailedAddress);
-    formData.append('description', description);
-    formData.append('latitude', latitude?.toString() || '');
-    formData.append('longitude', longitude?.toString() || '');
-    formData.append('facilityTypes', JSON.stringify(selectedFacility));
-    formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
-    formData.append('allowPetTypes', JSON.stringify(selectedAllowPet));
+      if (
+        selectedFacility.length === 0 ||
+        selectedPetFacility.length === 0 ||
+        selectedAllowPet.length === 0
+      ) {
+        alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
+        return;
+      }
 
-    if (thumbnail) {
-      formData.append('thumbnail', thumbnail);
-    }
+      if (!thumbnail) {
+        alert('대표이미지는 필수입니다.');
+        return;
+      }
 
-    additionalImages.forEach((image, index) => {
-      formData.append(`additionalImages[${index}]`, image);
-    });
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('type', accommodationType || '');
+      formData.append(
+        'address',
+        `${address.areaAddress} ${address.townAddress}`,
+      );
+      formData.append('detailedAddress', detailedAddress);
+      formData.append('description', description);
+      formData.append('latitude', latitude?.toString() || '');
+      formData.append('longitude', longitude?.toString() || '');
+      formData.append('facilityTypes', JSON.stringify(selectedFacility));
+      formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
+      formData.append('allowPetTypes', JSON.stringify(selectedAllowPet));
 
-    try {
-      let response;
-      if (accommodationId) {
-        response = await axios.put(
-          `${BASE_URL}/register/accommodation`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
+      if (thumbnail) {
+        formData.append('thumbnail', thumbnail);
+      }
 
-        if (response?.status === 200) {
+      additionalImages.forEach((image, index) => {
+        formData.append(`additionalImages[${index}]`, image);
+      });
+
+      try {
+        let response: AccommodationResponse;
+        if (accommodationId) {
+          response = await fetchCall(
+            `${BASE_URL}/register-accommodation`,
+            'put',
+            formData,
+          );
           alert('숙소 정보가 수정되었습니다.');
-        }
-      } else {
-        response = await axios.post(
-          `${BASE_URL}/register/accommodation`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        if (response?.status === 200) {
+        } else {
+          response = await fetchCall(
+            `${BASE_URL}/register-accommodation`,
+            'post',
+            formData,
+          );
           alert('숙소 정보가 등록되었습니다.');
           setAccommodationId(response.data.id);
         }
+      } catch (error) {
+        console.error('API를 불러오는데 오류가 발생했습니다:', error);
       }
-    } catch (error) {
-      console.error('API를 불러오는데 오류가 발생했습니다:', error);
     }
   };
 
   useEffect(() => {
     const fetchAccommodationData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/register/accommodation`);
-        console.log(response);
+        const response: AccommodationResponse = await fetchCall(
+          `${BASE_URL}/register-accommodation`,
+          'get',
+        );
+
         if (response.data) {
           const accommodation = response.data;
           setAccommodationId(accommodation.id);
@@ -323,9 +345,9 @@ const RegisterAccommodation = () => {
           setLongitude(accommodation.longitude);
           setThumbnailPreview(accommodation.thumbnail);
           setAdditionalImagesPreview(accommodation.additionalImages || []);
-          selectFacility(accommodation.facilityTypes || []);
-          selectPetFacility(accommodation.petFacilityTypes || []);
-          selectAllowPet(accommodation.allowPetTypes || []);
+          (accommodation.facilityTypes || []).forEach(selectFacility);
+          (accommodation.petFacilityTypes || []).forEach(selectPetFacility);
+          (accommodation.allowPetTypes || []).forEach(selectAllowPet);
           setRegistered(true);
         }
       } catch (error) {
@@ -362,6 +384,7 @@ const RegisterAccommodation = () => {
             maxLength={2000}
           />
           <SSCharacterCount>{description.length}/2000</SSCharacterCount>
+          {infoError && <SErrorMessage>{infoError}</SErrorMessage>}
         </SSDescriptionWrapper>
         <SSLabel>주소</SSLabel>
         <RegisterAddress
@@ -380,6 +403,8 @@ const RegisterAccommodation = () => {
           value={detailedAddress}
           onChange={handleDetailAddress}
         />
+        {addressError && <SErrorMessage>{addressError}</SErrorMessage>}
+
         <SSLabel>숙소 유형</SSLabel>
         <ButtonContainer>
           <CheckInput
@@ -480,7 +505,7 @@ export default RegisterAccommodation;
 const CheckInput = styled.button<ButtonProps>`
   background-color: #fff;
   border: 1px solid ${(props) => (props.selected ? '#f03e5e' : '#ccc')};
-  color: var(--gray-600);
+  color: ${(props) => (props.selected ? '#f03e5e' : '#757575')};
   padding: 7px 10px;
   margin-bottom: 10px;
   margin-right: 5px;

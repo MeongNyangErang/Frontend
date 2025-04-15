@@ -130,16 +130,16 @@ export const handlers = [
       return HttpResponse.json({ message: '예약이 완료되었습니다' });
     },
   ),
-  http.post(`${BASE_URL}/register/accommodation`, async () => {
+  http.post(`${BASE_URL}/register-accommodation`, async () => {
     return HttpResponse.json({
       message: '숙소 등록이 완료되었습니다',
       id: 'accommodationId',
     });
   }),
-  http.put(`${BASE_URL}/register/accommodation`, async () => {
+  http.put(`${BASE_URL}/register-accommodation`, async () => {
     return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
   }),
-  http.get(`${BASE_URL}/register/accommodation`, async () => {
+  http.get(`${BASE_URL}/register-accommodation`, async () => {
     const accommodationData = {
       code: 200,
       id: '1',
@@ -405,4 +405,32 @@ export const handlers = [
       return HttpResponse.json({ message: '찜 등록 성공' });
     },
   ),
+  http.get(`${BASE_URL}/review-list`, async () => {
+    const ReviewList = {
+      userId: '김멍냥',
+      roomId: 2,
+      reviewId: 3,
+      roomName: '오션 더블A',
+      totalRating: 4.6,
+      imageUrls: ['https://i.imgur.com/TuefC4N.jpeg'],
+      content:
+        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+      createdAt: '2025-03-23',
+    };
+    return HttpResponse.json([ReviewList]);
+  }),
+  http.get(`${BASE_URL}/reservation-list`, async () => {
+    const ReservationList = {
+      reservationDate: '2025-04-11',
+      reservationName: '김멍냥',
+      reservatioPhoneNumber: '010-1234-2345',
+      peopleCount: '2',
+      petCount: '3',
+      hasVehicle: true,
+      totalPrice: 23000,
+      checkInDate: '2025-03-03',
+      checkOutDate: '2025-03-09',
+    };
+    return HttpResponse.json([ReservationList]);
+  }),
 ];

@@ -241,7 +241,8 @@ const SButton = styled.button`
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  height: 40px;
+  height: 45px;
+  font-size: 16px;
   text-align: center;
   font-weight: bold;
   margin-top: 20px;
