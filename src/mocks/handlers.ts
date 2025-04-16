@@ -457,6 +457,17 @@ export const handlers = [
     };
 
     return HttpResponse.json(response);
-
+  }),
+  http.get(`${BASE_URL}/common/recommendnonmember`, async () => {
+    const response = {
+      accommodationId: 1,
+      type: '호텔',
+      name: '펫프렌들리 리조트',
+      price: 120000,
+      totalRating: 4.5,
+      reviewCount: 85,
+      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+    };
+    return HttpResponse.json(response);
   }),
 ];

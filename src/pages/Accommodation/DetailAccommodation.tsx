@@ -4,7 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
-import { fetchCall } from '@services/api';
+import { FaRegHeart } from 'react-icons/fa';
+import { fetchCall } from 'services/api';
 
 interface DetailData {
   accommodationId: number;
@@ -132,17 +133,22 @@ const DetailAccommodation = () => {
     <Container>
       {accommodation && (
         <>
+          <IconContainer>
+            <Icon>
+              <Chat>호스트 채팅</Chat>
+              <RegHeart />
+            </Icon>
+          </IconContainer>
+
           <TumbnailImage src={accommodation.thumbnailUrl} />
           <AccommodationName>
             {accommodation.name}
             <Text>{accommodation.totalRating}</Text>
           </AccommodationName>
-
           <Title>{accommodation.type}</Title>
           {accommodation.allowedPets.map((v) => (
             <Title key={v}>{v}</Title>
           ))}
-
           <Section>
             <All>
               <Real>리얼 리뷰</Real>
@@ -175,7 +181,6 @@ const DetailAccommodation = () => {
               <p>아직 리뷰가 없습니다</p>
             )}
           </Section>
-
           <SectionTitle>객실선택</SectionTitle>
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>
@@ -244,14 +249,12 @@ const DetailAccommodation = () => {
           <Open onClick={handleShowMoreRooms}>
             {showAllRooms ? '접기' : '더보기'}
           </Open>
-
           <SectionTitle>숙소 소개</SectionTitle>
           <AccommodationDescription>
             <QuotesL /> <br />
             {accommodation.description} <br />
             <QuotesR />
           </AccommodationDescription>
-
           <ImageTitle>
             <Queen />
             <br />
@@ -269,7 +272,6 @@ const DetailAccommodation = () => {
           ) : (
             <p>이미지가 없습니다</p>
           )}
-
           <SectionTitle>숙소 편의시설</SectionTitle>
           <Facility>
             {accommodation.accommodationFacilities.map((facility, index) => (
@@ -282,7 +284,6 @@ const DetailAccommodation = () => {
               <FacilityItem key={index}>{facility}</FacilityItem>
             ))}
           </Facility>
-
           <SectionTitle>위치</SectionTitle>
           <Address>{accommodation.address}</Address>
           <Address>{accommodation.detailedAddress}</Address>
@@ -292,7 +293,6 @@ const DetailAccommodation = () => {
               {accommodation.longitude}
             </Address>
             */}
-
           <SectionTitle>취소 및 환불 규정</SectionTitle>
           <Refund>
             ■ 체크인일 기준 3일 전까지 : 100% 환불 <br />
@@ -319,6 +319,19 @@ const All = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const IconContainer = styled.div`
+  position: relative;
+`;
+
+const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;
 
 const Container = styled.div`
@@ -561,8 +574,30 @@ const Queen = styled(GiChessQueen)`
   font-size: 50px;
 `;
 
+const RegHeart = styled(FaRegHeart)`
+  font-size: 25px;
+  color: #f29c70;
+  &:hover {
+    color: #ff7f51;
+  }
+`;
+
+const Chat = styled.div`
+  margin-right: 6px;
+  border: 1px solid #f29c70;
+  color: #f29c70;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  white-space: nowrap;
+  &:hover {
+    color: #ff7f51;
+    border: 1px solid #ff7f51;
+  }
+`;
+
 const ReviewContent = styled.div`
-  width: 300px;
   font-size: 1rem;
   color: #666;
   display: flex;

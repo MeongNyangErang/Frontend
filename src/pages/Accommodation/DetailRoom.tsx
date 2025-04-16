@@ -8,7 +8,7 @@ import { fetchCall } from '@services/api';
 
 interface DetailRoomData {
   name: String;
-  description: String;
+  description: string;
   standardPeopleCount: number;
   maxPeopleCount: number;
   standardPetCount: number;
@@ -26,6 +26,7 @@ interface DetailRoomData {
 }
 
 const DetailRoom = () => {
+  const navigate = useNavigate();
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
