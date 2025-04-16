@@ -1,4 +1,5 @@
 import { memo, useEffect, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
@@ -40,7 +41,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     isLoading,
     error,
   } = useSearchAccommodations(currentQuery, cursor, currentFilter);
-
+  console.log('content change', content);
   const updateCursor = useCallback(() => {
     if (content) {
       const id = content[content.length - 1].accommodationId;
@@ -54,14 +55,15 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   );
 
   useEffect(() => {
-    if (!content) return;
-    setSearchedData((prev) => [...prev, ...content]);
-  }, [content]);
-
-  useEffect(() => {
+    console.log('im here');
     setSearchedData([]);
     setCursor(null);
   }, [currentQuery, currentFilter]);
+
+  useEffect(() => {
+    if (!content) return;
+    setSearchedData((prev) => [...prev, ...content]);
+  }, [content]);
 
   return (
     <SectionLayout>
@@ -78,21 +80,24 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
               accommodationType,
               accommodationId,
               accommodationName,
-              thumbnailImageUrl,
+              thumbnailUrl,
               totalRating,
               price,
+              standardPetCount,
+              standardPeopleCount,
             }) => {
               return (
                 <SItem
                   key={accommodationId}
+                  onClick={() => {}}
                   to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
                 >
                   <SImageArea>
                     <SItemTypeBadge $type={accommodationType}>
                       {ACCOMMODATION_TYPE_MAP[accommodationType]}
                     </SItemTypeBadge>
-                    {thumbnailImageUrl ? (
-                      <img src={thumbnailImageUrl} alt={accommodationName} />
+                    {thumbnailUrl ? (
+                      <img src={thumbnailUrl} alt={accommodationName} />
                     ) : (
                       <div>NO IMAGE</div>
                     )}
@@ -108,10 +113,12 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                     <SPriceBox>
                       <SCapacity>
                         <div>
-                          <FaUser />2
+                          <FaUser />
+                          {standardPeopleCount}
                         </div>
                         <div>
-                          <FaPaw />2
+                          <FaPaw />
+                          {standardPetCount}
                         </div>
                       </SCapacity>
                       <SPrice $line={1}>

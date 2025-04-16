@@ -83,7 +83,7 @@ const hashTag = [
   '아늑한',
   '모던한',
   '금연숙소',
-  '프레스트뷰',
+  '포레스트뷰',
   '감성숙소',
 ];
 
@@ -109,7 +109,7 @@ const ROOM_FACILITY_TYPE_MAP = {
   와이파이: 'WIFI',
   욕실용품: 'BATHROOM_SUPPLIES',
   드라이기: 'DRYER',
-  바베큐: 'BARBECUE',
+  바비큐: 'BARBECUE',
   '객실 내 취사': 'POSSIBLE_COOK_IN_ROOM',
 };
 
@@ -121,9 +121,9 @@ const ROOM_PET_FACILITY_TYPE_MAP = {
   침대: 'BED',
   '미끄럼 방지 바닥': 'ANTI_SLIP_FLOOR',
   '펜스 설치 공간': 'FENCE_AREA',
-  캣타워: 'CAT_TOWER',
-  캣휠: 'CAT_WHEEL',
-  브러쉬: 'BRUSH',
+  '캣 타워': 'CAT_TOWER',
+  '캣 휠': 'CAT_WHEEL',
+  '그루밍 브러쉬': 'BRUSH',
   '강아지 계단': 'PET_STEPS',
 };
 
@@ -368,6 +368,8 @@ const RegisterRoom = () => {
       facilityTypes,
       petFacilityTypes,
     } as any;
+
+    console.log(data, 'data');
 
     if (roomId) data['roomId'] = roomId;
 

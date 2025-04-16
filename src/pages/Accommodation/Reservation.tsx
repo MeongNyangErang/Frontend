@@ -110,11 +110,8 @@ const Reservation = () => {
         totalPrice: sanitizedTotalPrice,
       };
 
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-      const response = await fetchCall(
-        `${BASE_URL}/accommodation/:accommodationId/reservation`,
-        'post',
+      const response = await axios.post(
+        `accommodation/:accommodationId/reservation`,
         paymentData,
       );
       if (response.status === 200) {
@@ -194,7 +191,7 @@ const Reservation = () => {
         </HalfPay>
         <SAmountText>{totalPrice}원</SAmountText>
       </Wrappers>
-      <SButton onClick={handlePayment}>결제하기</SButton>
+      <SButton onClick={handlePayment}>예약하기</SButton>
     </SFieldset>
   );
 };

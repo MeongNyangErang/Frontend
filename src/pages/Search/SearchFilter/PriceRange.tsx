@@ -27,7 +27,7 @@ const PriceRange = ({ currentValue, onChange }: PriceRangeProps) => {
       if (target && !priceArea.contains(target)) {
         const value1 = Number(currentValue[0]);
         const value2 = Number(currentValue[1]);
-        if (value1 > value2) {
+        if (value1 > value2 && !!value2 && !!value1) {
           onChange('maxPrice', currentValue[0]);
         }
       }

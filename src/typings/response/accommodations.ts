@@ -7,7 +7,7 @@ export type AccommodationType =
 export interface Accommodation {
   accommodationId: number;
   accommodationName: string;
-  thumbnailImageUrl: string;
+  thumbnailUrl: string;
   address: string;
   totalRating: number;
   price: number;
