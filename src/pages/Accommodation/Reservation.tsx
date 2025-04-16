@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Header from '@components/common/RegisterHeader/index';
+import { fetchCall } from 'services/api';
 
 interface ButtonProps {
   selected: boolean;
@@ -31,10 +31,6 @@ const Reservation = () => {
       !petCount ||
       !totalPrice
     ) {
-      /*
-      // 값 없을 경우 경로 이동
-      navigate('/');
-      */
     }
   }, [
     roomId,
@@ -113,10 +109,12 @@ const Reservation = () => {
         hasvehicle,
         totalPrice: sanitizedTotalPrice,
       };
+
       const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-      const response = await axios.post(
+      const response = await fetchCall(
         `${BASE_URL}/accommodation/:accommodationId/reservation`,
+        'post',
         paymentData,
       );
       if (response.status === 200) {

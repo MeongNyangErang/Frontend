@@ -35,8 +35,8 @@ const AccommodationReview = lazy(
   () => import('@pages/Accommodation/RoomReview'),
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
-
 const Chat = lazy(() => import('@pages/Chat/index'));
+const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
 
 const AppRouter = () => {
   return (
@@ -62,7 +62,7 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-
+          <Route path="common/recommendnonmember" element={<Recommend />} />
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />
@@ -75,7 +75,6 @@ const AppRouter = () => {
               <Route path="wishlist" element={<UserWishList />} />
             </Route>
           </Route>
-
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
@@ -87,7 +86,6 @@ const AppRouter = () => {
               <Route path="room-list" element={<HostRoomList />} />
             </Route>
           </Route>
-
           <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>
             <Route path="/chat" element={<Chat />} />
             <Route path="/chat/:chatRoomId" element={<Chat />} />

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
 import { FaRegHeart } from 'react-icons/fa';
+import { fetchCall } from 'services/api';
 
 interface DetailData {
   accommodationId: number;
@@ -84,26 +84,25 @@ const DetailAccommodation = () => {
   useEffect(() => {
     const getAccommodationDetails = async () => {
       try {
-        const response = await axios.get(
+        const response = await fetchCall(
           `${BASE_URL}/register/detailAccommodation`,
+          'get',
         );
-        console.log(response.data);
-        if (response.status === 200) {
-          const accommodationData = response.data.detailAccommodationData;
 
-          const sortedReviews = accommodationData.reviews.sort(
-            (a: ReviewData, b: ReviewData) => {
-              const dateA = new Date(a.createdAt).getTime();
-              const dateB = new Date(b.createdAt).getTime();
-              return dateB - dateA;
-            },
-          );
+        const accommodationData = response.data.detailAccommodationData;
 
-          setAccommodation({
-            ...response.data.detailAccommodationData,
-            review: sortedReviews,
-          });
-        }
+        const sortedReviews = accommodationData.reviews.sort(
+          (a: ReviewData, b: ReviewData) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA;
+          },
+        );
+
+        setAccommodation({
+          ...response.data.detailAccommodationData,
+          review: sortedReviews,
+        });
       } catch (error) {
         console.log('숙소 정보를 가져오는 데 오류가 발생했습니다.');
       } finally {
