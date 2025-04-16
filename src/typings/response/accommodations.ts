@@ -6,17 +6,24 @@ export type AccommodationType =
 
 export interface Accommodation {
   accommodationId: number;
-  name: string;
+  accommodationName: string;
   thumbnailImageUrl: string;
+  address: string;
   totalRating: number;
-  minPrice: number;
-  type: AccommodationType;
+  price: number;
+  accommodationType: AccommodationType;
+  standardPeopleCount: number;
+  standardPetCount: number;
 }
 
 export interface SearchAccommodationsData {
   content: Accommodation[];
-  nextCursor: number;
-  hasNext: boolean;
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
 }
 
 export interface SearchAccommodationsResponse {

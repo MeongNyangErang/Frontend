@@ -1,38 +1,39 @@
 import { fetchCall } from './api';
-import { SearchQuery, SearchFilterType } from '@typings/search';
+import { SearchBaseType, SearchFilterType } from '@typings/search';
 import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';
 
 export const searchAccommodations = async (
-  query: SearchQuery,
+  query: SearchBaseType,
   cursor: number | null,
   filter?: SearchFilterType,
 ) => {
-  const isFilterEmpty =
-    !filter ||
-    Object.values(filter).some((v) => {
-      if (Array.isArray(v)) {
-        return v.length === 0;
-      }
-      return v === '';
-    });
-  const queries = { ...query, ...(isFilterEmpty ? {} : filter) };
-  const params = new URLSearchParams();
-  for (let key in queries) {
-    const typedKey = key as keyof typeof queries;
-    const value = queries[typedKey];
-    if (value && value.length > 0) {
+  const data = { ...query, ...(filter ? filter : {}) } as any;
+  const entries = Object.entries(data).map(([key, value]) => {
+    const mapObj = FILTER_VALUE_MAP[key as keyof typeof FILTER_VALUE_MAP];
+    if (mapObj) {
       if (Array.isArray(value)) {
-        value.forEach((el) => params.append(key, el));
+        const mappedValue = value.map((v) => mapObj[v as keyof typeof mapObj]);
+        return [key, mappedValue];
       } else {
-        params.append(key, value);
+        const mappedValue = mapObj[value as keyof typeof mapObj];
+        return [key, mappedValue || ''];
       }
     }
-  }
+    return [key, value];
+  });
+  const mappedData = Object.fromEntries(entries);
+  if (cursor) data.cursor = cursor;
 
-  if (cursor) params.append('cursor', cursor.toString());
-  const baseUrl = `users/accommodations/search?${params.toString()}`;
+  const blob = new Blob([JSON.stringify(mappedData)], {
+    type: 'application/json',
+  });
+  const formData = new FormData();
+  formData.append('request', blob);
 
-  return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'get').then(
-    (v) => v.data,
-  );
+  return await fetchCall<SearchAccommodationsResponse>(
+    'search/accommodations',
+    'post',
+    formData,
+  ).then((v) => v.data);
 };

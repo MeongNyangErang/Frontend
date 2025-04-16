@@ -12,6 +12,7 @@ import Loader from '@components/common/Loader';
 import { Accommodation } from '@typings/response/accommodations';
 
 import {
+  SMessageArea,
   SItems,
   SItem,
   SItemTypeBadge,
@@ -35,18 +36,21 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
   const {
-    data: { hasNext, nextCursor, content } = {},
+    data: { last, content } = {},
     isLoading,
     error,
   } = useSearchAccommodations(currentQuery, cursor, currentFilter);
 
   const updateCursor = useCallback(() => {
-    if (nextCursor) setCursor(nextCursor);
-  }, [nextCursor]);
+    if (content) {
+      const id = content[content.length - 1].accommodationId;
+      setCursor(id);
+    }
+  }, [content]);
 
   const observerTargetRef = useInfiniteScroll(
     updateCursor,
-    !isLoading && !!hasNext,
+    !isLoading && !error && !last,
   );
 
   useEffect(() => {
@@ -59,65 +63,71 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     setCursor(null);
   }, [currentQuery, currentFilter]);
 
-  if (error) return <MessageBox>{error.message}</MessageBox>;
-
   return (
     <SectionLayout>
-      <SItems>
-        {searchedData.map(
-          ({
-            type,
-            accommodationId,
-            name,
-            thumbnailImageUrl,
-            totalRating,
-            minPrice,
-          }) => {
-            return (
-              <SItem
-                key={accommodationId}
-                to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
-              >
-                <SImageArea>
-                  <SItemTypeBadge $type={type}>
-                    {ACCOMMODATION_TYPE_MAP[type]}
-                  </SItemTypeBadge>
-                  {thumbnailImageUrl ? (
-                    <img src={thumbnailImageUrl} alt={name} />
-                  ) : (
-                    <div>NO IMAGE</div>
-                  )}
-                </SImageArea>
-                <STextArea>
-                  <SNameBox>
-                    <SName $line={1}>{name}</SName>
-                    <SRating>
-                      <FaStar />
-                      {totalRating.toString().padEnd(3, '.0')}
-                    </SRating>
-                  </SNameBox>
-                  <SPriceBox>
-                    <SCapacity>
-                      <div>
-                        <FaUser />2
-                      </div>
-                      <div>
-                        <FaPaw />2
-                      </div>
-                    </SCapacity>
-                    <SPrice $line={1}>
-                      <span>1박/</span>
-                      {minPrice.toLocaleString()}원~
-                    </SPrice>
-                  </SPriceBox>
-                </STextArea>
-              </SItem>
-            );
-          },
+      <SMessageArea>
+        {error && <MessageBox>{error.message}</MessageBox>}
+        {!error && !isLoading && searchedData.length === 0 && (
+          <MessageBox>검색 결과가 없습니다.</MessageBox>
         )}
-      </SItems>
+      </SMessageArea>
+      {!error && !isLoading && (
+        <SItems>
+          {searchedData.map(
+            ({
+              accommodationType,
+              accommodationId,
+              accommodationName,
+              thumbnailImageUrl,
+              totalRating,
+              price,
+            }) => {
+              return (
+                <SItem
+                  key={accommodationId}
+                  to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
+                >
+                  <SImageArea>
+                    <SItemTypeBadge $type={accommodationType}>
+                      {ACCOMMODATION_TYPE_MAP[accommodationType]}
+                    </SItemTypeBadge>
+                    {thumbnailImageUrl ? (
+                      <img src={thumbnailImageUrl} alt={accommodationName} />
+                    ) : (
+                      <div>NO IMAGE</div>
+                    )}
+                  </SImageArea>
+                  <STextArea>
+                    <SNameBox>
+                      <SName $line={1}>{accommodationName}</SName>
+                      <SRating>
+                        <FaStar />
+                        {totalRating.toString().padEnd(3, '.0')}
+                      </SRating>
+                    </SNameBox>
+                    <SPriceBox>
+                      <SCapacity>
+                        <div>
+                          <FaUser />2
+                        </div>
+                        <div>
+                          <FaPaw />2
+                        </div>
+                      </SCapacity>
+                      <SPrice $line={1}>
+                        <span>1박/</span>
+                        {price.toLocaleString()}원~
+                      </SPrice>
+                    </SPriceBox>
+                  </STextArea>
+                </SItem>
+              );
+            },
+          )}
+        </SItems>
+      )}
       <SItemsBottom ref={observerTargetRef}>
-        <Loader loading={isLoading} color="grayBorder" size={8} />
+        {isLoading && <Loader loading color="grayBorder" size={8} />}
       </SItemsBottom>
     </SectionLayout>
   );

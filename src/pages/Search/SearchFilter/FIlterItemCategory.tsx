@@ -1,18 +1,18 @@
 import { memo } from 'react';
-import { SItemName } from './styles';
+import { SItemCategory } from './styles';
 import { FaPaw } from 'react-icons/fa';
 
-const FilterItemName = ({ category }: { category: string }) => {
+const FilterItemCategory = ({ category }: { category: string }) => {
   const typedCategory = category as keyof typeof IconMap;
   return (
-    <SItemName>
+    <SItemCategory>
       {category}
       {IconMap[typedCategory] && <i>{IconMap[typedCategory]}</i>}
-    </SItemName>
+    </SItemCategory>
   );
 };
 
-export default memo(FilterItemName);
+export default memo(FilterItemCategory);
 
 const IconMap = {
   '동반 반려동물': <FaPaw />,

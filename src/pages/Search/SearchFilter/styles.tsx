@@ -72,7 +72,7 @@ const SResetButton = styled.button`
 
 const SScrollArea = styled.div`
   flex: 1;
-  padding-bottom: ${contorlBoxSize};
+  padding-bottom: calc(${contorlBoxSize});
   overflow-y: auto;
   position: relative;
 
@@ -125,7 +125,7 @@ const SFilterItems = styled.div`
 `;
 
 const SFilterItem = styled.div`
-  padding-top: 20px;
+  padding: 22px 0 32px;
   border-top: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
 
   &:first-child {
@@ -133,10 +133,11 @@ const SFilterItem = styled.div`
   }
 `;
 
-const SItemName = styled.div`
+const SItemCategory = styled.div`
   display: flex;
   align-items: center;
   gap: 2px;
+  margin-bottom: 22px;
   font-size: 16px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.gray700};
@@ -147,9 +148,18 @@ const SItemName = styled.div`
   }
 `;
 
-const SItemContent = styled.div`
-  padding: 20px 0 28px;
+const SItemName = styled.div`
+  margin: 22px 0 12px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray500};
+
+  &:last-child {
+    margin-top: -10px;
+    background-color: red;
+  }
 `;
+
+const SItemContent = styled.div``;
 
 export {
   SContainer,
@@ -161,6 +171,7 @@ export {
   SNavIndicator,
   SFilterItems,
   SFilterItem,
-  SItemName,
+  SItemCategory,
   SItemContent,
+  SItemName,
 };
