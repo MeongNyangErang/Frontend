@@ -19,7 +19,6 @@ const useChatList = () => {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (!lastPage.last) return lastPage.page + 1;
-
       return undefined;
     },
   });

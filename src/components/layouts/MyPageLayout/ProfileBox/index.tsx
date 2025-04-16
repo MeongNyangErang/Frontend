@@ -43,7 +43,6 @@ const ProfileBox = ({ email, role }: ProfileBoxProps) => {
     );
   }
 
-  console.log(data);
   return (
     <SProfileBoxWrap>
       <SProfileArea>

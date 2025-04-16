@@ -29,6 +29,11 @@ const DetailAccommodation = lazy(
   () => import('@pages/Accommodation/DetailAccommodation'),
 );
 
+const HostReservationList = lazy(
+  () => import('@pages/host/HostList/ReservationList'),
+);
+const HostReviewList = lazy(() => import('@pages/host/HostList/ReviewList'));
+
 const Search = lazy(() => import('@pages/Search'));
 const DetailRoom = lazy(() => import('@pages/Accommodation/DetailRoom'));
 const AccommodationReview = lazy(
@@ -85,6 +90,8 @@ const AppRouter = () => {
               />
               <Route path="register-room" element={<RegisterRoom />} />
               <Route path="room-list" element={<HostRoomList />} />
+              <Route path="reservation" element={<HostReservationList />} />
+              <Route path="reviews" element={<HostReviewList />} />
             </Route>
           </Route>
 

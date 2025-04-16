@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import Header from '@components/common/RegisterHeader/index';
+import { fetchCall } from '@services/api';
 
 interface ReviewList {
   userId: number;
@@ -26,14 +27,8 @@ const ReviewList = () => {
     if (!hasMore) return;
 
     try {
-      const response = await axios.get(`${BASE_URL}/review-list`, {
-        params: {
-          size: 10,
-          ...(lastReviewId !== null && { lastReviewId }),
-        },
-      });
-
-      const newReviews = response.data;
+      const response = (await fetchCall(`hosts/reviews`, 'get')) as any;
+      const newReviews = response?.content;
       setReviews((prev) => [...prev, ...newReviews]);
 
       if (newReviews.length < 10) {

@@ -18,32 +18,27 @@ interface ReservationList {
   checkOutDate: string;
 }
 
+const FILTER = ['RESERVED', 'COMPLETED', 'CANCELED'] as const;
+
 const ReservationList = () => {
   const [reservationList, setReservationList] = useState<ReservationList[]>([]);
   const [lastReservationId, setLastReservationId] = useState<string | null>(
     null,
   );
   const [hasMore, setHasMore] = useState(true);
-  const [selectedFilter, setSelectedFilter] = useState<string>('before');
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
 
   const fetchRooms = async () => {
     if (!hasMore) return;
 
+    const cursor = lastReservationId ? lastReservationId : '';
     try {
-      const response = await fetchCall<ReservationList[]>(
-        `${BASE_URL}/reservation-list`,
+      const response = (await fetchCall(
+        `hosts/reservations?status=${selectedFilter}&cursor=${cursor}`,
         'get',
-        {
-          params: {
-            size: 10,
-            status: selectedFilter,
-            ...(lastReservationId && { lastReservationId }),
-          },
-        },
-      );
+      )) as any;
 
-      setReservationList((prev) => [...prev, ...response]);
+      setReservationList((prev) => [...prev, ...response.content]);
 
       if (response.length < 10) {
         setHasMore(false);
@@ -75,20 +70,20 @@ const ReservationList = () => {
       <Header title="예약 목록" />
       <FilterButtons>
         <FilterButton
-          selected={selectedFilter === 'before'}
-          onClick={() => handleFilterClick('before')}
+          selected={selectedFilter === 'RESERVED'}
+          onClick={() => handleFilterClick('RESERVED')}
         >
           이용 전
         </FilterButton>
         <FilterButton
-          selected={selectedFilter === 'done'}
-          onClick={() => handleFilterClick('done')}
+          selected={selectedFilter === 'COMPLETED'}
+          onClick={() => handleFilterClick('COMPLETED')}
         >
           이용 완료
         </FilterButton>
         <FilterButton
-          selected={selectedFilter === 'cancelled'}
-          onClick={() => handleFilterClick('cancelled')}
+          selected={selectedFilter === 'CANCELED'}
+          onClick={() => handleFilterClick('CANCELED')}
         >
           취소됨
         </FilterButton>
