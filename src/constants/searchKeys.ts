@@ -8,8 +8,14 @@ export const SEARCH_KEYS = {
   },
   FILTER: {
     ACCOMMODATION_TYPE: 'accommodationType',
-    USER_RATING: 'userRating',
-    PET_TYPE: 'petType',
-    TAG: 'tag',
+    MIN_PRICE: 'minPrice',
+    MAX_PRICE: 'maxPrice',
+    MIN_RATING: 'minRating',
+    PET_TYPE: 'allowPets',
+    HASH_TAG: 'hashtags',
+    ACCOMMODATION_FACILITIES: 'accommodationFacilities',
+    ACCOMMODATION_PET_FACILITIES: 'accommodationPetFacilities',
+    ROOM_FACILITIES: 'roomFacilities',
+    ROOM_PET_FACILITIES: 'roomPetFacilities',
   },
 } as const;

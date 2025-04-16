@@ -35,7 +35,7 @@ const useSearchFilter = (
     },
     [],
   );
-  // console.log(filterState);
+
   const onToggleOptions = useCallback(
     (filterKey: Exclude<SearchFilterKey, SingleSelectFilterKey>) =>
       (option: string) => {
@@ -71,7 +71,6 @@ const useSearchFilter = (
     for (let key in filterState) {
       const typedKey = key as SearchFilterKey;
       const value = filterState[typedKey];
-      console.log(typedKey, value, filterState);
       if (Array.isArray(value)) {
         if (value.length > 0) params.append(typedKey, value.toString());
       } else {
@@ -82,7 +81,17 @@ const useSearchFilter = (
     return params;
   };
 
-  const onClickFilterButton = useCallback(() => {
+  const onSetPriceRange = useCallback(
+    (key: 'minPrice' | 'maxPrice', value: string) => {
+      setFilterState((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [],
+  );
+
+  const onSubmitFilter = useCallback(() => {
     if (!isFilterChanged) return;
 
     navigate(`${ROUTES.search}?${getSearchParams().toString()}`);
@@ -96,7 +105,8 @@ const useSearchFilter = (
     updateFilterState,
     onToggleRadio,
     onToggleOptions,
-    onClickFilterButton,
+    onSetPriceRange,
+    onSubmitFilter,
   };
 };
 

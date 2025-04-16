@@ -18,7 +18,7 @@ const RadioSelector = ({
   onClick,
 }: Props) => {
   const isNumberOptions = !Number.isNaN(Number(options[0]));
-  const isRating = filterKey === SEARCH_KEYS.FILTER.USER_RATING;
+  const isRating = filterKey === SEARCH_KEYS.FILTER.MIN_RATING;
 
   return (
     <SRadioArea>
