@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import { FaStar } from 'react-icons/fa';
+import { fetchCall } from 'services/api';
 
 interface RoomReviewData {
   nickname: String;
@@ -22,7 +23,10 @@ const RoomReview = () => {
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/register/roomReview`);
+        const response = await fetchCall(
+          `${BASE_URL}/register/roomReview`,
+          'get',
+        );
         setRoomReview(response.data);
       } catch (error) {
         console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);

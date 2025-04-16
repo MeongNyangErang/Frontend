@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { MdOutlinePets } from 'react-icons/md';
 import { IoTimeOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { fetchCall } from 'services/api';
 
 interface DetailRoomData {
   name: String;
-  description: String;
+  description: string;
   standardPeopleCount: number;
   maxPeopleCount: number;
   standardPetCount: number;
@@ -25,14 +25,15 @@ interface DetailRoomData {
 }
 
 const DetailRoom = () => {
+  const navigate = useNavigate();
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
-      const response = await axios.get(
+      const response = await fetchCall(
         `${BASE_URL}/accommodation/:accommodationId`,
+        'get',
       );
       setRoomDetails(response.data);
     };
