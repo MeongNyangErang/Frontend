@@ -1,6 +1,9 @@
 import { fetchCall } from './api';
 import { SearchBaseType, SearchFilterType } from '@typings/search';
-import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+import {
+  SearchAccommodationsResponse,
+  SearchAccommodationsData,
+} from '@typings/response/accommodations';
 import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';
 
 export const searchAccommodations = async (
@@ -9,6 +12,12 @@ export const searchAccommodations = async (
   filter?: SearchFilterType,
 ) => {
   const data = { ...query, ...(filter ? filter : {}) } as any;
+
+  for (let i in data) {
+    const value = data[i];
+    if (!value) delete data[i];
+  }
+
   const entries = Object.entries(data).map(([key, value]) => {
     const mapObj = FILTER_VALUE_MAP[key as keyof typeof FILTER_VALUE_MAP];
     if (mapObj) {
@@ -25,15 +34,9 @@ export const searchAccommodations = async (
   const mappedData = Object.fromEntries(entries);
   if (cursor) data.cursor = cursor;
 
-  const blob = new Blob([JSON.stringify(mappedData)], {
-    type: 'application/json',
-  });
-  const formData = new FormData();
-  formData.append('request', blob);
-
-  return await fetchCall<SearchAccommodationsResponse>(
+  return await fetchCall<SearchAccommodationsData>(
     'search/accommodations',
     'post',
-    formData,
-  ).then((v) => v.data);
+    mappedData,
+  );
 };

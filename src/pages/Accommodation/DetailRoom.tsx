@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { MdOutlinePets } from 'react-icons/md';
 import { IoTimeOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { fetchCall } from '@services/api';
 
 interface DetailRoomData {
   name: String;
@@ -16,32 +16,33 @@ interface DetailRoomData {
   price: number;
   extraPeopleFee: number;
   extraPetFee: number;
+  extraFee: number;
   checkInTime: String;
   checkOutTime: String;
   thumbnailUrl: string;
-  FacilityTypes: [];
-  PetFacilityTypes: [];
+  facilityTypes: [];
+  petFacilityTypes: [];
   hashtagTypes: [];
 }
 
 const DetailRoom = () => {
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const roomId = pathname.split('/').slice(-1)[0];
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
-      const response = await axios.get(
-        `${BASE_URL}/accommodation/:accommodationId`,
-      );
-      setRoomDetails(response.data);
+      const response = (await fetchCall(`rooms/${roomId}`, 'get')) as any;
+
+      setRoomDetails(response);
     };
 
     fetchRoomDetails();
   }, []);
 
   const handleAllReserve = () => {
-    navigate('/accommodation/:accommodationId/reservation');
+    navigate(`/accommodation/${roomId}/reservation`);
   };
 
   if (!roomDetails) return null;
@@ -84,14 +85,14 @@ const DetailRoom = () => {
 
       <Label>객실 편의시설</Label>
       <FacilityList>
-        {roomDetails.FacilityTypes.map((facility, index) => (
+        {roomDetails.facilityTypes.map((facility, index) => (
           <FacilityItem key={index}>{facility}</FacilityItem>
         ))}
       </FacilityList>
 
       <Label>반려동물 편의시설</Label>
       <FacilityList>
-        {roomDetails.PetFacilityTypes.map((petFacility, index) => (
+        {roomDetails.petFacilityTypes.map((petFacility, index) => (
           <FacilityItem key={index}>{petFacility}</FacilityItem>
         ))}
       </FacilityList>

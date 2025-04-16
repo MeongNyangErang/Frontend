@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
+import { fetchCall } from '@services/api';
 
 interface DetailData {
   accommodationId: number;
@@ -18,7 +18,7 @@ interface DetailData {
   totalRating: string;
   accommodationFacilities: string[];
   accommodationPetFacilities: string[];
-  allowPets: string[];
+  allowedPets: string[];
   latitude: number;
   longitude: number;
   reviews: ReviewData[];
@@ -28,10 +28,10 @@ interface DetailData {
 interface RoomData {
   roomId: number;
   roomName: string;
-  roomImageUrl: string[];
+  roomImageUrl: string;
   price: number;
-  standardPeople: number;
-  maxPeople: number;
+  standardPeopleCount: number;
+  maxPeopleCount: number;
   standardPetCount: number;
   maxPetCount: number;
   extraPeopleFee: number;
@@ -52,7 +52,8 @@ const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
   const navigate = useNavigate();
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const { pathname } = useLocation();
+  const accommodationId = pathname.split('/').splice(-1);
 
   const publicHolidays = ['2025-01-01', '2025-12-25'];
 
@@ -83,26 +84,25 @@ const DetailAccommodation = () => {
   useEffect(() => {
     const getAccommodationDetails = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/register/detailAccommodation`,
+        const response = (await fetchCall(
+          `accommodations/${accommodationId}`,
+          'get',
+        )) as any;
+        console.log(response);
+        const accommodationData = response;
+
+        const sortedReviews = accommodationData.reviews.sort(
+          (a: ReviewData, b: ReviewData) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA;
+          },
         );
-        console.log(response.data);
-        if (response.status === 200) {
-          const accommodationData = response.data.detailAccommodationData;
 
-          const sortedReviews = accommodationData.reviews.sort(
-            (a: ReviewData, b: ReviewData) => {
-              const dateA = new Date(a.createdAt).getTime();
-              const dateB = new Date(b.createdAt).getTime();
-              return dateB - dateA;
-            },
-          );
-
-          setAccommodation({
-            ...response.data.detailAccommodationData,
-            review: sortedReviews,
-          });
-        }
+        setAccommodation({
+          ...response,
+          review: sortedReviews,
+        });
       } catch (error) {
         console.log('숙소 정보를 가져오는 데 오류가 발생했습니다.');
       } finally {
@@ -117,15 +117,15 @@ const DetailAccommodation = () => {
   };
 
   const handleAllReviews = () => {
-    navigate('/accommodation/:accommodationId/review');
+    navigate(`/accommodation/${accommodationId}/review`);
   };
 
-  const handleRoomviews = () => {
-    navigate('/accommodation/:accommodationId/room/:roomId');
+  const handleRoomviews = (roomId: number) => {
+    navigate(`/accommodation/${accommodationId}/room/${roomId}`);
   };
 
   const handleAllReserve = () => {
-    navigate('/accommodation/:accommodationId/reservation');
+    navigate(`/accommodation/${accommodationId}/reservation`);
   };
 
   return (
@@ -139,7 +139,9 @@ const DetailAccommodation = () => {
           </AccommodationName>
 
           <Title>{accommodation.type}</Title>
-          <Title>{accommodation.allowPets}</Title>
+          {accommodation.allowedPets.map((v) => (
+            <Title key={v}>{v}</Title>
+          ))}
 
           <Section>
             <All>
@@ -184,8 +186,8 @@ const DetailAccommodation = () => {
                     <RoomInfoLeft>
                       <RoomImage
                         src={
-                          room.roomImageUrl && room.roomImageUrl.length > 0
-                            ? room.roomImageUrl[0]
+                          room.roomImageUrl
+                            ? room.roomImageUrl
                             : 'default-room-image.jpg'
                         }
                         alt={room.roomName}
@@ -193,7 +195,8 @@ const DetailAccommodation = () => {
                       <RoomName>{room.roomName}</RoomName>
                       <RoomInfo>
                         <Count>
-                          인원 {room.standardPeople}명 / 최대 {room.maxPeople}명
+                          인원 {room.standardPeopleCount}명 / 최대{' '}
+                          {room.maxPeopleCount}명
                         </Count>
                         <Count>
                           반려동물 {room.standardPetCount}마리 / 최대{' '}
@@ -204,7 +207,9 @@ const DetailAccommodation = () => {
                     <RoomInfoRight>
                       <All>
                         <RoomTitle>숙박</RoomTitle>
-                        <Detail onClick={handleRoomviews}>상세보기</Detail>
+                        <Detail onClick={() => handleRoomviews(room.roomId)}>
+                          상세보기
+                        </Detail>
                       </All>
                       <RoomInfo>
                         <Check>

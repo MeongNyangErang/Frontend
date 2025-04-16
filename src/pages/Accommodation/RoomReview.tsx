@@ -1,29 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import { FaStar } from 'react-icons/fa';
+import { fetchCall } from '@services/api';
 
-interface RoomReviewData {
+interface RoomReview {
   nickname: String;
   profileImageUrl: string;
   roomName: string;
   totalRating: number;
   content: string;
-  reviewImages: string[];
+  reviewImageUrl: string[];
   createdAt: string;
 }
 
+type RoomReviewData = RoomReview[];
+
 const RoomReview = () => {
   const [roomReview, setRoomReview] = useState<RoomReviewData | null>(null);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [isExpanded, setIsExpanded] = useState(false);
+  const { pathname } = useLocation();
+  const accommodationId = pathname.split('/')[2];
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/register/roomReview`);
-        setRoomReview(response.data);
+        const response = (await fetchCall(
+          `accommodations/${accommodationId}/reviews`,
+          'get',
+        )) as any;
+
+        setRoomReview(response.content);
       } catch (error) {
         console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
       }
@@ -39,46 +48,45 @@ const RoomReview = () => {
         리얼 리뷰
       </Title>
       {roomReview ? (
-        <>
-          <Header>
-            <ProfileImage
-              src={roomReview.profileImageUrl}
-              alt={`프로필 이미지`}
-            />
-            <Info>
-              <Nickname>{roomReview.nickname}</Nickname>
-              <Date>{roomReview.createdAt}</Date>
-            </Info>
-          </Header>
-          <Rating>
-            <StarRatings
-              rating={roomReview.totalRating}
-              starRatedColor="#f03e5e"
-              numberOfStars={5}
-              name="rating"
-              starDimension="17px"
-              starSpacing="1px"
-            />
-          </Rating>
-          {roomReview.reviewImages && roomReview.reviewImages.length > 0 && (
-            <ReviewImageContainer>
-              {roomReview.reviewImages.slice(0, 3).map((imageUrl, index) => (
-                <ReviewImage
-                  key={index}
-                  src={imageUrl}
-                  alt={`리뷰 이미지 ${index + 1}`}
-                />
-              ))}
-            </ReviewImageContainer>
-          )}
-          <RoomName>[ {roomReview.roomName} ]</RoomName>
-          <Content isExpanded={isExpanded}>{roomReview.content}</Content>
-          {roomReview.content.length > 100 && (
-            <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
-              {isExpanded ? '접기' : '더보기'}
-            </ToggleButton>
-          )}
-        </>
+        roomReview.map((r) => (
+          <Fragment key={r.createdAt}>
+            <Header>
+              <ProfileImage src={r.profileImageUrl} alt={`프로필 이미지`} />
+              <Info>
+                <Nickname>{r.nickname}</Nickname>
+                <Date>{r.createdAt}</Date>
+              </Info>
+            </Header>
+            <Rating>
+              <StarRatings
+                rating={r.totalRating}
+                starRatedColor="#f03e5e"
+                numberOfStars={5}
+                name="rating"
+                starDimension="17px"
+                starSpacing="1px"
+              />
+            </Rating>
+            {r.reviewImageUrl && r.reviewImageUrl.length > 0 && (
+              <ReviewImageContainer>
+                {r.reviewImageUrl.slice(0, 3).map((imageUrl, index) => (
+                  <ReviewImage
+                    key={index}
+                    src={imageUrl}
+                    alt={`리뷰 이미지 ${index + 1}`}
+                  />
+                ))}
+              </ReviewImageContainer>
+            )}
+            <RoomName>[ {r.roomName} ]</RoomName>
+            <Content isExpanded={isExpanded}>{r.content}</Content>
+            {r.content?.length > 100 && (
+              <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ? '접기' : '더보기'}
+              </ToggleButton>
+            )}
+          </Fragment>
+        ))
       ) : (
         <NoReviewMessage>등록된 리뷰가 없습니다.</NoReviewMessage>
       )}
