@@ -63,7 +63,7 @@ const NonMember = () => {
   }, []);
 
   const handleSeeAll = (animalType: keyof RecommendationResponse) => {
-    navigate(`/common/recommendnonmember/AllView?type=${animalType}`);
+    navigate(`recommendNonMember/allView?type=${animalType}`);
   };
 
   return (

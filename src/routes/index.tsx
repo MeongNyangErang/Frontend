@@ -36,23 +36,19 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
-const RecommendNonMember = lazy(
-  () => import('@components/common/RecommendNonMember'),
-);
+const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
 const RecommendNonMemberView = lazy(
-  () => import('@components/common/RecommendNonMember/AllView'),
+  () => import('@pages/Home/RecommendNonMember/AllView'),
 );
-const RecommendMember = lazy(
-  () => import('@components/common/RecommendMember'),
-);
+const RecommendMember = lazy(() => import('@pages/Home/RecommendMember'));
 const RecommendMostView = lazy(
-  () => import('@components/common/RecommendMember/MostView'),
+  () => import('@pages/Home/RecommendMember/MostView'),
 );
 const RecommendLastView = lazy(
-  () => import('@components/common/RecommendMember/LastView'),
+  () => import('@pages/Home/RecommendMember/LastView'),
 );
 const RecommendMemberView = lazy(
-  () => import('@components/common/RecommendMember/AllView'),
+  () => import('@pages/Home/RecommendMember/AllView'),
 );
 
 const AppRouter = () => {
@@ -79,28 +75,24 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
+          <Route path="recommendNonMember" element={<RecommendNonMember />} />
           <Route
-            path="common/recommendnonmember"
-            element={<RecommendNonMember />}
-          />
-          <Route
-            path="common/recommendnonmember/AllView"
+            path="recommendNonMember/allView"
             element={<RecommendNonMemberView />}
           />
-          <Route path="common/recommendmember" element={<RecommendMember />} />
+          <Route path="recommendMember" element={<RecommendMember />} />
           <Route
-            path="common/recommendmember/mostView"
+            path="recommendMember/mostView"
             element={<RecommendMostView />}
           />
           <Route
-            path="common/recommendmember/lastView"
+            path="recommendMember/lastView"
             element={<RecommendLastView />}
           />
           <Route
-            path="common/recommendmember/AllView"
+            path="recommendMember/AllView"
             element={<RecommendMemberView />}
           />
-
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />

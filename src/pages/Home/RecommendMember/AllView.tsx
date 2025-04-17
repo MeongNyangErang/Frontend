@@ -113,7 +113,7 @@ const AllView = () => {
             )}
           </>
         ) : (
-          <p>추천 숙소가 없습니다.</p>
+          <p></p>
         )}
       </Containers>
     </div>

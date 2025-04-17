@@ -42,7 +42,7 @@ const NonMember = () => {
   }, []);
 
   const handleSeeAll = (petId: number) => {
-    navigate(`/common/recommendmember/AllView?petId=${petId}`);
+    navigate(`recommendMember/AllView?petId=${petId}`);
   };
 
   return (
