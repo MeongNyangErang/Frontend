@@ -15,7 +15,7 @@ const Chat = () => {
   const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
   const { data } = useChatList();
   const listSize = data?.pages.flatMap(({ content }) => content).length;
-  console.log(data, 'data');
+
   if (isTablet) {
     return (
       <SChatWrap>

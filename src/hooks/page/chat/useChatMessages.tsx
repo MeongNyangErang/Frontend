@@ -9,7 +9,7 @@ import { createStompClient } from '@services/socket';
 import { initialChatError } from '@constants/chat';
 
 const useChatMessages = (chatRoomId: number | undefined) => {
-  const stompClientRef = useRef(createStompClient());
+  const stompClientRef = useRef<ReturnType<typeof createStompClient>>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
   const [pendingMessage, setPendingMessage] = useState<null | string>(null);
@@ -46,13 +46,12 @@ const useChatMessages = (chatRoomId: number | undefined) => {
 
   const sendMessage = (content: string, onSuccess: () => void) => {
     const client = stompClientRef.current;
-
     if (!client || !client.connected) {
       updateError('messageSending', '메세지 전송에 실패했습니다.');
       return;
     }
 
-    stompClientRef.current.publish({
+    stompClientRef.current!.publish({
       destination: `/app/chats/send/${chatRoomId}`,
       body: JSON.stringify({ content }),
     });
@@ -109,22 +108,26 @@ const useChatMessages = (chatRoomId: number | undefined) => {
         const newMessages = previousMessages.filter(
           (m) => !set.has(m.created_at + m.content),
         );
-        return [...newMessages, ...prev];
+        return [...prev, ...newMessages];
       });
     }
   }, [previousMessages]);
 
   useEffect(() => {
     if (!chatRoomId) return;
+    console.log('chatRoomId 존재', chatRoomId);
 
     let subscription: any;
 
-    const stompClient = stompClientRef.current;
+    const stompClient = createStompClient();
+    stompClientRef.current = stompClient;
     stompClient.onConnect = () => {
+      console.log('activateddddd');
       setIsConnected(true);
       subscription = stompClient.subscribe(
-        `subscribe/chats/${chatRoomId}`,
+        `/subscribe/chats/${chatRoomId}`,
         (message) => {
+          console.log(message, 'messageeeee');
           const { senderType, content, createdAt }: NewChatMessage = JSON.parse(
             message.body,
           );

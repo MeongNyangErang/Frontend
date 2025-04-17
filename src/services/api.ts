@@ -52,7 +52,7 @@ async function fetchCall<T>(
     ...(data && { data }),
     headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
   };
-  console.log('api:', isFormData);
+
   return axiosInstance(config);
 }
 

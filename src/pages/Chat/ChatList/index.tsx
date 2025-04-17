@@ -50,8 +50,8 @@ const ChatList = () => {
                   </SItemImage>
                   <SItemInfo>
                     <div>{partnerName}</div>
-                    <p>{lastMessage}</p>
-                    <span>{lastMessageTime}</span>
+                    <p>{lastMessage || '아직 메세지가 없습니다.'}</p>
+                    <span>{lastMessageTime || ''}</span>
                   </SItemInfo>
                   <SItemUnread>
                     {unreadCount > 0 && <span>{unreadCount}</span>}

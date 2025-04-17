@@ -8,8 +8,8 @@ export const getChatList = async (page: number) => {
   return await fetchCall<ChatListResponse>(`chats?page=${page}`, 'get');
 };
 
-export const createChatRoom = async (accomodationId: number) => {
-  return await fetchCall('chats/users/create', 'post', { accomodationId });
+export const createChatRoom = async (accommodationId: number) => {
+  return await fetchCall('chats/users/create', 'post', { accommodationId });
 };
 
 export const getPreviousChatMessages = async (

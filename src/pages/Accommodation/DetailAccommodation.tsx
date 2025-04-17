@@ -6,6 +6,10 @@ import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
 import { FaRegHeart } from 'react-icons/fa';
 import { fetchCall } from 'services/api';
+import { media } from '@components/styles/responsive';
+import { createChatRoom } from '@services/chat';
+import ROUTES from '@constants/routes';
+import useAuth from '@hooks/auth/useAuth';
 
 interface DetailData {
   accommodationId: number;
@@ -52,6 +56,7 @@ interface ReviewData {
 const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
+  const { member } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const accommodationId = pathname.split('/').splice(-1);
@@ -80,6 +85,20 @@ const DetailAccommodation = () => {
     }
 
     return finalPrice;
+  };
+
+  const handleClickChatButton = async () => {
+    if (!member || member.role === 'host') {
+      alert('로그인한 유저만 이용 할 수 있습니다.');
+      return;
+    }
+
+    try {
+      await createChatRoom(Number(accommodationId));
+      navigate(ROUTES.chat.list);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -132,23 +151,28 @@ const DetailAccommodation = () => {
   return (
     <Container>
       {accommodation && (
-        <>
-          <IconContainer>
-            <Icon>
-              <Chat>호스트 채팅</Chat>
-              <RegHeart />
-            </Icon>
-          </IconContainer>
-
+        <AccommodationDetailWrap>
+          <RegHeartButton>
+            <FaRegHeart />
+          </RegHeartButton>
           <TumbnailImage src={accommodation.thumbnailUrl} />
-          <AccommodationName>
-            {accommodation.name}
-            <Text>{accommodation.totalRating}</Text>
-          </AccommodationName>
-          <Title>{accommodation.type}</Title>
-          {accommodation.allowedPets.map((v) => (
-            <Title key={v}>{v}</Title>
-          ))}
+          <DetailTopArea>
+            <AccommodationNameBox>
+              <AccommodationName>
+                {accommodation.name}
+                <Text>{accommodation.totalRating}</Text>
+              </AccommodationName>
+              <Title>{accommodation.type}</Title>
+              {accommodation.allowedPets.map((v) => (
+                <Title key={v}>{v}</Title>
+              ))}
+            </AccommodationNameBox>
+            <AccommodationButtonBox>
+              <IconContainer>
+                <Chat onClick={handleClickChatButton}>호스트 채팅</Chat>
+              </IconContainer>
+            </AccommodationButtonBox>
+          </DetailTopArea>
           <Section>
             <All>
               <Real>리얼 리뷰</Real>
@@ -302,13 +326,43 @@ const DetailAccommodation = () => {
             ■ 체크인일 당일 및 No-Show : 최초 1일 숙박 요금 환불불가 <br />■ 각
             구매한 상품별 별도의 취소 규정이 적용되오니 참고 부탁드립니다
           </Refund>
-        </>
+        </AccommodationDetailWrap>
       )}
     </Container>
   );
 };
 
 export default DetailAccommodation;
+
+const AccommodationDetailWrap = styled.div`
+  position: relative;
+`;
+
+const DetailTopArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  ${media.mobile} {
+    flex-direction: row;
+  }
+`;
+
+const AccommodationNameBox = styled.div`
+  flex: 1;
+`;
+
+const AccommodationButtonBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  ${media.mobile} {
+    width: auto;
+  }
+`;
+
 const ReviewRatingWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -322,16 +376,17 @@ const All = styled.div`
 `;
 
 const IconContainer = styled.div`
-  position: relative;
-`;
-
-const Icon = styled.div`
+  padding-bottom: 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  gap: 12px;
+  width: 100%;
+
+  ${media.mobile} {
+    gap: 8px;
+    padding-bottom: 0;
+    width: auto;
+  }
 `;
 
 const Container = styled.div`
@@ -574,26 +629,47 @@ const Queen = styled(GiChessQueen)`
   font-size: 50px;
 `;
 
-const RegHeart = styled(FaRegHeart)`
-  font-size: 25px;
-  color: #f29c70;
-  &:hover {
-    color: #ff7f51;
+const RegHeartButton = styled.button`
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: ${({ theme }) => theme.colors.gray600};
+  width: 30px;
+  height: 30px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: ${({ theme }) => theme.colors.gray100};
+    border-radius: 9999px;
+    opacity: 0.6;
   }
 `;
 
-const Chat = styled.div`
+const Chat = styled.button`
+  width: 100%;
   margin-right: 6px;
-  border: 1px solid #f29c70;
-  color: #f29c70;
   font-weight: bold;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 12px;
   font-size: 14px;
+  text-align: center;
   white-space: nowrap;
-  &:hover {
-    color: #ff7f51;
-    border: 1px solid #ff7f51;
+  background-color: ${({ theme }) => theme.colors.info};
+  color: ${({ theme }) => theme.colors.infoText};
+
+  ${media.mobile} {
+    width: auto;
   }
 `;
 

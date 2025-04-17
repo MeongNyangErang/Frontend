@@ -68,7 +68,7 @@ const ChatRoom = ({
               const formattedTime = formatDateOrTime(created_at);
               return (
                 <SMessage
-                  key={created_at}
+                  key={`${created_at}${index}`}
                   className={isMyMessage ? 'right' : 'left'}
                 >
                   {isMyMessage ? (
