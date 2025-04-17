@@ -13,13 +13,3 @@ export interface HostProfile {
   profileImageUrl: string;
   currentPhoneNumber: string;
 }
-
-export interface UserProfileResponse {
-  code: number;
-  data: UserProfile;
-}
-
-export interface HostProfileResponse {
-  code: number;
-  data: HostProfile;
-}

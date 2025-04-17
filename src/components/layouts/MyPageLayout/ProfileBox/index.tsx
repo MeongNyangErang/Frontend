@@ -51,6 +51,8 @@ const ProfileBox = ({ email, role }: ProfileBoxProps) => {
     );
   }
 
+  console.log(data, 'data');
+
   return (
     <SProfileBoxWrap>
       <SProfileArea>

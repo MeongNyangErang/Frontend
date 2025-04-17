@@ -12,9 +12,13 @@ export interface ChatListResponse {
 
 export interface PreviousChatMessagesResponse {
   code: number;
-  messages: PreviousChatMessage[];
-  nextCursorId: number;
-  hasNext: boolean;
+  data: PreviousChatMessage[];
+  page: number;
+  size: number;
+  totalElement: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
 }
 
 export interface CreateChatRoomResponse {

@@ -21,8 +21,9 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const pages = (
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
+
   const previousMessages = useMemo(
-    () => pages?.flatMap((page) => page.messages),
+    () => pages?.flatMap((page) => page.data),
     [data],
   );
   const enableToFetch = hasNextPage && !isFetchingNextPage && !error;
@@ -79,7 +80,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   useEffect(() => {
     if (!pendingMessage) return;
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.content === pendingMessage) {
+    if (lastMessage.messageContent === pendingMessage) {
       pendingCallbackRef.current?.onSuccess?.();
     } else {
       updateError('messageSending', '메세지 전송에 실패했습니다.');
@@ -107,9 +108,9 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   useEffect(() => {
     if (previousMessages) {
       setMessages((prev) => {
-        const set = new Set(prev.map((m) => m.created_at + m.content));
+        const set = new Set(prev.map((m) => m.created_at + m.messageContent));
         const newMessages = previousMessages.filter(
-          (m) => !set.has(m.created_at + m.content),
+          (m) => !set.has(m.created_at + m.messageContent),
         );
         return [...prev, ...newMessages];
       });
@@ -118,7 +119,6 @@ const useChatMessages = (chatRoomId: number | undefined) => {
 
   useEffect(() => {
     if (!chatRoomId) return;
-    console.log('chatRoomId 존재', chatRoomId);
 
     let subscription: any;
 
@@ -129,10 +129,13 @@ const useChatMessages = (chatRoomId: number | undefined) => {
       subscription = stompClient.subscribe(
         `/subscribe/chats/${chatRoomId}`,
         (message) => {
-          const { senderType, content, createdAt }: NewChatMessage = JSON.parse(
+          const { createdAt, ...rest }: NewChatMessage = JSON.parse(
             message.body,
           );
-          const newMessage = { senderType, content, created_at: createdAt };
+          const newMessage = {
+            created_at: createdAt,
+            ...rest,
+          };
           setMessages((prev) => [...prev, newMessage]);
         },
       );

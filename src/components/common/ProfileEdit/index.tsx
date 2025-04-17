@@ -71,8 +71,9 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
           if ((id === 'name' || id === 'phoneNumber') && role === 'host') {
             return (
               <Modal
+                key={id}
                 isOpen={isOpen && enableToEdit}
-                variant="centered"
+                variant="full"
                 onClose={handleCloseModal}
                 closeType="x"
               >
@@ -84,7 +85,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
             return (
               <Modal
                 isOpen={isOpen && enableToEdit}
-                variant="centered"
+                variant="full"
                 onClose={handleCloseModal}
                 closeType="x"
               >
@@ -96,7 +97,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
             return (
               <Modal
                 isOpen={isOpen && enableToEdit}
-                variant="centered"
+                variant="full"
                 onClose={handleCloseModal}
                 closeType="x"
               >

@@ -17,10 +17,10 @@ export const createChatRoom = async (accommodationId: number) => {
 
 export const getPreviousChatMessages = async (
   chatRoomId: number,
-  cursorId: number | null,
+  page: number,
 ) => {
   return await fetchCall<PreviousChatMessagesResponse>(
-    `chats/${chatRoomId}/messages?cursorId=${cursorId ?? ''}`,
+    `chats/${chatRoomId}/messages?page=${page}`,
     'get',
   );
 };

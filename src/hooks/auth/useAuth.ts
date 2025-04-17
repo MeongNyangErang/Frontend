@@ -27,6 +27,11 @@ const useAuth = () => {
   useEffect(() => {
     if (!member.authLoading) return;
 
+    if (import.meta.env.DEV) {
+      setMember((prev) => ({ ...prev, authLoading: false }));
+      return;
+    }
+
     const token = getLocalStorage<string>(accessTokenKey);
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
