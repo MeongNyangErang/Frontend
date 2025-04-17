@@ -29,6 +29,11 @@ const DetailAccommodation = lazy(
   () => import('@pages/Accommodation/DetailAccommodation'),
 );
 
+const HostReservationList = lazy(
+  () => import('@pages/host/HostList/ReservationList'),
+);
+const HostReviewList = lazy(() => import('@pages/host/HostList/ReviewList'));
+
 const Search = lazy(() => import('@pages/Search'));
 const DetailRoom = lazy(() => import('@pages/Accommodation/DetailRoom'));
 const AccommodationReview = lazy(
@@ -36,6 +41,7 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
+
 const RecommendNonMember = lazy(
   () => import('@components/common/RecommendNonMember'),
 );
@@ -54,6 +60,9 @@ const RecommendLastView = lazy(
 const RecommendMemberView = lazy(
   () => import('@components/common/RecommendMember/AllView'),
 );
+const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
+const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
 
 const AppRouter = () => {
   return (
@@ -111,6 +120,7 @@ const AppRouter = () => {
               />
               <Route path="reviews" element={<UserReviews />} />
               <Route path="wishlist" element={<UserWishList />} />
+              <Route path="profile-edit" element={<UserProfileEdit />} />
             </Route>
           </Route>
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
@@ -122,6 +132,9 @@ const AppRouter = () => {
               />
               <Route path="register-room" element={<RegisterRoom />} />
               <Route path="room-list" element={<HostRoomList />} />
+              <Route path="reservation" element={<HostReservationList />} />
+              <Route path="reviews" element={<HostReviewList />} />
+              <Route path="profile-edit" element={<HostProfileEdit />} />
             </Route>
           </Route>
           <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>

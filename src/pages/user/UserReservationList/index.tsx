@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import SubPageHeader from '@components/common/SubPageHeader';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
+import Modal from '@components/common/Modal';
 import {
   RESERVATION_STATUS,
   RESERVATION_STATUS_MAP,
@@ -31,6 +32,8 @@ const UserReservationList = () => {
     infiniteScrolltargetRef,
     error,
     isLoading,
+    chatError,
+    resetChatError,
     handleSwitchTab,
     onClickReviewButton,
     onClickCancelButton,
@@ -38,6 +41,7 @@ const UserReservationList = () => {
     onCloseCancelModal,
     onSuccessPostReview,
     onSuccessCancelReservation,
+    ...rest
   } = useUserReservationListPage();
 
   useEffect(() => {
@@ -75,9 +79,12 @@ const UserReservationList = () => {
             {error.message}
           </MessageBox>
         )}
-        {!error && isFirstLoaded && reservationList.length === 0 && (
-          <MessageBox>예약 내역이 없습니다.</MessageBox>
-        )}
+        {!error &&
+          isLoading &&
+          isFirstLoaded &&
+          reservationList.length === 0 && (
+            <MessageBox>예약 내역이 없습니다.</MessageBox>
+          )}
         {!error && (
           <SReservationList>
             {reservationList.map((reservation) => {
@@ -89,6 +96,8 @@ const UserReservationList = () => {
                   reservation={reservation}
                   onClickReviewButton={onClickReviewButton}
                   onClickCancelButton={onClickCancelButton}
+                  chatError={chatError}
+                  {...rest}
                 />
               );
             })}
@@ -109,6 +118,17 @@ const UserReservationList = () => {
         onClose={onCloseCancelModal}
         onSuccess={onSuccessCancelReservation}
       />
+      <Modal
+        isOpen={!!chatError}
+        onClose={resetChatError}
+        variant="centered"
+        closeType="none"
+        role="alert"
+      >
+        {chatError.split('/n').map((line) => (
+          <div key={line}>{line}</div>
+        ))}
+      </Modal>
     </>
   );
 };

@@ -1,23 +1,23 @@
-import { QUERY_KEYS } from '@constants/queryKeys';
+import { SEARCH_KEYS } from '@constants/searchKeys';
 import { SINGLE_SELECT_FILTER_KEY } from '@constants/search';
 import {
-  SearchQuery,
+  SearchBaseType,
   SearchFilterType,
   SearchFilterKey,
   SingleSelectFilterKey,
 } from '@typings/search';
 
-const BASE = QUERY_KEYS.SEARCH.BASE;
-const FILTER = QUERY_KEYS.SEARCH.FILTER;
+const BASE = SEARCH_KEYS.BASE;
+const FILTER = SEARCH_KEYS.FILTER;
 
-export const getSearchQuery = (searchParams: URLSearchParams) => {
-  const searchQuery = {} as SearchQuery;
+export const getSearchBase = (searchParams: URLSearchParams) => {
+  const searchBase = {} as SearchBaseType;
 
   for (let key in BASE) {
-    const typedKey = BASE[key as keyof typeof BASE] as keyof SearchQuery;
-    searchQuery[typedKey] = searchParams.get(typedKey) || '';
+    const typedKey = BASE[key as keyof typeof BASE];
+    searchBase[typedKey] = searchParams.get(typedKey) || '';
   }
-  return searchQuery;
+  return searchBase;
 };
 
 export const getSearchFilter = (searchParams: URLSearchParams | null) => {
@@ -25,9 +25,8 @@ export const getSearchFilter = (searchParams: URLSearchParams | null) => {
 
   const isSingleSelectKey = (
     key: SearchFilterKey,
-  ): key is SingleSelectFilterKey => {
-    return SINGLE_SELECT_FILTER_KEY.includes(key as SingleSelectFilterKey);
-  };
+  ): key is SingleSelectFilterKey =>
+    SINGLE_SELECT_FILTER_KEY.includes(key as SingleSelectFilterKey);
 
   for (let key of Object.values(FILTER)) {
     const currentValue = searchParams?.get(key) || undefined;
@@ -35,7 +34,7 @@ export const getSearchFilter = (searchParams: URLSearchParams | null) => {
     if (isSingleSelectKey(key)) {
       searchFilter[key] = currentValue || '';
     } else {
-      searchFilter[key] = currentValue ? [currentValue] : [];
+      searchFilter[key] = currentValue ? currentValue.split(',') : [];
     }
   }
 

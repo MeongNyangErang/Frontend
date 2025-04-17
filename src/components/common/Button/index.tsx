@@ -12,6 +12,7 @@ interface ButtonProps {
   fixedHeight?: boolean;
   disabled?: boolean;
   isLoading?: boolean;
+  disabledStyle?: boolean;
 }
 
 const Button = ({
@@ -25,6 +26,7 @@ const Button = ({
   disabled,
   isLoading = false,
   type = 'button',
+  disabledStyle = true,
 }: ButtonProps) => {
   return (
     <SButton
@@ -35,6 +37,7 @@ const Button = ({
       $fontSize={fontSize}
       $fullWidth={fullWidth}
       $fixedHeight={fixedHeight}
+      $disabledStyle={disabledStyle}
       disabled={disabled}
     >
       {!isLoading && children}

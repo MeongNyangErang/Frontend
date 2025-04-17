@@ -31,7 +31,7 @@ const SMessageBoxWrap = styled.div<{
   padding: ${({ theme }) => theme.layouts.paddingX};
   border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme, $variant }) =>
-    $variant === 'white' ? '#fff' : theme.colors.gray200};
+    $variant === 'white' ? '#fff' : theme.colors.gray100};
   font-size: ${({ $fontSize }) => $fontSize};
   text-align: center;
 `;

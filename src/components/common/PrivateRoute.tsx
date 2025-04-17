@@ -7,12 +7,15 @@ interface Props {
 }
 
 const PrivateRoute = ({ allowedRoles }: Props) => {
-  const { member } = useAuth();
+  const {
+    member: { data, authLoading },
+  } = useAuth();
 
-  if (!member) return <Navigate to={ROUTES.home} replace />;
+  if (authLoading) return null;
 
-  if (!allowedRoles.includes(member.role))
-    return <Navigate to="/403" replace />;
+  if (!data) return <Navigate to={ROUTES.home} replace />;
+
+  if (!allowedRoles.includes(data.role)) return <Navigate to="/403" replace />;
 
   return <Outlet />;
 };

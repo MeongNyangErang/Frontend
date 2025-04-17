@@ -17,10 +17,12 @@ interface MyPageLayoutProps {
 }
 
 const MyPageLayout = () => {
-  const { member } = useAuth();
-  const menu = member?.role === 'user' ? USER_MY_PAGE_MENU : HOST_MY_PAGE_MENU;
+  const {
+    member: { data, authLoading },
+  } = useAuth();
+  const menu = data?.role === 'user' ? USER_MY_PAGE_MENU : HOST_MY_PAGE_MENU;
 
-  if (!member) return <Navigate to={ROUTES.home} />;
+  if (!data) return <Navigate to={ROUTES.home} />;
 
   return (
     <SMyPageWrap>

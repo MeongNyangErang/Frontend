@@ -26,15 +26,15 @@ const getAge = (birthDate: string) => {
 
   const today = new Date();
   const birthDay = new Date(birthDate);
-  let age = today.getFullYear() - birthDay.getFullYear();
+  let age = today.getFullYear() - birthDay.getFullYear() + 1;
 
-  if (
-    birthDay.getMonth() > today.getMonth() ||
-    (birthDay.getMonth() === today.getMonth() &&
-      birthDay.getDate() > today.getDate())
-  ) {
-    age--;
-  }
+  // if (
+  //   birthDay.getMonth() > today.getMonth() ||
+  //   (birthDay.getMonth() === today.getMonth() &&
+  //     birthDay.getDate() > today.getDate())
+  // ) {
+  //   age--;
+  // }
 
   return age;
 };

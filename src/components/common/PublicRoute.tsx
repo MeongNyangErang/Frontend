@@ -3,9 +3,13 @@ import useAuth from '@hooks/auth/useAuth';
 import ROUTES from '@constants/routes';
 
 const PublicRoute = () => {
-  const { member } = useAuth();
+  const {
+    member: { authLoading, data },
+  } = useAuth();
 
-  if (member) return <Navigate to={ROUTES.home} replace />;
+  if (authLoading) return null;
+
+  if (data) return <Navigate to={ROUTES.home} replace />;
 
   return <Outlet />;
 };

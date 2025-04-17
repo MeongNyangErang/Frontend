@@ -66,20 +66,31 @@ const SMessageContent = styled.div`
     color: ${({ theme }) => theme.colors.gray600};
   }
 
-  > p {
-    padding: 8px 12px;
-    border-radius: 8px;
-
+  > div {
     .left & {
       margin-right: 8px;
-      background-color: ${({ theme }) => theme.colors.gray100};
     }
     .right & {
       margin-left: 8px;
-      color: #fff;
-      background-color: ${({ theme }) => theme.colors.main};
     }
   }
+`;
+
+const SMessageText = styled.div`
+  padding: 8px 12px;
+  border-radius: 8px;
+  .left & {
+    background-color: ${({ theme }) => theme.colors.gray100};
+  }
+  .right & {
+    color: #fff;
+    background-color: ${({ theme }) => theme.colors.main};
+  }
+`;
+
+const SMessageImage = styled.img`
+  display: block;
+  width: 100%;
 `;
 
 const SMessageProfile = styled.div`
@@ -212,4 +223,6 @@ export {
   SSubmitButton,
   SImagePreivewBox,
   SErrorMessage,
+  SMessageText,
+  SMessageImage,
 };

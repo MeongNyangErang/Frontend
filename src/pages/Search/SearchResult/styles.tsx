@@ -4,6 +4,10 @@ import { ellipsisStyle } from '@components/styles/mixins';
 import { media } from '@components/styles/responsive';
 import { AccommodationType } from '@typings/response/accommodations';
 
+const SMessageArea = styled.div`
+  padding: 20px 0;
+`;
+
 const SItems = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -188,6 +192,7 @@ const SItemsBottom = styled.div`
 `;
 
 export {
+  SMessageArea,
   SItems,
   SItem,
   SItemTypeBadge,

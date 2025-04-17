@@ -5,13 +5,15 @@ import MyPageOverview from '@components/layouts/MyPageLayout/MyPageOverview';
 import ROUTES from '@constants/routes';
 
 const UserMyPage = () => {
-  const { member } = useAuth();
+  const {
+    member: { data },
+  } = useAuth();
 
-  if (!member || member.role !== 'user') return <Navigate to={ROUTES.home} />;
+  if (!data || data.role !== 'user') return <Navigate to={ROUTES.home} />;
   return (
     <>
-      <ProfileBox role={member.role} email={member.email} />
-      <MyPageOverview role={member.role} />
+      <ProfileBox role={data.role} email={data.email} />
+      <MyPageOverview role={data.role} />
     </>
   );
 };

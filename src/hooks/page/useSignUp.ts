@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import { Axios, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
   SignUpFormData,
@@ -231,9 +231,6 @@ const useSignUp = <T extends 'user' | 'host'>(type: T) => {
       );
       formDataToRequest.append('submitDocument', formData.accommodationPermit!);
     }
-
-    // const debugObj = Object.fromEntries(data.entries());
-    // console.log(debugObj, 'data');
 
     const submitFn = type === 'user' ? signupUser : signupHost;
 

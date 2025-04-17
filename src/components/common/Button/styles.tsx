@@ -28,6 +28,7 @@ const SButton = styled.button<{
   $fullWidth?: boolean;
   $fontSize: string;
   $fixedHeight?: boolean;
+  $disabledStyle: boolean;
 }>`
   ${buttonStyle}
 
@@ -43,9 +44,13 @@ const SButton = styled.button<{
   }
 
   &:disabled {
-    color: ${({ theme }) => theme.colors.gray500};
-    background-color: ${({ theme }) => theme.colors.gray200};
-    border: none;
+    ${({ $disabledStyle }) =>
+      $disabledStyle &&
+      css`
+        color: ${({ theme }) => theme.colors.gray500};
+        background-color: ${({ theme }) => theme.colors.gray200};
+        border: none;
+      `}
   }
 `;
 

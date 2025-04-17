@@ -17,6 +17,7 @@ const SUserEmptyBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
   padding: 40px 0;
   width: 100%;
   font-size: 13px;

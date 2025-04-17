@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import styled from 'styled-components';
 import { SearchFilterKey } from '@typings/search';
-import { QUERY_KEYS } from '@constants/queryKeys';
+import { SEARCH_KEYS } from '@constants/searchKeys';
 import StarRating from '@components/common/StarRating';
 
 interface Props {
@@ -18,7 +18,7 @@ const RadioSelector = ({
   onClick,
 }: Props) => {
   const isNumberOptions = !Number.isNaN(Number(options[0]));
-  const isRating = filterKey === QUERY_KEYS.SEARCH.FILTER.USER_RATING;
+  const isRating = filterKey === SEARCH_KEYS.FILTER.MIN_RATING;
 
   return (
     <SRadioArea>

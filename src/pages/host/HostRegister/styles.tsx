@@ -43,8 +43,9 @@ export const SInput = styled.input`
   background-color: var(--gray-100);
   &:active {
     background-color: var(--gray-200);
-  border-radius: 4px;
-  font-size: 14px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
 `;
 
 export const SDescriptionWrapper = styled.div`
@@ -57,12 +58,13 @@ export const SInputExplain = styled.textarea`
   height: 100px;
   padding: 8px 12px;
   background-color: var(--gray-100);
-    &:active {
+  &:active {
     background-color: var(--gray-200);
-  border-radius: 4px;
-  font-size: 14px;
-  resize: none;
-  overflow-y: auto;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: none;
+    overflow-y: auto;
+  }
 `;
 
 export const SCharacterCount = styled.div`
@@ -120,10 +122,11 @@ export const SInputNumber = styled.input`
   height: 40px;
   font-size: 14px;
   background-color: var(--gray-100);
-    &:active {
+  &:active {
     background-color: var(--gray-200);
-  border-radius: 4px;
-  cursor: pointer;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 `;
 
 export const SFormContainer = styled.div`
@@ -171,14 +174,15 @@ export const SSLabelFile = styled.label`
 export const SSInput = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  height:45px;
+  height: 45px;
   padding: 8px 12px;
   margin-bottom: 5px;
   border-radius: 4px;
   font-size: 14px;
   background-color: var(--gray-100);
-    &:active {
+  &:active {
     background-color: var(--gray-200);
+  }
 `;
 
 export const SSDescriptionWrapper = styled.div`
@@ -191,25 +195,27 @@ export const SSInputExplain = styled.textarea`
   height: 100px;
   padding: 8px 12px;
   background-color: var(--gray-100);
-   &:active {
-  background-color: var(--gray-200);
-  border-radius: 4px;
-  font-size: 14px;
-  resize: none;
-  overflow-y: auto;
+  &:active {
+    background-color: var(--gray-200);
+    border-radius: 4px;
+    font-size: 14px;
+    resize: none;
+    overflow-y: auto;
+  }
 `;
 
 export const SSInputAddress = styled.input`
   font-family: 'Noto Sans KR';
   width: 100%;
-  height:40px;
+  height: 40px;
   padding: 8px 12px;
   margin-bottom: 7px;
   background-color: var(--gray-100);
-    &:active {
+  &:active {
     background-color: var(--gray-200);
-  border-radius: 4px;
-  font-size: 14px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
 `;
 
 export const SSCharacterCount = styled.div`

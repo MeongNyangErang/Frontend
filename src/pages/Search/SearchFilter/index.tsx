@@ -1,14 +1,22 @@
-import { useState, UIEventHandler, useRef, useEffect, memo } from 'react';
+import {
+  useState,
+  UIEventHandler,
+  useRef,
+  useEffect,
+  memo,
+  Fragment,
+} from 'react';
 import { IoMdRefresh } from 'react-icons/io';
 import { FaXmark } from 'react-icons/fa6';
 import Button from '@components/common/Button';
 import BottomDrawer from '@components/common/BottomDrawer';
 import OptionSelector from '@components/common/OptionSelector';
 import useSearchFilter from '@hooks/page/useSearchFilter';
-import { SearchFilterType, SearchQuery } from '@typings/search';
+import { SearchFilterType, SearchBaseType } from '@typings/search';
 import { SEARCH_FILTER_ITEMS, FILTER_CATEGORIES } from '@constants/search';
 import RadioSelector from './RadioSelector';
-import FilterItemName from './FIlterItemName';
+import FilterItemCategory from './FIlterItemCategory';
+import PriceRange from './PriceRange';
 import {
   SContainer,
   SControlBox,
@@ -20,13 +28,14 @@ import {
   SFilterItems,
   SFilterItem,
   SItemContent,
+  SItemName,
 } from './styles';
 
 interface Props {
   isOpen: boolean;
   onClose(): void;
   currentFilter: SearchFilterType;
-  currentQuery: SearchQuery;
+  currentQuery: SearchBaseType;
 }
 
 const SearchFilter = ({
@@ -39,7 +48,8 @@ const SearchFilter = ({
     filterState,
     isFilterEmpty,
     isFilterChanged,
-    onClickFilterButton,
+    onSetPriceRange,
+    onSubmitFilter,
     onToggleRadio,
     onToggleOptions,
     handleResetFilter,
@@ -132,36 +142,49 @@ const SearchFilter = ({
             {FILTER_CATEGORIES.map((category, index) => {
               return (
                 <SFilterItem
-                  key={category}
+                  key={`${category}+${index}`}
                   ref={(el) => {
                     if (el) {
                       itemLocations.current[index] = el.offsetTop;
                     }
                   }}
                 >
-                  <FilterItemName category={category} />
+                  <FilterItemCategory category={category} />
                   {SEARCH_FILTER_ITEMS.filter(
                     (item) => item.category === category,
-                  ).map(({ type, options, key }) => {
+                  ).map((item) => {
+                    const { type, key, options, name, category } = item;
                     return (
-                      <SItemContent key={key}>
-                        {type === 'radio' && (
-                          <RadioSelector
-                            options={options}
-                            currentOption={filterState[key]}
-                            filterKey={key}
-                            onClick={onToggleRadio(key)}
-                          />
-                        )}
-                        {(type === 'capsule' || type === 'squareFixed') && (
-                          <OptionSelector
-                            $variant={type}
-                            onClick={onToggleOptions(key)}
-                            options={options}
-                            currentValue={filterState[key]}
-                          />
-                        )}
-                      </SItemContent>
+                      <Fragment key={key}>
+                        {name !== category && <SItemName>{name}</SItemName>}
+                        <SItemContent>
+                          {type === 'radio' && (
+                            <RadioSelector
+                              options={options}
+                              currentOption={filterState[key]}
+                              filterKey={key}
+                              onClick={onToggleRadio(key)}
+                            />
+                          )}
+                          {(type === 'capsule' || type === 'squareFixed') && (
+                            <OptionSelector
+                              $variant={type}
+                              onClick={onToggleOptions(key)}
+                              options={options}
+                              currentValue={filterState[key]}
+                            />
+                          )}
+                          {type === 'price' && (
+                            <PriceRange
+                              currentValue={[
+                                filterState.minPrice,
+                                filterState.maxPrice,
+                              ]}
+                              onChange={onSetPriceRange}
+                            />
+                          )}
+                        </SItemContent>
+                      </Fragment>
                     );
                   })}
                 </SFilterItem>
@@ -176,7 +199,7 @@ const SearchFilter = ({
           초기화
         </SResetButton>
         <Button
-          onClick={onClickFilterButton}
+          onClick={onSubmitFilter}
           variant="main"
           fontSize="14px"
           fullWidth={true}
