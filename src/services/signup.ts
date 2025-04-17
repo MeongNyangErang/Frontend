@@ -13,7 +13,6 @@ export const checkNicknameDuplicate = async (nickname: string) => {
 };
 
 export const checkUserEmailDuplicate = async (email: string) => {
-  console.log(email, 'email');
   return await fetchCall(`email/check/user?email=${email}`, 'get');
 };
 
