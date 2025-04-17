@@ -7,9 +7,7 @@ import {
   getLocalStorage,
   removeLocalStorage,
 } from '@utils/storage';
-import { isTokenExpired } from '@utils/jwt';
 import { STORAGE_KEYS } from '@constants/storageKey';
-import { getUserProfile, getHostProfile } from '@services/auth';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
 
@@ -17,33 +15,30 @@ const useAuth = () => {
   const [member, setMember] = useRecoilState(memberAtom);
 
   const setCurrentMember = (member: AppMember, accessToken: string) => {
-    setMember(member);
+    setMember((prev) => ({ ...prev, data: member }));
     setLocalStorage(accessTokenKey, accessToken);
   };
 
   const removeMember = () => {
-    setMember(null);
+    setMember((prev) => ({ ...prev, data: null }));
     removeLocalStorage(accessTokenKey);
   };
 
   useEffect(() => {
-    // const token = getLocalStorage<string>(accessTokenKey);
-    // if (!token) return;
-    // if (isTokenExpired(token)) {
-    //   removeMember();
-    //   return;
-    // }
-    // const payload = JSON.parse(atob(token.split('.')[1]));
-    // const role = payload.role;
-    // const getMemberInfo = async () => {
-    //   try {
-    //     const getInfoFn = role === 'host' ? getHostProfile : getUserProfile;
-    //     const { data } = await getInfoFn();
-    //   } catch {
-    //     removeMember();
-    //   }
-    // };
-    // getMemberInfo()
+    if (!member.authLoading) return;
+
+    const token = getLocalStorage<string>(accessTokenKey);
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const isTokenExpired = Date.now() > payload.exp * 1000;
+
+      if (!isTokenExpired) {
+        const role = payload.role;
+        setMember((prev) => ({ ...prev, data: { role, email: '' } }));
+      }
+    }
+
+    setMember((prev) => ({ ...prev, authLoading: false }));
   }, []);
 
   return { member, setCurrentMember, removeMember };

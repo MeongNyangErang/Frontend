@@ -1,7 +1,15 @@
 import { atom } from 'recoil';
 import { AppMember } from '@typings/member';
 
-export const memberAtom = atom<null | AppMember>({
+interface MemberState {
+  data: null | AppMember;
+  authLoading: boolean;
+}
+
+export const memberAtom = atom<MemberState>({
   key: 'member',
-  default: null,
+  default: {
+    data: null,
+    authLoading: true,
+  },
 });

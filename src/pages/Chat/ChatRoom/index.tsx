@@ -34,7 +34,7 @@ const ChatRoom = ({
   partnerInfo: { partnerImageUrl, partnerName },
 }: ChatRoomProps) => {
   const {
-    member,
+    member: { data },
     messages,
     text,
     image,
@@ -52,7 +52,7 @@ const ChatRoom = ({
     handleSubmit,
   } = useChatRoom(chatRoomId);
 
-  if (!member) return <Navigate to={ROUTES.home} />;
+  if (!data) return <Navigate to={ROUTES.home} />;
 
   return (
     <>
@@ -62,7 +62,7 @@ const ChatRoom = ({
             <div ref={infiniteScrollRef} />
             {messages.map((message, index) => {
               const { content, senderType, created_at } = message;
-              const isMyMessage = senderType === member.role.toUpperCase();
+              const isMyMessage = senderType === data.role.toUpperCase();
               const isThePreviousSender =
                 index > 0 && messages[index - 1].senderType === senderType;
               const formattedTime = formatDateOrTime(created_at);

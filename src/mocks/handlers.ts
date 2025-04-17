@@ -293,13 +293,13 @@ export const handlers = [
 
     let content;
     switch (status) {
-      case 'reserved':
+      case 'RESERVED':
         content = reservedReservations;
         break;
-      case 'completed':
+      case 'COMPLETED':
         content = completedReservations;
         break;
-      case 'canceled':
+      case 'CANCELED':
         content = canceledReservations;
         break;
       default:

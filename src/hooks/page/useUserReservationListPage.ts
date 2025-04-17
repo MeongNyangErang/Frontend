@@ -1,8 +1,13 @@
 import { useCallback, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReservationStatus, UserReservationItem } from '@typings/reservation';
 import useUserReservationList from '@hooks/query/user/useUserReservationList';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { RESERVATION_STATUS } from '@constants/reservation';
+import { createChatRoom } from '@services/chat';
+import ROUTES from '@constants/routes';
+import useIsLoading from '@hooks/ui/useIsLoading';
+import useError from '@hooks/ui/useError';
 
 const useUserReservationListPage = () => {
   const [currentTab, setCurrentTab] = useState<ReservationStatus>(
@@ -28,6 +33,18 @@ const useUserReservationListPage = () => {
     refreshReservationList,
   } = useUserReservationList(currentTab, currentCursor);
 
+  const {
+    isLoading: chatLoading,
+    startIsLoading: startChatLoading,
+    endIsLoading: endChatLoading,
+  } = useIsLoading();
+
+  const {
+    error: chatError,
+    resetError: resetChatError,
+    updateError: updateChatError,
+  } = useError();
+
   const updateCurrentCursor = useCallback(() => {
     if (!cursor) return;
     setCurrentCursor(cursor);
@@ -37,6 +54,8 @@ const useUserReservationListPage = () => {
     updateCurrentCursor,
     !isLoading && hasNext && isFirstLoaded,
   );
+
+  const navigate = useNavigate();
 
   const refreshPage = () => {
     setReservationList([]);
@@ -62,6 +81,21 @@ const useUserReservationListPage = () => {
     },
     [],
   );
+
+  const onClickChatButton = useCallback(async (accommodationId: number) => {
+    startChatLoading();
+    try {
+      const { chatRoomId } = await createChatRoom(accommodationId);
+      navigate(ROUTES.chat.room(chatRoomId));
+    } catch (error) {
+      console.log(error);
+      updateChatError(
+        '호스트와의 대화방을 생성하는데 실패했습니다./n다시 시도해주세요.',
+      );
+    } finally {
+      endChatLoading();
+    }
+  }, []);
 
   const onCloseReviewModal = useCallback(() => {
     setReservationToReview(null);
@@ -104,9 +138,13 @@ const useUserReservationListPage = () => {
     infiniteScrolltargetRef,
     error,
     isLoading,
+    chatLoading,
+    chatError,
+    resetChatError,
     handleSwitchTab,
     onClickReviewButton,
     onClickCancelButton,
+    onClickChatButton,
     onCloseReviewModal,
     onCloseCancelModal,
     onSuccessPostReview,

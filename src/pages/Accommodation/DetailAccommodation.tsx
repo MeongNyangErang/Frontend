@@ -56,7 +56,9 @@ interface ReviewData {
 const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
-  const { member } = useAuth();
+  const {
+    member: { data },
+  } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const accommodationId = pathname.split('/').splice(-1);
@@ -88,7 +90,7 @@ const DetailAccommodation = () => {
   };
 
   const handleClickChatButton = async () => {
-    if (!member || member.role === 'host') {
+    if (!data || data.role === 'host') {
       alert('로그인한 유저만 이용 할 수 있습니다.');
       return;
     }

@@ -16,3 +16,7 @@ export interface PreviousChatMessagesResponse {
   nextCursorId: number;
   hasNext: boolean;
 }
+
+export interface CreateChatRoomResponse {
+  chatRoomId: number;
+}
