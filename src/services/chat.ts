@@ -25,6 +25,6 @@ export const getPreviousChatMessages = async (
   );
 };
 
-export const sendChatImage = async (chatRoomId: number, formData: FormData) => {
-  return await fetchCall(`chats/send/image/${chatRoomId}`, 'post', formData);
+export const sendChatImage = async (formData: FormData) => {
+  return await fetchCall(`chats/send/image`, 'post', formData);
 };
