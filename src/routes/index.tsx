@@ -36,7 +36,24 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
-const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+const RecommendNonMember = lazy(
+  () => import('@components/common/RecommendNonMember'),
+);
+const RecommendNonMemberView = lazy(
+  () => import('@components/common/RecommendNonMember/AllView'),
+);
+const RecommendMember = lazy(
+  () => import('@components/common/RecommendMember'),
+);
+const RecommendMostView = lazy(
+  () => import('@components/common/RecommendMember/MostView'),
+);
+const RecommendLastView = lazy(
+  () => import('@components/common/RecommendMember/LastView'),
+);
+const RecommendMemberView = lazy(
+  () => import('@components/common/RecommendMember/AllView'),
+);
 
 const AppRouter = () => {
   return (
@@ -62,7 +79,28 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-          <Route path="common/recommendnonmember" element={<Recommend />} />
+          <Route
+            path="common/recommendnonmember"
+            element={<RecommendNonMember />}
+          />
+          <Route
+            path="common/recommendnonmember/AllView"
+            element={<RecommendNonMemberView />}
+          />
+          <Route path="common/recommendmember" element={<RecommendMember />} />
+          <Route
+            path="common/recommendmember/mostView"
+            element={<RecommendMostView />}
+          />
+          <Route
+            path="common/recommendmember/lastView"
+            element={<RecommendLastView />}
+          />
+          <Route
+            path="common/recommendmember/AllView"
+            element={<RecommendMemberView />}
+          />
+
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />

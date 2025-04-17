@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegHeart, FaStar } from 'react-icons/fa';
 import { GrFormPrevious, GrFormNext } from 'react-icons/gr';
 
-type RecommendationResponse = {
-  LARGE_DOG: Recommendation[];
-  MEDIUM_DOG: Recommendation[];
-  SMALL_DOG: Recommendation[];
-  CAT: Recommendation[];
-};
+interface RecommendationResponse {
+  petId: number;
+  petName: string;
+  recommendations: Recommendation[];
+}
 
 interface Recommendation {
   id: number;
@@ -20,38 +19,18 @@ interface Recommendation {
   thumbnailUrl: string;
 }
 
-const renderOrder: (keyof RecommendationResponse)[] = [
-  'LARGE_DOG',
-  'MEDIUM_DOG',
-  'SMALL_DOG',
-  'CAT',
-];
-
-const animalTypeLabels: { [key in keyof RecommendationResponse]: string } = {
-  LARGE_DOG: '대형견',
-  MEDIUM_DOG: '중형견',
-  SMALL_DOG: '소형견',
-  CAT: '고양이',
-};
-
 const NonMember = () => {
-  const containerRefs = useRef<
-    Record<keyof RecommendationResponse, HTMLDivElement | null>
-  >({
-    LARGE_DOG: null,
-    MEDIUM_DOG: null,
-    SMALL_DOG: null,
-    CAT: null,
-  });
+  const containerRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const navigate = useNavigate();
-  const [recommendation, setRecommendations] =
-    useState<RecommendationResponse | null>(null);
+  const [recommendations, setRecommendations] = useState<
+    RecommendationResponse[] | null
+  >(null);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         const response = (await fetchCall(
-          `/recommendations/default`,
+          `/recommendations/user-pet`,
           'get',
         )) as any;
         setRecommendations(response);
@@ -62,53 +41,46 @@ const NonMember = () => {
     fetchRecommendations();
   }, []);
 
-  const handleSeeAll = (animalType: keyof RecommendationResponse) => {
-    navigate(`/common/recommendnonmember/AllView?type=${animalType}`);
+  const handleSeeAll = (petId: number) => {
+    navigate(`/common/recommendmember/AllView?petId=${petId}`);
   };
 
   return (
     <div>
       <Containers>
-        {recommendation &&
-          renderOrder.map((key) => {
-            const recList = recommendation[key];
+        {recommendations ? (
+          recommendations.map((recommendation) => (
+            <div key={recommendation.petId}>
+              <All>
+                <Real>{recommendation.petName}를 위한 숙소</Real>
+                <SeeAllButton
+                  onClick={() => handleSeeAll(recommendation.petId)}
+                >
+                  더보기
+                </SeeAllButton>
+              </All>
+              <Section>
+                <SliderWrapper>
+                  <NavButton
+                    onClick={() =>
+                      containerRefs.current[recommendation.petId]?.scrollBy({
+                        left: -300,
+                        behavior: 'smooth',
+                      })
+                    }
+                    $position="left"
+                  >
+                    <GrFormPrevious />
+                  </NavButton>
 
-            const scrollLeft = () => {
-              containerRefs.current[key]?.scrollBy({
-                left: -300,
-                behavior: 'smooth',
-              });
-            };
-
-            const scrollRight = () => {
-              containerRefs.current[key]?.scrollBy({
-                left: 300,
-                behavior: 'smooth',
-              });
-            };
-
-            if (!recList || recList.length === 0) return null;
-
-            return (
-              <div key={key}>
-                <All>
-                  <Real>{animalTypeLabels[key]} 추천 숙소</Real>
-                  <SeeAllButton onClick={() => handleSeeAll(key)}>
-                    더보기
-                  </SeeAllButton>
-                </All>
-                <Section>
-                  <SliderWrapper>
-                    <NavButton onClick={scrollLeft} $position="left">
-                      <GrFormPrevious />
-                    </NavButton>
-
-                    <RecommendationContainer
-                      ref={(el) => {
-                        containerRefs.current[key] = el;
-                      }}
-                    >
-                      {recList.slice(0, 6).map((recommendations) => (
+                  <RecommendationContainer
+                    ref={(el) => {
+                      containerRefs.current[recommendation.petId] = el;
+                    }}
+                  >
+                    {recommendation.recommendations
+                      .slice(0, 6)
+                      .map((recommendations) => (
                         <RecommendationCard key={recommendations.id}>
                           <AccommodationThumbnail
                             src={recommendations.thumbnailUrl}
@@ -133,21 +105,33 @@ const NonMember = () => {
                           </AccommodationDetails>
                         </RecommendationCard>
                       ))}
-                    </RecommendationContainer>
-                    <NavButton onClick={scrollRight} $position="right">
-                      <GrFormNext />
-                    </NavButton>
-                  </SliderWrapper>
-                </Section>
-              </div>
-            );
-          })}
+                  </RecommendationContainer>
+
+                  <NavButton
+                    onClick={() =>
+                      containerRefs.current[recommendation.petId]?.scrollBy({
+                        left: 300,
+                        behavior: 'smooth',
+                      })
+                    }
+                    $position="right"
+                  >
+                    <GrFormNext />
+                  </NavButton>
+                </SliderWrapper>
+              </Section>
+            </div>
+          ))
+        ) : (
+          <p>추천 숙소가 없습니다.</p>
+        )}
       </Containers>
     </div>
   );
 };
 
 export default NonMember;
+
 const Containers = styled.div`
   font-family: 'Noto Sans KR';
   margin: 0 auto;

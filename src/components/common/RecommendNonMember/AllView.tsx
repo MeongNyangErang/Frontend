@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchCall } from 'services/api';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { FaRegHeart, FaStar } from 'react-icons/fa';
-import { GrFormPrevious, GrFormNext } from 'react-icons/gr';
+import { useSearchParams } from 'react-router-dom';
 
 type RecommendationResponse = {
   LARGE_DOG: Recommendation[];
@@ -20,6 +19,15 @@ interface Recommendation {
   thumbnailUrl: string;
 }
 
+interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
+
 const renderOrder: (keyof RecommendationResponse)[] = [
   'LARGE_DOG',
   'MEDIUM_DOG',
@@ -34,58 +42,61 @@ const animalTypeLabels: { [key in keyof RecommendationResponse]: string } = {
   CAT: '고양이',
 };
 
-const NonMember = () => {
-  const containerRefs = useRef<
-    Record<keyof RecommendationResponse, HTMLDivElement | null>
-  >({
-    LARGE_DOG: null,
-    MEDIUM_DOG: null,
-    SMALL_DOG: null,
-    CAT: null,
-  });
-  const navigate = useNavigate();
+const AllView = () => {
+  const [searchParams] = useSearchParams();
+  const animalType = searchParams.get('type') as
+    | keyof RecommendationResponse
+    | null;
+  const filteredRenderOrder =
+    animalType && renderOrder.includes(animalType) ? [animalType] : [];
+
   const [recommendation, setRecommendations] =
     useState<RecommendationResponse | null>(null);
+  const [pageInfo, setPageInfo] = useState<PageInfo>({
+    page: 0,
+    size: 20,
+    totalElements: 0,
+    totalPages: 0,
+    first: true,
+    last: false,
+  });
+
+  const fetchRecommendations = async (page: number = 0) => {
+    try {
+      const response = (await fetchCall(
+        `/recommendations/default/more?type=${animalType}&page=0&size=20`,
+        'get',
+      )) as any;
+      setRecommendations(response);
+      setPageInfo({
+        page: response.page,
+        size: response.size,
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        first: response.first,
+        last: response.last,
+      });
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const response = (await fetchCall(
-          `/recommendations/default`,
-          'get',
-        )) as any;
-        setRecommendations(response);
-      } catch (error) {
-        console.error('Error fetching recommendations:', error);
-      }
-    };
     fetchRecommendations();
-  }, []);
+  }, [animalType]);
 
-  const handleSeeAll = (animalType: keyof RecommendationResponse) => {
-    navigate(`/common/recommendnonmember/AllView?type=${animalType}`);
+  const handleLoadMore = () => {
+    if (recommendation && !pageInfo.last) {
+      fetchRecommendations(pageInfo.page + 1);
+    }
   };
 
   return (
     <div>
       <Containers>
         {recommendation &&
-          renderOrder.map((key) => {
+          filteredRenderOrder.map((key) => {
             const recList = recommendation[key];
-
-            const scrollLeft = () => {
-              containerRefs.current[key]?.scrollBy({
-                left: -300,
-                behavior: 'smooth',
-              });
-            };
-
-            const scrollRight = () => {
-              containerRefs.current[key]?.scrollBy({
-                left: 300,
-                behavior: 'smooth',
-              });
-            };
 
             if (!recList || recList.length === 0) return null;
 
@@ -93,22 +104,11 @@ const NonMember = () => {
               <div key={key}>
                 <All>
                   <Real>{animalTypeLabels[key]} 추천 숙소</Real>
-                  <SeeAllButton onClick={() => handleSeeAll(key)}>
-                    더보기
-                  </SeeAllButton>
                 </All>
                 <Section>
                   <SliderWrapper>
-                    <NavButton onClick={scrollLeft} $position="left">
-                      <GrFormPrevious />
-                    </NavButton>
-
-                    <RecommendationContainer
-                      ref={(el) => {
-                        containerRefs.current[key] = el;
-                      }}
-                    >
-                      {recList.slice(0, 6).map((recommendations) => (
+                    <RecommendationContainer>
+                      {recList.map((recommendations) => (
                         <RecommendationCard key={recommendations.id}>
                           <AccommodationThumbnail
                             src={recommendations.thumbnailUrl}
@@ -125,7 +125,7 @@ const NonMember = () => {
                             </All>
                             <ReviewCount>
                               <Star />
-                              {recommendations.totalRating}
+                              {recommendations.totalRating.toFixed(1)}
                             </ReviewCount>
                             <AccommodationPrice>
                               {recommendations.price.toLocaleString()}원 ~
@@ -134,10 +134,12 @@ const NonMember = () => {
                         </RecommendationCard>
                       ))}
                     </RecommendationContainer>
-                    <NavButton onClick={scrollRight} $position="right">
-                      <GrFormNext />
-                    </NavButton>
                   </SliderWrapper>
+                  {recommendation[key].length > 6 && !pageInfo.last && (
+                    <LoadMoreButton onClick={handleLoadMore}>
+                      더보기
+                    </LoadMoreButton>
+                  )}
                 </Section>
               </div>
             );
@@ -147,7 +149,7 @@ const NonMember = () => {
   );
 };
 
-export default NonMember;
+export default AllView;
 const Containers = styled.div`
   font-family: 'Noto Sans KR';
   margin: 0 auto;
@@ -157,11 +159,7 @@ const Containers = styled.div`
 `;
 
 const Section = styled.div`
-  box-shadow: ${({ theme }) => theme.shadow.bottom};
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 15px;
+  padding: 5px;
 `;
 
 const All = styled.div`
@@ -174,37 +172,24 @@ const Real = styled.p`
   font-size: 20px;
   color: var(--gray-700);
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   padding-left: 5px;
-`;
-
-const SeeAllButton = styled.button`
-  color: #3a86ff;
-  background: rgb(249, 252, 255);
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 30px;
-  padding: 5px;
 `;
 
 const RecommendationContainer = styled.div`
   display: flex;
-  flex-wrap: nowrap;
-  gap: 15px;
-  overflow-x: hidden;
+  flex-wrap: wrap;
+  gap: 20px;
   padding-bottom: 10px;
 `;
 
 const RecommendationCard = styled.div`
-  width: 250px;
+  width: 320px;
   height: auto;
-  background: white;
-  padding: 5px;
   border-radius: 10px;
   flex-shrink: 0;
-  border: 1px solid #eeeeee;
+  border: 1px solid #ddd;
   box-shadow: ${({ theme }) => theme.shadow.bottom};
 `;
 
@@ -216,7 +201,7 @@ const AccommodationThumbnail = styled.img`
 `;
 
 const AccommodationDetails = styled.div`
-  padding-top: 5px;
+  padding: 7px;
 `;
 
 const AccommodationName = styled.h4`
@@ -228,7 +213,6 @@ const AccommodationPrice = styled.p`
   font-size: 18px;
   color: var(--gray-700);
   font-weight: bold;
-  margin-bottom: 15px;
 `;
 
 const ReviewCount = styled.p`
@@ -246,7 +230,7 @@ const Star = styled(FaStar)`
   margin-right: 3px;
 `;
 
-const AccommodationType = styled.button`
+const AccommodationType = styled.h4`
   background: #f5f5f5;
   border-radius: 20px;
   font-size: 14px;
@@ -265,22 +249,19 @@ const SliderWrapper = styled.div`
   align-items: center;
 `;
 
-const NavButton = styled.button<{ $position: 'left' | 'right' }>`
-  position: absolute;
-  top: 45%;
-  ${({ $position }) =>
-    $position === 'left' ? 'left: -25px;' : 'right: -25px;'}
-  transform: translateY(-50%);
-  background: white;
-  border: 1px solid #ddd;
-  box-shadow: ${({ theme }) => theme.shadow.bottom};
-  font-size: 30px;
+const LoadMoreButton = styled.button`
+  width: 100%;
+  margin: 5px auto 0;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(255, 212, 219);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  z-index: 10;
-  border-radius: 15px;
-  padding: 7px;
-  color: var(--gray-600);
   &:hover {
-    background: var(--gray-100);
+    color: #ff7b92;
   }
 `;
