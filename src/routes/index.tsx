@@ -41,14 +41,11 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
-<<<<<<<<< Temporary merge branch 1
-const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+
 const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
 const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
-=========
-const RecommendNonMember = lazy(
-  () => import('@components/common/RecommendNonMember'),
-);
+
+const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
 const RecommendNonMemberView = lazy(
   () => import('@pages/Home/RecommendNonMember/AllView'),
 );
@@ -62,7 +59,6 @@ const RecommendLastView = lazy(
 const RecommendMemberView = lazy(
   () => import('@pages/Home/RecommendMember/AllView'),
 );
->>>>>>>>> Temporary merge branch 2
 
 const AppRouter = () => {
   return (
@@ -106,6 +102,7 @@ const AppRouter = () => {
             path="recommendMember/AllView"
             element={<RecommendMemberView />}
           />
+
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />
