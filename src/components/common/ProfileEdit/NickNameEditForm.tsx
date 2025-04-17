@@ -5,19 +5,22 @@ import { validateNickname } from '@utils/validateSignUp';
 import useError from '@hooks/ui/useError';
 import useIsLoading from '@hooks/ui/useIsLoading';
 import { checkNicknameDuplicate } from '@services/signup';
+import EditSuccessMessage from './EditSuccessMessage';
 import { SFormTitle } from './styles';
 import Button from '../Button';
 
 interface NickNameEditFormProps {
   defaultValue: string;
+  onClose(): void;
 }
 
-const NickNameEditForm = ({ defaultValue }: NickNameEditFormProps) => {
+const NickNameEditForm = ({ defaultValue, onClose }: NickNameEditFormProps) => {
   const [text, setText] = useState(defaultValue);
   const [duplicateCheck, setDuplicateCheck] = useState(false);
   const { error, updateError } = useError();
   const { error: submitError, updateError: updateSubmitError } = useError();
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     if (duplicateCheck) setDuplicateCheck(false);
@@ -43,6 +46,8 @@ const NickNameEditForm = ({ defaultValue }: NickNameEditFormProps) => {
     updateSubmitError('');
     startIsLoading();
     try {
+      //api
+      setIsSuccess(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -55,7 +60,9 @@ const NickNameEditForm = ({ defaultValue }: NickNameEditFormProps) => {
     updateError(error);
   }, [text]);
 
-  return (
+  return isSuccess ? (
+    <EditSuccessMessage onClose={onClose} message="닉네임이 변경되었습니다." />
+  ) : (
     <SNickNameEditFormWrap>
       <SFormTitle>닉네임 변경</SFormTitle>
       <SInputWrap>
@@ -87,7 +94,6 @@ const NickNameEditForm = ({ defaultValue }: NickNameEditFormProps) => {
     </SNickNameEditFormWrap>
   );
 };
-
 export default NickNameEditForm;
 
 const SNickNameEditFormWrap = styled.div`

@@ -36,7 +36,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
     setSelectedEditItem(item);
   };
 
-  const handleCloseModal = useCallback(() => {
+  const onCloseModal = useCallback(() => {
     setSelectedEditItem(null);
   }, []);
 
@@ -74,10 +74,10 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
                 key={id}
                 isOpen={isOpen && enableToEdit}
                 variant="full"
-                onClose={handleCloseModal}
+                onClose={onCloseModal}
                 closeType="x"
               >
-                {element(data as HostProfile)}
+                {element(data as HostProfile, onCloseModal)}
               </Modal>
             );
           }
@@ -86,10 +86,10 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
               <Modal
                 isOpen={isOpen && enableToEdit}
                 variant="full"
-                onClose={handleCloseModal}
+                onClose={onCloseModal}
                 closeType="x"
               >
-                {element(data)}
+                {element(data, onCloseModal)}
               </Modal>
             );
           }
@@ -98,10 +98,10 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
               <Modal
                 isOpen={isOpen && enableToEdit}
                 variant="full"
-                onClose={handleCloseModal}
+                onClose={onCloseModal}
                 closeType="x"
               >
-                {element()}
+                {element(onCloseModal)}
               </Modal>
             );
           }

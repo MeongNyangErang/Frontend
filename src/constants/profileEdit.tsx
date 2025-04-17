@@ -22,31 +22,48 @@ export const hostProfileEditList = [
 type ModalFormItem =
   | {
       id: 'nickname';
-      element: (data: UserProfile | HostProfile) => JSX.Element;
+      element: (
+        data: UserProfile | HostProfile,
+        onClose: () => void,
+      ) => JSX.Element;
     }
   | {
       id: 'name' | 'phoneNumber';
-      element: (data: HostProfile) => JSX.Element;
+      element: (data: HostProfile, onClose: () => void) => JSX.Element;
     }
-  | { id: 'password' | 'withdraw'; element: () => JSX.Element };
+  | {
+      id: 'password' | 'withdraw';
+      element: (onClose: () => void) => JSX.Element;
+    };
 
 export const modalFormList: ModalFormItem[] = [
   {
     id: 'nickname',
-    element: (data: UserProfile | HostProfile) => (
-      <NickNameEditForm defaultValue={data.nickname} />
+    element: (data: UserProfile | HostProfile, onClose: () => void) => (
+      <NickNameEditForm defaultValue={data.nickname} onClose={onClose} />
     ),
   },
   {
     id: 'name',
-    element: (data: HostProfile) => <NameEditForm defaultValue={data.name} />,
+    element: (data: HostProfile, onClose: () => void) => (
+      <NameEditForm defaultValue={data.name} onClose={onClose} />
+    ),
   },
   {
     id: 'phoneNumber',
-    element: (data: HostProfile) => (
-      <PhoneNumberEditForm defaultValue={data.currentPhoneNumber} />
+    element: (data: HostProfile, onClose: () => void) => (
+      <PhoneNumberEditForm
+        defaultValue={data.currentPhoneNumber}
+        onClose={onClose}
+      />
     ),
   },
-  { id: 'password', element: () => <PasswordEditForm /> },
-  { id: 'withdraw', element: () => <WithdrawForm /> },
+  {
+    id: 'password',
+    element: (onClose: () => void) => <PasswordEditForm onClose={onClose} />,
+  },
+  {
+    id: 'withdraw',
+    element: (onClose: () => void) => <WithdrawForm onClose={onClose} />,
+  },
 ];

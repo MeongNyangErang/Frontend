@@ -1,4 +1,8 @@
-const WithdrawForm = () => {
+interface WithdrawFormProps {
+  onClose(): void;
+}
+
+const WithdrawForm = ({}: WithdrawFormProps) => {
   return <></>;
 };
 

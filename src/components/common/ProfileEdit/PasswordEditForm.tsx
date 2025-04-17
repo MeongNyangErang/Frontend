@@ -1,4 +1,8 @@
-const PasswordEditForm = () => {
+interface PasswordEditFormProps {
+  onClose(): void;
+}
+
+const PasswordEditForm = ({}: PasswordEditFormProps) => {
   return <></>;
 };
 

@@ -159,13 +159,15 @@ const RegisterAccommodation = () => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    const regex = /^[가-힣a-zA-Z0-9\s]+$/;
+    // const regex = /^[가-힣a-zA-Z0-9\s]+$/;
 
-    if (regex.test(newName)) {
-      setName(newName);
-    } else {
-      setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
-    }
+    // if (regex.test(newName)) {
+
+    // } else {
+    //   setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
+    // }
+
+    setName(newName);
   };
 
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
