@@ -41,8 +41,14 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
-<<<<<<< HEAD
-const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
+<<<<<<<<< Temporary merge branch 1
+const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
+const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
+=========
+const RecommendNonMember = lazy(
+  () => import('@components/common/RecommendNonMember'),
+);
 const RecommendNonMemberView = lazy(
   () => import('@pages/Home/RecommendNonMember/AllView'),
 );
@@ -56,11 +62,7 @@ const RecommendLastView = lazy(
 const RecommendMemberView = lazy(
   () => import('@pages/Home/RecommendMember/AllView'),
 );
-=======
-const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
-const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
-const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
->>>>>>> b7291ad2cc4d64b58ea8e139611ba1c1c3b28293
+>>>>>>>>> Temporary merge branch 2
 
 const AppRouter = () => {
   return (
