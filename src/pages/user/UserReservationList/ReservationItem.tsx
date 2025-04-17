@@ -16,8 +16,11 @@ import {
 interface ReservationItemProps {
   currentTab: ReservationStatus;
   reservation: UserReservationItem;
+  chatLoading: boolean;
+  chatError: string;
   onClickReviewButton: (reservatoin: UserReservationItem) => () => void;
   onClickCancelButton: (reservationId: string) => () => void;
+  onClickChatButton: (accommodationId: number) => Promise<void>;
 }
 
 const ReservationItem = ({
@@ -25,6 +28,8 @@ const ReservationItem = ({
   reservation,
   onClickReviewButton,
   onClickCancelButton,
+  onClickChatButton,
+  ...rest
 }: ReservationItemProps) => {
   const {
     reservationDate,
@@ -35,6 +40,8 @@ const ReservationItem = ({
     checkInTime,
     checkOutTime,
     totalPrice,
+    reviewWritten,
+    accommodationId,
   } = reservation;
 
   return (
@@ -66,8 +73,11 @@ const ReservationItem = ({
           <SReservationButtons>
             <ReservationButtons
               status={currentTab}
+              reviewWritten={reviewWritten}
               onClickReview={onClickReviewButton(reservation)}
               onClickCancel={onClickCancelButton(reservation.reservationId)}
+              onClickChat={() => onClickChatButton(accommodationId)}
+              {...rest}
             />
           </SReservationButtons>
         </SReservationButtonArea>

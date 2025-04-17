@@ -17,6 +17,10 @@ const SChatContiner = styled.div`
   max-width: ${({ theme }) => theme.layouts.innerWidth};
   height: 100%;
 
+  > div:last-child {
+    border-left: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+  }
+
   ${media.tablet} {
     display: grid;
     grid-template-columns: 360px 1fr;

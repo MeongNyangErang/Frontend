@@ -30,19 +30,16 @@ interface ButtonProps {
 }
 
 interface AccommodationResponse {
-  id: string;
+  accommodationId: string;
   name: string;
   type: string;
   description: string | null;
-  address: {
-    area: string;
-    town: string;
-  };
+  address: string;
   detailedAddress: string | null;
   latitude: number | null;
   longitude: number | null;
-  thumbnail: string | null;
-  additionalImages: string[];
+  thumbnailUrl: string | null;
+  additionalImageUrls: string[];
   facilityTypes: string[];
   petFacilityTypes: string[];
   allowPetTypes: string[];
@@ -74,6 +71,15 @@ const petFacility = [
 ];
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
+const ACCOMMODATION_MAP = {
+  '호텔 리조트': 'HOTEL_RESORT',
+  풀빌라: 'FULL_VILLA',
+  펜션: 'PENSION',
+  독채: 'DETACHED_HOUSE',
+};
+
+type AccommodationType = keyof typeof ACCOMMODATION_MAP;
+
 const RegisterAccommodation = () => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
@@ -87,9 +93,8 @@ const RegisterAccommodation = () => {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
-  const [accommodationType, setAccommodationType] = useState<string | null>(
-    null,
-  );
+  const [accommodationType, setAccommodationType] =
+    useState<AccommodationType | null>(null);
 
   const [additionalImagesPreview, setAdditionalImagesPreview] = useState<
     string[]
@@ -113,7 +118,6 @@ const RegisterAccommodation = () => {
   const POSTCODE_SCRIPT_URL =
     '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
   const VITE_GEO_API_KEY = import.meta.env.VITE_GEO_API_KEY;
-
   const geocodeAddress = async (address: string, apiKey: string) => {
     try {
       const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
@@ -142,6 +146,7 @@ const RegisterAccommodation = () => {
     const { lat, lng } = await geocodeAddress(fullAddress, VITE_GEO_API_KEY);
     setLatitude(lat);
     setLongitude(lng);
+    console.log(lat, lng);
   };
 
   const handleDescriptionChange = (
@@ -214,7 +219,7 @@ const RegisterAccommodation = () => {
     }
   };
 
-  const handleClick = (value: string) => {
+  const handleClick = (value: AccommodationType) => {
     setAccommodationType(value);
   };
 
@@ -272,12 +277,6 @@ const RegisterAccommodation = () => {
         return;
       }
 
-      const ACCOMMODATION_MAP = {
-        '호텔 리조트': 'HOTEL_RESORT',
-        풀빌라: 'FULL_VILLA',
-        펜션: 'PENSION',
-        독채: 'DETACHED_HOUSE',
-      };
       const FACILITY_TYPES = {
         '무료 주차': 'FREE_PARKING',
         노래방: 'KARAOKE_ROOM',
@@ -311,29 +310,48 @@ const RegisterAccommodation = () => {
         고양이: 'CAT',
       };
 
+      const data = {
+        name,
+        type: ACCOMMODATION_MAP[accommodationType!],
+        address: `${address.areaAddress} ${address.townAddress}`,
+        detailedAddress,
+        description,
+        latitude: latitude?.toString() || '',
+        longitude: longitude?.toString() || '',
+        facilityTypes: selectedFacility.map(
+          (f) => FACILITY_TYPES[f as keyof typeof FACILITY_TYPES],
+        ),
+        petFacilityTypes: selectedPetFacility.map(
+          (f) => PETFACILITY_TYPE[f as keyof typeof PETFACILITY_TYPE],
+        ),
+        allowPetTypes: selectedAllowPet.map(
+          (p) => ALLOWPET_TYPES[p as keyof typeof ALLOWPET_TYPES],
+        ),
+      } as any;
+
       const formData = new FormData();
 
-      const blob = new Blob(
-        [
-          JSON.stringify({
-            name,
-            type: ACCOMMODATION_MAP['호텔 리조트'],
-            address: `${address.areaAddress} ${address.townAddress}`,
-            detailedAddress,
-            description,
-            latitude: latitude?.toString() || '',
-            longitude: longitude?.toString() || '',
-            facilityTypes: FACILITY_TYPES['무료 주차'],
-            petFacilityTypes: PETFACILITY_TYPE['샤워장'],
-            allowPetTypes: ALLOWPET_TYPES['대형견'],
-          }),
-        ],
-        {
-          type: 'application/json',
-        },
-      );
+      if (accommodationId) {
+        formData.append('newThumbnail', thumbnail);
+        data['deletedImageUrls'] = [thumbnailPreview];
+        if (additionalImages.length > 0) {
+          additionalImages.forEach((image) => {
+            formData.append('newAdditionalImages', image);
+          });
+        }
+      } else {
+        formData.append('thumbnail', thumbnail);
+        if (additionalImages.length > 0) {
+          additionalImages.forEach((image) => {
+            formData.append('additionalImages', image);
+          });
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(data)], {
+        type: 'application/json',
+      });
       formData.append('request', blob);
-      formData.append('thumbnail', thumbnail);
 
       try {
         let response: AccommodationResponse;
@@ -343,7 +361,7 @@ const RegisterAccommodation = () => {
         } else {
           response = await fetchCall(`/hosts/accommodations`, 'post', formData);
           alert('숙소 정보가 등록되었습니다.');
-          setAccommodationId(response.id);
+          setAccommodationId(response.accommodationId);
         }
       } catch (error) {
         console.error('API를 불러오는데 오류가 발생했습니다:', error);
@@ -360,19 +378,20 @@ const RegisterAccommodation = () => {
         );
         if (response) {
           const accommodation = response;
-          setAccommodationId(accommodation.id);
+          setAccommodationId(accommodation.accommodationId);
           setName(accommodation.name);
-          setAccommodationType(accommodation.type);
+          setAccommodationType(accommodation.type as AccommodationType);
           setDescription(accommodation.description || '');
+
           setAddress({
-            areaAddress: accommodation.address.area,
-            townAddress: accommodation.address.town,
+            areaAddress: accommodation.address,
+            townAddress: '',
           });
           setDetailedAddress(accommodation.detailedAddress || '');
           setLatitude(accommodation.latitude);
           setLongitude(accommodation.longitude);
-          setThumbnailPreview(accommodation.thumbnail);
-          setAdditionalImagesPreview(accommodation.additionalImages || []);
+          setThumbnailPreview(accommodation.thumbnailUrl);
+          setAdditionalImagesPreview(accommodation.additionalImageUrls || []);
           (accommodation.facilityTypes || []).forEach(selectFacility);
           (accommodation.petFacilityTypes || []).forEach(selectPetFacility);
           (accommodation.allowPetTypes || []).forEach(selectAllowPet);
@@ -432,7 +451,7 @@ const RegisterAccommodation = () => {
         <SSLabel>숙소 유형</SSLabel>
         <ButtonContainer>
           <CheckInput
-            selected={accommodationType === '호텔 리조트'}
+            selected={accommodationType === ('호텔리조트' as AccommodationType)}
             onClick={() => handleClick('호텔 리조트')}
           >
             호텔 리조트

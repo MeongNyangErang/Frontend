@@ -15,11 +15,11 @@ const usePreviousChatMessages = (
     queryKey: ['chat', 'previous-messages', chatRoomId],
     queryFn: ({ pageParam }) => {
       if (!chatRoomId) throw new Error('유효하지 않은 chatRoomId');
-      return getPreviousChatMessages(chatRoomId, pageParam);
+      return getPreviousChatMessages(chatRoomId, pageParam ?? 0);
     },
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
-      return lastPage.hasNext ? lastPage.nextCursorId : undefined;
+      return !lastPage.last ? lastPage.page : null;
     },
     enabled: !!chatRoomId,
   });

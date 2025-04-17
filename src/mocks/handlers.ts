@@ -79,17 +79,14 @@ export const handlers = [
 
     return HttpResponse.json(mockData);
   }),
-  http.get(`${BASE_URL}/users/profile`, async () => {
+  http.get(`${BASE_URL}/users/me`, async () => {
     const userProfileData = {
-      code: 200,
-      data: {
-        nickname: '유저123닉네임',
-        profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-      },
+      nickname: '유저123닉네임',
+      profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
     };
     return HttpResponse.json(userProfileData);
   }),
-  http.get(`${BASE_URL}/hosts/profile`, async () => {
+  http.get(`${BASE_URL}/hosts/me`, async () => {
     const userProfileData = {
       code: 200,
       data: {
@@ -293,13 +290,13 @@ export const handlers = [
 
     let content;
     switch (status) {
-      case 'reserved':
+      case 'RESERVED':
         content = reservedReservations;
         break;
-      case 'completed':
+      case 'COMPLETED':
         content = completedReservations;
         break;
-      case 'canceled':
+      case 'CANCELED':
         content = canceledReservations;
         break;
       default:
@@ -451,7 +448,7 @@ export const handlers = [
   http.get(`${BASE_URL}/chats/:chatRoomId/messages`, async () => {
     const response = {
       code: 200,
-      messages: previouseChatMessages,
+      data: previouseChatMessages,
       nextCursorId: 100,
       hasNext: true,
     };

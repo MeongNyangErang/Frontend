@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import useAuth from '@hooks/auth/useAuth';
-import { logoutHost, logoutUser } from '@services/auth';
 import ROUTES from '@constants/routes';
 import { MemberRole } from '@typings/member';
 

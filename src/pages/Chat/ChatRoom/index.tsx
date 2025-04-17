@@ -22,6 +22,8 @@ import {
   SSubmitButton,
   SImagePreivewBox,
   SErrorMessage,
+  SMessageText,
+  SMessageImage,
 } from './styles';
 
 interface ChatRoomProps {
@@ -34,7 +36,7 @@ const ChatRoom = ({
   partnerInfo: { partnerImageUrl, partnerName },
 }: ChatRoomProps) => {
   const {
-    member,
+    member: { data },
     messages,
     text,
     image,
@@ -52,7 +54,7 @@ const ChatRoom = ({
     handleSubmit,
   } = useChatRoom(chatRoomId);
 
-  if (!member) return <Navigate to={ROUTES.home} />;
+  if (!data) return <Navigate to={ROUTES.home} />;
 
   return (
     <>
@@ -61,21 +63,29 @@ const ChatRoom = ({
           <SMessageList>
             <div ref={infiniteScrollRef} />
             {messages.map((message, index) => {
-              const { content, senderType, created_at } = message;
-              const isMyMessage = senderType === member.role.toUpperCase();
+              const { messageContent, senderType, created_at, messageType } =
+                message;
+              const isMyMessage = senderType === data.role.toUpperCase();
               const isThePreviousSender =
                 index > 0 && messages[index - 1].senderType === senderType;
+              const isText = messageType === 'MESSAGE';
               const formattedTime = formatDateOrTime(created_at);
               return (
                 <SMessage
-                  key={created_at}
+                  key={`${created_at}${index}`}
                   className={isMyMessage ? 'right' : 'left'}
                 >
                   {isMyMessage ? (
                     <SMessageContainer className="right">
                       <SMessageTime>{formattedTime}</SMessageTime>
                       <SMessageContent>
-                        <p>{content}</p>
+                        <div>
+                          {isText ? (
+                            <SMessageText>{messageContent}</SMessageText>
+                          ) : (
+                            <SMessageImage src={messageContent} alt="이미지" />
+                          )}
+                        </div>
                       </SMessageContent>
                     </SMessageContainer>
                   ) : (
@@ -87,7 +97,13 @@ const ChatRoom = ({
                       </SMessageProfile>
                       <SMessageContent>
                         {!isThePreviousSender && <span>{partnerName}</span>}
-                        <p>{content}</p>
+                        <div>
+                          {isText ? (
+                            <SMessageText>{messageContent}</SMessageText>
+                          ) : (
+                            <SMessageImage src={messageContent} alt="이미지" />
+                          )}
+                        </div>
                       </SMessageContent>
                       <SMessageTime>{formattedTime}</SMessageTime>
                     </SMessageContainer>

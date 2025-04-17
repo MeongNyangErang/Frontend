@@ -8,7 +8,7 @@ const ROUTES = {
   myPage: {
     user: {
       root: '/mypage/user',
-      profile: '/mypage/user/profile',
+      profileEdit: '/mypage/user/profile-edit',
       myPet: '/mypage/user/my-pet',
       reservationList: '/mypage/user/reservation-list',
       reviews: '/mypage/user/reviews',
@@ -16,7 +16,7 @@ const ROUTES = {
     },
     host: {
       root: '/mypage/host',
-      profile: '/mypage/host/profile',
+      profileEdit: '/mypage/host/profile-edit',
       reservation: '/mypage/host/reservation',
       reviews: '/mypage/host/reviews',
       registerAccommodation: '/mypage/host/register-accommodation',

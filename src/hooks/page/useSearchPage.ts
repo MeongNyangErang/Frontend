@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getSearchQuery, getSearchFilter } from '@utils/searchParams';
+import { getSearchBase, getSearchFilter } from '@utils/searchParams';
 import ROUTES from '@constants/routes';
 import { DEFAULT_SEARCH_QUERY } from '@constants/search';
 
 const useSearchPage = () => {
   const [searchParams] = useSearchParams();
-  const [currentQuery, setCurrentQuery] = useState(
-    getSearchQuery(searchParams),
-  );
+  const [currentQuery, setCurrentQuery] = useState(getSearchBase(searchParams));
   const [currentFilter, setCurrentFilter] = useState(
     getSearchFilter(searchParams),
   );
@@ -27,7 +25,7 @@ const useSearchPage = () => {
   useEffect(() => {
     if (searchParams.size === 0) return;
 
-    setCurrentQuery(getSearchQuery(searchParams));
+    setCurrentQuery(getSearchBase(searchParams));
     setCurrentFilter(getSearchFilter(searchParams));
   }, [searchParams]);
 

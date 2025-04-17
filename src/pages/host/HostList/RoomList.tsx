@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { HiEllipsisVertical } from 'react-icons/hi2';
+import ROUTES from '@constants/routes';
+import { fetchCall } from '@services/api';
 
 interface Room {
   roomId: number;
@@ -31,19 +33,13 @@ const RoomList: React.FC = () => {
     setIsLoading(true);
     try {
       const lastRoomId =
-        roomList.length > 0 ? roomList[roomList.length - 1].roomId : null;
+        roomList.length > 0 ? roomList[roomList.length - 1].roomId : '';
+      const response = (await fetchCall(
+        `hosts/rooms?cursorId=${lastRoomId}`,
+        'get',
+      )) as any;
 
-      const response = await axios.get(`${BASE_URL}/register/roomList`, {
-        params: {
-          cursor: lastRoomId,
-          size: 10,
-        },
-      });
-      if (response.data.code === 200) {
-        setRoomList(response.data.data);
-      } else {
-        console.log('객실을 불러오는 데 실패했습니다.');
-      }
+      setRoomList(response.content);
     } catch (error) {
       console.log('서버 오류가 발생했습니다.');
     } finally {
@@ -57,15 +53,11 @@ const RoomList: React.FC = () => {
 
   const deleteRoom = async (roomId: number) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/register/roomList`);
-      if (response.data.code === 200) {
-        setRoomList((prev) => prev.filter((room) => room.roomId !== roomId));
-      } else {
-        alert('삭제에 실패했습니다.');
-      }
+      await fetchCall(`hosts/rooms/${roomId}`, 'delete');
+      setRoomList((prev) => prev.filter((room) => room.roomId !== roomId));
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
-      alert('서버 오류로 삭제에 실패했습니다.');
+      alert('삭제에 실패했습니다.');
     }
   };
 
@@ -87,7 +79,7 @@ const RoomList: React.FC = () => {
   }, [observerRef.current, hasNext, isLoading]);
 
   const openRegisterPage = () => {
-    navigate('/register');
+    navigate(ROUTES.myPage.host.registerRoom);
   };
 
   const formatPrice = (price: number) => {
@@ -109,24 +101,39 @@ const RoomList: React.FC = () => {
   return (
     <div>
       {roomList.map((room) => (
-        <HotelContainer key={room.roomId}>
+        <HotelContainer
+          key={room.roomId}
+          onClick={() =>
+            navigate(ROUTES.myPage.host.registerRoom, {
+              state: { selectedRoomId: room.roomId },
+            })
+          }
+        >
           <Thumbnail src={room.thumbnailUrl} />
           <HotelInfo>
             <HeaderRow>
               <HotelTitle>{room.name}</HotelTitle>
               <DropdownWrapper>
                 <MoreButton
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setDropdownOpenId(
                       dropdownOpenId === room.roomId ? null : room.roomId,
-                    )
-                  }
+                    );
+                  }}
                 >
                   <HiEllipsisVertical />
                 </MoreButton>
                 {dropdownOpenId === room.roomId && (
                   <DropdownMenu>
-                    <DropdownItem onClick={() => deleteRoom(room.roomId)}>
+                    <DropdownItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        deleteRoom(room.roomId);
+                      }}
+                    >
                       삭제하기
                     </DropdownItem>
                   </DropdownMenu>

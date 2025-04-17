@@ -11,18 +11,15 @@ export interface ChatItem {
 export interface PreviousChatMessage {
   messageId?: number;
   senderType: 'USER' | 'HOST';
-  content: string;
+  messageContent: string;
   created_at: string;
+  messageType: 'MESSAGE' | 'IMAGE';
 }
 
 export interface NewChatMessage {
-  chatRoomId: number;
-  senderId: number;
+  messageContent: string;
   senderType: 'USER' | 'HOST';
-  receiverId: number;
-  receiverType: 'USER' | 'HOST';
-  content: string;
-  notificationType: 'MESSAGE';
+  messageType: 'MESSAGE' | 'IMAGE';
   createdAt: string;
 }
 

@@ -14,14 +14,16 @@ const mobileMenu = [
 ] as const;
 
 const MobileNav = () => {
-  const { member } = useAuth();
+  const {
+    member: { data, authLoading },
+  } = useAuth();
 
-  if (!member) return null;
+  if (!data) return null;
 
   return (
     <SNav>
       {mobileMenu.map(({ name, path, icon }) => {
-        const isHostMyPage = member.role === 'host' && name === 'MY';
+        const isHostMyPage = data.role === 'host' && name === 'MY';
         return (
           <SNavLink
             key={name}

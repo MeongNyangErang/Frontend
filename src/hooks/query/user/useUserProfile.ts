@@ -7,7 +7,6 @@ const useUserProfile = () => {
     queryFn: () => getUserProfile(),
     staleTime: 1000 * 60 * 30,
   });
-  console.log(result.data, 'result');
   return result;
 };
 

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import useHostRegister from '@hooks/page/useHostRegister';
 import Header from '@components/common/RegisterHeader/index';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { fetchCall } from 'services/api';
+import { useNavigate } from 'react-router-dom';
 import {
   SFieldset,
   SOptionSelectorWrapper,
@@ -22,41 +24,30 @@ import {
   SErrorMessage,
   SSUploadContainer,
 } from '@pages/host/HostRegister/styles';
+import ROUTES from '@constants/routes';
 
 interface ButtonProps {
   selected: boolean;
 }
 
 interface RoomResponse {
-  data: {
-    id: string;
-    name: string;
-    type: string;
-    description: string | null;
-    address: {
-      area: string;
-      town: string;
-    };
-    detailedAddress: string | null;
-    latitude: number | null;
-    longitude: number | null;
-    thumbnail: string | null;
-    additionalImages: string[];
-    facilityTypes: string[];
-    petFacilityTypes: string[];
-    hashTagTypes: string[];
-
-    price: string;
-    extraFee: string;
-    extraPeopleFee: string;
-    extraPetFee: string;
-    standardPeopleCount: string;
-    maxPeopleCount: string;
-    standardPetCount: string;
-    maxPetCount: string;
-    checkInTime: string;
-    checkOutTime: string;
-  };
+  roomId: string;
+  name: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  facilityTypes: string[];
+  petFacilityTypes: string[];
+  hashtagTypes: string[];
+  price: number;
+  extraFee: number;
+  extraPeopleFee: number;
+  extraPetFee: number;
+  standardPeopleCount: number;
+  maxPeopleCount: number;
+  standardPetCount: number;
+  maxPetCount: number;
+  checkInTime: string;
+  checkOutTime: string;
 }
 
 const facility = [
@@ -74,7 +65,7 @@ const facility = [
 ];
 const petFacility = [
   '식기',
-  '배변 용품',
+  '배변용품',
   '장난감',
   '침대',
   '캣 타워',
@@ -87,15 +78,54 @@ const petFacility = [
 const hashTag = [
   '가족여행',
   '스파',
-  '풀빌라',
   '오션뷰',
   '파티룸',
   '아늑한',
   '모던한',
   '금연숙소',
-  '프레스트뷰',
+  '포레스트뷰',
   '감성숙소',
 ];
+
+const HASHTAG_TYPE_MAP = {
+  가족여행: 'FAMILY_TRIP',
+  스파: 'SPA',
+  오션뷰: 'OCEAN_VIEW',
+  포레스트뷰: 'FOREST_VIEW',
+  아늑한: 'COZY',
+  금연숙소: 'NO_SMOKING',
+  모던한: 'MODERN',
+  파티룸: 'PARTY_ROOM',
+  감성숙소: 'EMOTIONAL',
+};
+
+const ROOM_FACILITY_TYPE_MAP = {
+  스타일러: 'STYLER',
+  냉장고: 'REFRIGERATOR',
+  전기밥솥: 'RICE_COOKER',
+  샤워실: 'SHOWER_ROOM',
+  에어컨: 'AIR_CONDITIONER',
+  TV: 'TV',
+  와이파이: 'WIFI',
+  욕실용품: 'BATHROOM_SUPPLIES',
+  드라이기: 'DRYER',
+  바비큐: 'BARBECUE',
+  '객실 내 취사': 'POSSIBLE_COOK_IN_ROOM',
+};
+
+const ROOM_PET_FACILITY_TYPE_MAP = {
+  식기: 'FOOD_BOWL',
+  '전용 마당': 'EXCLUSIVE_YARD',
+  배변용품: 'POTTY_SUPPLIES',
+  장난감: 'TOY',
+  침대: 'BED',
+  '미끄럼 방지 바닥': 'ANTI_SLIP_FLOOR',
+  '펜스 설치 공간': 'FENCE_AREA',
+  '캣 타워': 'CAT_TOWER',
+  '캣 휠': 'CAT_WHEEL',
+  '그루밍 브러쉬': 'BRUSH',
+  '강아지 계단': 'PET_STEPS',
+};
 
 const RegisterRoom = () => {
   const [roomId, setRoomId] = useState<string | null>(null);
@@ -123,7 +153,8 @@ const RegisterRoom = () => {
   const [peopleCountError, setPeopleCountError] = useState('');
   const [thumbnailError, setThumbnailError] = useState('');
   const [registered, setRegistered] = useState(false);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
   const { selectedRegister: selectedFacility, toggleRegister: selectFacility } =
     useHostRegister();
@@ -305,28 +336,50 @@ const RegisterRoom = () => {
       return;
     }
 
+    const hashtagTypes = selectedHashTag.map(
+      (h) => HASHTAG_TYPE_MAP[h as keyof typeof HASHTAG_TYPE_MAP],
+    );
+
+    const facilityTypes = selectedFacility.map(
+      (f) => ROOM_FACILITY_TYPE_MAP[f as keyof typeof ROOM_FACILITY_TYPE_MAP],
+    );
+
+    const petFacilityTypes = selectedPetFacility.map(
+      (f) =>
+        ROOM_PET_FACILITY_TYPE_MAP[
+          f as keyof typeof ROOM_PET_FACILITY_TYPE_MAP
+        ],
+    );
+
+    const data = {
+      name,
+      description,
+      standardPeopleCount: counts.standardPeopleCount,
+      maxPeopleCount: counts.maxPeopleCount,
+      standardPetCount: counts.standardPetCount,
+      maxPetCount: counts.maxPetCount,
+      price: String(prices.price).replace(/,/g, ''),
+      extraPeopleFee: String(prices.extraPeopleFee).replace(/,/g, ''),
+      extraPetFee: String(prices.extraPetFee).replace(/,/g, ''),
+      extraFee: String(prices.extraFee).replace(/,/g, ''),
+      checkInTime: checkInTime,
+      checkOutTime: checkOutTime,
+      hashtagTypes,
+      facilityTypes,
+      petFacilityTypes,
+    } as any;
+
+    console.log(data, 'data');
+
+    if (roomId) data['roomId'] = roomId;
+
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('standardPeopleCount', counts.standardPeopleCount);
-    formData.append('maxPeopleCount', counts.maxPeopleCount);
-    formData.append('standardPetCount', counts.standardPetCount);
-    formData.append('maxPetCount', counts.maxPetCount);
-    formData.append('facilityTypes', JSON.stringify(selectedFacility));
-    formData.append('petFacilityTypes', JSON.stringify(selectedPetFacility));
-    formData.append('hashTagTypes', JSON.stringify(selectedHashTag));
-    formData.append(
-      'extraPeopleFee',
-      String(prices.extraPeopleFee).replace(/,/g, ''),
-    );
-    formData.append(
-      'extraPetFee',
-      String(prices.extraPetFee).replace(/,/g, ''),
-    );
-    formData.append('extraFee', String(prices.extraFee).replace(/,/g, ''));
-    formData.append('price', String(prices.price).replace(/,/g, ''));
-    formData.append('checkInTime', checkInTime || '');
-    formData.append('checkOutTime', checkOutTime || '');
+
+    const blob = new Blob([JSON.stringify(data)], {
+      type: 'application/json',
+    });
+
+    formData.append('request', blob);
 
     if (thumbnail) {
       formData.append('thumbnail', thumbnail);
@@ -335,16 +388,11 @@ const RegisterRoom = () => {
     try {
       let response: RoomResponse;
       if (roomId) {
-        response = await fetchCall(
-          `/hosts/accommodations/{accommodationId}/rooms/{roomId}`,
-          'put',
-          formData,
-        );
+        response = await fetchCall(`hosts/rooms`, 'put', formData);
         alert('숙소 정보가 수정되었습니다.');
       } else {
-        response = await fetchCall(`/hosts/rooms`, 'post', formData);
-        alert('숙소 정보가 등록되었습니다.');
-        setRoomId(response.data.id);
+        response = await fetchCall(`hosts/rooms`, 'post', formData);
+        navigate(ROUTES.myPage.host.roomList);
       }
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
@@ -352,34 +400,42 @@ const RegisterRoom = () => {
   };
 
   useEffect(() => {
+    const id = state?.selectedRoomId;
+    if (id) {
+      setRoomId(id);
+    }
+  }, [state]);
+
+  useEffect(() => {
     const fetchRoomData = async () => {
       try {
         const response: RoomResponse = await fetchCall(
-          `/hosts/rooms/{roomId}`,
+          `/hosts/rooms/${roomId}`,
           'get',
         );
-        const room = response.data;
-        setRoomId(room.id);
+        const room = response;
+        console.log(room, 'room');
+        setRoomId(room.roomId);
         setName(room.name);
         setDescription(room.description ?? '');
         setPrices({
-          price: room.price,
-          extraFee: room.extraFee,
-          extraPeopleFee: room.extraPeopleFee,
-          extraPetFee: room.extraPetFee,
+          price: room.price.toString(),
+          extraFee: room.extraFee.toString(),
+          extraPeopleFee: room.extraPeopleFee.toString(),
+          extraPetFee: room.extraPetFee.toString(),
         });
         setCount({
-          standardPeopleCount: room.standardPeopleCount,
-          maxPeopleCount: room.maxPeopleCount,
-          standardPetCount: room.standardPetCount,
-          maxPetCount: room.maxPetCount,
+          standardPeopleCount: room.standardPeopleCount.toString(),
+          maxPeopleCount: room.maxPeopleCount.toString(),
+          standardPetCount: room.standardPetCount.toString(),
+          maxPetCount: room.maxPetCount.toString(),
         });
         setCheckInTime(room.checkInTime);
         setCheckOutTime(room.checkOutTime);
-        setThumbnailPreview(room.thumbnail);
-        (room.facilityTypes || []).forEach(selectFacility);
-        (room.petFacilityTypes || []).forEach(selectPetFacility);
-        (room.hashTagTypes || []).forEach(selectHashTag);
+        setThumbnailPreview(room.thumbnailUrl);
+        room.facilityTypes.forEach(selectFacility);
+        room.petFacilityTypes.forEach(selectPetFacility);
+        room.hashtagTypes.forEach(selectHashTag);
         setRegistered(true);
       } catch (error) {
         console.error('데이터 불러오기 실패:', error);
@@ -397,7 +453,7 @@ const RegisterRoom = () => {
         <div>
           <SInput
             type="text"
-            placeholder="숙소명을 입력해주세요"
+            placeholder="객실실명을 입력해주세요"
             value={name}
             onChange={handleNameChange}
           />
@@ -407,7 +463,7 @@ const RegisterRoom = () => {
         <SLabel>설명</SLabel>
         <SDescriptionWrapper>
           <SInputExplain
-            placeholder="숙소 설명을 작성해주세요"
+            placeholder="객실 설명을 작성해주세요"
             value={description}
             onChange={handleDescriptionChange}
             maxLength={2000}

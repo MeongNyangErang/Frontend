@@ -1,38 +1,42 @@
 import { fetchCall } from './api';
-import { SearchQuery, SearchFilterType } from '@typings/search';
-import { SearchAccommodationsResponse } from '@typings/response/accommodations';
+import { SearchBaseType, SearchFilterType } from '@typings/search';
+import {
+  SearchAccommodationsResponse,
+  SearchAccommodationsData,
+} from '@typings/response/accommodations';
+import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';
 
 export const searchAccommodations = async (
-  query: SearchQuery,
+  query: SearchBaseType,
   cursor: number | null,
   filter?: SearchFilterType,
 ) => {
-  const isFilterEmpty =
-    !filter ||
-    Object.values(filter).some((v) => {
-      if (Array.isArray(v)) {
-        return v.length === 0;
-      }
-      return v === '';
-    });
-  const queries = { ...query, ...(isFilterEmpty ? {} : filter) };
-  const params = new URLSearchParams();
-  for (let key in queries) {
-    const typedKey = key as keyof typeof queries;
-    const value = queries[typedKey];
-    if (value && value.length > 0) {
-      if (Array.isArray(value)) {
-        value.forEach((el) => params.append(key, el));
-      } else {
-        params.append(key, value);
-      }
-    }
+  const data = { ...query, ...(filter ? filter : {}) } as any;
+
+  for (let i in data) {
+    const value = data[i];
+    if (!value) delete data[i];
   }
 
-  if (cursor) params.append('cursor', cursor.toString());
-  const baseUrl = `users/accommodations/search?${params.toString()}`;
+  const entries = Object.entries(data).map(([key, value]) => {
+    const mapObj = FILTER_VALUE_MAP[key as keyof typeof FILTER_VALUE_MAP];
+    if (mapObj) {
+      if (Array.isArray(value)) {
+        const mappedValue = value.map((v) => mapObj[v as keyof typeof mapObj]);
+        return [key, mappedValue];
+      } else {
+        const mappedValue = mapObj[value as keyof typeof mapObj];
+        return [key, mappedValue || ''];
+      }
+    }
+    return [key, value];
+  });
+  const mappedData = Object.fromEntries(entries);
+  if (cursor) data.cursor = cursor;
 
-  return await fetchCall<SearchAccommodationsResponse>(baseUrl, 'get').then(
-    (v) => v.data,
+  return await fetchCall<SearchAccommodationsData>(
+    'search/accommodations',
+    'post',
+    mappedData,
   );
 };

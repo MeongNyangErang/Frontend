@@ -29,6 +29,11 @@ const DetailAccommodation = lazy(
   () => import('@pages/Accommodation/DetailAccommodation'),
 );
 
+const HostReservationList = lazy(
+  () => import('@pages/host/HostList/ReservationList'),
+);
+const HostReviewList = lazy(() => import('@pages/host/HostList/ReviewList'));
+
 const Search = lazy(() => import('@pages/Search'));
 const DetailRoom = lazy(() => import('@pages/Accommodation/DetailRoom'));
 const AccommodationReview = lazy(
@@ -36,6 +41,7 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
+<<<<<<< HEAD
 const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
 const RecommendNonMemberView = lazy(
   () => import('@pages/Home/RecommendNonMember/AllView'),
@@ -50,6 +56,11 @@ const RecommendLastView = lazy(
 const RecommendMemberView = lazy(
   () => import('@pages/Home/RecommendMember/AllView'),
 );
+=======
+const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
+const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
+>>>>>>> b7291ad2cc4d64b58ea8e139611ba1c1c3b28293
 
 const AppRouter = () => {
   return (
@@ -103,6 +114,7 @@ const AppRouter = () => {
               />
               <Route path="reviews" element={<UserReviews />} />
               <Route path="wishlist" element={<UserWishList />} />
+              <Route path="profile-edit" element={<UserProfileEdit />} />
             </Route>
           </Route>
           <Route element={<PrivateRoute allowedRoles={['host']} />}>
@@ -114,6 +126,9 @@ const AppRouter = () => {
               />
               <Route path="register-room" element={<RegisterRoom />} />
               <Route path="room-list" element={<HostRoomList />} />
+              <Route path="reservation" element={<HostReservationList />} />
+              <Route path="reviews" element={<HostReviewList />} />
+              <Route path="profile-edit" element={<HostProfileEdit />} />
             </Route>
           </Route>
           <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>

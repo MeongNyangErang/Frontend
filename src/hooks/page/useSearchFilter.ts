@@ -6,13 +6,13 @@ import { getSearchFilter } from '@utils/searchParams';
 import {
   SearchFilterKey,
   SingleSelectFilterKey,
-  SearchQuery,
+  SearchBaseType,
   SearchFilterType,
 } from '@typings/search';
 
 const useSearchFilter = (
   currentFilter: SearchFilterType,
-  currentQuery: SearchQuery,
+  currentQuery: SearchBaseType,
 ) => {
   const [filterState, setFilterState] = useState(currentFilter);
   const navigate = useNavigate();
@@ -65,29 +65,37 @@ const useSearchFilter = (
     const params = new URLSearchParams();
 
     for (let key in currentQuery) {
-      params.append(key, currentQuery[key as keyof SearchQuery]);
+      params.append(key, currentQuery[key as keyof SearchBaseType]);
     }
 
     for (let key in filterState) {
       const typedKey = key as SearchFilterKey;
-      const value1 = filterState[typedKey];
-      const value2 = currentFilter[typedKey];
-      if (Array.isArray(value1)) {
-        if (!value1.every((v, i) => v === value2[i]) && value1.length > 0)
-          params.append(key, value1.toString());
+      const value = filterState[typedKey];
+      if (Array.isArray(value)) {
+        if (value.length > 0) params.append(typedKey, value.toString());
       } else {
-        if (value1 !== value2 && value1 !== '') params.append(key, value1);
+        if (value) params.append(typedKey, value);
       }
     }
 
     return params;
   };
 
-  const onClickFilterButton = useCallback(() => {
+  const onSetPriceRange = useCallback(
+    (key: 'minPrice' | 'maxPrice', value: string) => {
+      setFilterState((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [],
+  );
+
+  const onSubmitFilter = useCallback(() => {
     if (!isFilterChanged) return;
 
     navigate(`${ROUTES.search}?${getSearchParams().toString()}`);
-  }, [isFilterChanged, navigate]);
+  }, [isFilterChanged, navigate, filterState]);
 
   return {
     filterState,
@@ -97,7 +105,8 @@ const useSearchFilter = (
     updateFilterState,
     onToggleRadio,
     onToggleOptions,
-    onClickFilterButton,
+    onSetPriceRange,
+    onSubmitFilter,
   };
 };
 
