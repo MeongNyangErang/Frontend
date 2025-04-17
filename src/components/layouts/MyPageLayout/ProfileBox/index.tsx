@@ -19,7 +19,11 @@ interface ProfileBoxProps {
 }
 
 const USER_EDIT_LIST = [
-  { name: '내 정보 관리', path: ROUTES.myPage.user.profile, icon: <FaEdit /> },
+  {
+    name: '내 정보 관리',
+    path: ROUTES.myPage.user.profileEdit,
+    icon: <FaEdit />,
+  },
   {
     name: '내 반려동물',
     path: ROUTES.myPage.user.myPet,
@@ -28,7 +32,11 @@ const USER_EDIT_LIST = [
 ] as const;
 
 const HOST_EDIT_LIST = [
-  { name: '내 정보 관리', path: ROUTES.myPage.host.profile, icon: <FaEdit /> },
+  {
+    name: '내 정보 관리',
+    path: ROUTES.myPage.host.profileEdit,
+    icon: <FaEdit />,
+  },
 ] as const;
 
 const ProfileBox = ({ email, role }: ProfileBoxProps) => {

@@ -1,6 +1,7 @@
 import {
   ChatListResponse,
   PreviousChatMessagesResponse,
+  CreateChatRoomResponse,
 } from '@typings/response/chat';
 import { fetchCall } from './api';
 
@@ -9,7 +10,9 @@ export const getChatList = async (page: number) => {
 };
 
 export const createChatRoom = async (accommodationId: number) => {
-  return await fetchCall('chats/users/create', 'post', { accommodationId });
+  return await fetchCall<CreateChatRoomResponse>('chats/users/create', 'post', {
+    accommodationId,
+  });
 };
 
 export const getPreviousChatMessages = async (

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import useAuth from '@hooks/auth/useAuth';
 import { FaRegBell, FaBell } from 'react-icons/fa';
 import { FaRegMessage } from 'react-icons/fa6';
 import ROUTES from '@constants/routes';
 import Button from '@components/common/Button';
+import useAuth from '@hooks/auth/useAuth';
 import { SUserMenu, SUserButton, SMyPageButton, SNotifyButton } from './styles';
 
 const userMenu = [
@@ -12,14 +12,16 @@ const userMenu = [
 ] as const;
 
 const UserMenu = () => {
-  const { member } = useAuth();
+  const {
+    member: { data },
+  } = useAuth();
   const navigate = useNavigate();
-  const isHost = member?.role === 'host';
+  const isHost = data?.role === 'host';
   const myPagePath = isHost ? ROUTES.myPage.host.root : ROUTES.myPage.user.root;
 
   return (
     <SUserMenu>
-      {!member ? (
+      {!data ? (
         <Button
           onClick={() => navigate(ROUTES.logIn)}
           fontSize="14px"

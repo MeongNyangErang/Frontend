@@ -17,7 +17,7 @@ import {
 
 const ChatList = () => {
   const { member } = useAuth();
-  const isHost = member && member.role === 'host';
+  const isHost = member.data && member.data.role === 'host';
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage, error } =
     useChatList();
   const list = data?.pages.flatMap(({ content }) => content);

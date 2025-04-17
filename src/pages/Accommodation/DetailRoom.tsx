@@ -28,7 +28,6 @@ interface DetailRoomData {
 const DetailRoom = () => {
   const navigate = useNavigate();
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const roomId = pathname.split('/').slice(-1)[0];
 

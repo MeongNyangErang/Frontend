@@ -5,7 +5,7 @@ export const USER_MY_PAGE_MENU = [
   { name: '숙소 예약 내역', path: ROUTES.myPage.user.reservationList },
   { name: '찜한 숙소', path: ROUTES.myPage.user.wishlist },
   { name: '내 리뷰', path: ROUTES.myPage.user.reviews },
-  { name: '내 정보 관리', path: ROUTES.myPage.user.profile },
+  { name: '내 정보 관리', path: ROUTES.myPage.user.profileEdit },
 ] as const;
 
 export const HOST_MY_PAGE_MENU = [
@@ -13,7 +13,7 @@ export const HOST_MY_PAGE_MENU = [
   { name: '리뷰 내역', path: ROUTES.myPage.host.reviews },
   { name: '숙소 관리', path: ROUTES.myPage.host.registerAccommodation },
   { name: '객실 관리', path: ROUTES.myPage.host.roomList },
-  { name: '내 정보 관리', path: ROUTES.myPage.host.profile },
+  { name: '내 정보 관리', path: ROUTES.myPage.host.profileEdit },
 ] as const;
 
 export const USER_OVERVEIW_LIST = [

@@ -7,6 +7,8 @@
     "allowJs": false,
     "strict": true,
     "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
+    "types": ["react", "vite/client"],
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["components/*"],
