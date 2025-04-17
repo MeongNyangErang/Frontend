@@ -17,7 +17,7 @@ function validatePhoneNumber(phoneNumber: string) {
   return '';
 }
 
-export function validateEmail(email: string) {
+function validateEmail(email: string) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) return '이메일을 입력해주세요.';
   if (!regex.test(email)) return '올바른 이메일을 입력해주세요.';
@@ -56,7 +56,7 @@ const validator = {
   nickname: validateNickname,
 } as const;
 
-export function validateOnChange(
+function validateOnChange(
   key: ValidateOnChangeFields,
   value1: string,
   value2?: string,
@@ -65,3 +65,11 @@ export function validateOnChange(
     ? validator[key](value1, value2!)
     : validator[key](value1);
 }
+
+export {
+  validateOnChange,
+  validateEmail,
+  validateNickname,
+  validateName,
+  validatePhoneNumber,
+};

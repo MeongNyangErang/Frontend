@@ -58,9 +58,17 @@ const SProfileEditItem = styled.button`
   }
 `;
 
+const SFormTitle = styled.div`
+  margin-bottom: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+`;
+
 export {
   SProfileEditWrap,
   SProfileEditItem,
   SProfileEditList,
   SProfileImageEdit,
+  SFormTitle,
 };
