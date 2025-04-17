@@ -22,7 +22,7 @@ export interface NewChatMessage {
   receiverId: number;
   receiverType: 'USER' | 'HOST';
   content: string;
-  notificationType: 'MESSAGE';
+  NotificationType: 'MESSAGE';
   createdAt: string;
 }
 

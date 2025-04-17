@@ -9,7 +9,9 @@ import { createStompClient } from '@services/socket';
 import { initialChatError } from '@constants/chat';
 
 const useChatMessages = (chatRoomId: number | undefined) => {
-  const stompClientRef = useRef<ReturnType<typeof createStompClient>>(null);
+  const stompClientRef = useRef<ReturnType<typeof createStompClient> | null>(
+    null,
+  );
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
   const [pendingMessage, setPendingMessage] = useState<null | string>(null);
@@ -64,9 +66,10 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     if (!chatRoomId) return;
     const formData = new FormData();
     formData.append('imageFile', imageFile);
+    formData.append('chatRoomId', chatRoomId.toString());
 
     try {
-      await sendChatImage(chatRoomId, formData);
+      await sendChatImage(formData);
       onSuccess();
     } catch (error) {
       updateError('imageSending', '이미지 전송에 실패했습니다.');
@@ -122,12 +125,10 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     const stompClient = createStompClient();
     stompClientRef.current = stompClient;
     stompClient.onConnect = () => {
-      console.log('activateddddd');
       setIsConnected(true);
       subscription = stompClient.subscribe(
         `/subscribe/chats/${chatRoomId}`,
         (message) => {
-          console.log(message, 'messageeeee');
           const { senderType, content, createdAt }: NewChatMessage = JSON.parse(
             message.body,
           );
