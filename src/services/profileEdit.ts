@@ -20,12 +20,12 @@ const changeProfileImage = async (formData: FormData) => {
 
 const changePhoneNumber = async (phoneNumber: string) => {
   const data = { phoneNumber };
-  return await fetchCall('hosts/phone', 'patch', data);
+  return await fetchCall('hosts/me/phone', 'patch', data);
 };
 
 const changeName = async (name: string) => {
   const data = { name };
-  return await fetchCall('hosts/name', 'patch', data);
+  return await fetchCall('hosts/me/name', 'patch', data);
 };
 
 export {

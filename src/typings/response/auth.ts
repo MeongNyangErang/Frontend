@@ -11,5 +11,5 @@ export interface HostProfile {
   name: string;
   nickname: string;
   profileImageUrl: string;
-  currentPhoneNumber: string;
+  phone: string;
 }

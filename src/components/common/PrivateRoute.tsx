@@ -3,7 +3,7 @@ import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
 
 interface Props {
-  allowedRoles: ('user' | 'host')[];
+  allowedRoles: ('USER' | 'HOST')[];
 }
 
 const PrivateRoute = ({ allowedRoles }: Props) => {
@@ -13,7 +13,7 @@ const PrivateRoute = ({ allowedRoles }: Props) => {
 
   if (authLoading) return null;
 
-  if (!data) return <Navigate to={ROUTES.home} replace />;
+  if (data === null) return <Navigate to={ROUTES.home} replace />;
 
   if (!allowedRoles.includes(data.role)) return <Navigate to="/403" replace />;
 

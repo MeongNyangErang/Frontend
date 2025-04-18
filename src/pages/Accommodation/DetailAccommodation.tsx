@@ -90,8 +90,13 @@ const DetailAccommodation = () => {
   };
 
   const handleClickChatButton = async () => {
-    if (!data || data.role === 'host') {
+    if (data === null) {
       alert('로그인한 유저만 이용 할 수 있습니다.');
+      return;
+    }
+
+    if (data.role === 'HOST') {
+      alert('일반 유저만 이용 할 수 있습니다.');
       return;
     }
 

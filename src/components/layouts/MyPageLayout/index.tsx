@@ -20,9 +20,11 @@ const MyPageLayout = () => {
   const {
     member: { data, authLoading },
   } = useAuth();
-  const menu = data?.role === 'user' ? USER_MY_PAGE_MENU : HOST_MY_PAGE_MENU;
+  const menu = data?.role === 'USER' ? USER_MY_PAGE_MENU : HOST_MY_PAGE_MENU;
 
-  if (!data) return <Navigate to={ROUTES.home} />;
+  if (authLoading) return null;
+
+  if (data === null) return <Navigate to={ROUTES.home} />;
 
   return (
     <SMyPageWrap>

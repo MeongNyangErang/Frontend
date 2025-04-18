@@ -12,15 +12,15 @@ import useToggleModal from '@hooks/ui/useToggleModal';
 import { useCallback } from 'react';
 
 interface MyPageOverviewProps {
-  role: 'host' | 'user';
+  role: 'HOST' | 'USER';
 }
 
 const MyPageOverview = ({ role }: MyPageOverviewProps) => {
-  const { logout: hostLogout } = useLogout('host');
-  const { logout: userLogout } = useLogout('user');
+  const { logout: hostLogout } = useLogout('HOST');
+  const { logout: userLogout } = useLogout('USER');
   const { isModalOpen, openModal, closeModal } = useToggleModal();
   const navigate = useNavigate();
-  const isHost = role === 'host';
+  const isHost = role === 'HOST';
   const overviewList = isHost ? HOST_OVERVIEW_LIST : USER_OVERVEIW_LIST;
   const logoutFn = isHost ? hostLogout : userLogout;
   const handleLogout = useCallback(() => {

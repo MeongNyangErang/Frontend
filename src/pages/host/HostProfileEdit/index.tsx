@@ -3,7 +3,7 @@ import ProfileEdit from '@components/common/ProfileEdit';
 const HostProfileEdit = () => {
   return (
     <>
-      <ProfileEdit role="host" />
+      <ProfileEdit role="HOST" />
     </>
   );
 };
