@@ -11,14 +11,13 @@ export interface ChatListResponse {
 }
 
 export interface PreviousChatMessagesResponse {
-  code: number;
-  data: PreviousChatMessage[];
+  content: PreviousChatMessage[];
+  first: boolean;
+  last: boolean;
   page: number;
   size: number;
   totalElement: number;
   totalPages: number;
-  first: boolean;
-  last: boolean;
 }
 
 export interface CreateChatRoomResponse {

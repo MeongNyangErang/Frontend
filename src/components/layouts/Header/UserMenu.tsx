@@ -13,11 +13,13 @@ const userMenu = [
 
 const UserMenu = () => {
   const {
-    member: { data },
+    member: { data, authLoading },
   } = useAuth();
   const navigate = useNavigate();
-  const isHost = data?.role === 'host';
+  const isHost = data?.role === 'HOST';
   const myPagePath = isHost ? ROUTES.myPage.host.root : ROUTES.myPage.user.root;
+
+  if (authLoading) return null;
 
   return (
     <SUserMenu>

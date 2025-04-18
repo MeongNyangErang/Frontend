@@ -23,7 +23,7 @@ const MobileNav = () => {
   return (
     <SNav>
       {mobileMenu.map(({ name, path, icon }) => {
-        const isHostMyPage = data.role === 'host' && name === 'MY';
+        const isHostMyPage = data.role === 'HOST' && name === 'MY';
         return (
           <SNavLink
             key={name}

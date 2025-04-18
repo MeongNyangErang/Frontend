@@ -26,7 +26,7 @@ interface ProfileEditProps {
 const ProfileEdit = ({ role }: ProfileEditProps) => {
   const { data, error, isLoading } = useMemberProfile(role);
   const enableToEdit = !isLoading;
-  const editList = role === 'user' ? userProfileEditList : hostProfileEditList;
+  const editList = role === 'USER' ? userProfileEditList : hostProfileEditList;
   type EditItem = (typeof editList)[number]['id'] | 'profileImage';
   const [selectedEditItem, setSelectedEditItem] = useState<EditItem | null>(
     null,
@@ -79,7 +79,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
       {data &&
         modalFormList.map(({ id, element }) => {
           const isOpen = selectedEditItem === id;
-          if ((id === 'name' || id === 'phoneNumber') && role === 'host') {
+          if ((id === 'name' || id === 'phoneNumber') && role === 'HOST') {
             return (
               <Modal
                 key={id}

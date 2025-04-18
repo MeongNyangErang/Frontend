@@ -7,7 +7,7 @@ type Member<T extends MemberRole> = {
   [MEMBER_KEYS.EMAIL]: string;
 };
 
-export type UserMember = Member<'user'>;
-export type HostMember = Member<'host'>;
+export type UserMember = Member<'USER'>;
+export type HostMember = Member<'HOST'>;
 
 export type AppMember = UserMember | HostMember;

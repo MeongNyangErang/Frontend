@@ -15,7 +15,7 @@ import {
 
 interface ProfileBoxProps {
   email: string;
-  role: 'user' | 'host';
+  role: 'USER' | 'HOST';
 }
 
 const USER_EDIT_LIST = [
@@ -41,7 +41,7 @@ const HOST_EDIT_LIST = [
 
 const ProfileBox = ({ email, role }: ProfileBoxProps) => {
   const { data, isLoading } = useMemberProfile(role);
-  const editList = role === 'user' ? USER_EDIT_LIST : HOST_EDIT_LIST;
+  const editList = role === 'USER' ? USER_EDIT_LIST : HOST_EDIT_LIST;
 
   if (isLoading) {
     return (
@@ -50,6 +50,8 @@ const ProfileBox = ({ email, role }: ProfileBoxProps) => {
       </SProfileBoxWrap>
     );
   }
+
+  console.log(data, 'data');
 
   return (
     <SProfileBoxWrap>

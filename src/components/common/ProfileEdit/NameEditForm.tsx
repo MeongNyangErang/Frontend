@@ -78,6 +78,7 @@ const NameEditForm = ({ defaultValue, onClose }: NameEditFormProps) => {
           )}
         </Button>
       </SSubmitButtonBox>
+      <SFormErrorMessage>{submitError}</SFormErrorMessage>
     </>
   );
 };

@@ -103,7 +103,7 @@ const AppRouter = () => {
             element={<RecommendMemberView />}
           />
 
-          <Route element={<PrivateRoute allowedRoles={['user']} />}>
+          <Route element={<PrivateRoute allowedRoles={['USER']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />
               <Route path="my-pet" element={<UserMyPet />} />
@@ -116,7 +116,7 @@ const AppRouter = () => {
               <Route path="profile-edit" element={<UserProfileEdit />} />
             </Route>
           </Route>
-          <Route element={<PrivateRoute allowedRoles={['host']} />}>
+          <Route element={<PrivateRoute allowedRoles={['HOST']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
               <Route
@@ -130,7 +130,7 @@ const AppRouter = () => {
               <Route path="profile-edit" element={<HostProfileEdit />} />
             </Route>
           </Route>
-          <Route element={<PrivateRoute allowedRoles={['host', 'user']} />}>
+          <Route element={<PrivateRoute allowedRoles={['HOST', 'USER']} />}>
             <Route path="/chat" element={<Chat />} />
             <Route path="/chat/:chatRoomId" element={<Chat />} />
           </Route>

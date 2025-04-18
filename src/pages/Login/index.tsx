@@ -20,8 +20,8 @@ import {
 import MemberTypeSelector from './MemberTypeSelector';
 
 const tabList = [
-  { memberType: 'user', name: '일반회원' },
-  { memberType: 'host', name: '호스트회원' },
+  { memberType: 'USER', name: '일반회원' },
+  { memberType: 'HOST', name: '호스트회원' },
 ] as const;
 
 const Login = () => {

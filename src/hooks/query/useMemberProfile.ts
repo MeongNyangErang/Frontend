@@ -10,7 +10,7 @@ const useMemberProfile = (
   error: unknown;
   isLoading: boolean;
 } => {
-  return role === 'user' ? useUserProfile() : useHostProfile();
+  return role === 'USER' ? useUserProfile() : useHostProfile();
 };
 
 export default useMemberProfile;

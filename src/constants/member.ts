@@ -6,6 +6,6 @@ export const MEMBER_KEYS = {
 } as const;
 
 export const MEMBER_ROLES = {
-  USER: 'user',
-  HOST: 'host',
+  USER: 'USER',
+  HOST: 'HOST',
 } as const;

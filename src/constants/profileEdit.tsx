@@ -62,10 +62,7 @@ export const modalFormList: ModalFormItem[] = [
   {
     id: 'phoneNumber',
     element: (data: HostProfile, onClose: () => void) => (
-      <PhoneNumberEditForm
-        defaultValue={data.currentPhoneNumber}
-        onClose={onClose}
-      />
+      <PhoneNumberEditForm defaultValue={data.phone} onClose={onClose} />
     ),
   },
   {
