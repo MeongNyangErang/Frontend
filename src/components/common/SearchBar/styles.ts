@@ -30,6 +30,10 @@ export const SNumberInputWrapper = styled.div`
 
 export const SInput = styled.input`
   width: 100%;
+<<<<<<< HEAD
+=======
+  font-size: 16px;
+>>>>>>> 530a64f4b4f4bdaf158d2ba6ffad7ffda3a42700
   padding: 12px;
   border-radius: 10px 10px 0 0;
   border: 1px solid #ccc;
