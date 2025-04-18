@@ -16,7 +16,8 @@ const useAuth = () => {
 
   const setCurrentMember = (member: AppMember, accessToken: string) => {
     setMember((prev) => ({ ...prev, data: member }));
-    setLocalStorage(accessTokenKey, accessToken);
+    const token = accessToken.split('"')[1];
+    setLocalStorage(accessTokenKey, token);
   };
 
   const removeMember = () => {
