@@ -216,11 +216,7 @@ const DetailAccommodation = () => {
                   <RoomCard key={room.roomId}>
                     <RoomInfoLeft>
                       <RoomImage
-                        src={
-                          room.roomImageUrl
-                            ? room.roomImageUrl
-                            : 'default-room-image.jpg'
-                        }
+                        src={room.roomImageUrl ? room.roomImageUrl : ''}
                         alt={room.roomName}
                       />
                       <RoomName>{room.roomName}</RoomName>
@@ -272,9 +268,12 @@ const DetailAccommodation = () => {
           ) : (
             <p>현재 방이 없습니다</p>
           )}
-          <Open onClick={handleShowMoreRooms}>
-            {showAllRooms ? '접기' : '더보기'}
-          </Open>
+          {accommodation.roomDetails &&
+            accommodation.roomDetails.length > 2 && (
+              <Open onClick={handleShowMoreRooms}>
+                {showAllRooms ? '접기' : '더보기'}
+              </Open>
+            )}
           <SectionTitle>숙소 소개</SectionTitle>
           <AccommodationDescription>
             <QuotesL /> <br />

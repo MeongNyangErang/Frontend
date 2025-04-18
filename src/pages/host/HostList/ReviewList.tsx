@@ -100,7 +100,7 @@ const ReviewList = () => {
             <ReviewContent>
               {isExpanded || !shouldShowToggle
                 ? review.content
-                : `${review.content.slice(0, 400)}...`}
+                : `${review.content.slice(0, 260)}...`}
               {shouldShowToggle && (
                 <ToggleButton onClick={() => toggleExpand(review.reviewId)}>
                   {isExpanded ? '접기' : '더보기'}
@@ -119,8 +119,7 @@ export default ReviewList;
 // 스타일 정의
 const ReviewContainer = styled.div`
   font-family: 'Noto Sans KR';
-  padding-bottom: 16px;
-  margin: 0 auto;
+  margin: 20px auto 30px auto;
   width: 100%;
   max-width: 1024px;
   min-width: 320px;
@@ -150,6 +149,7 @@ const ReviewHeader = styled.div`
 
 const RoomName = styled.p`
   font-size: 16px;
+  padding-left: 10px;
 `;
 
 const Rating = styled.span`
@@ -173,8 +173,8 @@ const ImageGallery = styled.div`
 
 const ReviewImage = styled.img`
   padding-left: 16px;
-  max-width: 120px;
-  max-height: 120px;
+  max-width: 200px;
+  max-height: 200px;
   object-fit: cover;
   border-radius: 4px;
 `;
@@ -187,8 +187,8 @@ const CreatedAt = styled.p`
 
 const NoReviewsMessage = styled.div`
   text-align: center;
-  padding: 20px;
-  font-size: 18px;
+  padding: 16px;
+  font-size: 16px;
   color: var(--gray-700);
 `;
 

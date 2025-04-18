@@ -50,41 +50,43 @@ const RoomReview = () => {
       {roomReview ? (
         roomReview.map((r) => (
           <Fragment key={r.createdAt}>
-            <Header>
-              <ProfileImage src={r.profileImageUrl} alt={`프로필 이미지`} />
-              <Info>
-                <Nickname>{r.nickname}</Nickname>
-                <Date>{r.createdAt}</Date>
-              </Info>
-            </Header>
-            <Rating>
-              <StarRatings
-                rating={r.totalRating}
-                starRatedColor="#f03e5e"
-                numberOfStars={5}
-                name="rating"
-                starDimension="17px"
-                starSpacing="1px"
-              />
-            </Rating>
-            {r.reviewImageUrl && r.reviewImageUrl.length > 0 && (
-              <ReviewImageContainer>
-                {r.reviewImageUrl.slice(0, 3).map((imageUrl, index) => (
-                  <ReviewImage
-                    key={index}
-                    src={imageUrl}
-                    alt={`리뷰 이미지 ${index + 1}`}
-                  />
-                ))}
-              </ReviewImageContainer>
-            )}
-            <RoomName>[ {r.roomName} ]</RoomName>
-            <Content isExpanded={isExpanded}>{r.content}</Content>
-            {r.content?.length > 100 && (
-              <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
-                {isExpanded ? '접기' : '더보기'}
-              </ToggleButton>
-            )}
+            <Body>
+              <Header>
+                <ProfileImage src={r.profileImageUrl} alt={`프로필 이미지`} />
+                <Info>
+                  <Nickname>{r.nickname}</Nickname>
+                  <Date>{r.createdAt}</Date>
+                </Info>
+              </Header>
+              <Rating>
+                <StarRatings
+                  rating={r.totalRating}
+                  starRatedColor="#f03e5e"
+                  numberOfStars={5}
+                  name="rating"
+                  starDimension="17px"
+                  starSpacing="1px"
+                />
+              </Rating>
+              {r.reviewImageUrl && r.reviewImageUrl.length > 0 && (
+                <ReviewImageContainer>
+                  {r.reviewImageUrl.slice(0, 3).map((imageUrl, index) => (
+                    <ReviewImage
+                      key={index}
+                      src={imageUrl}
+                      alt={`리뷰 이미지 ${index + 1}`}
+                    />
+                  ))}
+                </ReviewImageContainer>
+              )}
+              <RoomName>[ {r.roomName} ]</RoomName>
+              <Content isExpanded={isExpanded}>{r.content}</Content>
+              {r.content?.length > 100 && (
+                <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+                  {isExpanded ? '접기' : '더보기'}
+                </ToggleButton>
+              )}
+            </Body>
           </Fragment>
         ))
       ) : (
@@ -97,7 +99,6 @@ export default RoomReview;
 
 const Card = styled.div`
   font-family: 'Noto Sans KR';
-  border-bottom: 1px solid #000;
   padding: 16px;
   margin: 0 auto;
   width: 100%;
@@ -105,12 +106,17 @@ const Card = styled.div`
   min-width: 320px;
 `;
 
+const Body = styled.div`
+  border-bottom: 1px solid rgb(235, 233, 233);
+  padding-bottom: 8px;
+  margin-top: 15px;
+`;
+
 const Title = styled.h1`
   font-weight: bold;
   font-size: 20px;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(235, 233, 233);
   position: relative;
 `;
 
