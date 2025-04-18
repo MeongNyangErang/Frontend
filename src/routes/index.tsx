@@ -59,6 +59,7 @@ const RecommendLastView = lazy(
 const RecommendMemberView = lazy(
   () => import('@pages/Home/RecommendMember/AllView'),
 );
+const Notificaion = lazy(() => import('@pages/Notification'));
 
 const AppRouter = () => {
   return (
@@ -102,6 +103,7 @@ const AppRouter = () => {
             path="recommendMember/AllView"
             element={<RecommendMemberView />}
           />
+          <Route path="notification" element={<Notificaion />} />
 
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>

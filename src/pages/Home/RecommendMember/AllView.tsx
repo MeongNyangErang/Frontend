@@ -140,7 +140,7 @@ const All = styled.div`
 `;
 
 const Real = styled.p`
-  font-size: 20px;
+  font-size: 18px;
   color: var(--gray-700);
   font-weight: bold;
   margin-top: 20px;
@@ -211,7 +211,7 @@ const AccommodationType = styled.h4`
 const RegHeart = styled(FaRegHeart)`
   color: #f03e5e;
   margin-top: 3px;
-  font-size: 20px;
+  font-size: 18px;
 `;
 
 const SliderWrapper = styled.div`

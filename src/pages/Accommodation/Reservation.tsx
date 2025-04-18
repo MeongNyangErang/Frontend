@@ -3,10 +3,21 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from 'services/api';
-import axios from 'axios';
 
 interface ButtonProps {
   selected: boolean;
+}
+
+interface Reservation {
+  roomId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  peopleCount: number;
+  perCount: number;
+  reserverName: string;
+  reservePhoneNumber: string;
+  hasVehicle: boolean;
+  totalPrice: number;
 }
 
 const Reservation = () => {
@@ -23,30 +34,32 @@ const Reservation = () => {
     totalPrice,
   } = location.state || {};
 
+  const [hasVehicle, setHasvehicle] = useState<string | null>(null);
+  const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
+  const [reserverName, setReserverName] = useState('');
+  const [formError, setFormError] = useState<string>('');
+  const [roomDetails, setRoomDetails] = useState<any>(null);
+
   useEffect(() => {
     if (
       !roomId ||
       !checkInDate ||
       !checkOutDate ||
-      !peopleCount ||
-      !petCount ||
+      peopleCount === undefined ||
+      petCount === undefined ||
       !totalPrice
     ) {
+      console.log('잘못된 접근입니다.');
     }
   }, [
+    navigate,
     roomId,
     checkInDate,
     checkOutDate,
     peopleCount,
     petCount,
     totalPrice,
-    navigate,
   ]);
-
-  const [hasvehicle, setHasvehicle] = useState<string | null>(null);
-  const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
-  const [reserverName, setReserverName] = useState('');
-  const [formError, setFormError] = useState<string>('');
 
   const handleReserverPhoneNumber = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -64,8 +77,7 @@ const Reservation = () => {
   };
 
   const handleReserverName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setReserverName(inputValue);
+    setReserverName(e.target.value);
   };
 
   const handleClick = (value: string) => {
@@ -86,39 +98,46 @@ const Reservation = () => {
       return;
     }
 
-    if (!hasvehicle) {
+    if (!hasVehicle) {
       setFormError('주차 여부를 선택해주세요.');
       return;
     }
 
-    try {
-      const sanitizedTotalPrice = totalPrice
-        ? totalPrice.replace(/[^0-9]/g, '')
-        : '0';
-      const paymentData = {
-        roomId,
-        checkInDate,
-        checkOutDate,
-        peopleCount,
-        petCount,
-        reserverName,
-        reserverPhoneNumber,
-        hasvehicle,
-        totalPrice: sanitizedTotalPrice,
-      };
+    const sanitizedTotalPrice = totalPrice
+      ? totalPrice.replace(/[^0-9]/g, '')
+      : '0';
 
-      const response = await axios.post(
-        `accommodation/:accommodationId/reservation`,
-        paymentData,
+    const reservationData = {
+      roomId,
+      checkInDate,
+      checkOutDate,
+      peopleCount,
+      petCount,
+      reserverName,
+      reserverPhoneNumber,
+      hasVehicle,
+      totalPrice: sanitizedTotalPrice,
+    } as any;
+
+    const formData = new FormData();
+    const blob = new Blob([JSON.stringify(reservationData)], {
+      type: 'application/json',
+    });
+
+    formData.append('request', blob);
+
+    try {
+      const response = await fetchCall(
+        '/user/reservations',
+        'post',
+        reservationData,
       );
-      if (response.status === 200) {
-        alert('예약이 완료되었습니다!');
-      } else {
-        alert('예약이 실패했습니다.');
-      }
+      setRoomDetails(response);
+      alert('예약이 완료되었습니다!');
+      navigate('/reservation/complete');
     } catch (error) {
-      console.error('결제 API 호출 중 오류 발생:', error);
-      alert('오류가 발생했습니다.');
+      console.error('API를 불러오는데 오류가 발생했습니다:', error);
+      alert('예약 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -168,13 +187,13 @@ const Reservation = () => {
       <SLabel>주차 여부</SLabel>
       <ButtonContainer>
         <CheckInput
-          selected={hasvehicle === 'O'}
+          selected={hasVehicle === 'O'}
           onClick={() => handleClick('O')}
         >
           O
         </CheckInput>
         <CheckInput
-          selected={hasvehicle === 'X'}
+          selected={hasVehicle === 'X'}
           onClick={() => handleClick('X')}
         >
           X
@@ -192,8 +211,8 @@ const Reservation = () => {
     </SFieldset>
   );
 };
-
 export default Reservation;
+
 const ErrorText = styled.p`
   color: red;
   font-size: 15px;

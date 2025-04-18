@@ -123,12 +123,9 @@ export const handlers = [
     };
     return HttpResponse.json(roomListData);
   }),
-  http.post(
-    `${BASE_URL}/accommodation/:accommodationId/reservation`,
-    async () => {
-      return HttpResponse.json({ message: '예약이 완료되었습니다' });
-    },
-  ),
+  http.post(`${BASE_URL}/user/reservations`, async () => {
+    return HttpResponse.json({ message: '예약이 완료되었습니다' });
+  }),
   http.post(`${BASE_URL}/register-accommodation`, async () => {
     return HttpResponse.json({
       message: '숙소 등록이 완료되었습니다',
