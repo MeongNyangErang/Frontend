@@ -63,16 +63,16 @@ const ChatRoom = ({
           <SMessageList>
             <div ref={infiniteScrollRef} />
             {messages.map((message, index) => {
-              const { messageContent, senderType, created_at, messageType } =
+              const { messageContent, senderType, createdAt, messageType } =
                 message;
               const isMyMessage = senderType === data.role.toUpperCase();
               const isThePreviousSender =
                 index > 0 && messages[index - 1].senderType === senderType;
               const isText = messageType === 'MESSAGE';
-              const formattedTime = formatDateOrTime(created_at);
+              const formattedTime = formatDateOrTime(createdAt);
               return (
                 <SMessage
-                  key={`${created_at}${index}`}
+                  key={`${createdAt}${index}`}
                   className={isMyMessage ? 'right' : 'left'}
                 >
                   {isMyMessage ? (

@@ -108,9 +108,9 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   useEffect(() => {
     if (previousMessages) {
       setMessages((prev) => {
-        const set = new Set(prev.map((m) => m.created_at + m.messageContent));
+        const set = new Set(prev.map((m) => m.createdAt + m.messageContent));
         const newMessages = previousMessages.filter(
-          (m) => !set.has(m.created_at + m.messageContent),
+          (m) => !set.has(m.createdAt + m.messageContent),
         );
         return [...prev, ...newMessages];
       });
@@ -129,13 +129,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
       subscription = stompClient.subscribe(
         `/subscribe/chats/${chatRoomId}`,
         (message) => {
-          const { createdAt, ...rest }: NewChatMessage = JSON.parse(
-            message.body,
-          );
-          const newMessage = {
-            created_at: createdAt,
-            ...rest,
-          };
+          const newMessage: NewChatMessage = JSON.parse(message.body);
           setMessages((prev) => [...prev, newMessage]);
         },
       );
