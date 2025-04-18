@@ -107,13 +107,15 @@ const RegisterAccommodation = () => {
   } = useHostRegister();
   const { selectedRegister: selectedAllowPet, toggleRegister: selectAllowPet } =
     useHostRegister();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [nameError, setNameError] = useState('');
   const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [accommodationId, setAccommodationId] = useState<string | null>(null);
   const [addressError, setAddressError] = useState('');
   const [infoError, setInfoError] = useState('');
+  const [imageError, setImageError] = useState('');
+  const [facilityError, setFacilityError] = useState('');
 
   const POSTCODE_SCRIPT_URL =
     '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -159,14 +161,6 @@ const RegisterAccommodation = () => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    // const regex = /^[가-힣a-zA-Z0-9\s]+$/;
-
-    // if (regex.test(newName)) {
-
-    // } else {
-    //   setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
-    // }
-
     setName(newName);
   };
 
@@ -254,6 +248,10 @@ const RegisterAccommodation = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!name || !/^[가-힣a-zA-Z0-9\s]+$/.test(name)) {
+      setNameError('한글, 알파벳, 숫자만 입력할 수 있습니다.');
+    }
+
     if (!description) {
       setInfoError('숙소 설명을 입력해주세요.');
     } else {
@@ -270,12 +268,12 @@ const RegisterAccommodation = () => {
         selectedPetFacility.length === 0 ||
         selectedAllowPet.length === 0
       ) {
-        alert('허용 반려동물, 시설은 최소 1개 선택해주세요.');
+        setFacilityError('허용 반려동물, 시설은 최소 1개 선택해주세요.');
         return;
       }
 
       if (!thumbnail) {
-        alert('대표이미지는 필수입니다.');
+        setImageError('대표이미지는 필수입니다.');
         return;
       }
 
@@ -419,7 +417,8 @@ const RegisterAccommodation = () => {
           value={name}
           onChange={handleNameChange}
         />
-        {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
+        {nameError && <SErrorMessage>{nameError}</SErrorMessage>}
+
         <SSLabel>설명</SSLabel>
         <SSDescriptionWrapper>
           <SSInputExplain
@@ -495,6 +494,8 @@ const RegisterAccommodation = () => {
           selectedOptions={selectedPetFacility}
           onSelect={selectPetFacility}
         />
+        {facilityError && <SErrorMessage>{facilityError}</SErrorMessage>}
+
         <SSLabelFile>대표이미지</SSLabelFile>
         {!thumbnailImageUploaded && (
           <SSUploadContainer htmlFor="thumbnail-upload">
@@ -513,6 +514,7 @@ const RegisterAccommodation = () => {
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
           </SSImagePreviewWrapper>
         )}
+        {imageError && <SErrorMessage>{imageError}</SErrorMessage>}
 
         <SSLabelFile>이미지</SSLabelFile>
         {!imageUploaded && (

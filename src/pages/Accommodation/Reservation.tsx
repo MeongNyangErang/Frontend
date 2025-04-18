@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from 'services/api';
+import axios from 'axios';
 
 interface ButtonProps {
   selected: boolean;
@@ -64,11 +65,7 @@ const Reservation = () => {
 
   const handleReserverName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-
-    const koreanRegex = /^[가-힣]*$/;
-    if (koreanRegex.test(inputValue)) {
-      setReserverName(inputValue);
-    }
+    setReserverName(inputValue);
   };
 
   const handleClick = (value: string) => {
@@ -266,6 +263,7 @@ const SLabel = styled.label`
   margin-top: 10px;
   margin-bottom: 3px;
   font-size: 16px;
+  padding: 3px 0;
 `;
 
 const STotal = styled.label`
@@ -290,6 +288,7 @@ const SInputText = styled.input`
 
 const SInputTel = styled.input`
   margin: 7px 2px;
+  padding: 5px 0;
   font-size: 16px;
 `;
 
