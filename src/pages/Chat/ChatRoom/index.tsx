@@ -4,7 +4,7 @@ import { FaXmark } from 'react-icons/fa6';
 import Modal from '@components/common/Modal';
 import { ChatPartnerState } from '@typings/chat';
 import ROUTES from '@constants/routes';
-import { formatDateOrTime } from '@utils/date';
+import { formatUTCTimeToDateOrTime } from '@utils/date';
 import useChatRoom from './useChatRoom';
 import {
   SChatRoomWrap,
@@ -60,58 +60,66 @@ const ChatRoom = ({
     <>
       <SChatRoomWrap>
         <SChatContainer ref={scrollContainerRef}>
-          <SMessageList>
-            <div ref={infiniteScrollRef} />
-            {messages.map((message, index) => {
-              const { messageContent, senderType, createdAt, messageType } =
-                message;
-              const isMyMessage = senderType === data.role.toUpperCase();
-              const isThePreviousSender =
-                index > 0 && messages[index - 1].senderType === senderType;
-              const isText = messageType === 'MESSAGE';
-              const formattedTime = formatDateOrTime(createdAt);
-              return (
-                <SMessage
-                  key={`${createdAt}${index}`}
-                  className={isMyMessage ? 'right' : 'left'}
-                >
-                  {isMyMessage ? (
-                    <SMessageContainer className="right">
-                      <SMessageTime>{formattedTime}</SMessageTime>
-                      <SMessageContent>
-                        <div>
-                          {isText ? (
-                            <SMessageText>{messageContent}</SMessageText>
-                          ) : (
-                            <SMessageImage src={messageContent} alt="이미지" />
+          {messages && messages.length > 0 && (
+            <SMessageList>
+              <div ref={infiniteScrollRef} />
+              {messages.map((message, index) => {
+                const { messageContent, senderType, createdAt, messageType } =
+                  message;
+                const isMyMessage = senderType === data.role.toUpperCase();
+                const isThePreviousSender =
+                  index > 0 && messages[index - 1].senderType === senderType;
+                const isText = messageType === 'MESSAGE';
+                const formattedTime = formatUTCTimeToDateOrTime(createdAt);
+                return (
+                  <SMessage
+                    key={`${createdAt}${index}`}
+                    className={isMyMessage ? 'right' : 'left'}
+                  >
+                    {isMyMessage ? (
+                      <SMessageContainer className="right">
+                        <SMessageTime>{formattedTime}</SMessageTime>
+                        <SMessageContent>
+                          <div>
+                            {isText ? (
+                              <SMessageText>{messageContent}</SMessageText>
+                            ) : (
+                              <SMessageImage
+                                src={messageContent}
+                                alt="이미지"
+                              />
+                            )}
+                          </div>
+                        </SMessageContent>
+                      </SMessageContainer>
+                    ) : (
+                      <SMessageContainer className="left">
+                        <SMessageProfile>
+                          {!isThePreviousSender && (
+                            <img src={partnerImageUrl} alt="프로필 이미지" />
                           )}
-                        </div>
-                      </SMessageContent>
-                    </SMessageContainer>
-                  ) : (
-                    <SMessageContainer className="left">
-                      <SMessageProfile>
-                        {!isThePreviousSender && (
-                          <img src={partnerImageUrl} alt="프로필 이미지" />
-                        )}
-                      </SMessageProfile>
-                      <SMessageContent>
-                        {!isThePreviousSender && <span>{partnerName}</span>}
-                        <div>
-                          {isText ? (
-                            <SMessageText>{messageContent}</SMessageText>
-                          ) : (
-                            <SMessageImage src={messageContent} alt="이미지" />
-                          )}
-                        </div>
-                      </SMessageContent>
-                      <SMessageTime>{formattedTime}</SMessageTime>
-                    </SMessageContainer>
-                  )}
-                </SMessage>
-              );
-            })}
-          </SMessageList>
+                        </SMessageProfile>
+                        <SMessageContent>
+                          {!isThePreviousSender && <span>{partnerName}</span>}
+                          <div>
+                            {isText ? (
+                              <SMessageText>{messageContent}</SMessageText>
+                            ) : (
+                              <SMessageImage
+                                src={messageContent}
+                                alt="이미지"
+                              />
+                            )}
+                          </div>
+                        </SMessageContent>
+                        <SMessageTime>{formattedTime}</SMessageTime>
+                      </SMessageContainer>
+                    )}
+                  </SMessage>
+                );
+              })}
+            </SMessageList>
+          )}
         </SChatContainer>
         <STextBox>
           <STextBoxInputWrap className={image ? 'disabled' : ''}>
@@ -125,6 +133,11 @@ const ChatRoom = ({
               type="text"
               value={text}
               onChange={handleChangeText}
+              onKeyDown={(e) => {
+                const key = e.key;
+                if (key === 'Enter') {
+                }
+              }}
               disabled={!!image}
             />
             <SImageButton onClick={handleClickImageButton} disabled={!!text}>

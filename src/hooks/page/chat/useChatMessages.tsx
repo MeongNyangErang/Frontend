@@ -21,11 +21,17 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const pages = (
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
+  const previousMessages = useMemo(() => {
+    const messages = pages?.flatMap((page) => page.content) || [];
+    messages.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateA.getTime() - dateB.getTime();
+    });
 
-  const previousMessages = useMemo(
-    () => pages?.flatMap((page) => page.data),
-    [data],
-  );
+    return messages;
+  }, [data]);
+
   const enableToFetch = hasNextPage && !isFetchingNextPage && !error;
   const infiniteScrollRef = useInfiniteScroll(fetchNextPage, enableToFetch);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -65,9 +71,18 @@ const useChatMessages = (chatRoomId: number | undefined) => {
 
   const sendImage = async (imageFile: File, onSuccess: () => void) => {
     if (!chatRoomId) return;
+
+    const request = {
+      chatRoomId,
+    };
+
+    const blob = new Blob([JSON.stringify(request)], {
+      type: 'application/json',
+    });
+
     const formData = new FormData();
+    formData.append('request', blob);
     formData.append('imageFile', imageFile);
-    formData.append('chatRoomId', chatRoomId.toString());
 
     try {
       await sendChatImage(formData);
@@ -106,7 +121,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   }, [previousMessages]);
 
   useEffect(() => {
-    if (previousMessages) {
+    if (previousMessages && previousMessages.length > 0) {
       setMessages((prev) => {
         const set = new Set(prev.map((m) => m.createdAt + m.messageContent));
         const newMessages = previousMessages.filter(

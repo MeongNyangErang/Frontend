@@ -15,15 +15,6 @@ export const createStompClient = () => {
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },
-    debug: (str) => {
-      console.log(str);
-    },
-    onStompError: (e) => {
-      console.log(e, 'stomp error');
-    },
-    onWebSocketError: (e) => {
-      console.log(e, 'socket error');
-    },
   });
 
   return client;

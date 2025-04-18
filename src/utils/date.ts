@@ -35,9 +35,10 @@ const formatDateStrToStrWithDay = (dateStr: string) => {
   return `${year}.${month}.${day}(${dayName})`;
 };
 
-const formatDateOrTime = (dateStr: string) => {
+const formatUTCTimeToDateOrTime = (dateStr: string) => {
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return '';
+  date.setHours(date.getHours() + 9);
   const today = new Date();
   const isToday =
     date.getFullYear() === today.getFullYear() &&
@@ -46,8 +47,7 @@ const formatDateOrTime = (dateStr: string) => {
   if (isToday) {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
+    return `${hours}:${minutes}`;
   }
 
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -63,5 +63,5 @@ export {
   stringToDate,
   formatDateStrToKorean,
   formatDateStrToStrWithDay,
-  formatDateOrTime,
+  formatUTCTimeToDateOrTime,
 };
