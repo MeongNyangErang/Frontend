@@ -9,6 +9,7 @@ interface Props {
   onChange(key: FileFormatFields, file: File | null): void;
   width: string;
   maxWidth: string;
+  defaultProfileImage: string | null;
 }
 
 const ProfileImageUploader = ({
@@ -16,9 +17,11 @@ const ProfileImageUploader = ({
   onChange,
   width,
   maxWidth,
+  defaultProfileImage,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<null | string>(null);
+  const [preview, setPreview] = useState<null | string>(defaultProfileImage);
+  const [initialRender, setInitialRender] = useState(true);
 
   const handleClickButton = useCallback(() => {
     if (inputRef.current) inputRef.current.click();
@@ -30,6 +33,11 @@ const ProfileImageUploader = ({
   }, []);
 
   useEffect(() => {
+    if (initialRender && defaultProfileImage) {
+      setInitialRender(false);
+      return;
+    }
+
     if (profileImage) {
       const reader = new FileReader();
 
@@ -42,6 +50,8 @@ const ProfileImageUploader = ({
     } else {
       setPreview(null);
     }
+
+    if (initialRender) setInitialRender(false);
   }, [profileImage]);
 
   return (

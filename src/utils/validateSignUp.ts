@@ -72,4 +72,6 @@ export {
   validateNickname,
   validateName,
   validatePhoneNumber,
+  validatePassword,
+  validatePasswordCheck,
 };

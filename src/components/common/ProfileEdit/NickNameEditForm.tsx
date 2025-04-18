@@ -5,9 +5,11 @@ import { validateNickname } from '@utils/validateSignUp';
 import useError from '@hooks/ui/useError';
 import useIsLoading from '@hooks/ui/useIsLoading';
 import { checkNicknameDuplicate } from '@services/signup';
+import { changeNickname } from '@services/profileEdit';
 import EditSuccessMessage from './EditSuccessMessage';
 import { SFormTitle } from './styles';
 import Button from '../Button';
+import Loader from '../Loader';
 
 interface NickNameEditFormProps {
   defaultValue: string;
@@ -43,13 +45,15 @@ const NickNameEditForm = ({ defaultValue, onClose }: NickNameEditFormProps) => {
   };
 
   const handleClickSubmitButton = async () => {
+    if (error || isLoading) return;
     updateSubmitError('');
     startIsLoading();
     try {
-      //api
+      await changeNickname(text);
       setIsSuccess(true);
     } catch (error) {
       console.log(error);
+      updateSubmitError('닉네임 변경에 실패했습니다. 다시 시도해주세요.');
     } finally {
       endIsLoading();
     }
@@ -88,7 +92,11 @@ const NickNameEditForm = ({ defaultValue, onClose }: NickNameEditFormProps) => {
         fixedHeight
         disabled={!duplicateCheck || !!error || isLoading}
       >
-        닉네임 변경
+        {isLoading ? (
+          <Loader size={8} color="grayBorder" loading />
+        ) : (
+          '변경하기'
+        )}
       </Button>
       <SInputMessage>{error}</SInputMessage>
     </SNickNameEditFormWrap>

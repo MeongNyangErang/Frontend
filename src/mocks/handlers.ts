@@ -87,16 +87,13 @@ export const handlers = [
     return HttpResponse.json(userProfileData);
   }),
   http.get(`${BASE_URL}/hosts/me`, async () => {
-    const userProfileData = {
-      code: 200,
-      data: {
-        nickname: '호스트123닉네임',
-        profileImageUrl: 'https://i.imgur.com/WrQthuy.jpeg',
-        name: '홍길동',
-        currentPhoneNumber: '01012345678',
-      },
+    const hostProfileData = {
+      nickname: '호스트123닉네임',
+      profileImageUrl: 'https://i.imgur.com/WrQthuy.jpeg',
+      name: '홍길동',
+      currentPhoneNumber: '01012345678',
     };
-    return HttpResponse.json(userProfileData);
+    return HttpResponse.json(hostProfileData);
   }),
   http.delete(`${BASE_URL}/register/roomList`, async () => {
     return HttpResponse.json({ code: 200, message: '객실 삭제 성공' });

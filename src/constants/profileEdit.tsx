@@ -4,6 +4,7 @@ import NickNameEditForm from '@components/common/ProfileEdit/NickNameEditForm';
 import PhoneNumberEditForm from '@components/common/ProfileEdit/PhoneNumberEditForm';
 import PasswordEditForm from '@components/common/ProfileEdit/PasswordEditForm';
 import WithdrawForm from '@components/common/ProfileEdit/WithdrawForm';
+import ProfileImageEditForm from '@components/common/ProfileEdit/ProfileImageEditForm';
 
 export const userProfileEditList = [
   { name: '닉네임 변경', id: 'nickname' },
@@ -21,7 +22,7 @@ export const hostProfileEditList = [
 
 type ModalFormItem =
   | {
-      id: 'nickname';
+      id: 'nickname' | 'profileImage';
       element: (
         data: UserProfile | HostProfile,
         onClose: () => void,
@@ -37,6 +38,15 @@ type ModalFormItem =
     };
 
 export const modalFormList: ModalFormItem[] = [
+  {
+    id: 'profileImage',
+    element: (data: UserProfile | HostProfile, onClose: () => void) => (
+      <ProfileImageEditForm
+        defaultValue={data.profileImageUrl}
+        onClose={onClose}
+      />
+    ),
+  },
   {
     id: 'nickname',
     element: (data: UserProfile | HostProfile, onClose: () => void) => (
@@ -67,3 +77,27 @@ export const modalFormList: ModalFormItem[] = [
     element: (onClose: () => void) => <WithdrawForm onClose={onClose} />,
   },
 ];
+
+export const passwordEditFormData = {
+  password: '',
+  newPassword: '',
+  newPasswordCheck: '',
+};
+
+export const passwordEditFormFields = [
+  {
+    id: 'password',
+    label: '기존 비밀번호',
+    placeholder: '기존 비밀번호를 입력해주세요.',
+  },
+  {
+    id: 'newPassword',
+    label: '새 비밀번호',
+    placeholder: '새 비밀번호를 입력해주세요.',
+  },
+  {
+    id: 'newPasswordCheck',
+    label: '새 비밀번호 확인',
+    placeholder: '새 비밀번호를 한번 더 입력해주세요.',
+  },
+] as const;
