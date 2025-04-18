@@ -1,3 +1,8 @@
+import {
+  inputStyle,
+  inputVariantStyles,
+  labelDotStyle,
+} from '@components/styles/mixins';
 import { media } from '@components/styles/responsive';
 import styled from 'styled-components';
 
@@ -58,9 +63,43 @@ const SProfileEditItem = styled.button`
   }
 `;
 
+const SFormTitle = styled.div`
+  margin-bottom: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+`;
+
+const SFormInputBox = styled.div`
+  width: 100%;
+  margin-bottom: 8px;
+`;
+
+const SFormLabel = styled.span`
+  ${labelDotStyle}
+  display: inline-block;
+  padding-bottom: 6px;
+`;
+
+const SFormInput = styled.input`
+  ${inputStyle}
+  ${inputVariantStyles.gray};
+  margin-bottom: 4px;
+`;
+
+const SFormErrorMessage = styled.p`
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.main};
+`;
+
 export {
   SProfileEditWrap,
   SProfileEditItem,
   SProfileEditList,
   SProfileImageEdit,
+  SFormTitle,
+  SFormInputBox,
+  SFormInput,
+  SFormLabel,
+  SFormErrorMessage,
 };

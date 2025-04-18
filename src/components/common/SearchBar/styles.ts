@@ -53,12 +53,14 @@ export const SLocationDropdown = styled.div`
 `;
 
 export const SPeopleDropdown = styled.div`
-  position: absolute;
-  top: 155px;
-  right: 15px;
+  width: 100%;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  margin-top: 10px;
+  margin-left: -10px;
 `;
 
 export const SDropdownItem = styled.div`
@@ -75,6 +77,7 @@ export const SLabel = styled.label`
 
 export const SDatePickerWrapper = styled.div`
   width: 60px;
+  font-size: 14px;
 
   input {
     font-size: 16px !important;
@@ -103,14 +106,14 @@ export const SDatePickerWrapper = styled.div`
 export const SButton = styled.button`
   width: 30px;
   height: 30px;
-  background-color: var(--gray-300);
-  color: var(--gray-600);
+  background-color: #f5f5f5;
+  color: var(--gray-800);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
   &:hover {
-    background-color: var(--gray-400);
+    background-color: rgb(251, 229, 233);
   }
 `;
 
@@ -149,6 +152,7 @@ export const SBoxWrapper = styled.div`
   border: 1px solid #ccc;
   border-radius: 0 0 10px 0px;
   font-family: 'Noto Sans KR';
+  position: relative;
 `;
 
 export const SContainer = styled.div`
@@ -160,8 +164,8 @@ export const SContainer = styled.div`
 export const SApplyButton = styled.button`
   padding: 5px;
   border: ${({ theme }) => `1px solid ${theme.colors.main}`};
-  border-radius: 4px;
-  width: 95%;
+  border-radius: 8px;
+  width: 100%;
   text-align: center;
   color: ${({ theme }) => theme.colors.main};
 `;

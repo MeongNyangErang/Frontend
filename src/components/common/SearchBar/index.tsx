@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { locations } from '@constants/search';
 import { formatDate, stringToDate } from '@utils/date';
 import { SearchQuery } from '@typings/search';
+import { usePopper } from 'react-popper';
 import {
   SearchBarWrapper,
   SInputBox,
@@ -23,6 +24,7 @@ import {
   STextInput,
   SApplyButton,
 } from './styles';
+
 import Modal from '../Modal';
 
 interface Props {
@@ -37,10 +39,20 @@ const SearchBar = ({ currentQuery }: Props) => {
   const [petCount, setPetCount] = useState(1);
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [peopleDropdownOpen, setPeopleDropdownOpen] = useState(false);
-  const peopleDropdownRef = useRef<HTMLDivElement>(null);
+  const peopleDropdownRef = useRef<HTMLDivElement | null>(null);
   const locationDropdownRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState('');
+  const [selectionDone, setSelectionDone] = useState(false);
+
   const navigate = useNavigate();
+
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom-start',
+  });
 
   const resetError = () => {
     setError('');
@@ -122,6 +134,7 @@ const SearchBar = ({ currentQuery }: Props) => {
 
   const applyPeopleAndPets = () => {
     setPeopleDropdownOpen(false);
+    setSelectionDone(true);
   };
 
   useEffect(() => {
@@ -137,13 +150,21 @@ const SearchBar = ({ currentQuery }: Props) => {
   }, [currentQuery]);
 
   useEffect(() => {
-    const handleClickOutside = (e: Event) => {
+    const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+
+      const clickedInsideLocationDropdown =
+        locationDropdownRef.current?.contains(target);
+      const clickedInsidePeopleDropdown =
+        peopleDropdownRef.current?.contains(target);
+
+      const clickedInputOrLabel =
+        target.closest('input') || target.closest('label');
+
       if (
-        locationDropdownRef.current &&
-        !locationDropdownRef.current.contains(target) &&
-        peopleDropdownRef.current &&
-        !peopleDropdownRef.current.contains(target)
+        !clickedInsideLocationDropdown &&
+        !clickedInsidePeopleDropdown &&
+        !clickedInputOrLabel
       ) {
         setLocationDropdownOpen(false);
         setPeopleDropdownOpen(false);
@@ -151,8 +172,6 @@ const SearchBar = ({ currentQuery }: Props) => {
     };
 
     document.addEventListener('click', handleClickOutside);
-
-    applyPeopleAndPets();
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -204,12 +223,23 @@ const SearchBar = ({ currentQuery }: Props) => {
           </SCheckWrapper>
 
           <SBoxWrapper>
-            <SLabel onClick={handlePeopleToggle}>
+            <SLabel
+              onClick={handlePeopleToggle}
+              ref={setReferenceElement}
+              style={{ color: selectionDone ? '#424242' : '#888' }}
+            >
               인원 {peopleCount}&nbsp;&nbsp;반려동물 {petCount}
             </SLabel>
 
             {peopleDropdownOpen && (
-              <SPeopleDropdown ref={peopleDropdownRef}>
+              <SPeopleDropdown
+                ref={(el) => {
+                  setPopperElement(el);
+                  peopleDropdownRef.current = el;
+                }}
+                style={styles.popper}
+                {...attributes.popper}
+              >
                 <SDropdownItem>
                   <SNumberInputWrapper>
                     <SLabel>인원</SLabel>
