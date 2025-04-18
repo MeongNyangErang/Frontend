@@ -455,16 +455,209 @@ export const handlers = [
 
     return HttpResponse.json(response);
   }),
-  http.get(`${BASE_URL}/common/recommendnonmember`, async () => {
-    const response = {
-      accommodationId: 1,
-      type: '호텔',
-      name: '펫프렌들리 리조트',
-      price: 120000,
-      totalRating: 4.5,
-      reviewCount: 85,
-      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-    };
-    return HttpResponse.json(response);
+  http.get(`${BASE_URL}/recommendations/user-pet`, () => {
+    const mockResponse = [
+      {
+        petId: 1,
+        petName: '콩이',
+        recommendations: [
+          {
+            id: 101,
+            name: '강릉 펫프렌들리 호텔',
+            price: 125000,
+            totalRating: 4.8,
+            thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+          },
+          {
+            id: 102,
+            name: '속초 바닷가 숙소',
+            price: 89000,
+            totalRating: 4.5,
+            thumbnailUrl: 'https://i.imgur.com/WrQthuy.jpeg',
+          },
+        ],
+      },
+      {
+        petId: 2,
+        petName: '솜이',
+        recommendations: [
+          {
+            id: 201,
+            name: '제주 고양이 리조트',
+            price: 99000,
+            totalRating: 4.6,
+            thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+          },
+        ],
+      },
+    ];
+    return HttpResponse.json(mockResponse);
+  }),
+  http.get(`${BASE_URL}/recommendations/default/more`, () => {
+    return HttpResponse.json([
+      {
+        acommodationId: 1,
+        accommodationName: '속초 해변 펫텔',
+        nickname: '김멍냥',
+        content:
+          '정말 만족스러웠어요! 강아지가 너무 편해했어요. 주변도 조용하고 산책로도 잘 되어 있어요. 또 오고 싶어요!',
+        totalRating: 4.7,
+        imageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      },
+      {
+        acommodationId: 2,
+        accommodationName: '경주 전통 펫하우스',
+        nickname: '김냥냥',
+        price: 99000,
+        totalRating: 4.6,
+        imageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      },
+    ]);
+  }),
+  http.get(`${BASE_URL}/recommendations/most-viewed`, () => {
+    return HttpResponse.json([
+      {
+        id: 1,
+        name: '속초 해변 펫텔',
+        price: 159000,
+        totalRating: 4.6,
+        thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      },
+      {
+        id: 2,
+        name: '경주 전통 펫하우스',
+        price: 129000,
+        totalRating: 4.9,
+        thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+      },
+    ]);
+  }),
+  /*회원 allview*/
+  http.get(`${BASE_URL}/recommendations/user-pet/more`, () => {
+    return HttpResponse.json([
+      {
+        id: 1,
+        name: '반려견과 함께하는 바닷가 숙소',
+        price: 120000,
+        totalRating: 4.8,
+        thumbnailUrl: 'https://example.com/images/beach-house.jpg',
+      },
+      {
+        id: 2,
+        name: '고양이 전용 아파트형 숙소',
+        price: 95000,
+        totalRating: 4.7,
+        thumbnailUrl: 'https://example.com/images/cat-apartment.jpg',
+      },
+    ]);
+  }),
+  http.get(`${BASE_URL}/recommendations/default`, () => {
+    return HttpResponse.json({
+      LARGE_DOG: [
+        {
+          id: 1,
+          name: '고양이 전용 아파트형 숙소',
+          price: 150000,
+          totalRating: 4.5,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+        {
+          id: 2,
+          name: '고양이 전용 아파트형 숙소',
+          price: 120000,
+          totalRating: 4.3,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      MEDIUM_DOG: [
+        {
+          id: 3,
+          name: '고양이 전용 아파트형 숙소',
+          price: 80000,
+          totalRating: 4.2,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      SMALL_DOG: [
+        {
+          id: 4,
+          name: '고양이 전용 아파트형 숙소',
+          price: 60000,
+          totalRating: 4.0,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      CAT: [
+        {
+          id: 5,
+          name: '고양이 전용 아파트형 숙소',
+          price: 50000,
+          totalRating: 4.8,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+        {
+          id: 6,
+          name: '고양이 전용 아파트형 숙소',
+          price: 45000,
+          totalRating: 4.7,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+    });
+  }),
+  /*회원 allview*/
+  http.get(`${BASE_URL}/recommendations/default/more`, () => {
+    return HttpResponse.json({
+      LARGE_DOG: [
+        {
+          id: 1,
+          name: '고양이 전용 아파트형 숙소',
+          price: 150000,
+          totalRating: 4.5,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+        {
+          id: 2,
+          name: '고양이 전용 아파트형 숙소',
+          price: 120000,
+          totalRating: 4.3,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      MEDIUM_DOG: [
+        {
+          id: 3,
+          name: '고양이 전용 아파트형 숙소',
+          price: 80000,
+          totalRating: 4.2,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      SMALL_DOG: [
+        {
+          id: 4,
+          name: '고양이 전용 아파트형 숙소',
+          price: 60000,
+          totalRating: 4.0,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+      CAT: [
+        {
+          id: 5,
+          name: '고양이 전용 아파트형 숙소',
+          price: 50000,
+          totalRating: 4.8,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+        {
+          id: 6,
+          name: '고양이 전용 아파트형 숙소',
+          price: 45000,
+          totalRating: 4.7,
+          thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
+        },
+      ],
+    });
   }),
 ];
