@@ -20,7 +20,7 @@ const Button = ({
   children,
   onClick,
   variant,
-  fontSize = '14px',
+  fontSize = '13px',
   fullWidth,
   fixedHeight,
   disabled,
