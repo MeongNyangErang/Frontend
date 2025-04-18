@@ -145,14 +145,18 @@ const RegisterRoom = () => {
     standardPetCount: '',
     maxPetCount: '',
   });
+  const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutTime, setCheckOutTime] = useState('');
-  const [thumbnailImageUploaded, setThumbnailImageUploaded] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [priceError, setPriceError] = useState('');
   const [peopleCountError, setPeopleCountError] = useState('');
   const [thumbnailError, setThumbnailError] = useState('');
-  const [registered, setRegistered] = useState(false);
+  const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [checkError, setCheckError] = useState('');
+  const [facilityError, setFacilityError] = useState('');
+
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -198,12 +202,6 @@ const RegisterRoom = () => {
     key: keyof typeof counts,
   ) => {
     const rawValue = e.target.value;
-    const isNumeric = /^\d*$/.test(rawValue);
-
-    if (!isNumeric) {
-      alert('숫자만 입력할 수 있습니다.');
-      return;
-    }
 
     const numericValue = Number(rawValue);
     if (!isNaN(numericValue)) {
@@ -234,13 +232,7 @@ const RegisterRoom = () => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    const regex = /^[a-zA-Z0-9가-힣()]*$/;
-    if (regex.test(newName)) {
-      setName(newName);
-      setErrorMessage('');
-    } else {
-      setErrorMessage('한글, 알파벳, 숫자만 입력할 수 있습니다.');
-    }
+    setName(newName);
   };
 
   const OptionSelector = ({
@@ -284,6 +276,15 @@ const RegisterRoom = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!name || !/^[가-힣a-zA-Z0-9\s]+$/.test(name)) {
+      setNameError('한글, 알파벳, 숫자만 입력할 수 있습니다.');
+    }
+
+    if (!description || '') {
+      setDescriptionError('설명를 입력해주세요.');
+      return;
+    }
+
     if (
       !counts.standardPeopleCount ||
       !counts.maxPeopleCount ||
@@ -308,8 +309,6 @@ const RegisterRoom = () => {
 
     if (!thumbnail) {
       setThumbnailError('대표 이미지를 선택해주세요.');
-    } else {
-      setThumbnailError('');
     }
 
     if (
@@ -317,17 +316,12 @@ const RegisterRoom = () => {
       selectedPetFacility.length === 0 ||
       selectedHashTag.length === 0
     ) {
-      alert('시설, 해시태그는 최소 1개 선택해주세요.');
-      return;
-    }
-
-    if (!name || !description) {
-      alert('객실 정보를 입력해주세요.');
+      setFacilityError('시설, 해시태그는 최소 1개 선택해주세요.');
       return;
     }
 
     if (!checkInTime || !checkOutTime) {
-      alert('체크인, 체크아웃을 선택해주세요.');
+      setCheckError('체크인, 체크아웃을 선택해주세요.');
       return;
     }
 
@@ -458,7 +452,7 @@ const RegisterRoom = () => {
             onChange={handleNameChange}
           />
         </div>
-        {errorMessage && <SErrorMessage>{errorMessage}</SErrorMessage>}
+        {nameError && <SErrorMessage>{nameError}</SErrorMessage>}
 
         <SLabel>설명</SLabel>
         <SDescriptionWrapper>
@@ -470,6 +464,7 @@ const RegisterRoom = () => {
           />
           <SCharacterCount>{description.length}/2000</SCharacterCount>
         </SDescriptionWrapper>
+        {descriptionError && <SErrorMessage>{descriptionError}</SErrorMessage>}
 
         <SLabel>체크인 - 체크아웃</SLabel>
         <SFormContainer>
@@ -490,6 +485,7 @@ const RegisterRoom = () => {
             />
           </SFormItem>
         </SFormContainer>
+        {checkError && <SErrorMessage>{checkError}</SErrorMessage>}
 
         <SLabel>인원</SLabel>
         <SFormContainer>
@@ -585,6 +581,7 @@ const RegisterRoom = () => {
           selectedOptions={selectedHashTag}
           onSelect={selectHashTag}
         />
+        {facilityError && <SErrorMessage>{facilityError}</SErrorMessage>}
 
         <SLabelFile>대표 이미지</SLabelFile>
         {!thumbnailImageUploaded && (
