@@ -41,9 +41,24 @@ const AccommodationReview = lazy(
 );
 const Reservation = lazy(() => import('@pages/Accommodation/Reservation'));
 const Chat = lazy(() => import('@pages/Chat/index'));
-const Recommend = lazy(() => import('@components/common/RecommendNonMember'));
+
 const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
 const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
+
+const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
+const RecommendNonMemberView = lazy(
+  () => import('@pages/Home/RecommendNonMember/AllView'),
+);
+const RecommendMember = lazy(() => import('@pages/Home/RecommendMember'));
+const RecommendMostView = lazy(
+  () => import('@pages/Home/RecommendMember/MostView'),
+);
+const RecommendLastView = lazy(
+  () => import('@pages/Home/RecommendMember/LastView'),
+);
+const RecommendMemberView = lazy(
+  () => import('@pages/Home/RecommendMember/AllView'),
+);
 
 const AppRouter = () => {
   return (
@@ -69,7 +84,25 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-          <Route path="common/recommendnonmember" element={<Recommend />} />
+          <Route path="recommendNonMember" element={<RecommendNonMember />} />
+          <Route
+            path="recommendNonMember/allView"
+            element={<RecommendNonMemberView />}
+          />
+          <Route path="recommendMember" element={<RecommendMember />} />
+          <Route
+            path="recommendMember/mostView"
+            element={<RecommendMostView />}
+          />
+          <Route
+            path="recommendMember/lastView"
+            element={<RecommendLastView />}
+          />
+          <Route
+            path="recommendMember/AllView"
+            element={<RecommendMemberView />}
+          />
+
           <Route element={<PrivateRoute allowedRoles={['user']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
               <Route index element={<UserMyPage />} />
