@@ -657,4 +657,7 @@ export const handlers = [
   http.post(`${BASE_URL}/notifications/messages`, async () => {
     return HttpResponse.json({ message: '알림 전송 성공' });
   }),
+  http.post(`${BASE_URL}/notifications/messages`, async () => {
+    return HttpResponse.json({ message: '알림 전송 성공' });
+  }),
 ];

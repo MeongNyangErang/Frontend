@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from '@services/api';
+import { AiOutlineNotification } from 'react-icons/ai';
+import axios from 'axios';
 
 export type UserType = 'USER' | 'HOST';
 
@@ -47,7 +49,7 @@ const NotificationSender = () => {
   });
 
   useEffect(() => {
-    socketRef.current = new WebSocket('wss://your-api-url/ws/notifications'); // 웹소켓 주소
+    socketRef.current = new WebSocket('wss://your-api-url/ws/notifications');
 
     socketRef.current.onopen = () => {
       console.log('[WebSocket] Connected');
@@ -70,26 +72,39 @@ const NotificationSender = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const loadNotifications = async (page: number = 0) => {
-      try {
-        const notificationsList = await fetchCall(
-          `/notifications/list?page=${page}&size=${pagination.size}`,
-        );
-        setNotifications((prev) => [...prev, ...notificationsList.data]);
-        setPagination({
-          page: notificationsList.page,
-          size: notificationsList.size,
-          totalElements: notificationsList.totalElements,
-          totalPages: notificationsList.totalPages,
-          first: notificationsList.first,
-          last: notificationsList.last,
-        });
-      } catch (e: any) {
-        setLog((prev) => [`알림 목록 로드 실패: ${e.message}`, ...prev]);
+  const loadNotifications = async (page: number = 0) => {
+    try {
+      const notificationsList = await fetchCall<{
+        data: NotificationPayload[];
+        page: number;
+        size: number;
+        totalElements: number;
+        totalPages: number;
+        first: boolean;
+        last: boolean;
+      }>(`/notifications/list?page=${page}&size=${pagination.size}`, 'get');
+
+      if (!Array.isArray(notificationsList.data)) {
+        throw new Error('Response data is not an array');
       }
-    };
-  });
+
+      setNotifications((prev) => [...prev, ...notificationsList.data]);
+      setPagination({
+        page: notificationsList.page,
+        size: notificationsList.size,
+        totalElements: notificationsList.totalElements,
+        totalPages: notificationsList.totalPages,
+        first: notificationsList.first,
+        last: notificationsList.last,
+      });
+    } catch (e: any) {
+      setLog((prev) => [`알림 목록 로드 실패: ${e.message}`, ...prev]);
+    }
+  };
+
+  useEffect(() => {
+    loadNotifications(0);
+  }, [pagination.size]);
 
   const loadMore = () => {
     if (pagination.page < pagination.totalPages - 1) {
@@ -99,7 +114,7 @@ const NotificationSender = () => {
 
   const handleSend = async () => {
     try {
-      await fetchCall('/user/subscribe/notifications');
+      await axios('/user/subscribe/notifications');
       setLog((prev) => ['구독 완료', ...prev]);
 
       const payload: SendNotificationRequest = {
@@ -117,9 +132,7 @@ const NotificationSender = () => {
         chatRoomId: 1,
         content: '알림입니다',
       };
-
-      await fetchCall('/notifications/messages', {
-        method: 'POST',
+      await fetchCall('/notifications/messages', 'post', {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(request),
       });
@@ -133,7 +146,10 @@ const NotificationSender = () => {
     <div>
       <Header title="알림함" />
       <Container>
-        <Title>중요한 알림</Title>
+        <Title>
+          <OutlineNotification />
+          중요한 알림
+        </Title>
         <NotificationList>
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
@@ -225,4 +241,11 @@ const LoadMoreButton = styled.button`
   &:hover {
     background-color: #3578b6;
   }
+`;
+
+const OutlineNotification = styled(AiOutlineNotification)`
+  color: var(--main-color);
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 20px;
 `;
