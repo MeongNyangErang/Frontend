@@ -21,7 +21,7 @@ interface Reservation {
 }
 
 const Reservation = () => {
-  const location = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   const {
@@ -32,7 +32,7 @@ const Reservation = () => {
     peopleCount,
     petCount,
     totalPrice,
-  } = location.state || {};
+  } = state || {};
 
   const [hasVehicle, setHasvehicle] = useState<string | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');

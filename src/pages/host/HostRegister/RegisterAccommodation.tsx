@@ -452,7 +452,9 @@ const RegisterAccommodation = () => {
         <SSLabel>숙소 유형</SSLabel>
         <ButtonContainer>
           <CheckInput
-            selected={accommodationType === ('호텔리조트' as AccommodationType)}
+            selected={
+              accommodationType === ('호텔 리조트' as AccommodationType)
+            }
             onClick={() => handleClick('호텔 리조트')}
           >
             호텔 리조트
