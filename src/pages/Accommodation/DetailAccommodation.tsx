@@ -61,6 +61,10 @@ const DetailAccommodation = () => {
   } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [checkInTime, setCheckInTime] = useState<string | null>(null);
+  const [checkOutTime, setCheckOutTime] = useState<string | null>(null);
+  const [peopleCount, setPeopleCount] = useState<number>(1);
+  const [petCount, setPetCount] = useState<number>(0);
   const accommodationId = pathname.split('/').splice(-1);
 
   const publicHolidays = ['2025-01-01', '2025-12-25'];
@@ -151,8 +155,19 @@ const DetailAccommodation = () => {
     navigate(`/accommodation/${accommodationId}/room/${roomId}`);
   };
 
-  const handleAllReserve = () => {
-    navigate(`/accommodation/${accommodationId}/reservation`);
+  const handleAllReserve = (room: RoomData) => {
+    const price = getRoomPrice(room);
+    navigate(`/accommodation/${accommodationId}/reservation`, {
+      state: {
+        accommodationName: accommodation?.name ?? '',
+        roomId: room.roomId,
+        checkInTime,
+        checkOutTime,
+        peopleCount,
+        petCount,
+        price,
+      },
+    });
   };
 
   return (
@@ -263,7 +278,7 @@ const DetailAccommodation = () => {
                           {(room.price + room.extraFee).toLocaleString()}
                         </Price>
                       </RoomInfo>
-                      <RoomButton onClick={handleAllReserve}>
+                      <RoomButton onClick={() => handleAllReserve(room)}>
                         예약하기
                       </RoomButton>
                     </RoomInfoRight>

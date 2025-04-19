@@ -109,9 +109,7 @@ const Containers = styled.div`
 
 const Section = styled.div`
   box-shadow: ${({ theme }) => theme.shadow.bottom};
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-top: 5px;
   border-radius: 15px;
 `;
 
@@ -122,10 +120,10 @@ const All = styled.div`
 `;
 
 const Real = styled.p`
-  font-size: 20px;
+  font-size: 18px;
   color: var(--gray-700);
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 20px;
   padding-left: 5px;
 `;
 
@@ -138,7 +136,7 @@ const RecommendationContainer = styled.div`
 `;
 
 const RecommendationCard = styled.div`
-  width: 250px;
+  width: 230px;
   height: auto;
   background: white;
   padding: 5px;
@@ -197,7 +195,7 @@ const AccommodationType = styled.button`
 const RegHeart = styled(FaRegHeart)`
   color: #f03e5e;
   margin-top: 3px;
-  font-size: 20px;
+  font-size: 18px;
 `;
 
 const SliderWrapper = styled.div`

@@ -30,7 +30,7 @@ export const SNumberInputWrapper = styled.div`
 
 export const SInput = styled.input`
   width: 100%;
-  font-size: 14px;
+  font-size: 16px;
   padding: 12px;
   border-radius: 10px 10px 0 0;
   border: 1px solid #ccc;
@@ -70,14 +70,13 @@ export const SDropdownItem = styled.div`
 `;
 
 export const SLabel = styled.label`
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   margin-right: 20px;
 `;
 
 export const SDatePickerWrapper = styled.div`
   width: 60px;
-  font-size: 14px;
 
   .react-datepicker__header {
     background-color: #ffffff;
@@ -114,8 +113,10 @@ export const SButton = styled.button`
 
 export const SearchButton = styled.button`
   padding: 10px;
-  background-color: rgb(252, 109, 135);
+  background-color: rgb(243, 81, 111);
   color: white;
+  font-size: 16px;
+  font-weight: 500;
   border-radius: 8px;
   text-align: center;
   &:hover {
