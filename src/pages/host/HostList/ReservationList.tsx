@@ -167,12 +167,13 @@ const FilterButtons = styled.div`
 const FilterButton = styled.button<{ selected: boolean }>`
   padding: 12px 10px;
   font-size: 18px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   background: none;
   border: none;
   border-bottom: ${({ selected }) =>
     selected ? '4px solid #f03e5e' : '4px solid transparent'};
-  color: ${({ selected }) => (selected ? '#f03e5e' : 'inherit')};
+  color: ${({ selected, disabled }) =>
+    disabled ? '#ccc' : selected ? '#f03e5e' : 'inherit'};
   font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
   transition: all 0.2s;
 `;

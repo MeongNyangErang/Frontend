@@ -10,6 +10,7 @@ import { media } from '@components/styles/responsive';
 import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
+import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
 
 interface DetailData {
   accommodationId: number;
@@ -61,10 +62,6 @@ const DetailAccommodation = () => {
   } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [checkInTime, setCheckInTime] = useState<string | null>(null);
-  const [checkOutTime, setCheckOutTime] = useState<string | null>(null);
-  const [peopleCount, setPeopleCount] = useState<number>(1);
-  const [petCount, setPetCount] = useState<number>(0);
   const accommodationId = pathname.split('/').splice(-1);
 
   const publicHolidays = ['2025-01-01', '2025-12-25'];
@@ -151,16 +148,20 @@ const DetailAccommodation = () => {
   };
 
   const handleAllReserve = (room: RoomData) => {
-    const price = getRoomPrice(room);
+    if (!accommodation) {
+      console.error('Accommodation is null.');
+      return;
+    }
+
     navigate(`/accommodation/${accommodationId}/reservation`, {
       state: {
-        accommodationName: accommodation?.name ?? '',
         roomId: room.roomId,
-        checkInTime,
-        checkOutTime,
-        peopleCount,
-        petCount,
-        price,
+        accommodationName: accommodation.name,
+        totalPrice: room.price,
+        checkInDate: room.checkInTime,
+        checkOutDate: room.checkOutTime,
+        peopleCount: room.maxPeopleCount,
+        petCount: room.maxPetCount,
       },
     });
   };
@@ -223,6 +224,7 @@ const DetailAccommodation = () => {
             )}
           </Section>
           <SectionTitle>객실선택</SectionTitle>
+          <RoomSearchBar />
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>
               {accommodation.roomDetails
@@ -485,7 +487,7 @@ const RoomContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  margin-top: 15px;
+  margin-top: 20px;
 `;
 
 const RoomInfoLeft = styled.div`

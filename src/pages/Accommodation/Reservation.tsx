@@ -24,6 +24,12 @@ const Reservation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!state) {
+      console.log('잘못된 접근입니다.');
+    }
+  }, [state]);
+
   const {
     accommodationName,
     roomId,
@@ -103,9 +109,7 @@ const Reservation = () => {
       return;
     }
 
-    const sanitizedTotalPrice = totalPrice
-      ? totalPrice.replace(/[^0-9]/g, '')
-      : '0';
+    const sanitizedTotalPrice = totalPrice ?? 0;
 
     const reservationData = {
       roomId,
@@ -134,7 +138,7 @@ const Reservation = () => {
       );
       setRoomDetails(response);
       alert('예약이 완료되었습니다!');
-      navigate('/reservation/complete');
+      navigate('/reservation');
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
       alert('예약 처리 중 오류가 발생했습니다.');

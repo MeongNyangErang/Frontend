@@ -100,7 +100,7 @@ const AppRouter = () => {
             element={<RecommendLastView />}
           />
           <Route
-            path="recommendMember/AllView"
+            path="recommendMember/allView"
             element={<RecommendMemberView />}
           />
           <Route path="notification" element={<Notificaion />} />
