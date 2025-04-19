@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserProfile } from '@services/auth';
 
 const useUserProfile = () => {
@@ -7,7 +7,12 @@ const useUserProfile = () => {
     queryFn: () => getUserProfile(),
     staleTime: 1000 * 60 * 30,
   });
-  return result;
+
+  const queryClient = useQueryClient();
+  const invalidateProfile = () =>
+    queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+
+  return { ...result, invalidateProfile };
 };
 
 export default useUserProfile;

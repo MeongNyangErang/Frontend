@@ -24,6 +24,20 @@ const SChatContainer = styled.div`
   }
 `;
 
+const SChatInfoBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: ${({ theme }) => `${theme.layouts.paddingX}`};
+  margin: ${({ theme }) => `30px 0`};
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.gray100};
+
+  ${media.tablet} {
+    margin: ${({ theme }) => `30px ${theme.layouts.paddingX}`};
+  }
+`;
+
 const SMessageList = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,7 +67,7 @@ const SMessage = styled.div`
 
 const SMessageContainer = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
 `;
 
 const SMessageContent = styled.div`
@@ -210,6 +224,7 @@ const SErrorMessage = styled.div``;
 export {
   SChatRoomWrap,
   SChatContainer,
+  SChatInfoBox,
   SMessageList,
   SMessage,
   SMessageContainer,

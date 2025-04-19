@@ -7,6 +7,7 @@ import ROUTES from '@constants/routes';
 import ChatList from './ChatList';
 import ChatRoom from './ChatRoom';
 import { SChatWrap, SChatContiner, SEmptyChatRoomMessage } from './styles';
+import useAuth from '@hooks/auth/useAuth';
 
 const Chat = () => {
   const { chatRoomId } = useParams();
@@ -15,6 +16,8 @@ const Chat = () => {
   const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
   const { data } = useChatList();
   const listSize = data?.pages.flatMap(({ content }) => content).length;
+  const { member } = useAuth();
+  const partnerRole = member.data?.role === 'HOST' ? '유저' : '호스트';
 
   if (isTablet) {
     return (
@@ -37,8 +40,8 @@ const Chat = () => {
           <SEmptyChatRoomMessage>
             <p>
               {listSize && listSize > 0
-                ? '대화하실 호스트를 선택해주세요.'
-                : '대화중인 호스트가 없습니다.'}
+                ? `대화하실 ${partnerRole}를 선택해주세요.`
+                : `대화중인 ${partnerRole}가 없습니다.`}
             </p>
           </SEmptyChatRoomMessage>
         )}

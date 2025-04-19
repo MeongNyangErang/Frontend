@@ -5,10 +5,12 @@ import Modal from '@components/common/Modal';
 import { ChatPartnerState } from '@typings/chat';
 import ROUTES from '@constants/routes';
 import { formatUTCTimeToDateOrTime } from '@utils/date';
+import defaultProfileImage from '@assets/images/profile/profileUser.png';
 import useChatRoom from './useChatRoom';
 import {
   SChatRoomWrap,
   SChatContainer,
+  SChatInfoBox,
   SMessageList,
   SMessage,
   SMessageContainer,
@@ -60,6 +62,7 @@ const ChatRoom = ({
     <>
       <SChatRoomWrap>
         <SChatContainer ref={scrollContainerRef}>
+          <SChatInfoBox>{partnerName}님과의 대화방 입니다.</SChatInfoBox>
           {messages && messages.length > 0 && (
             <SMessageList>
               <div ref={infiniteScrollRef} />
@@ -96,7 +99,10 @@ const ChatRoom = ({
                       <SMessageContainer className="left">
                         <SMessageProfile>
                           {!isThePreviousSender && (
-                            <img src={partnerImageUrl} alt="프로필 이미지" />
+                            <img
+                              src={partnerImageUrl || defaultProfileImage}
+                              alt="프로필 이미지"
+                            />
                           )}
                         </SMessageProfile>
                         <SMessageContent>

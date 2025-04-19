@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 import { locations } from '@constants/search';
 import { formatDate, stringToDate } from '@utils/date';
-import { SearchQuery } from '@typings/search';
+import { SearchBaseType } from '@typings/search';
 import { usePopper } from 'react-popper';
 import {
   SearchBarWrapper,
@@ -28,7 +27,7 @@ import {
 import Modal from '../Modal';
 
 interface Props {
-  currentQuery?: SearchQuery;
+  currentQuery?: SearchBaseType;
 }
 
 const SearchBar = ({ currentQuery }: Props) => {
