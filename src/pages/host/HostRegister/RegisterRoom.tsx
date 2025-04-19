@@ -107,7 +107,7 @@ const ROOM_FACILITY_TYPE_MAP = {
   에어컨: 'AIR_CONDITIONER',
   TV: 'TV',
   와이파이: 'WIFI',
-  욕실용품: 'BATHROOM_SUPPLIES',
+  '욕실 용품': 'BATHROOM_SUPPLIES',
   드라이기: 'DRYER',
   바비큐: 'BARBECUE',
   '객실 내 취사': 'POSSIBLE_COOK_IN_ROOM',
@@ -370,9 +370,7 @@ const RegisterRoom = () => {
     const blob = new Blob([JSON.stringify(data)], {
       type: 'application/json',
     });
-    console.log(data, 'data');
 
-    return;
     formData.append('request', blob);
 
     if (thumbnail) {
