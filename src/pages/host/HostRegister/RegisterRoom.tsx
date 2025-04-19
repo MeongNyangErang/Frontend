@@ -370,7 +370,9 @@ const RegisterRoom = () => {
     const blob = new Blob([JSON.stringify(data)], {
       type: 'application/json',
     });
+    console.log(data, 'data');
 
+    return;
     formData.append('request', blob);
 
     if (thumbnail) {
