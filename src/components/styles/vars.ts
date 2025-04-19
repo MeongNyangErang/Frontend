@@ -38,7 +38,7 @@ export const layouts = {
   // sizes
   innerWidth: '1024px',
   headerHeight: '56px',
-  footerHeight: '200px',
+  footerHeight: '180px',
   mobileNavHeight: '60px',
 } as const;
 

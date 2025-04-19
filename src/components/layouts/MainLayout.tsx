@@ -1,14 +1,18 @@
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import useAuth from '@hooks/auth/useAuth';
+import { media } from '@components/styles/responsive';
 import Header from './Header';
 import Footer from './Footer';
 import MobileNav from './MobileNav';
 
 const MainLayout = () => {
+  const { member } = useAuth();
+  const isMemberExist = !!member.data;
   return (
     <SContainer>
       <Header />
-      <SContent>
+      <SContent $isMemberExist={isMemberExist}>
         <SMain>
           <Outlet />
         </SMain>
@@ -26,9 +30,18 @@ const SContainer = styled.div`
   min-width: 320px;
 `;
 
-const SContent = styled.div`
+const SContent = styled.div<{ $isMemberExist: boolean }>`
   padding-top: ${({ theme }) => theme.layouts.headerHeight};
   min-height: 100vh;
+
+  ${({ $isMemberExist, theme }) =>
+    $isMemberExist &&
+    css`
+      padding-bottom: ${theme.layouts.mobileNavHeight};
+      ${media.tablet} {
+        padding-bottom: 0;
+      }
+    `}
 `;
 
 const SMain = styled.main`
