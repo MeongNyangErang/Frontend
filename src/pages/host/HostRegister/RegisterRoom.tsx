@@ -376,7 +376,7 @@ const RegisterRoom = () => {
     if (thumbnail) {
       formData.append('thumbnail', thumbnail);
     }
-
+    console.log(data, 'data');
     try {
       let response: RoomResponse;
       if (roomId) {
