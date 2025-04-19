@@ -14,8 +14,7 @@ axiosInstance.interceptors.request.use(
     // 요청 헤더에 인증 토큰 추가
     const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (token) {
-      const realToken = JSON.parse(token);
-      config.headers.Authorization = `Bearer ${realToken}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

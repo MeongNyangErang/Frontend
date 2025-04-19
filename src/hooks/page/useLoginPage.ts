@@ -6,7 +6,7 @@ import useError from '@hooks/ui/useError';
 
 const useLoginPage = () => {
   const { isModalOpen, openModal, closeModal } = useToggleModal();
-  const [currentType, setCurrentType] = useState<MemberRole>('user');
+  const [currentType, setCurrentType] = useState<MemberRole>('USER');
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, resetError, updateError } = useError();
 

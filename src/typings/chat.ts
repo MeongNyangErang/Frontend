@@ -12,7 +12,7 @@ export interface PreviousChatMessage {
   messageId?: number;
   senderType: 'USER' | 'HOST';
   messageContent: string;
-  created_at: string;
+  createdAt: string;
   messageType: 'MESSAGE' | 'IMAGE';
 }
 

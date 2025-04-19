@@ -9,7 +9,7 @@ const HostMyPage = () => {
     member: { data },
   } = useAuth();
 
-  if (!data || data.role !== 'host') return <Navigate to={ROUTES.home} />;
+  if (!data || data.role !== 'HOST') return <Navigate to={ROUTES.home} />;
   return (
     <>
       <ProfileBox role={data.role} email={data.email} />
