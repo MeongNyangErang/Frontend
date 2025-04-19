@@ -140,8 +140,9 @@ const ChatRoom = ({
               value={text}
               onChange={handleChangeText}
               onKeyDown={(e) => {
-                const key = e.key;
-                if (key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit();
                 }
               }}
               disabled={!!image}
