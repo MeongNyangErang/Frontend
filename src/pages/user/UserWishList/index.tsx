@@ -5,7 +5,6 @@ import MessageBox from '@components/common/MessageBox';
 import StarRating from '@components/common/StarRating';
 import Modal from '@components/common/Modal';
 import ROUTES from '@constants/routes';
-import { floorToHalf } from '@utils/formatter';
 import useWishlistPage from '@hooks/page/useWishlistPage';
 import {
   SWishlistWrap,
@@ -40,7 +39,7 @@ const UserWishList = () => {
         </MessageBox>
       )}
       {!error && isFirstLoaded && wishlist.length === 0 && (
-        <MessageBox>찜한 숙소가 없습니다.</MessageBox>
+        <MessageBox variant="light">찜한 숙소가 없습니다.</MessageBox>
       )}
       {!error && (
         <SWishlistWrap>
@@ -55,7 +54,9 @@ const UserWishList = () => {
               const rating = Number.isNaN(totalRating) ? 0 : totalRating;
               return (
                 <SWishItem key={Math.random().toString()}>
-                  <SWishItemLink to={ROUTES.detail(accommodationId)}>
+                  <SWishItemLink
+                    to={ROUTES.accommodationDetail.root(accommodationId)}
+                  >
                     <SThumbnailBox>
                       <img src={thumbnailImageUrl} alt={accommodationName} />
                     </SThumbnailBox>

@@ -25,6 +25,6 @@ export interface NewChatMessage {
 
 export interface ChatPartnerState {
   partnerName: string;
-  partnerImageUrl: string;
+  partnerImageUrl: string | null;
   partnerId: number;
 }

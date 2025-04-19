@@ -46,7 +46,7 @@ const UserReviews = () => {
         </MessageBox>
       )}
       {!error && isFirstLoaded && reviews.length === 0 && (
-        <MessageBox>작성한 리뷰가 없습니다.</MessageBox>
+        <MessageBox variant="light">작성한 리뷰가 없습니다.</MessageBox>
       )}
       {!error && (
         <>

@@ -24,7 +24,7 @@ interface ProfileEditProps {
 }
 
 const ProfileEdit = ({ role }: ProfileEditProps) => {
-  const { data, error, isLoading } = useMemberProfile(role);
+  const { data, error, isLoading, invalidateProfile } = useMemberProfile(role);
   const enableToEdit = !isLoading;
   const editList = role === 'USER' ? userProfileEditList : hostProfileEditList;
   type EditItem = (typeof editList)[number]['id'] | 'profileImage';
@@ -38,6 +38,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
 
   const onCloseModal = useCallback(() => {
     setSelectedEditItem(null);
+    invalidateProfile();
   }, []);
 
   if (error) {
