@@ -5,6 +5,8 @@ const useInfiniteScroll = (callback: () => void, enabled: boolean) => {
 
   useEffect(() => {
     if (!observerTargetRef.current || !enabled) return;
+
+    console.log('callback', callback);
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         observer.unobserve(entry.target);
@@ -12,11 +14,15 @@ const useInfiniteScroll = (callback: () => void, enabled: boolean) => {
       }
     });
 
+    console.log('here');
+
     setTimeout(() => {
       if (observerTargetRef.current) {
         observer.observe(observerTargetRef.current);
       }
     }, 100);
+
+    console.log('here2');
 
     return () => observer.disconnect();
   }, [enabled, callback]);
