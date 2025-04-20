@@ -4,7 +4,7 @@ const SWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: ${({ theme }) => theme.layouts.paddingX};
+  padding: ${({ theme }) => `${theme.layouts.paddingX} 0`};
 `;
 
 const SFilterButton = styled.button`
