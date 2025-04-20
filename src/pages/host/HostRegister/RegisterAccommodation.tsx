@@ -399,7 +399,6 @@ const RegisterAccommodation = () => {
         }
       } catch (error) {
         console.error('Failed to fetch accommodation data:', error);
-        alert('숙소 데이터를 불러오는 데 실패했습니다.');
       }
     };
 

@@ -66,6 +66,10 @@ const NonMember = () => {
     navigate(`recommendNonMember/allView?type=${animalType}`);
   };
 
+  const handleCardClick = (id: number) => {
+    navigate(`/accommodationl/${id}`);
+  };
+
   return (
     <div>
       <Containers>
@@ -108,7 +112,10 @@ const NonMember = () => {
                         }}
                       >
                         {recList.slice(0, 6).map((recommendations) => (
-                          <RecommendationCard key={recommendations.id}>
+                          <RecommendationCard
+                            key={recommendations.id}
+                            onClick={() => handleCardClick(recommendations.id)}
+                          >
                             <AccommodationThumbnail
                               src={recommendations.thumbnailUrl}
                               alt={recommendations.name}
@@ -208,7 +215,8 @@ const RecommendationCard = styled.div`
 
 const AccommodationThumbnail = styled.img`
   width: 100%;
-  height: auto;
+  height: 150px;
+  max-height: 150px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 `;

@@ -154,7 +154,7 @@ export const handlers = [
     };
     return HttpResponse.json(accommodationData);
   }),
-  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
+  http.get(`${BASE_URL}/accommodations/:accommodationId`, async () => {
     const detailAccommodationData = {
       accommodationsId: 1,
       name: '광안리 위더스오션',
