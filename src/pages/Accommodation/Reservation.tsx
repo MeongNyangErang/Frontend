@@ -21,24 +21,32 @@ interface Reservation {
 }
 
 const Reservation = () => {
-  const { state } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!state) {
+    if (!location) {
       console.log('정보가 없습니다.');
     }
-  }, [state]);
+  }, [location]);
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
   const {
-    accommodationName,
     roomId,
-    checkInDate,
-    checkOutDate,
-    peopleCount,
-    petCount,
-    totalPrice,
-  } = state || {};
+    accommodationName,
+    totalPrice = 100000,
+    checkInDate = formatDate(today),
+    checkOutDate = formatDate(tomorrow),
+    peopleCount = 1,
+    petCount = 1,
+  } = location.state || {};
 
   const [hasVehicle, setHasvehicle] = useState<string | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');

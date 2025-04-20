@@ -61,34 +61,23 @@ const DetailAccommodation = () => {
     member: { data },
   } = useAuth();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname } = location;
+  const state = location.state as
+    | {
+        checkInDate: string;
+        checkOutDate: string;
+        peopleCount: number;
+        petCount: number;
+      }
+    | undefined;
+
+  const checkInDate = state?.checkInDate;
+  const checkOutDate = state?.checkOutDate;
+  const peopleCount = state?.peopleCount;
+  const petCount = state?.petCount;
+
   const accommodationId = pathname.split('/').splice(-1);
-
-  const publicHolidays = ['2025-01-01', '2025-12-25'];
-
-  const isWeekend = (date: Date) => {
-    const day = date.getDay();
-    return day === 0 || day === 6;
-  };
-
-  const isHoliday = (date: Date) => {
-    const dateString = date.toISOString().split('T')[0];
-    return publicHolidays.includes(dateString);
-  };
-
-  const getRoomPrice = (room: RoomData) => {
-    const today = new Date();
-    const isWeekendDay = isWeekend(today);
-    const isHolidayDay = isHoliday(today);
-
-    let finalPrice = room.price;
-
-    if (isWeekendDay || isHolidayDay) {
-      finalPrice += room.extraFee;
-    }
-
-    return finalPrice;
-  };
 
   const handleClickChatButton = async () => {
     if (data === null) {
@@ -117,20 +106,7 @@ const DetailAccommodation = () => {
           'get',
         )) as any;
         console.log(response);
-        const accommodationData = response;
-
-        const sortedReviews = accommodationData.reviews.sort(
-          (a: ReviewData, b: ReviewData) => {
-            const dateA = new Date(a.createdAt).getTime();
-            const dateB = new Date(b.createdAt).getTime();
-            return dateB - dateA;
-          },
-        );
-
-        setAccommodation({
-          ...response,
-          review: sortedReviews,
-        });
+        setAccommodation(response);
       } catch (error) {
         console.log('숙소 정보를 가져오는 데 오류가 발생했습니다.');
       } finally {
@@ -163,10 +139,10 @@ const DetailAccommodation = () => {
         roomId: room.roomId,
         accommodationName: accommodation.name,
         totalPrice: room.price,
-        checkInDate: room.checkInTime,
-        checkOutDate: room.checkOutTime,
-        peopleCount: room.maxPeopleCount,
-        petCount: room.maxPetCount,
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+        peopleCount: peopleCount,
+        petCount: petCount,
       },
     });
   };
@@ -186,9 +162,12 @@ const DetailAccommodation = () => {
                 <Text>{accommodation.totalRating}</Text>
               </AccommodationName>
               <Title>{accommodation.type}</Title>
-              {accommodation.allowedPets.map((v) => (
-                <Title key={v}>{v}</Title>
-              ))}
+              {Array.isArray(accommodation.allowedPets) &&
+              accommodation.allowedPets.length > 0 ? (
+                accommodation.allowedPets.map((v) => <Title key={v}>{v}</Title>)
+              ) : (
+                <p>No pets allowed</p> // 만약 allowedPets가 없으면 이 메시지를 표시
+              )}
             </AccommodationNameBox>
             <AccommodationButtonBox>
               <IconContainer>
