@@ -199,14 +199,14 @@ const Reservation = () => {
       <SLabel>주차 여부</SLabel>
       <ButtonContainer>
         <CheckInput
-          selected={hasVehicle === 'O'}
-          onClick={() => handleClick('O')}
+          selected={hasVehicle === 'true'}
+          onClick={() => handleClick('true')}
         >
           O
         </CheckInput>
         <CheckInput
-          selected={hasVehicle === 'X'}
-          onClick={() => handleClick('X')}
+          selected={hasVehicle === 'false'}
+          onClick={() => handleClick('false')}
         >
           X
         </CheckInput>

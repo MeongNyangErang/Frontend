@@ -162,12 +162,9 @@ const DetailAccommodation = () => {
                 <Text>{accommodation.totalRating}</Text>
               </AccommodationName>
               <Title>{accommodation.type}</Title>
-              {Array.isArray(accommodation.allowedPets) &&
-              accommodation.allowedPets.length > 0 ? (
-                accommodation.allowedPets.map((v) => <Title key={v}>{v}</Title>)
-              ) : (
-                <p>No pets allowed</p> // 만약 allowedPets가 없으면 이 메시지를 표시
-              )}
+              {accommodation.allowedPets.map((v) => (
+                <Title key={v}>{v}</Title>
+              ))}
             </AccommodationNameBox>
             <AccommodationButtonBox>
               <IconContainer>
