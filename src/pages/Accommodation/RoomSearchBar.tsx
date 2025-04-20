@@ -105,6 +105,8 @@ const SearchBar = () => {
     const [start, end] = dates;
     setCheckInDate(start);
     setCheckOutDate(end);
+    console.log('시간', start);
+    console.log('시간', end);
   };
 
   const applyPeopleAndPets = () => {

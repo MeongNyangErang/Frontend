@@ -154,7 +154,7 @@ export const handlers = [
     };
     return HttpResponse.json(accommodationData);
   }),
-  http.get(`${BASE_URL}/register/detailAccommodation`, async () => {
+  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
     const detailAccommodationData = {
       accommodationsId: 1,
       name: '광안리 위더스오션',
@@ -333,7 +333,7 @@ export const handlers = [
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
   }),
 
-  http.get(`${BASE_URL}/accommodation/:accommodationId`, async () => {
+  http.get(`${BASE_URL}/`, async () => {
     const roomDetaiData = {
       roomId: 1,
       name: 'Cozy Mountain Cabin',
