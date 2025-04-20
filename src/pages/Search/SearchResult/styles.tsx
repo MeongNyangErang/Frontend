@@ -79,11 +79,11 @@ const SItemTypeBadge = styled.div<{ $type: AccommodationType }>`
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
     background-color: ${({ theme, $type }) => {
       switch ($type) {
-        case 'DETACHEDHOUSE':
+        case 'DETACHED_HOUSE':
           return theme.colors.blueBage;
-        case 'FULLVILLA':
+        case 'FULL_VILLA':
           return theme.colors.orangeBage;
-        case 'HOTELRESORT':
+        case 'HOTEL_RESORT':
           return theme.colors.purpleBage;
         case 'PENSION':
           return theme.colors.mintBage;
