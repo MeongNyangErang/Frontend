@@ -34,19 +34,18 @@ interface SearchResultProps {
 
 const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
-  const [cursor, setCursor] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const {
-    data: { last, content } = {},
+    data: { last, content, page } = {},
     isLoading,
     error,
-  } = useSearchAccommodations(currentQuery, cursor, currentFilter);
+  } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
 
   const updateCursor = useCallback(() => {
-    if (content) {
-      const id = content[content.length - 1].accommodationId;
-      setCursor(id);
+    if (page) {
+      setCurrentPage(page + 1);
     }
-  }, [content]);
+  }, [page]);
 
   const observerTargetRef = useInfiniteScroll(
     updateCursor,
@@ -55,7 +54,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
 
   useEffect(() => {
     setSearchedData([]);
-    setCursor(null);
+    setCurrentPage(0);
   }, [currentQuery, currentFilter]);
 
   useEffect(() => {

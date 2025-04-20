@@ -4,12 +4,12 @@ import { searchAccommodations } from '@services/search';
 
 export const useSearchAccommodations = (
   query: SearchBaseType,
-  cursor: number | null,
+  page: number,
   filter?: SearchFilterType,
 ) => {
   return useQuery({
-    queryKey: ['search-accommodations', query, cursor, filter],
-    queryFn: () => searchAccommodations(query, cursor, filter),
+    queryKey: ['search-accommodations', query, page, filter],
+    queryFn: () => searchAccommodations(query, page, filter),
     enabled: Object.values(query).every((v) => v !== ''),
     staleTime: 1000 * 60 * 60,
   });
