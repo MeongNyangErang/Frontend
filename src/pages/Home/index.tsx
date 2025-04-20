@@ -4,6 +4,7 @@ import NonMemberRecommend from '@pages/Home/RecommendNonMember/index';
 import MemberLastview from '@pages/Home/RecommendMember/LastView';
 import MemberMostView from '@pages/Home/RecommendMember/MostView';
 import MemberView from '@pages/Home/RecommendMember/index';
+import { SSearchBarArea, SSearchBarContainer } from './styles';
 
 import useAuth from '@hooks/auth/useAuth';
 const Home = () => {
@@ -13,18 +14,24 @@ const Home = () => {
   const isLoggedIn = !!data;
 
   return (
-    <SectionLayout>
-      <SearchBar />
-      {isLoggedIn ? (
-        <>
-          <MemberView />
-          <MemberLastview />
-          <MemberMostView />
-        </>
-      ) : (
-        <NonMemberRecommend />
-      )}
-    </SectionLayout>
+    <>
+      <SSearchBarArea>
+        <SSearchBarContainer>
+          <SearchBar />
+        </SSearchBarContainer>
+      </SSearchBarArea>
+      <SectionLayout>
+        {isLoggedIn ? (
+          <>
+            <MemberView />
+            <MemberLastview />
+            <MemberMostView />
+          </>
+        ) : (
+          <NonMemberRecommend />
+        )}
+      </SectionLayout>
+    </>
   );
 };
 

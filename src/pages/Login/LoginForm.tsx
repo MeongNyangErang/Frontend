@@ -52,7 +52,7 @@ const LoginForm = ({
           fixedHeight={true}
           isLoading={isLoading}
         >
-          {memberType === 'user' ? '로그인' : '호스트회원 로그인'}
+          {memberType === 'USER' ? '로그인' : '호스트회원 로그인'}
         </Button>
       </SForm>
     </>
