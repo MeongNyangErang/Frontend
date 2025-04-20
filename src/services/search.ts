@@ -5,7 +5,7 @@ import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';
 
 export const searchAccommodations = async (
   query: SearchBaseType,
-  cursor: number | null,
+  page: number,
   filter?: SearchFilterType,
 ) => {
   const data = { ...query, ...(filter ? filter : {}) } as any;
@@ -29,10 +29,9 @@ export const searchAccommodations = async (
     return [key, value];
   });
   const mappedData = Object.fromEntries(entries);
-  if (cursor) data.cursor = cursor;
 
   return await fetchCall<SearchAccommodationsData>(
-    'search/accommodations',
+    `search/accommodations?page=${page}`,
     'post',
     mappedData,
   );
