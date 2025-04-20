@@ -204,7 +204,7 @@ const RecommendationContainer = styled.div`
 
 const RecommendationCard = styled.div`
   width: 230px;
-  height: auto;
+  height: 240px;
   background: white;
   padding: 5px;
   border-radius: 10px;
@@ -215,7 +215,7 @@ const RecommendationCard = styled.div`
 
 const AccommodationThumbnail = styled.img`
   width: 100%;
-  height: 150px;
+  height: auto;
   max-height: 150px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
