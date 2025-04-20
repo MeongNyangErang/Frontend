@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
 import axios from 'axios';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 export type UserType = 'USER' | 'HOST';
 
@@ -29,17 +25,6 @@ interface NotificationPayload {
   createdAt: string;
 }
 
-interface SendNotificationRequest {
-  chatRoomId: number;
-  senderId: number;
-  senderType: UserType;
-  receiverId: number;
-  receiverType: UserType;
-  content: string;
-  notificationType: NotificationType;
-  createdAt?: string;
-}
-
 // 목록
 const fetchNotifications = async ({ pageParam = 0 }) => {
   const { data } = await axios.get(`/notifications?page=${pageParam}&size=10`);
@@ -49,22 +34,13 @@ const fetchNotifications = async ({ pageParam = 0 }) => {
   };
 };
 
-// 전송
-const sendNotification = async (payload: SendNotificationRequest) => {
-  await axios.post('/notifications/messages', {
-    chatRoomId: payload.chatRoomId,
-    content: payload.content,
-  });
-};
-
 const NotificationSender = () => {
   const socket = useRef<WebSocket | null>(null);
-  const queryClient = useQueryClient();
 
   // 구독
   useEffect(() => {
     socket.current = new WebSocket(
-      'ws://localhost:8080//user/subscribe/notifications',
+      'https://meongnyangerang.shop/user/subscribe/notifications',
     );
 
     socket.current.addEventListener('open', () => {
@@ -84,41 +60,13 @@ const NotificationSender = () => {
     };
   }, []);
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-    error,
-  } = useInfiniteQuery({
-    queryKey: ['notifications'],
-    queryFn: fetchNotifications,
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-    initialPageParam: 0,
-  });
-
-  const { mutate: send, isPending: isSending } = useMutation({
-    mutationFn: sendNotification,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
-    },
-  });
-
-  const handleSend = () => {
-    const payload: SendNotificationRequest = {
-      chatRoomId: 1,
-      senderId: 100,
-      senderType: 'HOST',
-      receiverId: 200,
-      receiverType: 'USER',
-      content: '알림입니다',
-      notificationType: 'MESSAGE',
-      createdAt: new Date().toISOString(),
-    };
-    send(payload);
-  };
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['notifications'],
+      queryFn: fetchNotifications,
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      initialPageParam: 0,
+    });
 
   return (
     <div>
