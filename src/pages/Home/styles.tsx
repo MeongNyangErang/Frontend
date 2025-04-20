@@ -1,12 +1,16 @@
-import { theme } from '@components/styles/theme';
 import styled from 'styled-components';
+import { media } from '@components/styles/responsive';
 
 const SSearchBarArea = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${({ theme }) => `52px ${theme.layouts.paddingX}`};
+  padding: ${({ theme }) => `40px ${theme.layouts.paddingX}`};
+
+  ${media.tablet} {
+    padding: ${({ theme }) => `52px ${theme.layouts.paddingX}`};
+  }
 
   &::before {
     content: '';
@@ -20,11 +24,8 @@ const SSearchBarArea = styled.div`
 `;
 
 const SSearchBarContainer = styled.div`
-  position: static;
   max-width: ${({ theme }) => theme.layouts.innerWidth};
   width: 100%;
-  z-index: 1;
-
   > p {
     font-size: 18px;
   }

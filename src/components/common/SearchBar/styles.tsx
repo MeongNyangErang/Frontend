@@ -191,6 +191,11 @@ export const SDatePickerWrapper = styled.div`
     }
   }
 
+  .react-datepicker {
+    position: relative;
+    z-index: 100;
+  }
+
   .react-datepicker__day-names {
     display: flex;
     align-items: center;
@@ -300,6 +305,9 @@ export const SearchButton = styled.button`
   color: white;
   border-radius: 8px;
   text-align: center;
+  position: static;
+  z-index: 10;
+
   &:hover {
     background-color: var(--main-color);
   }
@@ -318,6 +326,7 @@ export const STextInput = styled.input`
 
 export const SCheckWrapper = styled.div`
   position: relative;
+  z-index: 11;
   width: 50%;
   height: 42px;
   display: flex;
