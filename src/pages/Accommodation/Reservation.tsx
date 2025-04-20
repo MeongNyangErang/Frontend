@@ -53,6 +53,7 @@ const Reservation = () => {
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
   const [roomDetails, setRoomDetails] = useState<any>(null);
+
   useEffect(() => {
     if (
       !accommodationName ||
@@ -148,7 +149,7 @@ const Reservation = () => {
       );
       setRoomDetails(response);
       alert('예약이 완료되었습니다!');
-      navigate('/reservation');
+      navigate('/mypage/user/reservation-list');
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
       alert('예약 처리 중 오류가 발생했습니다.');
