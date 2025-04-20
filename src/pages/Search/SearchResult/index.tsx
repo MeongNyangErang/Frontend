@@ -41,10 +41,6 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     error,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
 
-  console.log(currentPage, 'currentPage');
-  console.log(page, 'page');
-  console.log(last, 'last');
-
   const updatePage = useCallback(() => {
     if (!last) {
       setCurrentPage(page + 1);
@@ -74,7 +70,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
           <MessageBox>검색 결과가 없습니다.</MessageBox>
         )}
       </SMessageArea>
-      {!error && !isLoading && (
+      {!error && (
         <SItems>
           {searchedData.map(
             ({
