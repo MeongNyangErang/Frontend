@@ -168,7 +168,7 @@ const SeeAllButton = styled.button`
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 20px;
   padding: 5px;
 `;
 
