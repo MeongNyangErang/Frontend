@@ -36,7 +36,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const {
-    data: { last, content, page } = {},
+    data: { last, content, page = 0 } = {},
     isLoading,
     error,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
@@ -46,7 +46,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   console.log(last, 'last');
 
   const updatePage = useCallback(() => {
-    if (page && !last) {
+    if (!last) {
       setCurrentPage(page + 1);
     }
   }, [page, last]);
