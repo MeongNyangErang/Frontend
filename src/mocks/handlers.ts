@@ -442,7 +442,7 @@ export const handlers = [
   http.get(`${BASE_URL}/chats/:chatRoomId/messages`, async () => {
     const response = {
       code: 200,
-      data: previouseChatMessages,
+      content: previouseChatMessages,
       nextCursorId: 100,
       hasNext: true,
     };

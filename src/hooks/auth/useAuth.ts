@@ -42,6 +42,8 @@ const useAuth = () => {
         const role = payload.role.split('_')[1];
         const email = payload.sub;
         setMember((prev) => ({ ...prev, data: { role, email } }));
+      } else {
+        removeLocalStorage(accessTokenKey);
       }
     }
 

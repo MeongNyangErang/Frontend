@@ -67,7 +67,7 @@ const SMessage = styled.div`
 
 const SMessageContainer = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
 `;
 
 const SMessageContent = styled.div`
@@ -123,6 +123,8 @@ const SMessageProfile = styled.div`
 `;
 
 const SMessageTime = styled.div`
+  display: flex;
+  align-items: flex-end;
   font-size: 12px;
   color: ${({ theme }) => theme.colors.gray500};
 

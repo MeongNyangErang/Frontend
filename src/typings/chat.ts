@@ -5,6 +5,7 @@ export interface ChatItem {
   partnerImageUrl: string;
   lastMessage: string;
   lastMessageTime: string;
+  lastMessageType: 'MESSAGE' | 'IMAGE';
   unreadCount: number;
 }
 

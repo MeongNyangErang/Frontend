@@ -252,7 +252,7 @@ export const SDatePickerWrapper = styled.div`
 
   .react-datepicker__day--selecting-range-start,
   .react-datepicker__day--range-start {
-    border-radius: 9999px 0 0 9999px;
+    border-radius: 9999px 0 0 9999px !important;
     background-color: ${({ theme }) => theme.colors.main};
   }
 
@@ -268,7 +268,14 @@ export const SDatePickerWrapper = styled.div`
       .react-datepicker__day--range-end
     ) {
     border-radius: 0;
-    background-color: ${({ theme }) => theme.colors.light};
+  }
+
+  .react-datepicker__day--in-range {
+    background-color: ${({ theme }) => theme.colors.main};
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.main};
+    }
   }
 
   .react-datepicker__triangle {

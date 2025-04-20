@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import { PreviousChatMessage, NewChatMessage } from '@typings/chat';
 import usePreviousChatMessages from '@hooks/query/usePreviousChatMessages';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
@@ -16,13 +16,19 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
   const [pendingMessage, setPendingMessage] = useState<null | string>(null);
   const [chatError, setChatError] = useState({ ...initialChatError });
-  const { data, isFetchingNextPage, hasNextPage, error, fetchNextPage } =
-    usePreviousChatMessages(chatRoomId);
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    error,
+    fetchNextPage,
+  } = usePreviousChatMessages(chatRoomId);
   const pages = (
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
   const previousMessages = useMemo(() => {
-    const messages = pages?.flatMap((page) => page.content) || [];
+    const messages = pages?.flatMap((page) => page.content || []) || [];
     messages.sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
@@ -104,21 +110,32 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     pendingCallbackRef.current = null;
   }, [messages]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const target = scrollContainerRef.current;
-      if (
-        target &&
-        isInitialScrollRef.current &&
-        previousMessages?.length > 0
-      ) {
-        isInitialScrollRef.current = false;
-        target.scrollTop = target.scrollHeight;
-      }
-    }, 0);
+  useLayoutEffect(() => {
+    let raf1: number;
+    let raf2: number;
 
-    return () => clearTimeout(timeout);
-  }, [previousMessages]);
+    if (
+      scrollContainerRef.current &&
+      !isFetching &&
+      isInitialScrollRef.current &&
+      previousMessages?.length > 0
+    ) {
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => {
+          const target = scrollContainerRef.current!;
+          isInitialScrollRef.current = false;
+
+          target.scrollTop = target.scrollHeight;
+          target.style.scrollBehavior = '';
+        });
+      });
+    }
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [previousMessages, isFetching]);
 
   useEffect(() => {
     if (previousMessages && previousMessages.length > 0) {
@@ -136,6 +153,8 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     if (!chatRoomId) return;
 
     let subscription: any;
+
+    return;
 
     const stompClient = createStompClient();
     stompClientRef.current = stompClient;
