@@ -41,11 +41,15 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     error,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
 
+  console.log(currentPage, 'currentPage');
+  console.log(page, 'page');
+  console.log(last, 'last');
+
   const updateCursor = useCallback(() => {
-    if (page) {
+    if (page && !last) {
       setCurrentPage(page + 1);
     }
-  }, [page]);
+  }, [page, last]);
 
   const observerTargetRef = useInfiniteScroll(
     updateCursor,
