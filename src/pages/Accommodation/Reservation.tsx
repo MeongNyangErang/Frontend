@@ -53,9 +53,9 @@ const Reservation = () => {
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
   const [roomDetails, setRoomDetails] = useState<any>(null);
-
   useEffect(() => {
     if (
+      !accommodationName ||
       !roomId ||
       !checkInDate ||
       !checkOutDate ||
@@ -67,6 +67,7 @@ const Reservation = () => {
     }
   }, [
     navigate,
+    accommodationName,
     roomId,
     checkInDate,
     checkOutDate,
@@ -120,6 +121,7 @@ const Reservation = () => {
     const sanitizedTotalPrice = totalPrice ?? 0;
 
     const reservationData = {
+      accommodationName,
       roomId,
       checkInDate,
       checkOutDate,
