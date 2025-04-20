@@ -7,7 +7,6 @@ export const SearchBarWrapper = styled.div`
   display: flex;
   gap: 4px;
   width: 100%;
-  padding: 20px 0;
   flex-direction: column;
   color: #888;
 
@@ -23,6 +22,7 @@ const iconStyle = css`
   display: block;
   left: 8px;
   top: 50%;
+  z-index: 2;
   width: 14px;
   height: 14px;
   background-size: cover;
@@ -66,6 +66,7 @@ export const SInput = styled.input`
   border-radius: 10px 10px 0 0;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  background-color: #fff;
 
   ${media.tablet} {
     height: 100%;
@@ -81,7 +82,7 @@ export const SLocationDropdown = styled.div`
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  z-index: 10;
+  z-index: 100;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
@@ -94,6 +95,7 @@ export const SPeopleDropdown = styled.div`
   top: 100% !important;
   right: 0px !important;
   left: auto !important;
+  z-index: 100;
   width: 100%;
   min-width: 280px;
   background-color: white;
@@ -264,7 +266,7 @@ export const SDatePickerWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.light};
   }
 
-  */ .react-datepicker__triangle {
+  .react-datepicker__triangle {
     display: none;
   }
 

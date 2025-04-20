@@ -143,6 +143,18 @@ const SearchBar = ({ currentQuery }: Props) => {
   };
 
   useEffect(() => {
+    if (peopleDropdownOpen) {
+      setLocationDropdownOpen(false);
+    }
+  }, [peopleDropdownOpen]);
+
+  useEffect(() => {
+    if (locationDropdownOpen) {
+      setPeopleDropdownOpen(false);
+    }
+  }, [locationDropdownOpen]);
+
+  useEffect(() => {
     if (currentQuery) {
       const { peopleCount, petCount, checkInDate, checkOutDate, location } =
         currentQuery;
