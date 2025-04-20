@@ -9,7 +9,10 @@ interface RecommendationResponse {
   petId: number;
   petName: string;
   recommendations: Recommendation[];
+  petType: PetType;
 }
+
+type PetType = 'LARGE_DOG' | 'MEDIUM_DOG' | 'SMALL_DOG' | 'CAT';
 
 interface Recommendation {
   id: number;
@@ -28,9 +31,15 @@ const NonMember = () => {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
+      const petType: PetType[] = [
+        'LARGE_DOG',
+        'MEDIUM_DOG',
+        'SMALL_DOG',
+        'CAT',
+      ];
       try {
         const response = (await fetchCall(
-          `/recommendations/user-pet`,
+          `/recommendations/user-pet?type=${petType}`,
           'get',
         )) as any;
         setRecommendations(response);
