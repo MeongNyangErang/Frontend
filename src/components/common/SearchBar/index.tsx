@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
+import { usePopper } from 'react-popper';
+import { FaPlus, FaMinus } from 'react-icons/fa6';
 import { locations } from '@constants/search';
 import { formatDate, stringToDate } from '@utils/date';
 import { SearchBaseType } from '@typings/search';
-import { usePopper } from 'react-popper';
+import userIcon from '@assets/icons/userIcon.png';
+import petIcon from '@assets/icons/petIcon.png';
 import {
   SearchBarWrapper,
   SInputBox,
@@ -93,7 +96,10 @@ const SearchBar = ({ currentQuery }: Props) => {
 
   const handleSearch = async () => {
     const validations = [
-      { condition: !location, message: '여행지를 입력해주세요.' },
+      {
+        condition: !location,
+        message: '여행지를 입력해주세요.',
+      },
       { condition: !checkInDate, message: '체크인 날짜를 선택해주세요.' },
       { condition: !checkOutDate, message: '체크아웃 날짜를 선택해주세요.' },
       { condition: petCount < 1, message: '반려동물 수를 입력해주세요.' },
@@ -191,7 +197,7 @@ const SearchBar = ({ currentQuery }: Props) => {
           />
 
           {locationDropdownOpen && (
-            <SLocationDropdown ref={locationDropdownRef}>
+            <SLocationDropdown ref={locationDropdownRef} className="location">
               {locations.map((location, index) => (
                 <SDropdownItem
                   key={index}
@@ -227,7 +233,14 @@ const SearchBar = ({ currentQuery }: Props) => {
               ref={setReferenceElement}
               style={{ color: selectionDone ? '#424242' : '#888' }}
             >
-              인원 {peopleCount}&nbsp;&nbsp;반려동물 {petCount}
+              <span>
+                <img src={userIcon} alt="인원아이콘" />
+                인원 {peopleCount}
+              </span>
+              <span>
+                <img src={petIcon} alt="반려동물 아이콘" />
+                반려동물 {petCount}
+              </span>
             </SLabel>
 
             {peopleDropdownOpen && (
@@ -246,13 +259,13 @@ const SearchBar = ({ currentQuery }: Props) => {
                       <SButton
                         onClick={() => handlePeopleCountChange('decrement')}
                       >
-                        -
+                        <FaMinus />
                       </SButton>
                       <STextInput type="text" value={peopleCount} readOnly />
                       <SButton
                         onClick={() => handlePeopleCountChange('increment')}
                       >
-                        +
+                        <FaPlus />
                       </SButton>
                     </div>
                   </SNumberInputWrapper>
@@ -266,19 +279,19 @@ const SearchBar = ({ currentQuery }: Props) => {
                       <SButton
                         onClick={() => handlePetCountChange('decrement')}
                       >
-                        -
+                        <FaMinus />
                       </SButton>
                       <STextInput type="text" value={petCount} readOnly />
                       <SButton
                         onClick={() => handlePetCountChange('increment')}
                       >
-                        +
+                        <FaPlus />
                       </SButton>
                     </div>
                   </SNumberInputWrapper>
                 </SDropdownItem>
                 <SDropdownItem>
-                  <SApplyButton onClick={applyPeopleAndPets}>완료</SApplyButton>
+                  <SApplyButton onClick={applyPeopleAndPets}>적용</SApplyButton>
                 </SDropdownItem>
               </SPeopleDropdown>
             )}
@@ -286,7 +299,7 @@ const SearchBar = ({ currentQuery }: Props) => {
         </SContainer>
 
         {/* 검색 버튼 */}
-        <SearchButton onClick={handleSearch}>검색</SearchButton>
+        <SearchButton onClick={handleSearch}>검색하기</SearchButton>
       </SearchBarWrapper>
       <Modal
         isOpen={!!error}
