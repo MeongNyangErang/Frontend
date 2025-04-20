@@ -23,6 +23,9 @@ interface Reservation {
 const Reservation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const formatDate = (date: Date): string => {
+    return date.toISOString().split('T')[0];
+  };
 
   useEffect(() => {
     if (!state) {
@@ -45,6 +48,12 @@ const Reservation = () => {
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
   const [roomDetails, setRoomDetails] = useState<any>(null);
+  const formattedCheckInDate = checkInDate
+    ? formatDate(new Date(checkInDate))
+    : '';
+  const formattedCheckOutDate = checkOutDate
+    ? formatDate(new Date(checkOutDate))
+    : '';
 
   useEffect(() => {
     if (
@@ -113,8 +122,8 @@ const Reservation = () => {
 
     const reservationData = {
       roomId,
-      checkInDate,
-      checkOutDate,
+      checkInDate: formattedCheckInDate,
+      checkOutDate: formattedCheckOutDate,
       peopleCount,
       petCount,
       reserverName,
