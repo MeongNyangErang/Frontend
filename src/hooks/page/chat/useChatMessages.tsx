@@ -144,8 +144,18 @@ const useChatMessages = (chatRoomId: number | undefined) => {
       subscription = stompClient.subscribe(
         `/subscribe/chats/${chatRoomId}`,
         (message) => {
+          const scrollTarget = scrollContainerRef.current;
+          const wasAtBottom =
+            scrollTarget &&
+            scrollTarget.scrollTop + scrollTarget.clientHeight >=
+              scrollTarget.scrollHeight - 10;
           const newMessage: NewChatMessage = JSON.parse(message.body);
           setMessages((prev) => [...prev, newMessage]);
+
+          if (wasAtBottom)
+            setTimeout(() => {
+              scrollTarget.scrollTop = scrollTarget.scrollHeight;
+            }, 0);
         },
       );
     };

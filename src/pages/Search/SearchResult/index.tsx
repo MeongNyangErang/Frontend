@@ -89,8 +89,13 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
               return (
                 <SItem
                   key={accommodationId}
-                  onClick={() => {}}
                   to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
+                  state={{
+                    checkInDate: currentQuery.checkInDate,
+                    checkOutDate: currentQuery.checkOutDate,
+                    peopleCount: currentQuery.peopleCount,
+                    petCount: currentQuery.petCount,
+                  }}
                 >
                   <SImageArea>
                     <SItemTypeBadge $type={accommodationType}>

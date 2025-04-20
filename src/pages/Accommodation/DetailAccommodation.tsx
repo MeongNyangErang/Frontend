@@ -10,6 +10,7 @@ import { media } from '@components/styles/responsive';
 import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
+import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
 
 interface DetailData {
   accommodationId: number;
@@ -151,8 +152,23 @@ const DetailAccommodation = () => {
     navigate(`/accommodation/${accommodationId}/room/${roomId}`);
   };
 
-  const handleAllReserve = () => {
-    navigate(`/accommodation/${accommodationId}/reservation`);
+  const handleAllReserve = (room: RoomData) => {
+    if (!accommodation) {
+      console.error('Accommodation is null.');
+      return;
+    }
+
+    navigate(`/accommodation/${accommodationId}/reservation`, {
+      state: {
+        roomId: room.roomId,
+        accommodationName: accommodation.name,
+        totalPrice: room.price,
+        checkInDate: room.checkInTime,
+        checkOutDate: room.checkOutTime,
+        peopleCount: room.maxPeopleCount,
+        petCount: room.maxPetCount,
+      },
+    });
   };
 
   return (
@@ -213,6 +229,7 @@ const DetailAccommodation = () => {
             )}
           </Section>
           <SectionTitle>객실선택</SectionTitle>
+          <RoomSearchBar />
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>
               {accommodation.roomDetails
@@ -263,7 +280,7 @@ const DetailAccommodation = () => {
                           {(room.price + room.extraFee).toLocaleString()}
                         </Price>
                       </RoomInfo>
-                      <RoomButton onClick={handleAllReserve}>
+                      <RoomButton onClick={() => handleAllReserve(room)}>
                         예약하기
                       </RoomButton>
                     </RoomInfoRight>
@@ -475,7 +492,7 @@ const RoomContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  margin-top: 15px;
+  margin-top: 20px;
 `;
 
 const RoomInfoLeft = styled.div`

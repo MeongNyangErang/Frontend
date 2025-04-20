@@ -9,6 +9,7 @@ const useMemberProfile = (
   data: UserProfile | HostProfile | undefined;
   error: unknown;
   isLoading: boolean;
+  invalidateProfile: () => void;
 } => {
   return role === 'USER' ? useUserProfile() : useHostProfile();
 };

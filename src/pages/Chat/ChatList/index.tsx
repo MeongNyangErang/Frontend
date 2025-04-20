@@ -3,6 +3,8 @@ import useChatList from '@hooks/query/useChatList';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import Loader from '@components/common/Loader';
 import ROUTES from '@constants/routes';
+import defaultProfileImage from '@assets/images/profile/profileUser.png';
+import { formatUTCTimeToDateOrTime } from '@utils/date';
 import {
   SChatListWrap,
   SChatTitle,
@@ -46,12 +48,17 @@ const ChatList = () => {
                   state={{ partnerName, partnerImageUrl, partnerId }}
                 >
                   <SItemImage>
-                    <img src={partnerImageUrl} alt="프로필 이미지" />
+                    <img
+                      src={partnerImageUrl || defaultProfileImage}
+                      alt="프로필 이미지"
+                    />
                   </SItemImage>
                   <SItemInfo>
                     <div>{partnerName}</div>
                     <p>{lastMessage || '아직 메세지가 없습니다.'}</p>
-                    <span>{lastMessageTime || ''}</span>
+                    <span>
+                      {formatUTCTimeToDateOrTime(lastMessageTime) || ''}
+                    </span>
                   </SItemInfo>
                   <SItemUnread>
                     {unreadCount > 0 && <span>{unreadCount}</span>}

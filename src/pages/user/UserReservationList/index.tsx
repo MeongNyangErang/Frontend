@@ -80,10 +80,10 @@ const UserReservationList = () => {
           </MessageBox>
         )}
         {!error &&
-          isLoading &&
+          !isLoading &&
           isFirstLoaded &&
           reservationList.length === 0 && (
-            <MessageBox>예약 내역이 없습니다.</MessageBox>
+            <MessageBox variant="light">예약 내역이 없습니다.</MessageBox>
           )}
         {!error && (
           <SReservationList>
