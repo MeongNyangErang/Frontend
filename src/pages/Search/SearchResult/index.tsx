@@ -1,5 +1,4 @@
 import { memo, useEffect, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
