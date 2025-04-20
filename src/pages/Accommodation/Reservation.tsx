@@ -132,7 +132,7 @@ const Reservation = () => {
 
     try {
       const response = await fetchCall(
-        '/user/reservations',
+        '/users/reservations',
         'post',
         reservationData,
       );

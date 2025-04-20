@@ -87,8 +87,6 @@ const NonMember = () => {
               });
             };
 
-            if (!recList || recList.length === 0) return null;
-
             return (
               <div key={key}>
                 <All>
@@ -97,48 +95,50 @@ const NonMember = () => {
                     더보기
                   </SeeAllButton>
                 </All>
-                <Section>
-                  <SliderWrapper>
-                    <NavButton onClick={scrollLeft} $position="left">
-                      <GrFormPrevious />
-                    </NavButton>
+                {recList && recList.length > 0 && (
+                  <Section>
+                    <SliderWrapper>
+                      <NavButton onClick={scrollLeft} $position="left">
+                        <GrFormPrevious />
+                      </NavButton>
 
-                    <RecommendationContainer
-                      ref={(el) => {
-                        containerRefs.current[key] = el;
-                      }}
-                    >
-                      {recList.slice(0, 6).map((recommendations) => (
-                        <RecommendationCard key={recommendations.id}>
-                          <AccommodationThumbnail
-                            src={recommendations.thumbnailUrl}
-                            alt={recommendations.name}
-                          />
-                          <AccommodationDetails>
-                            <All>
-                              <AccommodationName>
-                                {recommendations.name}
-                              </AccommodationName>
-                              <AccommodationType>
-                                <RegHeart />
-                              </AccommodationType>
-                            </All>
-                            <ReviewCount>
-                              <Star />
-                              {recommendations.totalRating}
-                            </ReviewCount>
-                            <AccommodationPrice>
-                              {recommendations.price.toLocaleString()}원 ~
-                            </AccommodationPrice>
-                          </AccommodationDetails>
-                        </RecommendationCard>
-                      ))}
-                    </RecommendationContainer>
-                    <NavButton onClick={scrollRight} $position="right">
-                      <GrFormNext />
-                    </NavButton>
-                  </SliderWrapper>
-                </Section>
+                      <RecommendationContainer
+                        ref={(el) => {
+                          containerRefs.current[key] = el;
+                        }}
+                      >
+                        {recList.slice(0, 6).map((recommendations) => (
+                          <RecommendationCard key={recommendations.id}>
+                            <AccommodationThumbnail
+                              src={recommendations.thumbnailUrl}
+                              alt={recommendations.name}
+                            />
+                            <AccommodationDetails>
+                              <All>
+                                <AccommodationName>
+                                  {recommendations.name}
+                                </AccommodationName>
+                                <AccommodationType>
+                                  <RegHeart />
+                                </AccommodationType>
+                              </All>
+                              <ReviewCount>
+                                <Star />
+                                {recommendations.totalRating}
+                              </ReviewCount>
+                              <AccommodationPrice>
+                                {recommendations.price.toLocaleString()}원 ~
+                              </AccommodationPrice>
+                            </AccommodationDetails>
+                          </RecommendationCard>
+                        ))}
+                      </RecommendationContainer>
+                      <NavButton onClick={scrollRight} $position="right">
+                        <GrFormNext />
+                      </NavButton>
+                    </SliderWrapper>
+                  </Section>
+                )}
               </div>
             );
           })}
@@ -183,7 +183,7 @@ const SeeAllButton = styled.button`
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 20px;
   padding: 5px;
 `;
 

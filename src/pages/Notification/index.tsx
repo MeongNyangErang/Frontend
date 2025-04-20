@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import Header from '@components/common/RegisterHeader/index';
-import { fetchCall } from '@services/api';
+import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
 import axios from 'axios';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export type UserType = 'USER' | 'HOST';
 
@@ -14,6 +18,7 @@ export type NotificationType =
   | 'REVIEW';
 
 interface NotificationPayload {
+  notificationId: number;
   chatRoomId: number;
   senderId: number;
   senderType: UserType;
@@ -35,111 +40,84 @@ interface SendNotificationRequest {
   createdAt?: string;
 }
 
-const NotificationSender = () => {
-  const socketRef = useRef<WebSocket | null>(null);
-  const [log, setLog] = useState<string[]>([]);
-  const [notifications, setNotifications] = useState<NotificationPayload[]>([]);
-  const [pagination, setPagination] = useState({
-    page: 0,
-    size: 10,
-    totalElements: 0,
-    totalPages: 0,
-    first: true,
-    last: false,
+// 목록
+const fetchNotifications = async ({ pageParam = 0 }) => {
+  const { data } = await axios.get(`/notifications?page=${pageParam}&size=10`);
+  return {
+    notifications: data.data,
+    nextPage: data.last ? undefined : pageParam + 1,
+  };
+};
+
+// 전송
+const sendNotification = async (payload: SendNotificationRequest) => {
+  await axios.post('/notifications/messages', {
+    chatRoomId: payload.chatRoomId,
+    content: payload.content,
   });
+};
 
+const NotificationSender = () => {
+  const socket = useRef<WebSocket | null>(null);
+  const queryClient = useQueryClient();
+
+  // 구독
   useEffect(() => {
-    socketRef.current = new WebSocket('wss://your-api-url/ws/notifications');
+    socket.current = new WebSocket(
+      'ws://localhost:8080//user/subscribe/notifications',
+    );
 
-    socketRef.current.onopen = () => {
-      console.log('[WebSocket] Connected');
-      setLog((prev) => ['WebSocket 연결됨', ...prev]);
-    };
+    socket.current.addEventListener('open', () => {
+      console.log('WebSocket 연결됨');
+    });
 
-    socketRef.current.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log('[WebSocket] Received:', message);
-      setLog((prev) => [`수신: ${message.content}`, ...prev]);
-    };
+    socket.current.addEventListener('message', (event) => {
+      console.log('알림 수신:', event);
+    });
 
-    socketRef.current.onclose = () => {
-      console.log('[WebSocket] Closed');
-      setLog((prev) => ['WebSocket 연결 종료', ...prev]);
-    };
+    socket.current.addEventListener('close', () => {
+      console.log('WebSocket 연결 종료');
+    });
 
     return () => {
-      socketRef.current?.close();
+      socket.current?.close();
     };
   }, []);
 
-  const loadNotifications = async (page: number = 0) => {
-    try {
-      const notificationsList = await fetchCall<{
-        data: NotificationPayload[];
-        page: number;
-        size: number;
-        totalElements: number;
-        totalPages: number;
-        first: boolean;
-        last: boolean;
-      }>(`/notifications/list?page=${page}&size=${pagination.size}`, 'get');
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error,
+  } = useInfiniteQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchNotifications,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0,
+  });
 
-      if (!Array.isArray(notificationsList.data)) {
-        throw new Error('Response data is not an array');
-      }
+  const { mutate: send, isPending: isSending } = useMutation({
+    mutationFn: sendNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
 
-      setNotifications((prev) => [...prev, ...notificationsList.data]);
-      setPagination({
-        page: notificationsList.page,
-        size: notificationsList.size,
-        totalElements: notificationsList.totalElements,
-        totalPages: notificationsList.totalPages,
-        first: notificationsList.first,
-        last: notificationsList.last,
-      });
-    } catch (e: any) {
-      setLog((prev) => [`알림 목록 로드 실패: ${e.message}`, ...prev]);
-    }
-  };
-
-  useEffect(() => {
-    loadNotifications(0);
-  }, [pagination.size]);
-
-  const loadMore = () => {
-    if (pagination.page < pagination.totalPages - 1) {
-      loadNotifications(pagination.page + 1);
-    }
-  };
-
-  const handleSend = async () => {
-    try {
-      await axios('/user/subscribe/notifications');
-      setLog((prev) => ['구독 완료', ...prev]);
-
-      const payload: SendNotificationRequest = {
-        chatRoomId: 1,
-        senderId: 100,
-        senderType: 'HOST',
-        receiverId: 200,
-        receiverType: 'USER',
-        content: '알림입니다',
-        notificationType: 'MESSAGE',
-        createdAt: new Date().toISOString(),
-      };
-
-      const request = {
-        chatRoomId: 1,
-        content: '알림입니다',
-      };
-      await fetchCall('/notifications/messages', 'post', {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request),
-      });
-      setLog((prev) => [`전송`, ...prev]);
-    } catch (e: any) {
-      setLog((prev) => [`실패`, ...prev]);
-    }
+  const handleSend = () => {
+    const payload: SendNotificationRequest = {
+      chatRoomId: 1,
+      senderId: 100,
+      senderType: 'HOST',
+      receiverId: 200,
+      receiverType: 'USER',
+      content: '알림입니다',
+      notificationType: 'MESSAGE',
+      createdAt: new Date().toISOString(),
+    };
+    send(payload);
   };
 
   return (
@@ -151,25 +129,34 @@ const NotificationSender = () => {
           중요한 알림
         </Title>
         <NotificationList>
-          {notifications.length > 0 ? (
-            notifications.map((notification, index) => (
-              <NotificationItem key={index}>
-                <Sender>
-                  {notification.senderType === 'HOST' ? '호스트' : '사용자'}
-                </Sender>
-                <Content>{notification.content}</Content>
-                <Timestamp>
-                  {new Date(notification.createdAt).toLocaleString()}
-                </Timestamp>
-              </NotificationItem>
-            ))
+          {data?.pages?.length &&
+          data.pages.some((page) => page?.notifications?.length > 0) ? (
+            data.pages.flatMap((page) =>
+              page.notifications.map((notification: NotificationPayload) => (
+                <NotificationItem key={notification.notificationId}>
+                  <Sender>
+                    {notification.senderType === 'HOST' ? '호스트' : '사용자'}
+                  </Sender>
+                  <Sender>{notification.notificationType}</Sender>
+                  <Content>{notification.content}</Content>
+                  <Timestamp>
+                    {new Date(notification.createdAt).toLocaleString()}
+                  </Timestamp>
+                </NotificationItem>
+              )),
+            )
           ) : (
             <NotificationItem>현재 알림이 없습니다.</NotificationItem>
           )}
         </NotificationList>
 
-        {pagination.page < pagination.totalPages - 1 && (
-          <LoadMoreButton onClick={loadMore}>더 보기</LoadMoreButton>
+        {hasNextPage && (
+          <LoadMoreButton
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? '로딩 중...' : '더 보기'}
+          </LoadMoreButton>
         )}
       </Container>
     </div>
@@ -228,8 +215,7 @@ const Timestamp = styled.div`
 `;
 
 const LoadMoreButton = styled.button`
-  background-color: #4a90e2;
-  color: white;
+  color: var(--gray-700);
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -237,10 +223,6 @@ const LoadMoreButton = styled.button`
   margin: 20px 0;
   text-align: center;
   width: 100%;
-
-  &:hover {
-    background-color: #3578b6;
-  }
 `;
 
 const OutlineNotification = styled(AiOutlineNotification)`

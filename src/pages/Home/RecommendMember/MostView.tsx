@@ -51,7 +51,7 @@ const MostView = () => {
       <Containers>
         <div>
           <All>
-            <Real>최신 리뷰 추천 숙소</Real>
+            <Real>최신 등록된 리뷰</Real>
           </All>
           <Section>
             <SliderWrapper>
