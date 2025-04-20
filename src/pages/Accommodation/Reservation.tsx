@@ -23,13 +23,10 @@ interface Reservation {
 const Reservation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const formatDate = (date: Date): string => {
-    return date.toISOString().split('T')[0];
-  };
 
   useEffect(() => {
     if (!state) {
-      console.log('잘못된 접근입니다.');
+      console.log('정보가 없습니다.');
     }
   }, [state]);
 
@@ -48,12 +45,6 @@ const Reservation = () => {
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
   const [roomDetails, setRoomDetails] = useState<any>(null);
-  const formattedCheckInDate = checkInDate
-    ? formatDate(new Date(checkInDate))
-    : '';
-  const formattedCheckOutDate = checkOutDate
-    ? formatDate(new Date(checkOutDate))
-    : '';
 
   useEffect(() => {
     if (
@@ -122,8 +113,8 @@ const Reservation = () => {
 
     const reservationData = {
       roomId,
-      checkInDate: formattedCheckInDate,
-      checkOutDate: formattedCheckOutDate,
+      checkInDate,
+      checkOutDate,
       peopleCount,
       petCount,
       reserverName,
@@ -141,7 +132,7 @@ const Reservation = () => {
 
     try {
       const response = await fetchCall(
-        '/users/reservations',
+        '/user/reservations',
         'post',
         reservationData,
       );

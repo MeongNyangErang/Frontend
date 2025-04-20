@@ -34,6 +34,12 @@ const SearchBar = () => {
     setError('');
   };
 
+  const formatDateKST = (date: Date | null | undefined): string => {
+    if (!date) return '';
+    const offsetDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // KST 오프셋 적용
+    return offsetDate.toISOString().split('T')[0];
+  };
+
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (locationDropdownOpen) setLocationDropdownOpen(false);
     setLocation(e.target.value);
@@ -104,9 +110,9 @@ const SearchBar = () => {
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setCheckInDate(start);
+    console.log('체크인 날짜:', formatDateKST(checkInDate));
     setCheckOutDate(end);
-    console.log('시간', start);
-    console.log('시간', end);
+    console.log('체크아웃 날짜:', formatDateKST(checkOutDate));
   };
 
   const applyPeopleAndPets = () => {

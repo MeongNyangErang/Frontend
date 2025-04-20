@@ -51,7 +51,7 @@ const NonMember = () => {
   }, []);
 
   const handleSeeAll = (petId: number) => {
-    navigate(`recommendMember/AllView?petId=${petId}`);
+    navigate(`recommendMember/allView?petId=${petId}`);
   };
 
   return (
@@ -91,7 +91,14 @@ const NonMember = () => {
                       recommendation.recommendations
                         .slice(0, 6)
                         .map((recommendations) => (
-                          <RecommendationCard key={recommendations.id}>
+                          <RecommendationCard
+                            key={recommendations.id}
+                            onClick={() =>
+                              navigate(
+                                `/accommodation-detail/${recommendations.id}`,
+                              )
+                            }
+                          >
                             <AccommodationThumbnail
                               src={recommendations.thumbnailUrl}
                               alt={recommendations.name}
@@ -202,7 +209,8 @@ const RecommendationCard = styled.div`
 
 const AccommodationThumbnail = styled.img`
   width: 100%;
-  height: auto;
+  height: 150px;
+  max-height: 150px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 `;
