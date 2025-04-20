@@ -147,6 +147,12 @@ const SearchBar = ({ currentQuery }: Props) => {
     if (peopleDropdownOpen) setPeopleDropdownOpen(false);
   };
 
+  const getDatePickerMaxDate = () => {
+    const day = new Date();
+    day.setMonth(day.getMonth() + 3);
+    return day;
+  };
+
   useEffect(() => {
     if (peopleDropdownOpen) {
       setLocationDropdownOpen(false);
@@ -237,6 +243,7 @@ const SearchBar = ({ currentQuery }: Props) => {
                 placeholderText="날짜 선택"
                 dateFormat="yyyy-MM-dd"
                 minDate={new Date()}
+                maxDate={getDatePickerMaxDate()}
                 selectsRange
                 startDate={checkInDate}
                 endDate={checkOutDate}

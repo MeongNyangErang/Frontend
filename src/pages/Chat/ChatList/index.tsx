@@ -36,35 +36,47 @@ const ChatList = () => {
               ({
                 chatRoomId,
                 lastMessage,
+                lastMessageType,
                 lastMessageTime,
                 partnerImageUrl,
                 partnerName,
                 partnerId,
                 unreadCount,
-              }) => (
-                <SChatListItem
-                  key={chatRoomId}
-                  to={ROUTES.chat.room(chatRoomId)}
-                  state={{ partnerName, partnerImageUrl, partnerId }}
-                >
-                  <SItemImage>
-                    <img
-                      src={partnerImageUrl || defaultProfileImage}
-                      alt="프로필 이미지"
-                    />
-                  </SItemImage>
-                  <SItemInfo>
-                    <div>{partnerName}</div>
-                    <p>{lastMessage || '아직 메세지가 없습니다.'}</p>
-                    <span>
-                      {formatUTCTimeToDateOrTime(lastMessageTime) || ''}
-                    </span>
-                  </SItemInfo>
-                  <SItemUnread>
-                    {unreadCount > 0 && <span>{unreadCount}</span>}
-                  </SItemUnread>
-                </SChatListItem>
-              ),
+              }) => {
+                const isImage = lastMessageType === 'IMAGE';
+                return (
+                  <SChatListItem
+                    key={chatRoomId}
+                    to={ROUTES.chat.room(chatRoomId)}
+                    state={{ partnerName, partnerImageUrl, partnerId }}
+                  >
+                    <SItemImage>
+                      <img
+                        src={partnerImageUrl || defaultProfileImage}
+                        alt="프로필 이미지"
+                      />
+                    </SItemImage>
+                    <SItemInfo>
+                      <div>{partnerName}</div>
+                      <p>
+                        {!lastMessage
+                          ? '아직 메세지가 없습니다.'
+                          : isImage
+                            ? '(이미지)'
+                            : lastMessage}
+                      </p>
+                      <span>
+                        {lastMessageTime
+                          ? formatUTCTimeToDateOrTime(lastMessageTime)
+                          : ''}
+                      </span>
+                    </SItemInfo>
+                    <SItemUnread>
+                      {unreadCount > 0 && <span>{unreadCount}</span>}
+                    </SItemUnread>
+                  </SChatListItem>
+                );
+              },
             )}
           </SChatListBox>
         )}
