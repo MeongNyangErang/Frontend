@@ -1,7 +1,7 @@
 export type AccommodationType =
-  | 'HOTELRESORT'
-  | 'DETACHEDHOUSE'
-  | 'FULLVILLA'
+  | 'HOTEL_RESORT'
+  | 'DETACHED_HOUSE'
+  | 'FULL_VILLA'
   | 'PENSION';
 
 export interface Accommodation {
