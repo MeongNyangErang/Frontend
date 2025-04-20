@@ -142,6 +142,11 @@ const SearchBar = ({ currentQuery }: Props) => {
     setSelectionDone(true);
   };
 
+  const handleClickDatePicker = () => {
+    if (locationDropdownOpen) setLocationDropdownOpen(false);
+    if (peopleDropdownOpen) setPeopleDropdownOpen(false);
+  };
+
   useEffect(() => {
     if (peopleDropdownOpen) {
       setLocationDropdownOpen(false);
@@ -225,7 +230,7 @@ const SearchBar = ({ currentQuery }: Props) => {
         {/* 체크인/체크아웃 */}
         <SContainer>
           <SCheckWrapper>
-            <SDatePickerWrapper>
+            <SDatePickerWrapper onClick={handleClickDatePicker}>
               <DatePicker
                 selected={checkInDate}
                 onChange={handleDateChange}
