@@ -155,7 +155,7 @@ export const handlers = [
     return HttpResponse.json(accommodationData);
   }),
   http.get(`${BASE_URL}/accommodations/:accommodationId`, async () => {
-    const detailAccommodationData = {
+    const response = {
       accommodationsId: 1,
       name: '광안리 위더스오션',
       description:
@@ -163,7 +163,7 @@ export const handlers = [
       address: '부산광역시 수영구 광안해변로 200',
       detailedAddress: '상세주소',
       totalRating: 4.5,
-      type: 'PENSION',
+      type: '호텔 리조트',
       thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
       accommodationImagesUrls: [
         'https://i.imgur.com/TuefC4N.jpeg',
@@ -232,9 +232,7 @@ export const handlers = [
         },
       ],
     };
-    return HttpResponse.json({
-      detailAccommodationData,
-    });
+    return HttpResponse.json(response);
   }),
   http.get(`${BASE_URL}/users/pets`, async () => {
     const petListData = {
@@ -266,7 +264,6 @@ export const handlers = [
         },
       ],
     };
-
     return HttpResponse.json(petListData);
   }),
   http.post(`${BASE_URL}/users/pets`, async () => {
