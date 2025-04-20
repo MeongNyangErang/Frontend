@@ -189,6 +189,8 @@ const SItemsBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 10px;
+  background-color: beige;
 `;
 
 export {

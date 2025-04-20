@@ -7,10 +7,13 @@ const useInfiniteScroll = (callback: () => void, enabled: boolean) => {
     if (!observerTargetRef.current || !enabled) return;
 
     console.log('callback', callback);
+    console.log(observerTargetRef.current);
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
+        console.log('isIntersecting');
         observer.unobserve(entry.target);
         callback();
+        console.log('callback worked');
       }
     });
 
