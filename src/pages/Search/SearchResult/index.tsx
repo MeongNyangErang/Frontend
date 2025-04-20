@@ -40,7 +40,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     isLoading,
     error,
   } = useSearchAccommodations(currentQuery, cursor, currentFilter);
-  console.log('content change', content);
+
   const updateCursor = useCallback(() => {
     if (content) {
       const id = content[content.length - 1].accommodationId;
@@ -54,7 +54,6 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   );
 
   useEffect(() => {
-    console.log('im here');
     setSearchedData([]);
     setCursor(null);
   }, [currentQuery, currentFilter]);

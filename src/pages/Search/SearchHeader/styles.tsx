@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { SSectionWrap } from '@components/layouts/SectionLayout';
+import {
+  SSectionWrap,
+  SSectionContainer,
+} from '@components/layouts/SectionLayout';
 
 const SHeaderWrap = styled(SSectionWrap)`
   position: sticky;
@@ -9,4 +12,8 @@ const SHeaderWrap = styled(SSectionWrap)`
   border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
 `;
 
-export { SHeaderWrap };
+const SHeaderContainer = styled(SSectionContainer)`
+  padding-top: ${({ theme }) => theme.layouts.paddingX};
+`;
+
+export { SHeaderWrap, SHeaderContainer };
