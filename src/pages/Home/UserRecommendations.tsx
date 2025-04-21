@@ -15,7 +15,7 @@ const UserRecommendations = () => {
         return (
           <SSectionContainer key={petId}>
             <SSectionTitle>
-              <span>{addParticle(petName)}</span> 위한 추천 숙소
+              {addParticle(petName)}위한 추천 숙소
               <i>
                 <img src={titleIcon} alt="아이콘" />
               </i>

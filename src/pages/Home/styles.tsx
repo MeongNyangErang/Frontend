@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { media } from '@components/styles/responsive';
-import { SectionLayout } from '@components/layouts/SectionLayout';
+import { SSectionWrap } from '@components/layouts/SectionLayout';
 
-const SRecommendationArea = styled(SectionLayout)`
+const SRecommendationArea = styled(SSectionWrap)`
   padding-bottom: 60px;
 `;
 
@@ -44,12 +44,13 @@ const SSectionTitle = styled.h2`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 4px;
-    width: 18px;
+    margin-left: 64px;
+    width: 19px;
     color: ${({ theme }) => theme.colors.gray600};
   }
 
   > span {
+    margin-right: 6px;
     color: ${({ theme }) => theme.colors.main};
   }
 `;
