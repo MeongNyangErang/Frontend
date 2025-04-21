@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
+import { oneLineStyle } from '@components/styles/mixins';
 
 interface RecommendationSliderProps {
   recommendations: RecommendationsAccommodation[];
@@ -37,7 +38,9 @@ const RecommendationSlider = ({
               </SImageArea>
               <SDescArea>
                 <div>{name}</div>
-                <p>{price}원 부터</p>
+                <p>
+                  {price.toLocaleString()}원~ / <span>1박박</span>
+                </p>
               </SDescArea>
             </SItemLink>
           </SwiperSlide>
@@ -50,11 +53,45 @@ const RecommendationSlider = ({
 export default RecommendationSlider;
 
 const SItemLink = styled(Link)``;
+
 const SImageArea = styled.div`
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+
   img {
     width: 100%;
-    height: 200px;
+    height: 160px;
     object-fit: cover;
+    transition: ${({ theme }) => theme.transition};
+
+    :hover & {
+      transform: scale(1.05);
+    }
   }
 `;
-const SDescArea = styled.div``;
+
+const SDescArea = styled.div`
+  overflow: hidden;
+  padding: 8px 12px;
+  border-radius: 0 0 8px 8px;
+  background-color: #fff;
+  box-shadow: ${({ theme }) => theme.shadow.card};
+
+  > div {
+    ${oneLineStyle}
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.gray700};
+  }
+
+  > p {
+    font-size: 16px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.gray800};
+
+    span {
+      font-size: 12px;
+      color: ${({ theme }) => theme.colors.gray600};
+    }
+  }
+`;
