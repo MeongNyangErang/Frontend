@@ -68,7 +68,13 @@ const SSectionTitle = styled.h2`
 `;
 
 const SSectionContainer = styled.div`
+  padding-bottom: 44px;
   margin-bottom: 36px;
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const SSectionBox = styled.div`
