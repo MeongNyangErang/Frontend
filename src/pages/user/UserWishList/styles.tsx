@@ -14,6 +14,10 @@ const SWishlistWrap = styled.div`
   }
 `;
 
+const SWishlistBox = styled.div`
+  padding-top: 24px;
+`;
+
 const SWishItem = styled.div`
   position: relative;
   padding-bottom: 18px;
@@ -108,4 +112,5 @@ export {
   SInfoBox,
   SWishButton,
   SWishlistBottom,
+  SWishlistBox,
 };
