@@ -6,7 +6,7 @@ import {
 export type UserPetRecommendationsResponse = {
   petId: number;
   petName: string;
-  recommedations: RecommendationsAccommodation[];
+  recommendations: RecommendationsAccommodation[];
 }[];
 
 export interface GuestRecommendationsResponse {

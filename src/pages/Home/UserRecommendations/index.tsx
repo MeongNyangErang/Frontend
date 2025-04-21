@@ -10,8 +10,8 @@ const UserRecommendations = () => {
 
   return (
     <>
-      {data?.map(({ petId, petName, recommedations }) => {
-        console.log(recommedations, 'recommendations');
+      {data?.map(({ petId, petName, recommendations }) => {
+        console.log(recommendations, 'recommendations');
         console.log(petId, 'petId');
         console.log(petName, 'petName');
 
@@ -28,8 +28,8 @@ const UserRecommendations = () => {
                 <Loader size={10} color="grayBorder" loading />
               </SSectionContainer>
             )}
-            {recommedations && (
-              <RecommendationSlider recommendations={recommedations} />
+            {recommendations && (
+              <RecommendationSlider recommendations={recommendations} />
             )}
           </Fragment>
         );
