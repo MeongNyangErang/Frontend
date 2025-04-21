@@ -45,9 +45,9 @@ const useUserReviewsPage = () => {
   }, []);
 
   const handleSuccessReviewChange = () => {
-    refreshUserReviews();
     setReviews([]);
     setCurrentPage(0);
+    refreshUserReviews();
   };
 
   const onSuccessDeleteReview = useCallback(() => {
