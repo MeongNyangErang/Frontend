@@ -82,7 +82,7 @@ const SImageArea = styled.div`
 
 const SDescArea = styled.div`
   overflow: hidden;
-  padding: 8px 12px;
+  padding: 8px 12px 12px;
   border-radius: 0 0 8px 8px;
   background-color: #fff;
   box-shadow: ${({ theme }) => theme.shadow.card};
@@ -97,7 +97,7 @@ const SDescArea = styled.div`
     > div {
       ${oneLineStyle}
       flex: 1;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-size: 16px;
       font-weight: 500;
       color: ${({ theme }) => theme.colors.gray700};
@@ -106,15 +106,15 @@ const SDescArea = styled.div`
     > span {
       display: flex;
       align-items: center;
-      gap: 2px;
-      padding: 4px 8px;
+      gap: 4px;
+      padding: 2px 8px;
       font-size: 12px;
       color: ${({ theme }) => theme.colors.gray600};
       background-color: ${({ theme }) => theme.colors.gray200};
       border-radius: 4px;
 
       svg {
-        font-size: 18px;
+        font-size: 14px;
         color: ${({ theme }) => theme.colors.starYellow};
       }
     }
@@ -127,7 +127,7 @@ const SDescArea = styled.div`
 
     span {
       font-size: 12px;
-      color: ${({ theme }) => theme.colors.gray600};
+      color: ${({ theme }) => theme.colors.gray500};
     }
   }
 `;
