@@ -133,7 +133,7 @@ export const handlers = [
   http.put(`${BASE_URL}/register-accommodation`, async () => {
     return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
   }),
-  http.get(`${BASE_URL}/register-accommodation`, async () => {
+  http.get(`${BASE_URL}/hosts/accommodations`, async () => {
     const accommodationData = {
       code: 200,
       id: '1',

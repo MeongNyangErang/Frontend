@@ -91,6 +91,7 @@ export const SButton = styled.button`
 `;
 
 export const SImagePreviewWrapper = styled.div`
+  position: relative;
   width: 30%;
   height: 130px;
   border: 2px dashed #ccc;
@@ -242,6 +243,7 @@ export const SSButton = styled.button`
 `;
 
 export const SSImagePreviewWrapper = styled.div`
+  position: relative;
   width: 30%;
   height: 130px;
   border: 2px dashed #ccc;
