@@ -43,7 +43,7 @@ const floorToHalf = (number: number) => {
   return Math.floor(number * 2) / 2;
 };
 
-const addParticle = (word: string): string => {
+const addParticle = (word: string) => {
   const lastChar = word[word.length - 1];
   const code = lastChar.charCodeAt(0);
   const HANGUL_BASE = 0xac00;
@@ -51,11 +51,23 @@ const addParticle = (word: string): string => {
 
   // 한글이 아닌 경우 그대로 '를' 붙여서 반환
   if (code < HANGUL_BASE || code > HANGUL_END) {
-    return `${word}를`;
+    return (
+      <span>
+        <strong>${word}</strong>를
+      </span>
+    );
   }
 
   const hasFinalConsonant = (code - HANGUL_BASE) % 28 !== 0;
-  return hasFinalConsonant ? `${word}이를` : `${word}를`;
+  return hasFinalConsonant ? (
+    <span>
+      <strong>${word}</strong>이를
+    </span>
+  ) : (
+    <span>
+      <strong>${word}</strong>를
+    </span>
+  );
 };
 
 export { formatSecondsToTime, parseNewLine, getAge, floorToHalf, addParticle };

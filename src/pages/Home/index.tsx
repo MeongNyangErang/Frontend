@@ -1,4 +1,5 @@
 import SearchBar from '@components/common/SearchBar/index';
+import { SSectionContainer } from './styles';
 import UserRecommendations from './UserRecommendations';
 import GuestRecommendations from './GuestRecommendations';
 import {
@@ -24,7 +25,9 @@ const Home = () => {
         </SSearchBarContainer>
       </SSearchBarArea>
       <SRecommendationArea>
-        {isUser ? <UserRecommendations /> : <GuestRecommendations />}
+        <SSectionContainer>
+          {isUser ? <UserRecommendations /> : <GuestRecommendations />}
+        </SSectionContainer>
       </SRecommendationArea>
     </>
   );
