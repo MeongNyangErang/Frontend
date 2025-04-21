@@ -5,7 +5,7 @@ import RegisterAddress from '@pages/host/HostRegister/RegisterAddress';
 import axios from 'axios';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader/index';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import { IoCloudUploadOutline, IoCloseSharp } from 'react-icons/io5';
 import {
   SSFieldset,
   SSOptionSelectorWrapper,
@@ -177,6 +177,17 @@ const RegisterAccommodation = () => {
     setLongitude(lng);
   };
 
+  const handleRemoveAdditionalImage = (index: number) => {
+    setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
+    setAdditionalImagesPreview((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveThumbnail = () => {
+    setThumbnail(null);
+    setThumbnailPreview(null);
+    setThumbnailImageUploaded(false);
+  };
+
   const OptionSelector = ({
     options,
     selectedOptions,
@@ -272,9 +283,11 @@ const RegisterAccommodation = () => {
         return;
       }
 
-      if (!thumbnail) {
+      if (!thumbnail && !accommodationId) {
         setImageError('대표이미지는 필수입니다.');
         return;
+      } else {
+        setImageError('');
       }
 
       const FACILITY_TYPES = {
@@ -332,15 +345,21 @@ const RegisterAccommodation = () => {
       const formData = new FormData();
 
       if (accommodationId) {
-        formData.append('newThumbnail', thumbnail);
-        data['deletedImageUrls'] = [thumbnailPreview];
+        if (thumbnail) {
+          formData.append('newThumbnail', thumbnail);
+          data['deletedImageUrls'] = [thumbnailPreview];
+        }
+
         if (additionalImages.length > 0) {
           additionalImages.forEach((image) => {
             formData.append('newAdditionalImages', image);
           });
         }
       } else {
-        formData.append('thumbnail', thumbnail);
+        if (thumbnail) {
+          formData.append('thumbnail', thumbnail);
+        }
+
         if (additionalImages.length > 0) {
           additionalImages.forEach((image) => {
             formData.append('additionalImages', image);
@@ -513,6 +532,7 @@ const RegisterAccommodation = () => {
         {thumbnailPreview && (
           <SSImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
+            <DeleteButton onClick={handleRemoveThumbnail} />
           </SSImagePreviewWrapper>
         )}
         {imageError && <SErrorMessage>{imageError}</SErrorMessage>}
@@ -536,6 +556,9 @@ const RegisterAccommodation = () => {
             {additionalImagesPreview.map((preview, index) => (
               <SSImagePreviewWrapper key={index}>
                 <img src={preview} alt={`Additional preview ${index}`} />
+                <DeleteButton
+                  onClick={() => handleRemoveAdditionalImage(index)}
+                />
               </SSImagePreviewWrapper>
             ))}
           </SSPreviewWrapper>
@@ -565,4 +588,13 @@ const UploadIcon = styled(IoCloudUploadOutline)`
   font-size: 30px;
   color: var(--gray-600);
   margin-bottom: 5px;
+`;
+
+const DeleteButton = styled(IoCloseSharp)`
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  font-size: 25px;
+  color: #ff7b92;
+  cursor: pointer;
 `;

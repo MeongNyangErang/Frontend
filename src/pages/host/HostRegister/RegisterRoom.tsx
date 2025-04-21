@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import useHostRegister from '@hooks/page/useHostRegister';
 import Header from '@components/common/RegisterHeader/index';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import { IoCloudUploadOutline, IoCloseSharp } from 'react-icons/io5';
 import { fetchCall } from 'services/api';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -228,6 +228,12 @@ const RegisterRoom = () => {
         }));
       }
     }
+  };
+
+  const handleRemoveThumbnail = () => {
+    setThumbnail(null);
+    setThumbnailPreview(null);
+    setThumbnailImageUploaded(false);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -597,6 +603,7 @@ const RegisterRoom = () => {
         {thumbnailPreview && (
           <SImagePreviewWrapper>
             <img src={thumbnailPreview} alt="Thumbnail Preview" />
+            <DeleteButton onClick={handleRemoveThumbnail} />
           </SImagePreviewWrapper>
         )}
         {thumbnailError && <SErrorMessage>{thumbnailError}</SErrorMessage>}
@@ -624,4 +631,13 @@ const UploadIcon = styled(IoCloudUploadOutline)`
   font-size: 30px;
   color: var(--gray-600);
   margin-bottom: 5px;
+`;
+
+const DeleteButton = styled(IoCloseSharp)`
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  font-size: 25px;
+  color: #ff7b92;
+  cursor: pointer;
 `;
