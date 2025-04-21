@@ -2,8 +2,8 @@ import { Fragment } from 'react';
 import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
-import RecommendationSlider from '../RecommendationSlider';
-import { SSectionTitle, SSectionContainer } from '../styles';
+import RecommendationSlider from './RecommendationSlider';
+import { SSectionTitle, SSectionContainer } from './styles';
 
 const PetType = ['소형견', '중형견', '대형견', '고양이'] as const;
 
