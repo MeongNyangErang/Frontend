@@ -22,10 +22,10 @@ interface Notification {
 }
 
 const notificationTypeMap: Record<NotificationType, string> = {
-  MESSAGE: '메시지',
-  RESERVATION_CONFIRMED: '예약 확정',
-  RESERVATION_REMINDER: '예약 알림',
-  REVIEW: '리뷰',
+  MESSAGE: '메시지가 도착했습니다.',
+  RESERVATION_CONFIRMED: '예약이 확정되었습니다.',
+  RESERVATION_REMINDER: '예약 알림이 도착했습니다.',
+  REVIEW: '리뷰를 남겨주세요',
 };
 
 interface NotificationResponse {
