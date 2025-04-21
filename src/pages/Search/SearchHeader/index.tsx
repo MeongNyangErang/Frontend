@@ -11,18 +11,18 @@ interface SearchHeaderProps {
 
 const SearchHeader = ({ currentQuery, onOpenFilter }: SearchHeaderProps) => {
   return (
-    <>
-      <SHeaderWrap>
-        <SHeaderContainer>
+    <SHeaderWrap>
+      <SHeaderContainer>
+        <div>
           <SearchBar currentQuery={currentQuery} />
-        </SHeaderContainer>
-      </SHeaderWrap>
-      <SHeaderWrap>
-        <SHeaderContainer>
+        </div>
+      </SHeaderContainer>
+      <SHeaderContainer>
+        <div>
           <SearchControls onOpenFilter={onOpenFilter} />
-        </SHeaderContainer>
-      </SHeaderWrap>
-    </>
+        </div>
+      </SHeaderContainer>
+    </SHeaderWrap>
   );
 };
 

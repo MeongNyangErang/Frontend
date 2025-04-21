@@ -5,8 +5,6 @@ const SWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  margin-top: 10px;
-  border-top: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
 `;
 
 const SFilterButton = styled.button`

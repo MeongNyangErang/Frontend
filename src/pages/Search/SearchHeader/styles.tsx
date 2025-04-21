@@ -1,10 +1,6 @@
 import styled from 'styled-components';
-import {
-  SSectionWrap,
-  SSectionContainer,
-} from '@components/layouts/SectionLayout';
 
-const SHeaderWrap = styled(SSectionWrap)`
+const SHeaderWrap = styled.div`
   position: sticky;
   left: 0;
   top: ${({ theme }) => theme.layouts.headerHeight};
@@ -12,8 +8,18 @@ const SHeaderWrap = styled(SSectionWrap)`
   border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
 `;
 
-const SHeaderContainer = styled(SSectionContainer)`
-  padding-top: ${({ theme }) => theme.layouts.paddingX};
+const SHeaderContainer = styled.div`
+  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
+
+  &:first-child {
+    padding: ${({ theme }) => `12px ${theme.layouts.paddingX}`};
+    border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+  }
+
+  > div {
+    max-width: ${({ theme }) => theme.layouts.innerWidth};
+    margin: 0 auto;
+  }
 `;
 
 export { SHeaderWrap, SHeaderContainer };

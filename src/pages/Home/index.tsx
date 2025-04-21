@@ -17,7 +17,9 @@ const Home = () => {
     <>
       <SSearchBarArea>
         <SSearchBarContainer>
-          <SearchBar />
+          <div>
+            <SearchBar />
+          </div>
         </SSearchBarContainer>
       </SSearchBarArea>
       <SectionLayout>
