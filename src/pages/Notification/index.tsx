@@ -32,28 +32,31 @@ interface NotificationResponse {
 
 const NotificationSender = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const token = getLocalStorage('accessToken');
 
   // 목록
   /*
   const fetchNotifications = async (page: number) => {
     try {
-      (await fetchCall(
+      const response = (await fetchCall(
         `notifications?page=${page}&size=20`,
         'get',
       )) as NotificationResponse;
+
       setNotifications(response.content);
     } catch (error) {
       console.error('알림을 가져오는 중 오류 발생:', error);
     }
   };
-  */
+*/
 
   // 구독
   useEffect(() => {
+    const token = getLocalStorage('accessToken');
     const client = new Client({
-      webSocketFactory: () =>
-        new SockJS(`https://meongnyangerang.shop/?token=${token}`),
+      brokerURL: 'wss://meongnyangerang.shop/',
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
 
       onConnect: () => {
         console.log('WebSocket 연결됨');
@@ -84,7 +87,7 @@ const NotificationSender = () => {
         client.deactivate();
       }
     };
-  }, [token]);
+  });
 
   return (
     <div>
