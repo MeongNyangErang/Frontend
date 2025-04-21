@@ -3,6 +3,7 @@ import { media } from '@components/styles/responsive';
 
 const SSearchBarArea = styled.div`
   position: relative;
+  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: flex-end;
