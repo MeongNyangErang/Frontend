@@ -387,7 +387,7 @@ const RegisterRoom = () => {
       let response: RoomResponse;
       if (roomId) {
         response = await fetchCall(`hosts/rooms`, 'put', formData);
-        alert('숙소 정보가 수정되었습니다.');
+        alert('객실 정보가 수정되었습니다.');
       } else {
         response = await fetchCall(`hosts/rooms`, 'post', formData);
         navigate(ROUTES.myPage.host.roomList);
