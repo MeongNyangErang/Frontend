@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
-import axios from 'axios';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-
-export type UserType = 'USER' | 'HOST';
+import { fetchCall } from '@services/api';
+import { getLocalStorage } from '@utils/storage';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 export type NotificationType =
   | 'MESSAGE'
@@ -13,60 +13,78 @@ export type NotificationType =
   | 'RESERVATION_REMINDER'
   | 'REVIEW';
 
-interface NotificationPayload {
+interface Notification {
   notificationId: number;
-  chatRoomId: number;
-  senderId: number;
-  senderType: UserType;
-  receiverId: number;
-  receiverType: UserType;
   content: string;
   notificationType: NotificationType;
   createdAt: string;
 }
 
-// 목록
-const fetchNotifications = async ({ pageParam = 0 }) => {
-  const { data } = await axios.get(`/notifications?page=${pageParam}&size=10`);
-  return {
-    notifications: data.data,
-    nextPage: data.last ? undefined : pageParam + 1,
-  };
-};
+interface NotificationResponse {
+  content: Notification[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
 
 const NotificationSender = () => {
-  const socket = useRef<WebSocket | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const token = getLocalStorage('accessToken');
+
+  // 목록
+  /*
+  const fetchNotifications = async (page: number) => {
+    try {
+      (await fetchCall(
+        `notifications?page=${page}&size=20`,
+        'get',
+      )) as NotificationResponse;
+      setNotifications(response.content);
+    } catch (error) {
+      console.error('알림을 가져오는 중 오류 발생:', error);
+    }
+  };
+  */
 
   // 구독
   useEffect(() => {
-    socket.current = new WebSocket(
-      'https://meongnyangerang.shop/user/subscribe/notifications',
-    );
+    const client = new Client({
+      webSocketFactory: () =>
+        new SockJS(`https://meongnyangerang.shop/?token=${token}`),
 
-    socket.current.addEventListener('open', () => {
-      console.log('WebSocket 연결됨');
+      onConnect: () => {
+        console.log('WebSocket 연결됨');
+        client.subscribe(`/user/subscribe/notifications`, (message: any) => {
+          const newNotification = JSON.parse(message.body);
+          setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            newNotification,
+          ]);
+        });
+      },
+
+      onDisconnect: () => {
+        console.log('WebSocket 연결 종료');
+      },
+
+      /*
+      debug: (error: any) => {
+        console.log(error);
+      },
+      */
     });
 
-    socket.current.addEventListener('message', (event) => {
-      console.log('알림 수신:', event);
-    });
-
-    socket.current.addEventListener('close', () => {
-      console.log('WebSocket 연결 종료');
-    });
+    client.activate();
 
     return () => {
-      socket.current?.close();
+      if (client.connected) {
+        client.deactivate();
+      }
     };
-  }, []);
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['notifications'],
-      queryFn: fetchNotifications,
-      getNextPageParam: (lastPage) => lastPage.nextPage,
-      initialPageParam: 0,
-    });
+  }, [token]);
 
   return (
     <div>
@@ -77,39 +95,25 @@ const NotificationSender = () => {
           중요한 알림
         </Title>
         <NotificationList>
-          {data?.pages?.length &&
-          data.pages.some((page) => page?.notifications?.length > 0) ? (
-            data.pages.flatMap((page) =>
-              page.notifications.map((notification: NotificationPayload) => (
-                <NotificationItem key={notification.notificationId}>
-                  <Sender>
-                    {notification.senderType === 'HOST' ? '호스트' : '사용자'}
-                  </Sender>
-                  <Sender>{notification.notificationType}</Sender>
-                  <Content>{notification.content}</Content>
-                  <Timestamp>
-                    {new Date(notification.createdAt).toLocaleString()}
-                  </Timestamp>
-                </NotificationItem>
-              )),
-            )
+          {notifications.length === 0 ? (
+            <NoNotificationsMessage>알림이 없습니다.</NoNotificationsMessage>
           ) : (
-            <NotificationItem>현재 알림이 없습니다.</NotificationItem>
+            notifications.map((notification) => (
+              <NotificationItem key={notification.notificationId}>
+                <Sender>{notification.notificationType}</Sender>
+                <Content>{notification.content}</Content>
+                <Timestamp>
+                  {new Date(notification.createdAt).toLocaleString()}
+                </Timestamp>
+              </NotificationItem>
+            ))
           )}
         </NotificationList>
-
-        {hasNextPage && (
-          <LoadMoreButton
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage ? '로딩 중...' : '더 보기'}
-          </LoadMoreButton>
-        )}
       </Container>
     </div>
   );
 };
+
 export default NotificationSender;
 
 const Container = styled.div`
@@ -162,20 +166,16 @@ const Timestamp = styled.div`
   text-align: right;
 `;
 
-const LoadMoreButton = styled.button`
-  color: var(--gray-700);
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 20px 0;
-  text-align: center;
-  width: 100%;
-`;
-
 const OutlineNotification = styled(AiOutlineNotification)`
   color: var(--main-color);
   margin-right: 5px;
   margin-top: 5px;
   font-size: 20px;
+`;
+
+const NoNotificationsMessage = styled.div`
+  color: var(--gray-700);
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
 `;
