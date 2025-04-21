@@ -14,7 +14,7 @@ const GuestRecommendations = () => {
   return (
     <>
       {PetType.map((type) => {
-        const content = data![type] || [];
+        const content = data?.[type] || [];
         return (
           <>
             <SSectionTitle>{type} 추천 숙소</SSectionTitle>
