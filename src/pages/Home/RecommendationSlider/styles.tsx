@@ -24,7 +24,7 @@ const SImageArea = styled.div`
 
 const SDescArea = styled.div`
   overflow: hidden;
-  padding: 8px 12px 12px;
+  padding: 12px 12px 16px;
   border-radius: 0 0 8px 8px;
   background-color: #fff;
   box-shadow: ${({ theme }) => theme.shadow.card};
