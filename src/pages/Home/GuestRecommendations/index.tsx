@@ -29,7 +29,7 @@ const GuestRecommendations = () => {
                 <Loader size={10} color="grayBorder" loading />
               </SSectionContainer>
             )}
-            {content && <RecommendationSlider recommendations={content} />}
+            {<RecommendationSlider recommendations={content} />}
           </Fragment>
         );
       })}
