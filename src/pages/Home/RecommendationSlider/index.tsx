@@ -1,7 +1,14 @@
+import { useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FaStar } from 'react-icons/fa';
 import { Navigation } from 'swiper/modules';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaHeart,
+  FaRegHeart,
+  FaStar,
+} from 'react-icons/fa';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
 import {
@@ -19,13 +26,22 @@ interface RecommendationSliderProps {
 const RecommendationSlider = ({
   recommendations,
 }: RecommendationSliderProps) => {
+  const uniqueId = useMemo(() => uuidv4(), []);
+
   return (
-    <SSliderWrap className="swiper-container-wrapper">
+    <SSliderWrap>
       <Swiper
         modules={[Navigation]}
-        navigation={{
-          nextEl: '.swiper-next-button',
-          prevEl: '.swiper-prev-button',
+        onInit={(swiper) => {
+          if (
+            swiper.params.navigation &&
+            typeof swiper.params.navigation !== 'boolean'
+          ) {
+            swiper.params.navigation.prevEl = `.swiper-prev-button-${uniqueId}`;
+            swiper.params.navigation.nextEl = `.swiper-next-button-${uniqueId}`;
+            swiper.navigation.init();
+            swiper.navigation.update();
+          }
         }}
         spaceBetween={16}
         slidesPerView={1}
@@ -65,16 +81,23 @@ const RecommendationSlider = ({
                       {price.toLocaleString()}원~
                     </p>
                   </SDescArea>
+                  <span>
+                    <FaRegHeart />
+                  </span>
                 </SItemLink>
               </SwiperSlide>
             );
           },
         )}
       </Swiper>
-      <SNavigationButton className="swiper-prev-button">
+      <SNavigationButton
+        className={`swiper-prev-button swiper-prev-button-${uniqueId}`}
+      >
         <FaChevronLeft />
       </SNavigationButton>
-      <SNavigationButton className="swiper-next-button">
+      <SNavigationButton
+        className={`swiper-next-button swiper-next-button-${uniqueId}`}
+      >
         <FaChevronRight />
       </SNavigationButton>
     </SSliderWrap>

@@ -6,6 +6,11 @@ const SRecommendationArea = styled(SSectionWrap)`
   padding-bottom: 60px;
 `;
 
+const SRecommendationContainer = styled.div`
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.layouts.innerWidth};
+`;
+
 const SSearchBarArea = styled.div`
   position: relative;
   z-index: 100;
@@ -34,7 +39,7 @@ const SSectionTitle = styled.h2`
   display: flex;
   align-items: center;
 
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-size: 18px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray700};
@@ -46,7 +51,10 @@ const SSectionTitle = styled.h2`
     justify-content: center;
     margin-left: 4px;
     width: 18px;
-    color: ${({ theme }) => theme.colors.gray600};
+
+    img {
+      opacity: 0.7;
+    }
   }
 
   > span {
@@ -71,6 +79,7 @@ const SSectionBox = styled.div`
 
 export {
   SRecommendationArea,
+  SRecommendationContainer,
   SSearchBarArea,
   SSearchBarContainer,
   SSectionTitle,
