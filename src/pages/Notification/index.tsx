@@ -51,10 +51,8 @@ const NotificationSender = () => {
   // 구독
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () => new SockJS('https://meongnyangerang.shop/'),
-      connectHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      webSocketFactory: () =>
+        new SockJS(`https://meongnyangerang.shop/?token=${token}`),
 
       onConnect: () => {
         console.log('WebSocket 연결됨');
