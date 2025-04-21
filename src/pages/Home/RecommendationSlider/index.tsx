@@ -71,56 +71,6 @@ const RecommendationSlider = ({
           },
         )}
       </Swiper>
-      <Swiper
-        modules={[Navigation]}
-        navigation={{
-          nextEl: '.swiper-next-button',
-          prevEl: '.swiper-prev-button',
-        }}
-        spaceBetween={16}
-        slidesPerView={1}
-        breakpoints={{
-          480: {
-            slidesPerView: 2,
-          },
-          768: {
-            slidesPerView: 3,
-          },
-          1024: {
-            slidesPerView: 4,
-          },
-        }}
-      >
-        {recommendations.map(
-          ({ thumbnailUrl, name, id, totalRating, price }) => {
-            const accommodationId = Number(id);
-            return (
-              <SwiperSlide key={accommodationId}>
-                <SItemLink
-                  to={ROUTES.accommodationDetail.root(accommodationId)}
-                >
-                  <SImageArea>
-                    <img src={thumbnailUrl} alt={name} />
-                  </SImageArea>
-                  <SDescArea>
-                    <div>
-                      <div>{name}</div>
-                      <span>
-                        <FaStar />
-                        {totalRating.toString().padEnd(3, '.0')}
-                      </span>
-                    </div>
-                    <p>
-                      <span>1박 / </span>
-                      {price.toLocaleString()}원~
-                    </p>
-                  </SDescArea>
-                </SItemLink>
-              </SwiperSlide>
-            );
-          },
-        )}
-      </Swiper>
       <SNavigationButton className="swiper-prev-button">
         <FaChevronLeft />
       </SNavigationButton>
