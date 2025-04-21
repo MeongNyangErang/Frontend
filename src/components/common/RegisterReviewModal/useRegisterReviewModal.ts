@@ -35,7 +35,7 @@ const useReviewModal = ({
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError, resetError } = useError();
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const { refreshUserReviews } = useUserReviews(undefined);
+  const { refreshUserReviews } = useUserReviews(0);
   const isValidToSubmit = review.userRating && review.petFriendlyRating;
 
   const onChangeStarRates = useCallback(
@@ -140,26 +140,12 @@ const useReviewModal = ({
 
     const formData = new FormData();
 
-    formData.append('reviewRequest', blob);
+    formData.append('request', blob);
     if (review.images) {
       review.images.map((img) => {
         formData.append('images', img);
       });
     }
-
-    // const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-
-    // const formDataToRequest = new FormData();
-    // const infoType = type === 'user' ? 'userInfo' : 'hostInfo';
-    // formDataToRequest.append(infoType, blob);
-    // formDataToRequest.append('profileImage', formData.profileImage!);
-    // if (formData.accommodationPermit && formData.businessRegistration) {
-    //   formDataToRequest.append(
-    //     'businessLicense',
-    //     formData.businessRegistration!,
-    //   );
-    //   formDataToRequest.append('submitDocument', formData.accommodationPermit!);
-    // }
 
     startIsLoading();
     try {
