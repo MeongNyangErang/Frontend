@@ -28,7 +28,7 @@ const SSearchBarContainer = styled.div`
 const SSectionTitle = styled.h2`
   display: flex;
   align-items: center;
-  gap: 4px;
+
   margin-bottom: 12px;
   font-size: 18px;
   font-weight: 500;
@@ -36,11 +36,13 @@ const SSectionTitle = styled.h2`
   letter-spacing: -1px;
 
   > i {
-    width: 16px;
+    margin-left: 4px;
+    width: 18px;
+    color: ${({ theme }) => theme.colors.gray600};
   }
 
   > span {
-    color: ${({ theme }) => theme.colors.infoText};
+    color: ${({ theme }) => theme.colors.main};
   }
 `;
 
