@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { media } from '@components/styles/responsive';
+import bgImage from '@assets/images/bg/search-bg-3.png';
 
 const SSearchBarArea = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  height: 240px;
   padding: ${({ theme }) => `40px ${theme.layouts.paddingX}`};
 
   ${media.tablet} {
@@ -19,7 +21,9 @@ const SSearchBarArea = styled.div`
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: ${({ theme }) => theme.colors.gray100};
+    background-image: url(${bgImage});
+    background-position: center top;
+    background-size: auto 240px;
   }
 `;
 
