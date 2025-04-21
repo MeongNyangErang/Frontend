@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
@@ -16,7 +17,7 @@ const GuestRecommendations = () => {
       {PetType.map((type) => {
         const content = data?.[type] || [];
         return (
-          <>
+          <Fragment key={type}>
             <SSectionTitle>{type} 추천 숙소</SSectionTitle>
             {error && (
               <MessageBox variant="light">
@@ -29,7 +30,7 @@ const GuestRecommendations = () => {
               </SSectionContainer>
             )}
             {content && <RecommendationSlider recommendations={content} />}
-          </>
+          </Fragment>
         );
       })}
     </>
