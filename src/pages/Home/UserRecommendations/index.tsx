@@ -12,7 +12,9 @@ const UserRecommendations = () => {
     <>
       {data?.map(({ petId, petName, recommedations }) => {
         console.log(recommedations, 'recommendations');
-        console.log(data, 'data');
+        console.log(petId, 'petId');
+        console.log(petName, 'petName');
+
         return (
           <Fragment key={petId}>
             <SSectionTitle>{petName}을 위한 추천 숙소</SSectionTitle>
