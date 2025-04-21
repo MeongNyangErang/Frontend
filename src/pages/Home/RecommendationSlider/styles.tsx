@@ -111,7 +111,7 @@ const SDescArea = styled.div`
       padding: 2px 8px;
       font-size: 12px;
       color: ${({ theme }) => theme.colors.gray600};
-      background-color: ${({ theme }) => theme.colors.gray200};
+      background-color: ${({ theme }) => theme.colors.gray100};
       border-radius: 4px;
 
       svg {
