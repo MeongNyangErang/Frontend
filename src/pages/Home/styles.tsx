@@ -44,8 +44,8 @@ const SSectionTitle = styled.h2`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 6px;
-    width: 19px;
+    margin-left: 4px;
+    width: 18px;
     color: ${({ theme }) => theme.colors.gray600};
   }
 
@@ -53,6 +53,7 @@ const SSectionTitle = styled.h2`
     margin-right: 6px;
 
     strong {
+      font-weight: 500;
       color: ${({ theme }) => theme.colors.main};
     }
   }

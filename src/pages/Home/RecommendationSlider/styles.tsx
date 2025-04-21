@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { oneLineStyle } from '@components/styles/mixins';
 
+const SSliderWrap = styled.div``;
+
 const SItemLink = styled(Link)`
   &:hover {
     img {
@@ -75,4 +77,6 @@ const SDescArea = styled.div`
   }
 `;
 
-export { SItemLink, SImageArea, SDescArea };
+const SNavigationButton = styled.div``;
+
+export { SSliderWrap, SItemLink, SImageArea, SDescArea, SNavigationButton };
