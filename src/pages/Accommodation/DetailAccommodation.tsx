@@ -83,13 +83,22 @@ const DetailAccommodation = () => {
     const isHolidayDay = isHoliday(today);
 
     let finalPrice = room.price;
+  const state = location.state as
+    | {
+        checkInDate: string;
+        checkOutDate: string;
+        peopleCount: number;
+        petCount: number;
+      }
+    | undefined;
 
-    if (isWeekendDay || isHolidayDay) {
-      finalPrice += room.extraFee;
-    }
 
-    return finalPrice;
-  };
+  const checkInDate = state?.checkInDate;
+  const checkOutDate = state?.checkOutDate;
+  const peopleCount = state?.peopleCount;
+  const petCount = state?.petCount;
+
+  const accommodationId = pathname.split('/').splice(-1);
 
   const handleClickChatButton = async () => {
     if (data === null) {
@@ -123,20 +132,7 @@ const DetailAccommodation = () => {
           'get',
         )) as any;
         console.log(response);
-        const accommodationData = response;
-
-        const sortedReviews = accommodationData.reviews.sort(
-          (a: ReviewData, b: ReviewData) => {
-            const dateA = new Date(a.createdAt).getTime();
-            const dateB = new Date(b.createdAt).getTime();
-            return dateB - dateA;
-          },
-        );
-
-        setAccommodation({
-          ...response,
-          review: sortedReviews,
-        });
+        setAccommodation(response);
       } catch (error) {
         console.log('숙소 정보를 가져오는 데 오류가 발생했습니다.');
       } finally {
@@ -169,10 +165,10 @@ const DetailAccommodation = () => {
         roomId: room.roomId,
         accommodationName: accommodation.name,
         totalPrice: room.price,
-        checkInDate: room.checkInTime,
-        checkOutDate: room.checkOutTime,
-        peopleCount: room.maxPeopleCount,
-        petCount: room.maxPetCount,
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+        peopleCount: peopleCount,
+        petCount: petCount,
       },
     });
   };

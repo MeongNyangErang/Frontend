@@ -21,24 +21,32 @@ interface Reservation {
 }
 
 const Reservation = () => {
-  const { state } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!state) {
+    if (!location) {
       console.log('정보가 없습니다.');
     }
-  }, [state]);
+  }, [location]);
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
   const {
-    accommodationName,
     roomId,
-    checkInDate,
-    checkOutDate,
-    peopleCount,
-    petCount,
-    totalPrice,
-  } = state || {};
+    accommodationName,
+    totalPrice = 100000,
+    checkInDate = formatDate(today),
+    checkOutDate = formatDate(tomorrow),
+    peopleCount = 1,
+    petCount = 1,
+  } = location.state || {};
 
   const [hasVehicle, setHasvehicle] = useState<string | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
@@ -48,6 +56,7 @@ const Reservation = () => {
 
   useEffect(() => {
     if (
+      !accommodationName ||
       !roomId ||
       !checkInDate ||
       !checkOutDate ||
@@ -59,6 +68,7 @@ const Reservation = () => {
     }
   }, [
     navigate,
+    accommodationName,
     roomId,
     checkInDate,
     checkOutDate,
@@ -112,6 +122,7 @@ const Reservation = () => {
     const sanitizedTotalPrice = totalPrice ?? 0;
 
     const reservationData = {
+      accommodationName,
       roomId,
       checkInDate,
       checkOutDate,
@@ -138,7 +149,7 @@ const Reservation = () => {
       );
       setRoomDetails(response);
       alert('예약이 완료되었습니다!');
-      navigate('/reservation');
+      navigate('/mypage/user/reservation-list');
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
       alert('예약 처리 중 오류가 발생했습니다.');
@@ -191,14 +202,14 @@ const Reservation = () => {
       <SLabel>주차 여부</SLabel>
       <ButtonContainer>
         <CheckInput
-          selected={hasVehicle === 'O'}
-          onClick={() => handleClick('O')}
+          selected={hasVehicle === 'true'}
+          onClick={() => handleClick('true')}
         >
           O
         </CheckInput>
         <CheckInput
-          selected={hasVehicle === 'X'}
-          onClick={() => handleClick('X')}
+          selected={hasVehicle === 'false'}
+          onClick={() => handleClick('false')}
         >
           X
         </CheckInput>
