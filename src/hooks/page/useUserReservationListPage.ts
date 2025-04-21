@@ -83,7 +83,6 @@ const useUserReservationListPage = () => {
   );
 
   const onClickChatButton = useCallback(async (accommodationId: number) => {
-    console.log(accommodationId, 'accommodationId');
     startChatLoading();
     try {
       const { chatRoomId } = await createChatRoom(accommodationId);
