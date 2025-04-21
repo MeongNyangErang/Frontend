@@ -1,18 +1,23 @@
-import MessageBox from '@components/common/MessageBox';
+import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@components/common/Loader';
-import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
+import MessageBox from '@components/common/MessageBox';
 import RecommendationSlider from '../RecommendationSlider';
 import { SSectionTitle, SSectionContainer } from '../styles';
 
-const UserRecommendations = () => {
-  const { data, isLoading, error } = useUserPetRecommendations();
+const PetType = ['소형견', '중형견', '대형견', '고양이'] as const;
+
+const GuestRecommendations = () => {
+  const { data, isLoading, error } = useGuestRecommendations();
+
   console.log(data, 'data');
+
   return (
     <>
-      {data?.map(({ petId, petName, recommedations }) => {
+      {PetType.map((type) => {
+        const content = data![type] || [];
         return (
           <>
-            <SSectionTitle>{petName}을 위한 추천 숙소</SSectionTitle>
+            <SSectionTitle>{type} 추천 숙소</SSectionTitle>
             {error && (
               <MessageBox variant="light">
                 데이터를 불러오지 못했습니다.
@@ -23,9 +28,7 @@ const UserRecommendations = () => {
                 <Loader size={10} color="grayBorder" loading />
               </SSectionContainer>
             )}
-            {recommedations && (
-              <RecommendationSlider recommendations={recommedations} />
-            )}
+            {content && <RecommendationSlider recommendations={content} />}
           </>
         );
       })}
@@ -33,4 +36,4 @@ const UserRecommendations = () => {
   );
 };
 
-export default UserRecommendations;
+export default GuestRecommendations;
