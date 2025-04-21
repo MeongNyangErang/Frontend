@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
@@ -62,8 +62,8 @@ const DetailAccommodation = () => {
     member: { data },
   } = useAuth();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const accommodationId = parseInt(pathname.split('/').splice(-1)[0]);
+  const location = useLocation();
+  const accommodationId = parseInt(location.pathname.split('/').splice(-1)[0]);
 
   const publicHolidays = ['2025-01-01', '2025-12-25'];
 
@@ -83,6 +83,8 @@ const DetailAccommodation = () => {
     const isHolidayDay = isHoliday(today);
 
     let finalPrice = room.price;
+  };
+
   const state = location.state as
     | {
         checkInDate: string;
@@ -92,13 +94,10 @@ const DetailAccommodation = () => {
       }
     | undefined;
 
-
   const checkInDate = state?.checkInDate;
   const checkOutDate = state?.checkOutDate;
   const peopleCount = state?.peopleCount;
   const petCount = state?.petCount;
-
-  const accommodationId = pathname.split('/').splice(-1);
 
   const handleClickChatButton = async () => {
     if (data === null) {
