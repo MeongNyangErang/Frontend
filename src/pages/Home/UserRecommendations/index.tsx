@@ -7,11 +7,12 @@ import { SSectionTitle, SSectionContainer } from '../styles';
 
 const UserRecommendations = () => {
   const { data, isLoading, error } = useUserPetRecommendations();
-  console.log(data, 'data');
+
   return (
     <>
       {data?.map(({ petId, petName, recommedations }) => {
         console.log(recommedations, 'recommendations');
+        console.log(data, 'data');
         return (
           <Fragment key={petId}>
             <SSectionTitle>{petName}을 위한 추천 숙소</SSectionTitle>
