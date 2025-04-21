@@ -53,7 +53,7 @@ const NotificationSender = () => {
   useEffect(() => {
     const token = getLocalStorage('accessToken');
     const client = new Client({
-      brokerURL: 'wss://meongnyangerang.shop/',
+      brokerURL: 'wss://meongnyangerang.shop/ws',
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
