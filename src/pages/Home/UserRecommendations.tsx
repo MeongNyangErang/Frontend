@@ -2,6 +2,7 @@ import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 import titleIcon from '@assets/icons/recommendationIcon.png';
+import { addParticle } from '@utils/formatter';
 import RecommendationSlider from './RecommendationSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from './styles';
 
@@ -14,7 +15,7 @@ const UserRecommendations = () => {
         return (
           <SSectionContainer key={petId}>
             <SSectionTitle>
-              <span>{petName}</span>을 위한 추천 숙소
+              <span>{addParticle(petName)}</span>을 위한 추천 숙소
               <i>
                 <img src={titleIcon} alt="아이콘" />
               </i>
