@@ -24,13 +24,22 @@ const SSearchBarContainer = styled.div`
   }
 `;
 
-const SSectionTitle = styled.h2``;
+const SSectionTitle = styled.h2`
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray700};
+  letter-spacing: -1px;
+`;
 
 const SSectionContainer = styled.div``;
+
+const SSectionBox = styled.div``;
 
 export {
   SSearchBarArea,
   SSearchBarContainer,
   SSectionTitle,
   SSectionContainer,
+  SSectionBox,
 };

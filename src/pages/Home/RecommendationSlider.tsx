@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
 import styled from 'styled-components';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
@@ -37,9 +38,16 @@ const RecommendationSlider = ({
                 <img src={thumbnailUrl} alt={name} />
               </SImageArea>
               <SDescArea>
-                <div>{name}</div>
+                <div>
+                  <div>{name}</div>
+                  <span>
+                    <FaStar />
+                    {totalRating}
+                  </span>
+                </div>
                 <p>
-                  {price.toLocaleString()}원~ / <span>1박박</span>
+                  <span>1박 / </span>
+                  {price.toLocaleString()}원~
                 </p>
               </SDescArea>
             </SItemLink>
@@ -52,7 +60,13 @@ const RecommendationSlider = ({
 
 export default RecommendationSlider;
 
-const SItemLink = styled(Link)``;
+const SItemLink = styled(Link)`
+  &:hover {
+    img {
+      transform: scale(1.05);
+    }
+  }
+`;
 
 const SImageArea = styled.div`
   overflow: hidden;
@@ -63,10 +77,6 @@ const SImageArea = styled.div`
     height: 160px;
     object-fit: cover;
     transition: ${({ theme }) => theme.transition};
-
-    :hover & {
-      transform: scale(1.05);
-    }
   }
 `;
 
@@ -76,12 +86,38 @@ const SDescArea = styled.div`
   border-radius: 0 0 8px 8px;
   background-color: #fff;
   box-shadow: ${({ theme }) => theme.shadow.card};
+  border: ${({ theme }) => `1px solid ${theme.colors.gray300}`};
+  border-top: none;
 
   > div {
-    ${oneLineStyle}
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: ${({ theme }) => theme.colors.gray700};
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    > div {
+      ${oneLineStyle}
+      flex: 1;
+      margin-bottom: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      color: ${({ theme }) => theme.colors.gray700};
+    }
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px 8px;
+      font-size: 12px;
+      color: ${({ theme }) => theme.colors.gray600};
+      background-color: ${({ theme }) => theme.colors.gray200};
+      border-radius: 4px;
+
+      svg {
+        font-size: 18px;
+        color: ${({ theme }) => theme.colors.starYellow};
+      }
+    }
   }
 
   > p {
