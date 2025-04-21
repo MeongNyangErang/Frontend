@@ -8,7 +8,7 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { GoX } from 'react-icons/go';
 
-export type NotificationType =
+type NotificationType =
   | 'MESSAGE'
   | 'RESERVATION_CONFIRMED'
   | 'RESERVATION_REMINDER'
@@ -20,6 +20,13 @@ interface Notification {
   notificationType: NotificationType;
   createdAt: string;
 }
+
+const notificationTypeMap: Record<NotificationType, string> = {
+  MESSAGE: '메시지',
+  RESERVATION_CONFIRMED: '예약 확정',
+  RESERVATION_REMINDER: '예약 알림',
+  REVIEW: '리뷰',
+};
 
 interface NotificationResponse {
   content: Notification[];
@@ -59,7 +66,12 @@ const NotificationSender = () => {
           break;
         }
       }
-      setNotifications(allNotifications.reverse());
+      setNotifications(
+        allNotifications.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
+      );
       setPage(currentPage - 1);
       setLastPage(true);
     } catch (error) {
@@ -94,12 +106,6 @@ const NotificationSender = () => {
       onDisconnect: () => {
         console.log('WebSocket 연결 종료');
       },
-
-      /*
-      debug: (error: any) => {
-        console.log(error);
-      },
-      */
     });
 
     client.activate();
@@ -113,21 +119,14 @@ const NotificationSender = () => {
 
   // 삭제
   const deleteNotification = async (notificationId: number) => {
-    try {
-      const response = (await fetchCall(
-        `/notifications/${notificationId}`,
-        'delete',
-      )) as any;
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter(
+        (notification) => notification.notificationId !== notificationId,
+      ),
+    );
 
-      if (response?.status === 200) {
-        setNotifications((prevNotifications) =>
-          prevNotifications.filter(
-            (notification) => notification.notificationId !== notificationId,
-          ),
-        );
-      } else {
-        console.error('알림 삭제에 실패했습니다:', response);
-      }
+    try {
+      await fetchCall(`/notifications/${notificationId}`, 'delete');
     } catch (error) {
       console.error('알림 삭제 중 오류 발생:', error);
     }
@@ -148,7 +147,9 @@ const NotificationSender = () => {
             notifications.map((notification) => (
               <NotificationItem key={notification.notificationId}>
                 <All>
-                  <Sender>{notification.notificationType}</Sender>
+                  <Sender>
+                    {notificationTypeMap[notification.notificationType]}
+                  </Sender>
                   <DeleteButton
                     onClick={() =>
                       deleteNotification(notification.notificationId)
