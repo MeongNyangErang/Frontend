@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
@@ -10,8 +11,9 @@ const UserRecommendations = () => {
   return (
     <>
       {data?.map(({ petId, petName, recommedations }) => {
+        console.log(recommedations, 'recommendations');
         return (
-          <>
+          <Fragment key={petId}>
             <SSectionTitle>{petName}을 위한 추천 숙소</SSectionTitle>
             {error && (
               <MessageBox variant="light">
@@ -26,7 +28,7 @@ const UserRecommendations = () => {
             {recommedations && (
               <RecommendationSlider recommendations={recommedations} />
             )}
-          </>
+          </Fragment>
         );
       })}
     </>
