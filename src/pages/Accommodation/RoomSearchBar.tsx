@@ -7,12 +7,28 @@ import { formatDate, stringToDate } from '@utils/date';
 import { usePopper } from 'react-popper';
 import styled from 'styled-components';
 
-const SearchBar = () => {
+type SearchBarProps = {
+  checkInDate?: string;
+  checkOutDate?: string;
+  peopleCount?: number;
+  petCount?: number;
+};
+
+const SearchBar = ({
+  checkInDate: initCheckInDate,
+  checkOutDate: initCheckOutDate,
+  peopleCount: initPeopleCount = 1,
+  petCount: initPetCount = 1,
+}: SearchBarProps) => {
   const [location, setLocation] = useState('');
-  const [checkInDate, setCheckInDate] = useState<Date | null>(null);
-  const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
-  const [peopleCount, setPeopleCount] = useState(1);
-  const [petCount, setPetCount] = useState(1);
+  const [checkInDate, setCheckInDate] = useState<Date | null>(
+    initCheckInDate ? new Date(initCheckInDate) : null,
+  );
+  const [checkOutDate, setCheckOutDate] = useState<Date | null>(
+    initCheckOutDate ? new Date(initCheckOutDate) : null,
+  );
+  const [peopleCount, setPeopleCount] = useState(initPeopleCount);
+  const [petCount, setPetCount] = useState(initPetCount);
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [peopleDropdownOpen, setPeopleDropdownOpen] = useState(false);
   const peopleDropdownRef = useRef<HTMLDivElement | null>(null);

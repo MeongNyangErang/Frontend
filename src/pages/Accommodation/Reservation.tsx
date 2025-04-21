@@ -48,6 +48,17 @@ const Reservation = () => {
     petCount = 1,
   } = location.state || {};
 
+  const calculateStayDuration = (checkInDate: string, checkOutDate: string) => {
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const difference =
+      (checkOut.getTime() - checkIn.getTime()) / (1000 * 3600 * 24);
+    return difference;
+  };
+
+  const stayDuration = calculateStayDuration(checkInDate, checkOutDate);
+  const adjustedTotalPrice = totalPrice * stayDuration;
+
   const [hasVehicle, setHasvehicle] = useState<string | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
   const [reserverName, setReserverName] = useState('');
@@ -119,7 +130,7 @@ const Reservation = () => {
       return;
     }
 
-    const sanitizedTotalPrice = totalPrice ?? 0;
+    const sanitizedTotalPrice = adjustedTotalPrice;
 
     const reservationData = {
       accommodationName,
@@ -220,7 +231,7 @@ const Reservation = () => {
         <HalfPay>
           <STotal>총 결제 금액</STotal>
         </HalfPay>
-        <SAmountText>{totalPrice}원</SAmountText>
+        <SAmountText>{adjustedTotalPrice}원</SAmountText>
       </Wrappers>
       <SButton onClick={handlePayment}>예약하기</SButton>
     </SFieldset>
