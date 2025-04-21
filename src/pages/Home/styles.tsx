@@ -26,11 +26,22 @@ const SSearchBarContainer = styled.div`
 `;
 
 const SSectionTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 12px;
   font-size: 18px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray700};
   letter-spacing: -1px;
+
+  > i {
+    width: 16px;
+  }
+
+  > span {
+    color: ${({ theme }) => theme.colors.infoText};
+  }
 `;
 
 const SSectionContainer = styled.div`
