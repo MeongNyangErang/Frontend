@@ -28,3 +28,7 @@ export const getPreviousChatMessages = async (
 export const sendChatImage = async (formData: FormData) => {
   return await fetchCall(`chats/send/image`, 'post', formData);
 };
+
+export const sendChatNotification = async (formData: FormData) => {
+  return await fetchCall(`notifications/messages`, 'post', formData);
+};

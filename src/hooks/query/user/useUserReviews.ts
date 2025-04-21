@@ -1,12 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserReviews } from '@services/review';
 
-const useUserReviews = (cursor: number | undefined) => {
+const useUserReviews = (page: number) => {
   const queryClient = useQueryClient();
 
   const result = useQuery({
-    queryKey: ['user-reviews', cursor],
-    queryFn: () => getUserReviews(cursor),
+    queryKey: ['user-reviews', page],
+    queryFn: () => getUserReviews(page),
     staleTime: 1000 * 60 * 60,
   });
 
