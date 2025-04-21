@@ -32,9 +32,15 @@ const SSectionTitle = styled.h2`
   letter-spacing: -1px;
 `;
 
-const SSectionContainer = styled.div``;
+const SSectionContainer = styled.div`
+  margin-bottom: 36px;
+`;
 
-const SSectionBox = styled.div``;
+const SSectionBox = styled.div`
+  display: flex;
+  align-items: center;
+  height: 233px;
+`;
 
 export {
   SSearchBarArea,

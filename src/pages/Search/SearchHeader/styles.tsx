@@ -6,6 +6,7 @@ const SHeaderWrap = styled.div`
   top: ${({ theme }) => theme.layouts.headerHeight};
   z-index: 1000;
   border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+  background-color: #fff;
 `;
 
 const SHeaderContainer = styled.div`

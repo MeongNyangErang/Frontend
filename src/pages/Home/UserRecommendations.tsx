@@ -1,9 +1,8 @@
-import { Fragment } from 'react';
 import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
-import RecommendationSlider from '../RecommendationSlider';
-import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
+import RecommendationSlider from './RecommendationSlider';
+import { SSectionTitle, SSectionContainer, SSectionBox } from './styles';
 
 const UserRecommendations = () => {
   const { data, isLoading, error } = useUserPetRecommendations();
@@ -15,9 +14,11 @@ const UserRecommendations = () => {
           <SSectionContainer key={petId}>
             <SSectionTitle>{petName}을 위한 추천 숙소</SSectionTitle>
             {error && (
-              <MessageBox variant="light">
-                데이터를 불러오지 못했습니다.
-              </MessageBox>
+              <SSectionBox>
+                <MessageBox variant="light">
+                  데이터를 불러오지 못했습니다.
+                </MessageBox>
+              </SSectionBox>
             )}
             {isLoading && (
               <SSectionBox>
