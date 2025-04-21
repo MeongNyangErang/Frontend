@@ -44,14 +44,17 @@ const SSectionTitle = styled.h2`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 64px;
+    margin-left: 6px;
     width: 19px;
     color: ${({ theme }) => theme.colors.gray600};
   }
 
   > span {
     margin-right: 6px;
-    color: ${({ theme }) => theme.colors.main};
+
+    strong {
+      color: ${({ theme }) => theme.colors.main};
+    }
   }
 `;
 
