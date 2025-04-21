@@ -25,7 +25,6 @@ export const logoutHost = async () => {
 };
 
 export const getUserProfile = async () => {
-  console.log('im working');
   return await fetchCall<UserProfile>('users/me', 'get');
 };
 

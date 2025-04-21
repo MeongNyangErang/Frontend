@@ -10,8 +10,6 @@ const PetType = ['소형견', '중형견', '대형견', '고양이'] as const;
 const GuestRecommendations = () => {
   const { data, isLoading, error } = useGuestRecommendations();
 
-  console.log(data, 'data');
-
   return (
     <>
       {PetType.map((type) => {
