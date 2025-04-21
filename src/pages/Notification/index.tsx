@@ -35,18 +35,19 @@ const NotificationSender = () => {
   const token = getLocalStorage('accessToken');
 
   // 목록
+  /*
   const fetchNotifications = async (page: number) => {
     try {
       (await fetchCall(
         `notifications?page=${page}&size=20`,
         'get',
       )) as NotificationResponse;
-
       setNotifications(response.content);
     } catch (error) {
       console.error('알림을 가져오는 중 오류 발생:', error);
     }
   };
+  */
 
   // 구독
   useEffect(() => {
