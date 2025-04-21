@@ -13,8 +13,14 @@ const SearchHeader = ({ currentQuery, onOpenFilter }: SearchHeaderProps) => {
   return (
     <SHeaderWrap>
       <SHeaderContainer>
-        <SearchBar currentQuery={currentQuery} />
-        <SearchControls onOpenFilter={onOpenFilter} />
+        <div>
+          <SearchBar currentQuery={currentQuery} />
+        </div>
+      </SHeaderContainer>
+      <SHeaderContainer>
+        <div>
+          <SearchControls onOpenFilter={onOpenFilter} />
+        </div>
       </SHeaderContainer>
     </SHeaderWrap>
   );

@@ -6,9 +6,11 @@ export const postNewReview = async (review: FormData) => {
   return await fetchCall(`users/reviews`, 'post', review);
 };
 
-export const getUserReviews = async (cursor?: number) => {
-  const url = cursor ? `users/reviews?cursor=${cursor}` : 'users/reviews';
-  return await fetchCall<UserReviewsResponse>(url, 'get');
+export const getUserReviews = async (page: number) => {
+  return await fetchCall<UserReviewsResponse>(
+    `users/reviews?page=${page}`,
+    'get',
+  );
 };
 
 export const deleteReview = async (reviewId: string) => {

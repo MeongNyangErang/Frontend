@@ -4,28 +4,28 @@ import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { UserReview } from '@typings/review';
 
 const useUserReviewsPage = () => {
-  const [currentCursor, setCurrentCursor] = useState<undefined | number>(
-    undefined,
-  );
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [reviewToEdit, setReviewToEdit] = useState<null | UserReview>(null);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<null | string>(null);
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
-    data: { content, cursor, hasNext } = {},
+    data: { content, last } = {},
     isLoading,
     error,
     refreshUserReviews,
-  } = useUserReviews(currentCursor);
+  } = useUserReviews(currentPage);
 
   const updateCurrentCursor = useCallback(() => {
-    setCurrentCursor(cursor);
-  }, [cursor]);
+    if (last) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  }, [last]);
 
   const observeTargetRef = useInfiniteScroll(
     updateCurrentCursor,
-    !isLoading && !!hasNext && isFirstLoaded,
+    !isLoading && !last && isFirstLoaded,
   );
 
   const handleClickDeleteButton = (reviewId: string) => {
@@ -47,7 +47,7 @@ const useUserReviewsPage = () => {
   const handleSuccessReviewChange = () => {
     refreshUserReviews();
     setReviews([]);
-    setCurrentCursor(undefined);
+    setCurrentPage(0);
   };
 
   const onSuccessDeleteReview = useCallback(() => {

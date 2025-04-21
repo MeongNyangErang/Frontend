@@ -11,6 +11,7 @@ import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
 import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
+import { AxiosError } from 'axios';
 
 interface DetailData {
   accommodationId: number;
@@ -61,8 +62,27 @@ const DetailAccommodation = () => {
     member: { data },
   } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { pathname } = location;
+  const { pathname } = useLocation();
+  const accommodationId = parseInt(pathname.split('/').splice(-1)[0]);
+
+  const publicHolidays = ['2025-01-01', '2025-12-25'];
+
+  const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  const isHoliday = (date: Date) => {
+    const dateString = date.toISOString().split('T')[0];
+    return publicHolidays.includes(dateString);
+  };
+
+  const getRoomPrice = (room: RoomData) => {
+    const today = new Date();
+    const isWeekendDay = isWeekend(today);
+    const isHolidayDay = isHoliday(today);
+
+    let finalPrice = room.price;
   const state = location.state as
     | {
         checkInDate: string;
@@ -71,6 +91,7 @@ const DetailAccommodation = () => {
         petCount: number;
       }
     | undefined;
+
 
   const checkInDate = state?.checkInDate;
   const checkOutDate = state?.checkOutDate;
@@ -91,10 +112,15 @@ const DetailAccommodation = () => {
     }
 
     try {
-      await createChatRoom(Number(accommodationId));
-      navigate(ROUTES.chat.list);
+      const { chatRoomId } = await createChatRoom(accommodationId);
+      navigate(ROUTES.chat.room(chatRoomId));
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        alert(error.message);
+        return;
+      }
+      alert('에러가 발생했습니다. 다시 시도해주세요.');
     }
   };
 

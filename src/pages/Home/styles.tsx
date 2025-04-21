@@ -5,29 +5,22 @@ const SSearchBarArea = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => `40px ${theme.layouts.paddingX}`};
-
-  ${media.tablet} {
-    padding: ${({ theme }) => `52px ${theme.layouts.paddingX}`};
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: ${({ theme }) => theme.colors.gray100};
-  }
+  align-items: flex-end;
+  padding: ${({ theme }) => `30px ${theme.layouts.paddingX}`};
 `;
 
 const SSearchBarContainer = styled.div`
   max-width: ${({ theme }) => theme.layouts.innerWidth};
   width: 100%;
-  > p {
-    font-size: 18px;
+
+  ${media.tablet} {
+    > div {
+      position: relative;
+      z-index: 1;
+      padding: 20px 16px;
+      background-color: ${({ theme }) => theme.colors.gray100};
+      border-radius: 8px;
+    }
   }
 `;
 
