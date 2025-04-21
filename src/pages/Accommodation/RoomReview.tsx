@@ -7,12 +7,13 @@ import { FaStar } from 'react-icons/fa';
 import { fetchCall } from '@services/api';
 
 interface RoomReview {
+  reviewId: number;
   nickname: String;
   profileImageUrl: string;
   roomName: string;
   totalRating: number;
   content: string;
-  reviewImageUrl: string[];
+  reviewImages: string[];
   createdAt: string;
 }
 
@@ -49,7 +50,7 @@ const RoomReview = () => {
       </Title>
       {roomReview ? (
         roomReview.map((r) => (
-          <Fragment key={r.createdAt}>
+          <Fragment key={r.reviewId}>
             <Body>
               <Header>
                 <ProfileImage src={r.profileImageUrl} alt={`프로필 이미지`} />
@@ -68,9 +69,9 @@ const RoomReview = () => {
                   starSpacing="1px"
                 />
               </Rating>
-              {r.reviewImageUrl && r.reviewImageUrl.length > 0 && (
+              {r.reviewImages && r.reviewImages.length > 0 && (
                 <ReviewImageContainer>
-                  {r.reviewImageUrl.slice(0, 3).map((imageUrl, index) => (
+                  {r.reviewImages.slice(0, 3).map((imageUrl, index) => (
                     <ReviewImage
                       key={index}
                       src={imageUrl}

@@ -10,6 +10,7 @@ interface ButtonProps {
 
 interface Reservation {
   roomId: number;
+  accommodationName: string;
   checkInDate: string;
   checkOutDate: string;
   peopleCount: number;
@@ -231,7 +232,7 @@ const Reservation = () => {
         <HalfPay>
           <STotal>총 결제 금액</STotal>
         </HalfPay>
-        <SAmountText>{adjustedTotalPrice}원</SAmountText>
+        <SAmountText>{adjustedTotalPrice.toLocaleString()}원</SAmountText>
       </Wrappers>
       <SButton onClick={handlePayment}>예약하기</SButton>
     </SFieldset>
