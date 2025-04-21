@@ -44,6 +44,8 @@ const ReservationItem = ({
     accommodationId,
   } = reservation;
 
+  console.log(reservation, 'reservation');
+
   return (
     <SReservation>
       <SReservationHeader>
