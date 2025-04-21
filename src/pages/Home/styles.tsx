@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 import { media } from '@components/styles/responsive';
+import { SectionLayout } from '@components/layouts/SectionLayout';
+
+const SRecommendationArea = styled(SectionLayout)`
+  padding-bottom: 60px;
+`;
 
 const SSearchBarArea = styled.div`
   position: relative;
@@ -36,6 +41,9 @@ const SSectionTitle = styled.h2`
   letter-spacing: -1px;
 
   > i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: 4px;
     width: 18px;
     color: ${({ theme }) => theme.colors.gray600};
@@ -57,6 +65,7 @@ const SSectionBox = styled.div`
 `;
 
 export {
+  SRecommendationArea,
   SSearchBarArea,
   SSearchBarContainer,
   SSectionTitle,
