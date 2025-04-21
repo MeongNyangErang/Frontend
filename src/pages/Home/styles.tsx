@@ -24,4 +24,13 @@ const SSearchBarContainer = styled.div`
   }
 `;
 
-export { SSearchBarArea, SSearchBarContainer };
+const SSectionTitle = styled.h2``;
+
+const SSectionContainer = styled.div``;
+
+export {
+  SSearchBarArea,
+  SSearchBarContainer,
+  SSectionTitle,
+  SSectionContainer,
+};

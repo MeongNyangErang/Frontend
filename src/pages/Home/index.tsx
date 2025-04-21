@@ -4,17 +4,16 @@ import NonMemberRecommend from '@pages/Home/RecommendNonMember/index';
 import MemberLastview from '@pages/Home/RecommendMember/LastView';
 import MemberMostView from '@pages/Home/RecommendMember/MostView';
 import MemberView from '@pages/Home/RecommendMember/index';
+import UserRecommendations from './UserRecommendations';
+import GuestRecommendations from './GuestRecommendations';
 import { SSearchBarArea, SSearchBarContainer } from './styles';
-import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 
 import useAuth from '@hooks/auth/useAuth';
 const Home = () => {
-  // const {
-  //   member: { data },
-  // } = useAuth();
-  // const isLoggedIn = !!data;
-  const { data } = useUserPetRecommendations();
-  console.log(data, 'data');
+  const {
+    member: { data },
+  } = useAuth();
+  const isUser = data?.role === 'USER';
 
   return (
     <>
@@ -25,7 +24,9 @@ const Home = () => {
           </div>
         </SSearchBarContainer>
       </SSearchBarArea>
-      <SectionLayout>e</SectionLayout>
+      <SectionLayout>
+        {isUser ? <UserRecommendations /> : <GuestRecommendations />}
+      </SectionLayout>
     </>
   );
 };
