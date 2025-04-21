@@ -53,7 +53,7 @@ const addParticle = (word: string) => {
   if (code < HANGUL_BASE || code > HANGUL_END) {
     return (
       <span>
-        <strong>${word}</strong>를
+        <strong>{word}</strong>를
       </span>
     );
   }
@@ -61,11 +61,11 @@ const addParticle = (word: string) => {
   const hasFinalConsonant = (code - HANGUL_BASE) % 28 !== 0;
   return hasFinalConsonant ? (
     <span>
-      <strong>${word}</strong>이를
+      <strong>{word}</strong>이를
     </span>
   ) : (
     <span>
-      <strong>${word}</strong>를
+      <strong>{word}</strong>를
     </span>
   );
 };
