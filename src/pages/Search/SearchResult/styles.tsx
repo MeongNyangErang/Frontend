@@ -203,6 +203,7 @@ const SWishButton = styled.button<{ $isActive: boolean }>`
   justify-content: center;
   width: 32px;
   height: 32px;
+  box-shadow: ${({ theme }) => theme.shadow.bottom};
 
   &::after {
     content: '';
@@ -221,7 +222,7 @@ const SWishButton = styled.button<{ $isActive: boolean }>`
     z-index: 3;
     font-size: 18px;
     color: ${({ $isActive, theme }) =>
-      $isActive ? theme.colors.main : theme.colors.gray500};
+      $isActive ? theme.colors.main : theme.colors.gray600};
   }
 `;
 
