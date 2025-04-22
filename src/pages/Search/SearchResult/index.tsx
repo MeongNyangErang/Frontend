@@ -43,7 +43,6 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     data: { last, content, page = 0 } = {},
     isLoading,
     error,
-    refreshSearchAccommodations,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
   const { member } = useAuth();
   const {
@@ -69,12 +68,13 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
       );
       const updated = {
         ...prev[targetIndex],
-        isWishlisted: !prev[targetIndex].isWishlisted,
+        isWishlisted: !prev[targetIndex].wishlisted,
       };
-      return prev.map((v, i) => {
+      const updatedResult = prev.map((v, i) => {
         if (i === targetIndex) return updated;
         return v;
       });
+      return updatedResult;
     });
   };
 
@@ -96,7 +96,6 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
         ? await addToWishlist(accommodationId)
         : await deleteFromWishlist(accommodationId);
       handleSuccessAddWish(accommodationId);
-      refreshSearchAccommodations();
     } catch (error) {
       console.log(error);
     }
@@ -133,7 +132,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                 price,
                 standardPetCount,
                 standardPeopleCount,
-                isWishlisted,
+                wishlisted,
               }) => {
                 return (
                   <SItem
@@ -148,9 +147,9 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                   >
                     <SWishButton
                       onClick={(e) => {
-                        handleClickWishButton(e, accommodationId, isWishlisted);
+                        handleClickWishButton(e, accommodationId, wishlisted);
                       }}
-                      $isActive={isWishlisted}
+                      $isActive={wishlisted}
                     >
                       <FaHeart />
                     </SWishButton>
