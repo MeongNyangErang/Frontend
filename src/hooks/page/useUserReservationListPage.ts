@@ -16,9 +16,7 @@ const useUserReservationListPage = () => {
   const [reservationList, setReservationList] = useState<UserReservationItem[]>(
     [],
   );
-  const [currentCursor, setCurrentCursor] = useState<number | undefined>(
-    undefined,
-  );
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [reservationToReview, setReservationToReview] =
     useState<null | UserReservationItem>(null);
   const [reservationToCancel, setReservationToCancel] = useState<null | string>(
@@ -27,11 +25,11 @@ const useUserReservationListPage = () => {
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
-    data: { cursor, content: reservationItems, hasNext = false } = {},
+    data: { page, content: reservationItems, last } = {},
     error,
     isLoading,
     refreshReservationList,
-  } = useUserReservationList(currentTab, currentCursor);
+  } = useUserReservationList(currentTab, currentPage);
 
   const {
     isLoading: chatLoading,
@@ -46,20 +44,20 @@ const useUserReservationListPage = () => {
   } = useError();
 
   const updateCurrentCursor = useCallback(() => {
-    if (!cursor) return;
-    setCurrentCursor(cursor);
-  }, [cursor, currentTab]);
+    if (last) return;
+    setCurrentPage((prev) => prev + 1);
+  }, [page, currentTab, last]);
 
   const infiniteScrolltargetRef = useInfiniteScroll(
     updateCurrentCursor,
-    !isLoading && hasNext && isFirstLoaded,
+    !isLoading && !last && isFirstLoaded,
   );
 
   const navigate = useNavigate();
 
   const refreshPage = () => {
     setReservationList([]);
-    setCurrentCursor(undefined);
+    setCurrentPage(0);
   };
 
   const handleSwitchTab = (tab: ReservationStatus) => {
@@ -116,6 +114,10 @@ const useUserReservationListPage = () => {
     refreshPage();
     onCloseCancelModal();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [currentTab]);
 
   useEffect(() => {
     if (reservationItems) {
