@@ -187,7 +187,7 @@ const DetailAccommodation = () => {
                 <Text>{accommodation.totalRating}</Text>
               </AccommodationName>
               <Title>{accommodation.type}</Title>
-              {accommodation.allowedPets.map((v) => (
+              {accommodation?.allowedPets?.map((v) => (
                 <Title key={v}>{v}</Title>
               ))}
             </AccommodationNameBox>
