@@ -56,7 +56,9 @@ const useUserReservationListPage = () => {
   const navigate = useNavigate();
 
   const refreshPage = () => {
+    console.log('refreshPage', currentPage, currentTab);
     if (currentPage === 0) return;
+    setReservationList([]);
     setCurrentPage(0);
   };
 
@@ -122,6 +124,7 @@ const useUserReservationListPage = () => {
   useEffect(() => {
     if (!reservationItems) return;
     if (page === 0) {
+      console.log(page, 'reservationItemsPage', currentTab);
       setReservationList([...reservationItems]);
     } else {
       setReservationList((prev) => [...prev, ...reservationItems]);
