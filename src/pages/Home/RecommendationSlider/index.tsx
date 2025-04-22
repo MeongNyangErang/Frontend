@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -126,4 +126,4 @@ const RecommendationSlider = ({
   );
 };
 
-export default RecommendationSlider;
+export default memo(RecommendationSlider);

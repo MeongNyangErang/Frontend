@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { getMoreGuestRecommendations } from '@services/recommendations';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import useIsLoading from '@hooks/ui/useIsLoading';
@@ -71,4 +71,4 @@ const GuestRecommendationsSection = ({
   );
 };
 
-export default GuestRecommendationsSection;
+export default memo(GuestRecommendationsSection);

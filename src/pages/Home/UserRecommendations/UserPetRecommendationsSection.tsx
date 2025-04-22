@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { getMoreUserRecommendations } from '@services/recommendations';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import useIsLoading from '@hooks/ui/useIsLoading';
@@ -69,4 +69,4 @@ const UserPetRecommendationSection = ({
   );
 };
 
-export default UserPetRecommendationSection;
+export default memo(UserPetRecommendationSection);

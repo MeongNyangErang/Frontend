@@ -370,6 +370,7 @@ export default DetailAccommodation;
 
 const AccommodationDetailWrap = styled.div`
   position: relative;
+  padding-bottom: 60px;
 `;
 
 const DetailTopArea = styled.div`
