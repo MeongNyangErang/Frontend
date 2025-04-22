@@ -25,10 +25,7 @@ interface Reservation {
 const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { refreshReservationList } = useUserReservationList(
-    'RESERVED',
-    undefined,
-  );
+  const { refreshReservationList } = useUserReservationList('RESERVED', 0);
 
   useEffect(() => {
     if (!location) {
