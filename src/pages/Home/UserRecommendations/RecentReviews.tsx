@@ -6,7 +6,8 @@ import ReviewSlider from './ReviewSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 
 const RecentReviews = () => {
-  const { data: { data } = {}, isLoading, error } = useRecentReviewList();
+  const { data, isLoading, error } = useRecentReviewList();
+  console.log(data, 'review data');
   return (
     <SSectionContainer>
       <SSectionTitle>최근 작성된 리뷰</SSectionTitle>
