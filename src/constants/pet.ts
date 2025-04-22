@@ -12,6 +12,13 @@ export const PET_TYPE_MAP = {
   CAT: '고양이',
 } as const;
 
+export const PET_TYPE_MAP_REVERSE = {
+  소형견: 'SMALL_DOG',
+  중형견: 'MEDIUM_DOG',
+  대형견: 'LARGE_DOG',
+  고양이: 'CAT',
+} as const;
+
 export const PET_PERONALITY_MAP = {
   EXTROVERT: '외향적',
   INTROVERT: '내향적',

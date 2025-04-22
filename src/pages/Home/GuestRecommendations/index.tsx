@@ -1,17 +1,17 @@
 import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
-import RecommendationSlider from './RecommendationSlider';
-import { SSectionTitle, SSectionContainer, SSectionBox } from './styles';
+import GuestRecommendationsSection from './GuestRecommendationsSection';
+import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 
-const PetType = ['소형견', '중형견', '대형견', '고양이'] as const;
+export const petType = ['소형견', '중형견', '대형견', '고양이'] as const;
 
 const GuestRecommendations = () => {
   const { data, isLoading, error } = useGuestRecommendations();
 
   return (
     <>
-      {PetType.map((type) => {
+      {petType.map((type) => {
         const content = data?.[type] || [];
         return (
           <SSectionContainer key={type}>
@@ -32,7 +32,12 @@ const GuestRecommendations = () => {
                 <Loader size={10} color="grayBorder" loading />
               </SSectionBox>
             )}
-            {<RecommendationSlider recommendations={content} />}
+            {!error && (
+              <GuestRecommendationsSection
+                petType={type}
+                initialRecommendations={content}
+              />
+            )}
           </SSectionContainer>
         );
       })}
