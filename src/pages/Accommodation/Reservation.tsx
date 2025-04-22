@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from 'services/api';
+import useUserReservationList from '@hooks/query/user/useUserReservationList';
 
 interface ButtonProps {
   selected: boolean;
@@ -24,6 +25,10 @@ interface Reservation {
 const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { refreshReservationList } = useUserReservationList(
+    'RESERVED',
+    undefined,
+  );
 
   useEffect(() => {
     if (!location) {
@@ -154,12 +159,8 @@ const Reservation = () => {
     formData.append('request', blob);
 
     try {
-      const response = await fetchCall(
-        '/users/reservations',
-        'post',
-        reservationData,
-      );
-      setRoomDetails(response);
+      await fetchCall('/users/reservations', 'post', reservationData);
+      refreshReservationList();
       alert('예약이 완료되었습니다!');
       navigate('/mypage/user/reservation-list');
     } catch (error) {

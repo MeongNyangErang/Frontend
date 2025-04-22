@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import { PreviousChatMessage, NewChatMessage } from '@typings/chat';
 import usePreviousChatMessages from '@hooks/query/usePreviousChatMessages';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
+import useAuth from '@hooks/auth/useAuth';
 import useChatList from '@hooks/query/useChatList';
 import { InfiniteData } from '@tanstack/react-query';
 import { PreviousChatMessagesResponse } from '@typings/response/chat';
@@ -13,6 +14,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const stompClientRef = useRef<ReturnType<typeof createStompClient> | null>(
     null,
   );
+  const { member } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
   const [pendingMessage, setPendingMessage] = useState<null | string>(null);
@@ -116,8 +118,8 @@ const useChatMessages = (chatRoomId: number | undefined) => {
 
   useEffect(() => {
     if (!pendingMessage) return;
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.messageContent === pendingMessage) {
+    const { messageContent, senderType } = messages[messages.length - 1];
+    if (messageContent === pendingMessage && senderType === member.data?.role) {
       pendingCallbackRef.current?.onSuccess?.();
       onSuccessSending(pendingMessage);
     } else {
