@@ -12,7 +12,7 @@ const useUserReservationList = (status: ReservationStatus, page: number) => {
         return (
           Array.isArray(queryKey) &&
           queryKey[0] === 'user-reservation-list' &&
-          queryKey[1] === 'reserved'
+          queryKey[1] === status
         );
       },
     });
