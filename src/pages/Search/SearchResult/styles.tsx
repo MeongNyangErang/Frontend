@@ -25,6 +25,7 @@ const SItems = styled.div`
 `;
 
 const SItem = styled(NavLink)`
+  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -192,6 +193,34 @@ const SItemsBottom = styled.div`
   height: 10px;
 `;
 
+const SWishButton = styled.button<{ $isActive: boolean }>`
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255);
+  }
+
+  > svg {
+    font-size: 18px;
+    color: ${({ $isActive, theme }) =>
+      $isActive ? theme.colors.main : theme.colors.gray300};
+  }
+`;
+
 export {
   SMessageArea,
   SItems,
@@ -206,4 +235,5 @@ export {
   SPrice,
   SCapacity,
   SItemsBottom,
+  SWishButton,
 };

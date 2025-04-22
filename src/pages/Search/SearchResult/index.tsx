@@ -1,6 +1,6 @@
 import { memo, useEffect, useCallback, useState } from 'react';
 import { FaUser, FaPaw } from 'react-icons/fa6';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaHeart } from 'react-icons/fa';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { SectionLayout } from '@components/layouts/SectionLayout';
@@ -25,6 +25,7 @@ import {
   SPrice,
   SCapacity,
   SItemsBottom,
+  SWishButton,
 } from './styles';
 
 interface SearchResultProps {
@@ -82,6 +83,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
               price,
               standardPetCount,
               standardPeopleCount,
+              isWishlisted,
             }) => {
               return (
                 <SItem
@@ -94,6 +96,9 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                     petCount: currentQuery.petCount,
                   }}
                 >
+                  <SWishButton $isActive={isWishlisted}>
+                    <FaHeart />
+                  </SWishButton>
                   <SImageArea>
                     <SItemTypeBadge $type={accommodationType}>
                       {ACCOMMODATION_TYPE_MAP[accommodationType]}

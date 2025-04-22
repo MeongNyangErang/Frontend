@@ -8,6 +8,10 @@ import SearchFilter from './SearchFilter';
 const Search = () => {
   const { searchParams, currentQuery, currentFilter } = useSearchPage();
   const { isModalOpen, openModal, closeModal } = useToggleModal();
+  const isFiltered = Object.entries(currentFilter).some(([k, v]) => {
+    if (Array.isArray(v)) return v.length > 0;
+    return v !== '';
+  });
 
   useEffect(() => {
     if (isModalOpen) closeModal();
@@ -15,7 +19,11 @@ const Search = () => {
 
   return (
     <>
-      <SearchHeader currentQuery={currentQuery} onOpenFilter={openModal} />
+      <SearchHeader
+        currentQuery={currentQuery}
+        isFiltered={isFiltered}
+        onOpenFilter={openModal}
+      />
       <SearchResult currentQuery={currentQuery} currentFilter={currentFilter} />
       <SearchFilter
         isOpen={isModalOpen}

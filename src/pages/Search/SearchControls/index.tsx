@@ -4,13 +4,17 @@ import sortIcon from '@assets/icons/sortIcon.png';
 import { SWrap, SFilterButton, SSortButton } from './styles';
 
 interface Props {
+  isFiltered: boolean;
   onOpenFilter(): void;
 }
 
-const SearchControls = ({ onOpenFilter }: Props) => {
+const SearchControls = ({ onOpenFilter, isFiltered }: Props) => {
   return (
     <SWrap>
-      <SFilterButton onClick={onOpenFilter}>
+      <SFilterButton
+        className={isFiltered ? 'is--active' : ''}
+        onClick={onOpenFilter}
+      >
         <img src={filterIcon} alt="필터" /> 필터
       </SFilterButton>
       <SSortButton onClick={() => {}}>

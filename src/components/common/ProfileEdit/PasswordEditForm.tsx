@@ -65,7 +65,7 @@ const PasswordEditForm = ({ onClose }: PasswordEditFormProps) => {
     return (
       <EditSuccessMessage
         onClose={onClose}
-        message="비밀번호가 변경되었었습니다."
+        message="비밀번호가 변경되었습니다."
       />
     );
   }
