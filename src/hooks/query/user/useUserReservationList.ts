@@ -16,6 +16,18 @@ const useUserReservationList = (status: ReservationStatus, page: number) => {
         );
       },
     });
+
+    await queryClient.refetchQueries({
+      predicate: (query) => {
+        const queryKey = query.queryKey;
+        return (
+          Array.isArray(queryKey) &&
+          queryKey[0] === 'user-reservation-list' &&
+          queryKey[1] === status &&
+          queryKey[2] === 0
+        );
+      },
+    });
   };
 
   const result = useQuery({
