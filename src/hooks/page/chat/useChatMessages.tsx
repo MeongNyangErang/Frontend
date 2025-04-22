@@ -106,13 +106,9 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     refreshChatList(chatRoomId);
 
     const data = { chatRoomId, content: message };
-    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    const formData = new FormData();
-
-    formData.append('request', blob);
 
     try {
-      await sendChatNotification(formData);
+      await sendChatNotification(data);
     } catch (error) {
       console.log(error);
     }
