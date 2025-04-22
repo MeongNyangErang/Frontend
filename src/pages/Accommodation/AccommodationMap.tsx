@@ -15,12 +15,12 @@ const AccommodationMap = ({ longitude, latitude }: AccommodationMapProps) => {
     script.onload = () => {
       window.kakao.maps.load(() => {
         const map = new window.kakao.maps.Map(document.getElementById('map'), {
-          center: new window.kakao.maps.LatLng(longitude, latitude),
+          center: new window.kakao.maps.LatLng(latitude, longitude),
           level: 3,
         });
 
         new window.kakao.maps.Marker({
-          position: new window.kakao.maps.LatLng(longitude, latitude),
+          position: new window.kakao.maps.LatLng(latitude, longitude),
           map,
         });
       });
