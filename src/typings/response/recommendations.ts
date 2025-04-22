@@ -16,15 +16,9 @@ export interface GuestRecommendationsResponse {
   고양이: RecommendationsAccommodation[];
 }
 
-export interface MostViewedRecommendationsResponse {
-  code: number;
-  data: RecommendationsAccommodation[];
-}
+export type MostViewedRecommendationsResponse = RecommendationsAccommodation[];
 
-export interface RecentReviewListResponse {
-  code: number;
-  data: RecentReview[];
-}
+export type RecentReviewListResponse = RecentReview[];
 
 export interface UserPetMoreRecommendationsResponse {
   code: number;
