@@ -2,7 +2,6 @@ import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 import { addParticle } from '@utils/formatter';
-import RecommendationSlider from '../RecommendationSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 import UserPetRecommendationSection from './UserPetRecommendationsSection';
 
