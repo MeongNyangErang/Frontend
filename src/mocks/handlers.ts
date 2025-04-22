@@ -11,7 +11,12 @@ import { userReviews } from './data/userReviews';
 import { wishlist } from './data/wishlist';
 import { chatList } from './data/chatList';
 import { previouseChatMessages } from './data/previousChatMessages';
-import { guestRecommendationsResponse } from './data/recommendations';
+import {
+  guestRecommendationsResponse,
+  userRecommendationsResponse,
+  mostViewedRecommendations,
+  latestReviewList,
+} from './data/recommendations';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -449,6 +454,23 @@ export const handlers = [
   }),
   http.get(`${BASE_URL}/recommendations/default`, async () => {
     return HttpResponse.json(guestRecommendationsResponse);
+  }),
+  http.get(`${BASE_URL}/recommendations/user-pet`, async () => {
+    return HttpResponse.json(userRecommendationsResponse);
+  }),
+  http.get(`${BASE_URL}/recommendations/most-viewed`, async () => {
+    const response = {
+      code: 200,
+      data: mostViewedRecommendations,
+    };
+    return HttpResponse.json(response);
+  }),
+  http.get(`${BASE_URL}/users/latest-reviews`, async () => {
+    const response = {
+      code: 200,
+      data: latestReviewList,
+    };
+    return HttpResponse.json(response);
   }),
   http.post(`${BASE_URL}/notifications/messages`, async () => {
     return HttpResponse.json({ message: '알림 전송 성공' });

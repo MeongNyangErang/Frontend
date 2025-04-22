@@ -29,6 +29,7 @@ const SMessageBoxWrap = styled.div<{
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.layouts.paddingX};
+  width: 100%;
   border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme, $variant }) =>
     $variant === 'white' ? '#fff' : theme.colors.gray100};

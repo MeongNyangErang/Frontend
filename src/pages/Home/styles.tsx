@@ -38,23 +38,19 @@ const SSearchBarContainer = styled.div`
 const SSectionTitle = styled.h2`
   display: flex;
   align-items: center;
-
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray700};
-  letter-spacing: -1px;
+  letter-spacing: -2px;
 
   > i {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 4px;
-    width: 18px;
-
-    img {
-      opacity: 0.7;
-    }
+    margin-left: 2px;
+    font-size: 18px;
+    color: ${({ theme }) => theme.colors.main};
   }
 
   > span {
@@ -68,9 +64,15 @@ const SSectionTitle = styled.h2`
 `;
 
 const SSectionContainer = styled.div`
-  padding-bottom: 44px;
-  margin-bottom: 36px;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+  padding-bottom: 28px;
+  margin-bottom: 22px;
+
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray100}`};
+
+  ${media.tablet} {
+    padding-bottom: 32px;
+    margin-bottom: 24px;
+  }
 
   &:last-child {
     border-bottom: none;
@@ -80,6 +82,7 @@ const SSectionContainer = styled.div`
 const SSectionBox = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 233px;
 `;
 

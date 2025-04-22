@@ -13,7 +13,7 @@ const SNavigationButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -8px;
+  margin-top: -12px;
   width: 36px;
   height: 36px;
   font-size: 16px;
@@ -23,7 +23,7 @@ const SNavigationButton = styled.div`
   color: ${({ theme }) => theme.colors.gray600};
   cursor: pointer;
 
-  & &:hover {
+  &:hover {
     background-color: ${({ theme }) => theme.colors.gray100};
   }
 
