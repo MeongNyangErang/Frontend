@@ -29,6 +29,9 @@ export const sendChatImage = async (formData: FormData) => {
   return await fetchCall(`chats/send/image`, 'post', formData);
 };
 
-export const sendChatNotification = async (formData: FormData) => {
-  return await fetchCall(`notifications/messages`, 'post', formData);
+export const sendChatNotification = async (data: {
+  chatRoomId: number;
+  content: string;
+}) => {
+  return await fetchCall(`notifications/messages`, 'post', data);
 };
