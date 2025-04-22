@@ -187,7 +187,7 @@ const useReviewModal = ({
 
     if (newImages.length > 0) {
       newImages.map((img) => {
-        formData.append('newimages', img);
+        formData.append('newImages', img);
       });
     }
     console.log(newImages, 'newImages');
