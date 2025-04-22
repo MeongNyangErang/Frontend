@@ -6,11 +6,7 @@ import RecommendationSlider from '../RecommendationSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 
 const MostViewedRecommendations = () => {
-  const {
-    data: { data } = {},
-    isLoading,
-    error,
-  } = useMostViewedRecommendations();
+  const { data, isLoading, error } = useMostViewedRecommendations();
 
   return (
     <SSectionContainer>
