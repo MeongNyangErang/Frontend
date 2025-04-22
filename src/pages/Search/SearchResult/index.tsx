@@ -77,7 +77,13 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     });
   };
 
-  const handleClickWishButton = async (accommodationId: number) => {
+  const handleClickWishButton = async (
+    e: React.MouseEvent,
+    accommodationId: number,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!member.data || member.data.role === 'HOST') {
       updateWishError('로그인한 사용자만 이용 할 수 있습니다.');
       return;
@@ -136,8 +142,8 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                     }}
                   >
                     <SWishButton
-                      onClick={() => {
-                        handleClickWishButton(accommodationId);
+                      onClick={(e) => {
+                        handleClickWishButton(e, accommodationId);
                       }}
                       $isActive={isWishlisted}
                     >
