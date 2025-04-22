@@ -2,10 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ReservationStatus } from '@typings/reservation';
 import { getUserReservationList } from '@services/reservation';
 
-const useUserReservationList = (
-  status: ReservationStatus,
-  cursor: number | undefined,
-) => {
+const useUserReservationList = (status: ReservationStatus, page: number) => {
   const queryClient = useQueryClient();
 
   const refreshReservationList = async () => {
@@ -22,8 +19,8 @@ const useUserReservationList = (
   };
 
   const result = useQuery({
-    queryKey: ['user-reservation-list', status, cursor],
-    queryFn: () => getUserReservationList(status, cursor),
+    queryKey: ['user-reservation-list', status, page],
+    queryFn: () => getUserReservationList(status, page),
     staleTime: 1000 * 60 * 5,
   });
 

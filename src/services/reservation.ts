@@ -4,12 +4,12 @@ import { ReservationStatus } from '@typings/reservation';
 
 export const getUserReservationList = async (
   status: ReservationStatus,
-  cursor: number | undefined,
+  page: number,
 ) => {
-  const url = cursor
-    ? `users/reservations?status=${status.toUpperCase()}&cursor=${cursor}`
-    : `users/reservations?status=${status.toUpperCase()}`;
-  return fetchCall<UserReservationListResponse>(url, 'get');
+  return fetchCall<UserReservationListResponse>(
+    `users/reservations?status=${status.toUpperCase()}&page=${page}`,
+    'get',
+  );
 };
 
 export const cancelReservation = async (reservationId: string) => {
