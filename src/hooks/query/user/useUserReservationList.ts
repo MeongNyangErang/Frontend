@@ -5,7 +5,7 @@ import { getUserReservationList } from '@services/reservation';
 const useUserReservationList = (status: ReservationStatus, page: number) => {
   const queryClient = useQueryClient();
 
-  const refreshReservationList = async () => {
+  const refreshReservationList = async (status: ReservationStatus) => {
     await queryClient.invalidateQueries({
       predicate: (query) => {
         const queryKey = query.queryKey;
@@ -13,6 +13,18 @@ const useUserReservationList = (status: ReservationStatus, page: number) => {
           Array.isArray(queryKey) &&
           queryKey[0] === 'user-reservation-list' &&
           queryKey[1] === status
+        );
+      },
+    });
+
+    await queryClient.refetchQueries({
+      predicate: (query) => {
+        const queryKey = query.queryKey;
+        return (
+          Array.isArray(queryKey) &&
+          queryKey[0] === 'user-reservation-list' &&
+          queryKey[1] === status &&
+          queryKey[2] === 0
         );
       },
     });

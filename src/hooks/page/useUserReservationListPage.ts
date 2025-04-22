@@ -43,13 +43,13 @@ const useUserReservationListPage = () => {
     updateError: updateChatError,
   } = useError();
 
-  const updateCurrentCursor = useCallback(() => {
+  const updateCurrentPage = useCallback(() => {
     if (last) return;
     setCurrentPage((prev) => prev + 1);
   }, [page, currentTab, last]);
 
   const infiniteScrolltargetRef = useInfiniteScroll(
-    updateCurrentCursor,
+    updateCurrentPage,
     !isLoading && !last && isFirstLoaded,
   );
 
@@ -106,13 +106,14 @@ const useUserReservationListPage = () => {
   }, []);
 
   const onSuccessPostReview = useCallback(() => {
-    refreshReservationList();
+    refreshReservationList('COMPLETED');
     refreshPage();
     onCloseReviewModal();
   }, []);
 
   const onSuccessCancelReservation = useCallback(() => {
-    refreshReservationList();
+    refreshReservationList('RESERVED');
+    refreshReservationList('CANCELED');
     refreshPage();
     onCloseCancelModal();
   }, []);

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import useUserReviews from '@hooks/query/user/useUserReviews';
+import useUserReservationList from '@hooks/query/user/useUserReservationList';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import { UserReview } from '@typings/review';
 
@@ -9,6 +10,7 @@ const useUserReviewsPage = () => {
   const [reviewToEdit, setReviewToEdit] = useState<null | UserReview>(null);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<null | string>(null);
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
+  const { refreshReservationList } = useUserReservationList('CANCELED', 0);
 
   const {
     data: { content, last } = {},
@@ -52,6 +54,7 @@ const useUserReviewsPage = () => {
 
   const onSuccessDeleteReview = useCallback(() => {
     handleSuccessReviewChange();
+    refreshReservationList('COMPLETED');
     onCloseDeleteModal();
   }, [handleSuccessReviewChange]);
 
