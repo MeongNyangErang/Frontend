@@ -175,6 +175,8 @@ const useReviewModal = ({
       deletedImageId: [...imagesToDelete],
     };
 
+    console.log(data, 'data');
+
     const newImages = [...(review.images ? review.images : [])];
 
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
@@ -188,7 +190,7 @@ const useReviewModal = ({
         formData.append('newimages', img);
       });
     }
-
+    console.log(newImages, 'newImages');
     deleteEmptyValueFromData(data, ['content', 'images']);
 
     startIsLoading();
