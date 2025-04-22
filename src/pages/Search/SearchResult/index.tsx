@@ -12,7 +12,7 @@ import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import { Accommodation } from '@typings/response/accommodations';
 import useAuth from '@hooks/auth/useAuth';
-import { addToWishlist } from '@services/wishlist';
+import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
 import {
   SMessageArea,
   SItems,
@@ -80,6 +80,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   const handleClickWishButton = async (
     e: React.MouseEvent,
     accommodationId: number,
+    isWishlisted: boolean,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -90,7 +91,9 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     }
 
     try {
-      await addToWishlist(accommodationId);
+      !isWishlisted
+        ? await addToWishlist(accommodationId)
+        : await deleteFromWishlist(accommodationId);
       handleSuccessAddWish(accommodationId);
     } catch (error) {
       console.log(error);
@@ -143,7 +146,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                   >
                     <SWishButton
                       onClick={(e) => {
-                        handleClickWishButton(e, accommodationId);
+                        handleClickWishButton(e, accommodationId, isWishlisted);
                       }}
                       $isActive={isWishlisted}
                     >
