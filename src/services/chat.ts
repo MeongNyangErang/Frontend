@@ -33,5 +33,5 @@ export const sendChatNotification = async (data: {
   chatRoomId: number;
   content: string;
 }) => {
-  return await fetchCall(`notifications/messages`, 'post', data);
+  return await fetchCall('notifications/messages', 'post', data);
 };
