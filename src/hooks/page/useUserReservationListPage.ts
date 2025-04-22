@@ -106,13 +106,14 @@ const useUserReservationListPage = () => {
   }, []);
 
   const onSuccessPostReview = useCallback(() => {
-    refreshReservationList();
+    refreshReservationList('COMPLETED');
     refreshPage();
     onCloseReviewModal();
   }, []);
 
   const onSuccessCancelReservation = useCallback(() => {
-    refreshReservationList();
+    refreshReservationList('RESERVED');
+    refreshReservationList('CANCELED');
     refreshPage();
     onCloseCancelModal();
   }, []);

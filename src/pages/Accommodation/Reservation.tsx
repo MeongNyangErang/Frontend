@@ -157,7 +157,7 @@ const Reservation = () => {
 
     try {
       await fetchCall('/users/reservations', 'post', reservationData);
-      refreshReservationList();
+      refreshReservationList('RESERVED');
       alert('예약이 완료되었습니다!');
       navigate('/mypage/user/reservation-list');
     } catch (error) {

@@ -54,7 +54,7 @@ const useUserReviewsPage = () => {
 
   const onSuccessDeleteReview = useCallback(() => {
     handleSuccessReviewChange();
-    refreshReservationList();
+    refreshReservationList('COMPLETED');
     onCloseDeleteModal();
   }, [handleSuccessReviewChange]);
 
