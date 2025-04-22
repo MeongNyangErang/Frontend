@@ -47,7 +47,6 @@ const useUserReviewsPage = () => {
   }, []);
 
   const handleSuccessReviewChange = () => {
-    setReviews([]);
     setCurrentPage(0);
     refreshUserReviews();
   };
@@ -65,7 +64,11 @@ const useUserReviewsPage = () => {
 
   useEffect(() => {
     if (!content) return;
-    setReviews((prev) => [...prev, ...content]);
+    if (currentPage === 0) {
+      setReviews([...content]);
+    } else {
+      setReviews((prev) => [...prev, ...content]);
+    }
   }, [content]);
 
   useEffect(() => {

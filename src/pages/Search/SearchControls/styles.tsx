@@ -8,14 +8,19 @@ const SWrap = styled.div`
 `;
 
 const SFilterButton = styled.button`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 6px 12px;
   color: ${({ theme }) => theme.colors.gray600};
   font-size: 13px;
-  border: ${({ theme }) => `1.5px solid ${theme.colors.gray300}`};
+  border: ${({ theme }) => `1.2px solid ${theme.colors.gray300}`};
   border-radius: 9999px;
+
+  &.is--active {
+    border: ${({ theme }) => `1.2px solid ${theme.colors.main}`};
+  }
 
   > img {
     width: 16px;

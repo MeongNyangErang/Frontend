@@ -6,10 +6,15 @@ import SearchControls from '../SearchControls';
 
 interface SearchHeaderProps {
   currentQuery: SearchBaseType;
+  isFiltered: boolean;
   onOpenFilter(): void;
 }
 
-const SearchHeader = ({ currentQuery, onOpenFilter }: SearchHeaderProps) => {
+const SearchHeader = ({
+  currentQuery,
+  isFiltered,
+  onOpenFilter,
+}: SearchHeaderProps) => {
   return (
     <SHeaderWrap>
       <SHeaderContainer>
@@ -19,7 +24,7 @@ const SearchHeader = ({ currentQuery, onOpenFilter }: SearchHeaderProps) => {
       </SHeaderContainer>
       <SHeaderContainer>
         <div>
-          <SearchControls onOpenFilter={onOpenFilter} />
+          <SearchControls onOpenFilter={onOpenFilter} isFiltered={isFiltered} />
         </div>
       </SHeaderContainer>
     </SHeaderWrap>
