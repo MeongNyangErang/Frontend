@@ -21,6 +21,7 @@ const SNavigationButton = styled.div`
   border: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
   transform: translate(0, -100%);
   color: ${({ theme }) => theme.colors.gray600};
+  user-select: none;
   cursor: pointer;
 
   &:hover {
