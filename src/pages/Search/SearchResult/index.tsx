@@ -43,6 +43,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     data: { last, content, page = 0 } = {},
     isLoading,
     error,
+    refreshSearchAccommodations,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
   const { member } = useAuth();
   const {
@@ -95,6 +96,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
         ? await addToWishlist(accommodationId)
         : await deleteFromWishlist(accommodationId);
       handleSuccessAddWish(accommodationId);
+      refreshSearchAccommodations();
     } catch (error) {
       console.log(error);
     }
