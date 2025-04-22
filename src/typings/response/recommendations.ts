@@ -25,3 +25,25 @@ export interface RecentReviewListResponse {
   code: number;
   data: RecentReview[];
 }
+
+export interface UserPetMoreRecommendationsResponse {
+  code: number;
+  content: RecommendationsAccommodation[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
+
+export interface GuestMoreRecommendationsResponse {
+  code: number;
+  content: RecommendationsAccommodation[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}

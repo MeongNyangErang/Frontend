@@ -18,7 +18,7 @@ const RecentReviews = () => {
           <Loader size={10} color="grayBorder" loading />
         </SSectionBox>
       )}
-      {data && <ReviewSlider reviews={data} />}
+      {data && !error && <ReviewSlider reviews={data} />}
     </SSectionContainer>
   );
 };

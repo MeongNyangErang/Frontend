@@ -4,6 +4,7 @@ import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendatio
 import { addParticle } from '@utils/formatter';
 import RecommendationSlider from '../RecommendationSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
+import UserPetRecommendationSection from './UserPetRecommendationsSection';
 
 const UserPetRecommendations = () => {
   const { data, isLoading, error } = useUserPetRecommendations();
@@ -24,8 +25,11 @@ const UserPetRecommendations = () => {
                 <Loader size={10} color="grayBorder" loading />
               </SSectionBox>
             )}
-            {recommendations && (
-              <RecommendationSlider recommendations={recommendations} />
+            {!error && (
+              <UserPetRecommendationSection
+                petId={petId}
+                initialRecommendations={recommendations}
+              />
             )}
           </SSectionContainer>
         );

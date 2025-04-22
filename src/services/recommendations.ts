@@ -4,6 +4,8 @@ import {
   GuestRecommendationsResponse,
   RecentReviewListResponse,
   MostViewedRecommendationsResponse,
+  UserPetMoreRecommendationsResponse,
+  GuestMoreRecommendationsResponse,
 } from '@typings/response/recommendations';
 import { fetchCall } from './api';
 
@@ -39,8 +41,18 @@ export const getMoreGuestRecommendations = async (
   type: PetType,
   page: number,
 ) => {
-  return await fetchCall(
+  return await fetchCall<GuestMoreRecommendationsResponse>(
     `recommendations/default/more?type=${type}&page=${page}`,
+    'get',
+  );
+};
+
+export const getMoreUserRecommendations = async (
+  petId: number,
+  page: number,
+) => {
+  return await fetchCall<UserPetMoreRecommendationsResponse>(
+    `recommendations/user-pet/more?petId=${petId}&page=${page}`,
     'get',
   );
 };

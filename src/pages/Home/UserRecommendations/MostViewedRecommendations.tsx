@@ -28,7 +28,7 @@ const MostViewedRecommendations = () => {
           <Loader size={10} color="grayBorder" loading />
         </SSectionBox>
       )}
-      {data && <RecommendationSlider recommendations={data} />}
+      {data && !error && <RecommendationSlider recommendations={data} />}
     </SSectionContainer>
   );
 };

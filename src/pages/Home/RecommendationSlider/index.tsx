@@ -8,6 +8,7 @@ import {
   FaHeart,
   FaRegHeart,
   FaStar,
+  FaPlusCircle,
 } from 'react-icons/fa';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
@@ -17,17 +18,24 @@ import {
   SImageArea,
   SDescArea,
   SNavigationButton,
+  SLoadMoreSlide,
+  SLoadMoreButton,
 } from './styles';
 
 interface RecommendationSliderProps {
   recommendations: RecommendationsAccommodation[];
+  onClickMore?: () => void;
+  last?: boolean;
+  isLoading?: boolean;
 }
 
 const RecommendationSlider = ({
   recommendations,
+  onClickMore,
+  last = true,
+  isLoading = false,
 }: RecommendationSliderProps) => {
   const uniqueId = useMemo(() => uuidv4(), []);
-
   return (
     <SSliderWrap>
       <Swiper
@@ -85,6 +93,22 @@ const RecommendationSlider = ({
               </SwiperSlide>
             );
           },
+        )}
+
+        {!last && (
+          <SwiperSlide>
+            <SLoadMoreSlide>
+              <SLoadMoreButton onClick={onClickMore} disabled={isLoading}>
+                {isLoading ? (
+                  'loading...'
+                ) : (
+                  <>
+                    <FaPlusCircle />더 보기
+                  </>
+                )}
+              </SLoadMoreButton>
+            </SLoadMoreSlide>
+          </SwiperSlide>
         )}
       </Swiper>
       <SNavigationButton

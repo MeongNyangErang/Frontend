@@ -134,4 +134,36 @@ const SDescArea = styled.div`
   }
 `;
 
-export { SSliderWrap, SItemLink, SImageArea, SDescArea, SNavigationButton };
+const SLoadMoreSlide = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  background-color: ${({ theme }) => theme.colors.gray100};
+`;
+
+const SLoadMoreButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 20px;
+  color: ${({ theme }) => theme.colors.gray700};
+  font-size: 14px;
+  letter-spacing: -1px;
+  font-weight: bold;
+  text-align: center;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.gray600};
+  }
+`;
+
+export {
+  SSliderWrap,
+  SItemLink,
+  SImageArea,
+  SDescArea,
+  SNavigationButton,
+  SLoadMoreSlide,
+  SLoadMoreButton,
+};
