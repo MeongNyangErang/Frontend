@@ -195,13 +195,15 @@ const SItemsBottom = styled.div`
 
 const SWishButton = styled.button<{ $isActive: boolean }>`
   position: absolute;
-  top: 16px;
-  right: 24px;
+  top: 10px;
+  right: 13px;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
+  opacity: 0.5;
 
   &::after {
     content: '';
@@ -217,7 +219,7 @@ const SWishButton = styled.button<{ $isActive: boolean }>`
   > svg {
     font-size: 18px;
     color: ${({ $isActive, theme }) =>
-      $isActive ? theme.colors.main : theme.colors.gray300};
+      $isActive ? theme.colors.main : theme.colors.gray500};
   }
 `;
 
