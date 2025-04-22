@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 interface AccommodationMapProps {
   longitude: number;
@@ -27,7 +28,14 @@ const AccommodationMap = ({ longitude, latitude }: AccommodationMapProps) => {
     };
   }, []);
 
-  return <div id="map" style={{ width: '100%', height: '400px' }} />;
+  return (
+    <SMapWrap>
+      <div id="map" style={{ width: '100%', height: '300px' }} />
+    </SMapWrap>
+  );
 };
 
 export default AccommodationMap;
+const SMapWrap = styled.div`
+  padding: 12px 0 16px;
+`;
