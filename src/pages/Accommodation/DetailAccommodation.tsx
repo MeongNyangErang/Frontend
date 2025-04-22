@@ -12,6 +12,7 @@ import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
 import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
 import { AxiosError } from 'axios';
+import AccommodationMap from './AccommodationMap';
 
 interface DetailData {
   accommodationId: number;
@@ -130,7 +131,6 @@ const DetailAccommodation = () => {
           `accommodations/${accommodationId}`,
           'get',
         )) as any;
-        console.log(response);
         setAccommodation(response);
       } catch (error) {
         console.log('숙소 정보를 가져오는 데 오류가 발생했습니다.');
@@ -345,14 +345,12 @@ const DetailAccommodation = () => {
             ))}
           </Facility>
           <SectionTitle>위치</SectionTitle>
+          <AccommodationMap
+            longitude={accommodation.longitude}
+            latitude={accommodation.latitude}
+          />
           <Address>{accommodation.address}</Address>
           <Address>{accommodation.detailedAddress}</Address>
-          {/* 
-            <Address>
-              {accommodation.latitude}
-              {accommodation.longitude}
-            </Address>
-            */}
           <SectionTitle>취소 및 환불 규정</SectionTitle>
           <Refund>
             ■ 체크인일 기준 3일 전까지 : 100% 환불 <br />
