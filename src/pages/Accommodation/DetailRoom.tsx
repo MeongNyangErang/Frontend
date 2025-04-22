@@ -30,6 +30,8 @@ const DetailRoom = () => {
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
   const { pathname } = useLocation();
   const roomId = pathname.split('/').slice(-1)[0];
+  const location = useLocation();
+  const { totalPrice } = location.state || {};
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -78,7 +80,7 @@ const DetailRoom = () => {
           {` 1마리: ${roomDetails.extraPetFee.toLocaleString()}원`}
         </Check>
 
-        <RoomPrice>{`${roomDetails.price.toLocaleString()}원`}</RoomPrice>
+        <RoomPrice>{totalPrice?.toLocaleString()}원</RoomPrice>
       </SCheckbox>
 
       <RoomDescription>{roomDetails.description}</RoomDescription>

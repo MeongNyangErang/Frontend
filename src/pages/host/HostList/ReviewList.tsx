@@ -6,12 +6,12 @@ import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from '@services/api';
 
 interface ReviewList {
-  userId: number;
+  nickName: string;
   roomId: number;
   reviewId: number;
   roomName: string;
   totalRating: number;
-  content: string;
+  reviewContent: string;
   imageUrls: string[];
   createdAt: string;
 }
@@ -62,7 +62,7 @@ const ReviewList = () => {
       <Header title="리뷰 목록" />
       {reviews.map((review) => {
         const isExpanded = expandedReviews.includes(review.reviewId);
-        const shouldShowToggle = review.content.length > 200;
+        const shouldShowToggle = review.reviewContent.length > 200;
 
         return (
           <ReviewContainer key={`${review.reviewId}-${review.roomId}`}>
@@ -70,7 +70,7 @@ const ReviewList = () => {
               <RoomName>{review.roomName}</RoomName>
             </Name>
             <ReviewHeader>
-              <User>{review.userId}</User>
+              <User>{review.nickName}</User>
               <CreatedAt>
                 {new Date(review.createdAt).toISOString().split('T')[0]}
               </CreatedAt>
@@ -99,8 +99,8 @@ const ReviewList = () => {
 
             <ReviewContent>
               {isExpanded || !shouldShowToggle
-                ? review.content
-                : `${review.content.slice(0, 260)}...`}
+                ? review.reviewContent
+                : `${review.reviewContent.slice(0, 260)}...`}
               {shouldShowToggle && (
                 <ToggleButton onClick={() => toggleExpand(review.reviewId)}>
                   {isExpanded ? '접기' : '더보기'}
