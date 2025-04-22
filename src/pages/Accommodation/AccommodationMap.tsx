@@ -37,5 +37,7 @@ const AccommodationMap = ({ longitude, latitude }: AccommodationMapProps) => {
 
 export default AccommodationMap;
 const SMapWrap = styled.div`
-  padding: 12px 0 16px;
+  margin: 12px 0 16px;
+  border-radius: 8px;
+  overflow: hidden;
 `;

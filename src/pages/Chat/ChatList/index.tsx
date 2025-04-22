@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import useAuth from '@hooks/auth/useAuth';
 import useChatList from '@hooks/query/useChatList';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
@@ -88,4 +89,4 @@ const ChatList = () => {
   );
 };
 
-export default ChatList;
+export default memo(ChatList);

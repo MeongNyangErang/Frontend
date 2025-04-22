@@ -2,9 +2,10 @@ import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import { PreviousChatMessage, NewChatMessage } from '@typings/chat';
 import usePreviousChatMessages from '@hooks/query/usePreviousChatMessages';
 import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
+import useChatList from '@hooks/query/useChatList';
 import { InfiniteData } from '@tanstack/react-query';
 import { PreviousChatMessagesResponse } from '@typings/response/chat';
-import { sendChatImage } from '@services/chat';
+import { sendChatImage, sendChatNotification } from '@services/chat';
 import { createStompClient } from '@services/socket';
 import { initialChatError } from '@constants/chat';
 
@@ -43,6 +44,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isInitialScrollRef = useRef(true);
   const pendingCallbackRef = useRef<{ onSuccess?: () => void } | null>(null);
+  const { refreshChatList } = useChatList();
 
   const resetError = () => {
     setChatError({ ...initialChatError });
@@ -98,11 +100,30 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     }
   };
 
+  const onSuccessSending = async (message: string) => {
+    if (!chatRoomId) return;
+
+    refreshChatList(chatRoomId);
+
+    const data = { chatRoomId, content: message };
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const formData = new FormData();
+
+    formData.append('request', blob);
+
+    try {
+      await sendChatNotification(formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!pendingMessage) return;
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.messageContent === pendingMessage) {
       pendingCallbackRef.current?.onSuccess?.();
+      onSuccessSending(pendingMessage);
     } else {
       updateError('messageSending', '메세지 전송에 실패했습니다.');
     }
