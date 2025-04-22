@@ -36,6 +36,7 @@ const RecommendationSlider = ({
   isLoading = false,
 }: RecommendationSliderProps) => {
   const uniqueId = useMemo(() => uuidv4(), []);
+
   return (
     <SSliderWrap>
       <Swiper

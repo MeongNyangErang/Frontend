@@ -17,7 +17,7 @@ interface RecommendationSliderProps {
 
 const ReviewSlider = ({ reviews }: RecommendationSliderProps) => {
   const uniqueId = useMemo(() => uuidv4(), []);
-  console.log(reviews, 'review data in slide');
+
   return (
     <SSliderWrap>
       <Swiper
@@ -49,7 +49,6 @@ const ReviewSlider = ({ reviews }: RecommendationSliderProps) => {
             totalRating,
             nickname,
             content,
-            imageUrl,
             accommodationId,
             accommodationName,
           }) => {
