@@ -68,7 +68,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
       );
       const updated = {
         ...prev[targetIndex],
-        isWishlisted: !prev[targetIndex].wishlisted,
+        wishlisted: !prev[targetIndex].wishlisted,
       };
       const updatedResult = prev.map((v, i) => {
         if (i === targetIndex) return updated;
@@ -81,7 +81,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   const handleClickWishButton = async (
     e: React.MouseEvent,
     accommodationId: number,
-    isWishlisted: boolean,
+    wishlisted: boolean,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -92,7 +92,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     }
 
     try {
-      !isWishlisted
+      !wishlisted
         ? await addToWishlist(accommodationId)
         : await deleteFromWishlist(accommodationId);
       handleSuccessAddWish(accommodationId);
