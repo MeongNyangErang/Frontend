@@ -203,7 +203,6 @@ const SWishButton = styled.button<{ $isActive: boolean }>`
   justify-content: center;
   width: 32px;
   height: 32px;
-  opacity: 0.5;
 
   &::after {
     content: '';
@@ -214,9 +213,12 @@ const SWishButton = styled.button<{ $isActive: boolean }>`
     bottom: 0;
     border-radius: 9999px;
     background-color: rgba(255, 255, 255);
+    opacity: 0.5;
   }
 
   > svg {
+    position: static;
+    z-index: 3;
     font-size: 18px;
     color: ${({ $isActive, theme }) =>
       $isActive ? theme.colors.main : theme.colors.gray500};
