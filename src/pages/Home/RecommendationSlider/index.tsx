@@ -6,12 +6,13 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaHeart,
-  FaRegHeart,
   FaStar,
   FaPlusCircle,
 } from 'react-icons/fa';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
+import { SWishButton } from '@pages/Search/SearchResult/styles';
+import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
 import {
   SSliderWrap,
   SItemLink,
@@ -27,6 +28,8 @@ interface RecommendationSliderProps {
   onClickMore?: () => void;
   last?: boolean;
   isLoading?: boolean;
+  wishButton?: boolean;
+  onSuccessClickWishButton?: (accommodationId: number) => void;
 }
 
 const RecommendationSlider = ({
@@ -34,8 +37,29 @@ const RecommendationSlider = ({
   onClickMore,
   last = true,
   isLoading = false,
+  wishButton = false,
+  onSuccessClickWishButton,
 }: RecommendationSliderProps) => {
   const uniqueId = useMemo(() => uuidv4(), []);
+
+  const handleClickWishList = async (
+    e: React.MouseEvent,
+    accommodationId: number,
+    wishlist: boolean,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!onSuccessClickWishButton) return;
+
+    try {
+      !wishlist
+        ? await addToWishlist(accommodationId)
+        : deleteFromWishlist(accommodationId);
+      onSuccessClickWishButton(accommodationId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SSliderWrap>
@@ -67,13 +91,23 @@ const RecommendationSlider = ({
         }}
       >
         {recommendations.map(
-          ({ thumbnailUrl, name, id, totalRating, price }) => {
+          ({ thumbnailUrl, name, id, totalRating, price, wishlisted }) => {
             const accommodationId = Number(id);
             return (
               <SwiperSlide key={accommodationId}>
                 <SItemLink
                   to={ROUTES.accommodationDetail.root(accommodationId)}
                 >
+                  {wishButton && (
+                    <SWishButton
+                      $isActive={wishlisted}
+                      onClick={(e) => {
+                        handleClickWishList(e, accommodationId, wishlisted);
+                      }}
+                    >
+                      <FaHeart />
+                    </SWishButton>
+                  )}
                   <SImageArea>
                     <img src={thumbnailUrl} alt={name} />
                   </SImageArea>

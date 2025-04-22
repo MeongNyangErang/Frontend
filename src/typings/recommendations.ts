@@ -4,6 +4,7 @@ export interface RecommendationsAccommodation {
   price: number;
   totalRating: number;
   thumbnailUrl: string;
+  wishlisted: boolean;
 }
 
 export interface RecentReview {
