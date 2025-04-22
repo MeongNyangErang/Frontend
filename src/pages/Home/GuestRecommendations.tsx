@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@components/common/Loader';
 import MessageBox from '@components/common/MessageBox';
@@ -24,11 +23,9 @@ const GuestRecommendations = () => {
               <i></i>
             </SSectionTitle>
             {error && (
-              <SSectionBox>
-                <MessageBox variant="light">
-                  데이터를 불러오지 못했습니다.
-                </MessageBox>
-              </SSectionBox>
+              <MessageBox variant="light">
+                데이터를 불러오지 못했습니다.
+              </MessageBox>
             )}
             {isLoading && (
               <SSectionBox>

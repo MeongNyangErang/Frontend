@@ -1,12 +1,11 @@
 import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
-import titleIcon from '@assets/icons/recommendationIcon.png';
 import { addParticle } from '@utils/formatter';
-import RecommendationSlider from './RecommendationSlider';
-import { SSectionTitle, SSectionContainer, SSectionBox } from './styles';
+import RecommendationSlider from '../RecommendationSlider';
+import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 
-const UserRecommendations = () => {
+const UserPetRecommendations = () => {
   const { data, isLoading, error } = useUserPetRecommendations();
 
   return (
@@ -14,18 +13,11 @@ const UserRecommendations = () => {
       {data?.map(({ petId, petName, recommendations }) => {
         return (
           <SSectionContainer key={petId}>
-            <SSectionTitle>
-              {addParticle(petName)}위한 추천 숙소
-              <i>
-                <img src={titleIcon} alt="아이콘" />
-              </i>
-            </SSectionTitle>
+            <SSectionTitle>{addParticle(petName)}위한 추천 숙소</SSectionTitle>
             {error && (
-              <SSectionBox>
-                <MessageBox variant="light">
-                  데이터를 불러오지 못했습니다.
-                </MessageBox>
-              </SSectionBox>
+              <MessageBox variant="light">
+                데이터를 불러오지 못했습니다.
+              </MessageBox>
             )}
             {isLoading && (
               <SSectionBox>
@@ -42,4 +34,4 @@ const UserRecommendations = () => {
   );
 };
 
-export default UserRecommendations;
+export default UserPetRecommendations;

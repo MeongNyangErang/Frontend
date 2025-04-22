@@ -43,10 +43,10 @@ const RecommendationSlider = ({
             swiper.navigation.update();
           }
         }}
-        spaceBetween={16}
+        spaceBetween={12}
         slidesPerView={1}
         breakpoints={{
-          480: {
+          400: {
             slidesPerView: 2,
           },
           768: {
@@ -81,9 +81,6 @@ const RecommendationSlider = ({
                       {price.toLocaleString()}원~
                     </p>
                   </SDescArea>
-                  <span>
-                    <FaRegHeart />
-                  </span>
                 </SItemLink>
               </SwiperSlide>
             );

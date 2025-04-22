@@ -176,3 +176,198 @@ export const guestRecommendationsResponse = {
     },
   ],
 } as const;
+
+export const userRecommendationsResponse = [
+  {
+    petId: 101,
+    petName: '콩이',
+    recommendations: [
+      {
+        id: 1,
+        name: '콩이의 힐링 리조트',
+        price: 90000,
+        totalRating: 4.8,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 2,
+        name: '펫포레스트',
+        price: 85000,
+        totalRating: 4.6,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 3,
+        name: '편한 쉼터',
+        price: 80000,
+        totalRating: 4.7,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 4,
+        name: '힐스 펫하우스',
+        price: 88000,
+        totalRating: 4.9,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 5,
+        name: '리틀파크 리조트',
+        price: 92000,
+        totalRating: 4.5,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 6,
+        name: '콩이 전용 별장',
+        price: 97000,
+        totalRating: 4.8,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+    ],
+  },
+  {
+    petId: 202,
+    petName: '두부',
+    recommendations: [
+      {
+        id: 7,
+        name: '두부네 쉼터',
+        price: 93000,
+        totalRating: 4.7,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 8,
+        name: '펫럭셔리 리조트',
+        price: 97000,
+        totalRating: 4.6,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 9,
+        name: '두부와 함께 숙소',
+        price: 89000,
+        totalRating: 4.8,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 10,
+        name: '반려 힐링 하우스',
+        price: 91000,
+        totalRating: 4.5,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 11,
+        name: '두부파크 호텔',
+        price: 86000,
+        totalRating: 4.9,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+      {
+        id: 12,
+        name: '두부네 별장',
+        price: 95000,
+        totalRating: 5.0,
+        thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+      },
+    ],
+  },
+] as const;
+
+export const mostViewedRecommendations = [
+  {
+    id: 1,
+    name: '펫프렌즈 호텔',
+    price: 85000,
+    totalRating: 4.5,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+  {
+    id: 2,
+    name: '강아지 파라다이스',
+    price: 92000,
+    totalRating: 4.8,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+  {
+    id: 3,
+    name: '포근한 쉼터',
+    price: 78000,
+    totalRating: 4.6,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+  {
+    id: 4,
+    name: '러블리 펫하우스',
+    price: 87000,
+    totalRating: 4.9,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+  {
+    id: 5,
+    name: '힐링 펫스테이',
+    price: 91000,
+    totalRating: 4.4,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+  {
+    id: 6,
+    name: '작은별 리조트',
+    price: 99000,
+    totalRating: 4.7,
+    thumbnailUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+  },
+];
+
+export const latestReviewList = [
+  {
+    accommodationId: 1,
+    accommodationName: '펫프렌즈 호텔',
+    nickname: '콩이엄마',
+    content: '정말 깨끗하고 직원분들도 친절했어요! 강아지가 너무 좋아했어요.',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.8,
+  },
+  {
+    accommodationId: 2,
+    accommodationName: '강아지 파라다이스',
+    nickname: '두부아빠',
+    content: '반려동물과 함께하기 정말 좋은 숙소였어요. 재방문 의사 있습니다!',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.7,
+  },
+  {
+    accommodationId: 3,
+    accommodationName: '포근한 쉼터',
+    nickname: '냥이누나',
+    content: '고양이가 편안하게 잘 쉬었어요. 침구도 깔끔하고 따뜻했어요.',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.6,
+  },
+  {
+    accommodationId: 4,
+    accommodationName: '러블리 펫하우스',
+    nickname: '뽀삐언니',
+    content: '애견 전용 공간이 잘 되어 있어서 만족스러웠습니다.',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.9,
+  },
+  {
+    accommodationId: 5,
+    accommodationName: '힐링 펫스테이',
+    nickname: '초코아빠',
+    content: '주변 환경도 조용하고 산책하기 좋아요. 추천해요!',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.5,
+  },
+  {
+    accommodationId: 6,
+    accommodationName: '작은별 리조트',
+    nickname: '하늘이맘',
+    content: '넓은 마당이 있어서 신나게 뛰어놀 수 있었어요. 또 갈게요!',
+    imageUrl: 'https://i.imgur.com/ng8iy94.jpeg',
+    totalRating: 4.7,
+  },
+] as const;
