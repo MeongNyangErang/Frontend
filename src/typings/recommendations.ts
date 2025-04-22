@@ -11,6 +11,6 @@ export interface RecentReview {
   accommodationName: string;
   nickname: string;
   content: string;
-  imagesUrl: string;
+  imageUrl: string;
   totalRating: number;
 }

@@ -45,20 +45,6 @@ const Chat = lazy(() => import('@pages/Chat/index'));
 const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
 const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
 
-const RecommendNonMember = lazy(() => import('@pages/Home/RecommendNonMember'));
-const RecommendNonMemberView = lazy(
-  () => import('@pages/Home/RecommendNonMember/AllView'),
-);
-const RecommendMember = lazy(() => import('@pages/Home/RecommendMember'));
-const RecommendMostView = lazy(
-  () => import('@pages/Home/RecommendMember/MostView'),
-);
-const RecommendLastView = lazy(
-  () => import('@pages/Home/RecommendMember/LastView'),
-);
-const RecommendMemberView = lazy(
-  () => import('@pages/Home/RecommendMember/AllView'),
-);
 const Notificaion = lazy(() => import('@pages/Notification'));
 
 const AppRouter = () => {
@@ -85,28 +71,7 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-          <Route path="recommendNonMember" element={<RecommendNonMember />} />
-          <Route
-            path="recommendNonMember/allView"
-            element={<RecommendNonMemberView />}
-          />
-          <Route path="recommendMember" element={<RecommendMember />} />
-          <Route
-            path="recommendMember/mostView"
-            element={<RecommendMostView />}
-          />
-          <Route
-            path="recommendMember/lastView"
-            element={<RecommendLastView />}
-          />
-          <Route
-            path="recommendMember/allView"
-            element={<RecommendMemberView />}
-          />
-          <Route
-            path="register-accommodation"
-            element={<RegisterAccommodation />}
-          />
+
           <Route path="notification" element={<Notificaion />} />
 
           <Route element={<PrivateRoute allowedRoles={['USER']} />}>
@@ -125,7 +90,10 @@ const AppRouter = () => {
           <Route element={<PrivateRoute allowedRoles={['HOST']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
-
+              <Route
+                path="register-accommodation"
+                element={<RegisterAccommodation />}
+              />
               <Route path="register-room" element={<RegisterRoom />} />
               <Route path="room-list" element={<HostRoomList />} />
               <Route path="reservation" element={<HostReservationList />} />

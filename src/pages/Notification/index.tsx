@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
@@ -6,8 +6,9 @@ import { fetchCall } from '@services/api';
 import { getLocalStorage } from '@utils/storage';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { GoX } from 'react-icons/go';
 
-export type NotificationType =
+type NotificationType =
   | 'MESSAGE'
   | 'RESERVATION_CONFIRMED'
   | 'RESERVATION_REMINDER'
@@ -19,6 +20,13 @@ interface Notification {
   notificationType: NotificationType;
   createdAt: string;
 }
+
+const notificationTypeMap: Record<NotificationType, string> = {
+  MESSAGE: '메시지가 도착했습니다.',
+  RESERVATION_CONFIRMED: '예약이 확정되었습니다.',
+  RESERVATION_REMINDER: '예약 알림이 도착했습니다.',
+  REVIEW: '리뷰를 남겨주세요',
+};
 
 interface NotificationResponse {
   content: Notification[];
@@ -32,28 +40,54 @@ interface NotificationResponse {
 
 const NotificationSender = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [page, setPage] = useState(0);
+  const [lastPage, setLastPage] = useState(false);
+  const size = 20;
 
   // 목록
-  /*
-  const fetchNotifications = async (page: number) => {
-    try {
-      const response = (await fetchCall(
-        `notifications?page=${page}&size=20`,
-        'get',
-      )) as NotificationResponse;
+  const fetchNotifications = async () => {
+    let currentPage = 0;
+    let allNotifications: Notification[] = [];
+    let lastPage = false;
 
-      setNotifications(response.content);
+    try {
+      while (!lastPage) {
+        const response = (await fetchCall(
+          `/notifications?page=${page}&size=20`,
+          'get',
+        )) as NotificationResponse;
+
+        if (Array.isArray(response?.content)) {
+          allNotifications = [...allNotifications, ...response.content];
+          lastPage = response.last;
+          currentPage += 1;
+        } else {
+          console.error('알림 응답이 배열이 아닙니다', response);
+          break;
+        }
+      }
+      setNotifications(
+        allNotifications.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
+      );
+      setPage(currentPage - 1);
+      setLastPage(true);
     } catch (error) {
       console.error('알림을 가져오는 중 오류 발생:', error);
     }
   };
-*/
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [page]);
 
   // 구독
   useEffect(() => {
     const token = getLocalStorage('accessToken');
     const client = new Client({
-      brokerURL: 'https://meongnyangerang.shop/ws',
+      webSocketFactory: () => new SockJS('https://meongnyangerang.shop/ws'),
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
@@ -72,12 +106,6 @@ const NotificationSender = () => {
       onDisconnect: () => {
         console.log('WebSocket 연결 종료');
       },
-
-      /*
-      debug: (error: any) => {
-        console.log(error);
-      },
-      */
     });
 
     client.activate();
@@ -88,6 +116,21 @@ const NotificationSender = () => {
       }
     };
   });
+
+  // 삭제
+  const deleteNotification = async (notificationId: number) => {
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter(
+        (notification) => notification.notificationId !== notificationId,
+      ),
+    );
+
+    try {
+      await fetchCall(`/notifications/${notificationId}`, 'delete');
+    } catch (error) {
+      console.error('알림 삭제 중 오류 발생:', error);
+    }
+  };
 
   return (
     <div>
@@ -103,7 +146,18 @@ const NotificationSender = () => {
           ) : (
             notifications.map((notification) => (
               <NotificationItem key={notification.notificationId}>
-                <Sender>{notification.notificationType}</Sender>
+                <All>
+                  <Sender>
+                    {notificationTypeMap[notification.notificationType]}
+                  </Sender>
+                  <DeleteButton
+                    onClick={() =>
+                      deleteNotification(notification.notificationId)
+                    }
+                  >
+                    <X />
+                  </DeleteButton>
+                </All>
                 <Content>{notification.content}</Content>
                 <Timestamp>
                   {new Date(notification.createdAt).toLocaleString()}
@@ -146,26 +200,25 @@ const NotificationList = styled.ul`
 const NotificationItem = styled.li`
   background: #fff;
   border-radius: 8px;
-  padding: 7px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 `;
 
 const Sender = styled.span`
-  font-weight: 600;
-  color: #4a90e2;
+  font-weight: bold;
+  color: #3a86ff;
 `;
 
 const Content = styled.span`
   display: block;
-  margin-top: 0.3rem;
-  color: #333;
+  margin-top: 5px;
+  color: var(--gray-700);
 `;
 
 const Timestamp = styled.div`
-  font-size: 0.85rem;
-  color: #888;
-  margin-top: 0.5rem;
+  font-size: 12px;
+  color: var(--gray-600);
   text-align: right;
 `;
 
@@ -181,4 +234,21 @@ const NoNotificationsMessage = styled.div`
   font-size: 16px;
   text-align: center;
   margin-top: 20px;
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const All = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const X = styled(GoX)`
+  color: var(--gray-500);
+  font-size: 18px;
 `;

@@ -6,7 +6,7 @@ import {
 export type UserPetRecommendationsResponse = {
   petId: number;
   petName: string;
-  recommedations: RecommendationsAccommodation[];
+  recommendations: RecommendationsAccommodation[];
 }[];
 
 export interface GuestRecommendationsResponse {
@@ -16,12 +16,28 @@ export interface GuestRecommendationsResponse {
   고양이: RecommendationsAccommodation[];
 }
 
-export interface MostViewedRecommendationsResponse {
+export type MostViewedRecommendationsResponse = RecommendationsAccommodation[];
+
+export type RecentReviewListResponse = RecentReview[];
+
+export interface UserPetMoreRecommendationsResponse {
   code: number;
-  data: RecommendationsAccommodation[];
+  content: RecommendationsAccommodation[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
 }
 
-export interface RecentReviewListResponse {
+export interface GuestMoreRecommendationsResponse {
   code: number;
-  data: RecentReview[];
+  content: RecommendationsAccommodation[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
 }

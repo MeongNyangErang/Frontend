@@ -150,7 +150,14 @@ const DetailAccommodation = () => {
   };
 
   const handleRoomviews = (roomId: number) => {
-    navigate(`/accommodation/${accommodationId}/room/${roomId}`);
+    const room = accommodation?.roomDetails.find((r) => r.roomId === roomId);
+    if (!room) return;
+
+    navigate(`/accommodation/${accommodationId}/room/${roomId}`, {
+      state: {
+        totalPrice: room.price + room.extraFee,
+      },
+    });
   };
 
   const handleAllReserve = (room: RoomData) => {
@@ -163,7 +170,7 @@ const DetailAccommodation = () => {
       state: {
         roomId: room.roomId,
         accommodationName: accommodation.name,
-        totalPrice: room.price,
+        totalPrice: room.price + room.extraFee,
         checkInDate: checkInDate,
         checkOutDate: checkOutDate,
         peopleCount: peopleCount,
@@ -230,7 +237,12 @@ const DetailAccommodation = () => {
             )}
           </Section>
           <SectionTitle>객실선택</SectionTitle>
-          <RoomSearchBar />
+          <RoomSearchBar
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
+            peopleCount={peopleCount}
+            petCount={petCount}
+          />
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>
               {accommodation.roomDetails

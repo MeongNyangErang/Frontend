@@ -154,8 +154,6 @@ const useChatMessages = (chatRoomId: number | undefined) => {
 
     let subscription: any;
 
-    return;
-
     const stompClient = createStompClient();
     stompClientRef.current = stompClient;
     stompClient.onConnect = () => {

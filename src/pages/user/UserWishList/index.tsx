@@ -14,11 +14,11 @@ import {
   SInfoBox,
   SWishButton,
   SWishlistBottom,
+  SWishlistBox,
 } from './styles';
 
 const UserWishList = () => {
   const {
-    currentCursor,
     wishlist,
     isLoading,
     isFirstLoaded,
@@ -29,17 +29,21 @@ const UserWishList = () => {
     handleDeleteWishItem,
     resetError,
   } = useWishlistPage();
-  console.log(wishlist);
+
   return (
     <>
       <SubPageHeader title="찜한 숙소" style="noButton" />
       {error && (
-        <MessageBox>
-          {error.message || '에러가 발생했습니다. 새로고침 해주세요.'}
-        </MessageBox>
+        <SWishlistBox>
+          <MessageBox>
+            {error.message || '에러가 발생했습니다. 새로고침 해주세요.'}
+          </MessageBox>
+        </SWishlistBox>
       )}
       {!error && isFirstLoaded && wishlist.length === 0 && (
-        <MessageBox variant="light">찜한 숙소가 없습니다.</MessageBox>
+        <SWishlistBox>
+          <MessageBox variant="light">찜한 숙소가 없습니다.</MessageBox>
+        </SWishlistBox>
       )}
       {!error && (
         <SWishlistWrap>
