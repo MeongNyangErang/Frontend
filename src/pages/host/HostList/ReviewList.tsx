@@ -18,7 +18,7 @@ interface ReviewList {
 const ReviewList = () => {
   const [reviews, setReviews] = useState<ReviewList[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [size, setSize] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
