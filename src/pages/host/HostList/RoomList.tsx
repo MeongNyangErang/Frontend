@@ -29,6 +29,7 @@ const RoomList: React.FC = () => {
 
   const fetchRooms = async () => {
     if (!hasNext) return;
+    console.log(`Fetching rooms for page ${page}`);
 
     try {
       const response = (await fetchCall(
@@ -58,9 +59,11 @@ const RoomList: React.FC = () => {
   }, [page]);
 
   const deleteRoom = async (roomId: number) => {
+    console.log(`Deleting room with ID: ${roomId}`);
     try {
       await fetchCall(`hosts/rooms/${roomId}`, 'delete');
       setRoomList((prev) => prev.filter((room) => room.roomId !== roomId));
+      console.log(`Room with ID ${roomId} deleted successfully`);
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
       alert('삭제에 실패했습니다.');
@@ -73,7 +76,10 @@ const RoomList: React.FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNext) {
-          setPage((prevPage) => prevPage + 1);
+          setPage((prevPage) => {
+            console.log(`Page changed to: ${prevPage + 1}`);
+            return prevPage + 1;
+          });
         }
       },
       { threshold: 1 },
