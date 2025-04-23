@@ -156,17 +156,16 @@ const ReservationList = () => {
                 {reservation.checkOutDate}
               </Check>
 
-              {selectedFilter === 'RESERVED' &&
-                reservation.status === 'RESERVED' && (
-                  <CancelButton
-                    isDoneFilter={false}
-                    onClick={() =>
-                      handleCancelReservation(reservation.reservationId)
-                    }
-                  >
-                    예약 취소
-                  </CancelButton>
-                )}
+              {selectedFilter === 'RESERVED' && (
+                <CancelButton
+                  isDoneFilter={false}
+                  onClick={() =>
+                    handleCancelReservation(reservation.reservationId)
+                  }
+                >
+                  예약 취소
+                </CancelButton>
+              )}
             </Side>
           </Width>
         </RoomDetails>
