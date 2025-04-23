@@ -358,10 +358,6 @@ const RegisterAccommodation = () => {
       } as any;
 
       const formData = new FormData();
-      console.log(accommodationId, 'accommodationId');
-      console.log(deletedImageUrls, 'deletedImageUrls');
-      console.log(additionalImages, 'additionalImages');
-      console.log(thumbnail, 'thumbnail');
 
       if (accommodationId) {
         data['deleteImageUrls'] = deletedImageUrls;
