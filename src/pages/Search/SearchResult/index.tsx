@@ -105,13 +105,17 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
   };
 
   useEffect(() => {
-    setSearchedData([]);
     setCurrentPage(0);
   }, [currentQuery, currentFilter]);
 
   useEffect(() => {
     if (!content) return;
-    setSearchedData((prev) => [...prev, ...content]);
+    console.log('content 변경', content);
+    if (currentPage === 0) {
+      setSearchedData([...content]);
+    } else {
+      setSearchedData((prev) => [...prev, ...content]);
+    }
   }, [content]);
 
   return (
