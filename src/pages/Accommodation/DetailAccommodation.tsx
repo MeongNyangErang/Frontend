@@ -223,6 +223,8 @@ const DetailAccommodation = () => {
         totalPrice: room.price + room.extraFee,
         checkInDate,
         checkOutDate,
+        peopleCount,
+        petCount,
       },
     });
   };
