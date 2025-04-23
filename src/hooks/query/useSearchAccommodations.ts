@@ -7,6 +7,7 @@ export const useSearchAccommodations = (
   page: number,
   filter?: SearchFilterType,
 ) => {
+  console.log('useSearchAccommodations', filter);
   const queryClient = useQueryClient();
   const result = useQuery({
     queryKey: ['search-accommodations', query, page, filter],

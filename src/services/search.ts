@@ -8,6 +8,7 @@ export const searchAccommodations = async (
   page: number,
   filter?: SearchFilterType,
 ) => {
+  console.log('searchAccommodations', filter);
   const data = { ...query, ...(filter ? filter : {}) } as any;
 
   for (let i in data) {
