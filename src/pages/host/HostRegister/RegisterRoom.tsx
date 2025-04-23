@@ -395,6 +395,9 @@ const RegisterRoom = () => {
         response = await fetchCall(`hosts/rooms`, 'post', formData);
         navigate(ROUTES.myPage.host.roomList);
       }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('API를 불러오는데 오류가 발생했습니다:', error);
     }
