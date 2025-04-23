@@ -46,7 +46,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     error,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
   const { member } = useAuth();
-  const { refreshWishlist } = useWishlist(0);
+  const { refreshWishlist } = useWishlist(0, false);
   const {
     error: wishError,
     updateError: updateWishError,
