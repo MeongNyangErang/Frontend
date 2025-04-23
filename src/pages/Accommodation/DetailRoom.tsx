@@ -31,7 +31,8 @@ const DetailRoom = () => {
   const location = useLocation();
   const { pathname, state } = location;
   const roomId = pathname.split('/').slice(-1)[0];
-  const { totalPrice, checkIn, checkOut, peopleCount, petCount } = state || {};
+  const { totalPrice, checkInTime, checkOutTine, peopleCount, petCount } =
+    state || {};
   const roomName = state?.roomName || null;
 
   useEffect(() => {
@@ -48,8 +49,8 @@ const DetailRoom = () => {
     navigate(`/accommodation/${roomId}/reservation`, {
       state: {
         totalPrice,
-        checkIn,
-        checkOut,
+        checkInTime: roomDetails?.checkInTime,
+        checkOutTine: roomDetails?.checkOutTime,
         peopleCount,
         petCount,
         roomId,
