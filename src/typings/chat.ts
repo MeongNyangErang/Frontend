@@ -24,6 +24,8 @@ export interface NewChatMessage {
   senderType: 'USER' | 'HOST';
   messageType: 'MESSAGE' | 'IMAGE';
   createdAt: string;
+  receiverName: string;
+  receiverImageUrl: string;
 }
 
 export interface ChatPartnerState {

@@ -34,7 +34,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     const messages =
       pages?.flatMap(
         ({ data, receiverImageUrl, receiverName }) =>
-          data.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
+          data?.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
       ) || [];
     messages.sort((a, b) => {
       const dateA = new Date(a.createdAt);
