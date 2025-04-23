@@ -96,7 +96,7 @@ const NotificationSender = () => {
         console.log('WebSocket 연결됨');
         client.subscribe('/user/subscribe/notifications', (message: any) => {
           const { notificationId, content, notificationType, createdAt } =
-            message.body;
+            JSON.parse(message.body);
           console.log(message, message.body, 'message here');
           setNotifications((prevNotifications) => [
             ...prevNotifications,
