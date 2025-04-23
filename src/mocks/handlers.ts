@@ -104,8 +104,8 @@ export const handlers = [
   http.delete(`${BASE_URL}/register/roomList`, async () => {
     return HttpResponse.json({ code: 200, message: '객실 삭제 성공' });
   }),
-  http.get(`${BASE_URL}/register/roomList`, async () => {
-    const roomListData = {
+  http.get(`${BASE_URL}/hosts/rooms?page=0&size=20t`, async () => {
+    const response = {
       code: 200,
       data: [
         {
@@ -124,7 +124,7 @@ export const handlers = [
       nextCursor: '1',
       hasNext: true,
     };
-    return HttpResponse.json(roomListData);
+    return HttpResponse.json(response);
   }),
   http.post(`${BASE_URL}/user/reservations`, async () => {
     return HttpResponse.json({ message: '예약이 완료되었습니다' });
@@ -135,7 +135,7 @@ export const handlers = [
       id: 'accommodationId',
     });
   }),
-  http.put(`${BASE_URL}/register-accommodation`, async () => {
+  http.put(`${BASE_URL}/hosts/accommodations`, async () => {
     return HttpResponse.json({ message: '숙소 정보가 업데이트되었습니다' });
   }),
   http.get(`${BASE_URL}/hosts/accommodations`, async () => {
