@@ -29,7 +29,6 @@ const RoomList: React.FC = () => {
 
   const fetchRooms = async () => {
     if (!hasNext) return;
-    console.log(`Fetching rooms for page ${page}`);
 
     try {
       const response = (await fetchCall(
@@ -38,19 +37,13 @@ const RoomList: React.FC = () => {
       )) as any;
       console.log('API 응답:', response);
 
-      if (response && Array.isArray(response)) {
-        const rooms = response;
+      const rooms = response?.data?.response;
 
+      if (rooms && Array.isArray(rooms)) {
         if (rooms.length > 0) {
-          setRoomList((prev) => {
-            const updatedRooms = { ...prev };
-            rooms.forEach((room: Room) => {
-              updatedRooms[room.roomId] = room;
-            });
-            return updatedRooms;
-          });
+          setRoomList((prev) => [...prev, ...rooms]);
         }
-        setHasNext(response.length === 20);
+        setHasNext(rooms.length === 20);
       } else {
         console.error('응답 데이터가 올바르지 않습니다.');
       }
@@ -69,11 +62,7 @@ const RoomList: React.FC = () => {
     console.log(`Deleting room with ID: ${roomId}`);
     try {
       await fetchCall(`hosts/rooms/${roomId}`, 'delete');
-      setRoomList((prev) => {
-        const updatedRooms = { ...prev };
-        delete updatedRooms[roomId];
-        return updatedRooms;
-      });
+      setRoomList((prev) => prev.filter((room) => room.roomId !== roomId));
       console.log(`Room with ID ${roomId} deleted successfully`);
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
