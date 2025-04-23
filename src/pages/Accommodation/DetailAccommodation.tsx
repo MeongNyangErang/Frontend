@@ -179,6 +179,10 @@ const DetailAccommodation = () => {
       alert('에러가 발생했습니다. 다시 시도해주세요.');
     }
   };
+  useEffect(() => {
+    console.log(checkInDate);
+    console.log(checkOutDate);
+  }, [checkInDate, checkOutDate]);
 
   const onChangeDate = (
     key: 'checkInDate' | 'checkOutDate',
@@ -239,8 +243,8 @@ const DetailAccommodation = () => {
         roomId: room.roomId,
         accommodationName: accommodation.name,
         totalPrice: room.price + room.extraFee,
-        checkInTime: checkInDate,
-        checkOutTime: checkOutDate,
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
         peopleCount: peopleCount,
         petCount: petCount,
       },

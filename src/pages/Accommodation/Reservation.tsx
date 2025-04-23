@@ -27,7 +27,7 @@ const Reservation = () => {
   const navigate = useNavigate();
   const { refreshReservationList } = useUserReservationList('RESERVED', 0);
   const { state } = location;
-
+  console.log(state);
   useEffect(() => {
     if (!location) {
       console.log('정보가 없습니다.');
@@ -45,12 +45,14 @@ const Reservation = () => {
   const {
     roomId,
     accommodationName,
-    totalPrice = 100000,
-    checkInDate = formatDate(today),
-    checkOutDate = formatDate(tomorrow),
-    peopleCount = 1,
-    petCount = 1,
+    totalPrice,
+    checkInDate,
+    checkOutDate,
+    peopleCount,
+    petCount,
   } = location.state || {};
+
+  console.log(checkInDate, checkOutDate, '날짜');
 
   const calculateStayDuration = (checkInDate: string, checkOutDate: string) => {
     const checkIn = new Date(checkInDate);
