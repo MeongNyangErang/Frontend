@@ -31,7 +31,9 @@ const DetailRoom = () => {
   const location = useLocation();
   const { pathname, state } = location;
   const roomId = pathname.split('/').slice(-1)[0];
+
   const { totalPrice, checkInDate, checkOutDate, peopleCount, petCount } =
+
     state || {};
   const roomName = state?.roomName || null;
 
