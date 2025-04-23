@@ -32,9 +32,7 @@ const ReviewList = () => {
         'get',
       )) as any;
 
-      const newReviews = Array.isArray(response?.data?.content)
-        ? response.data.content
-        : [];
+      const newReviews = response.content;
 
       if (newReviews.length > 0) {
         setReviews((prev) => [...prev, ...newReviews]);
