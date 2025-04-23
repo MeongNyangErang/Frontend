@@ -66,8 +66,6 @@ type ReservationInfo = {
   petCount: number;
 };
 
-const SESSION_KEY = 'reservationInfo';
-
 const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
@@ -248,10 +246,6 @@ const DetailAccommodation = () => {
       },
     });
   };
-
-  useEffect(() => {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(reservationInfo));
-  }, [reservationInfo]);
 
   return (
     <Container>
