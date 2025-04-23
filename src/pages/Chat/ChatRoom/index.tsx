@@ -30,13 +30,9 @@ import {
 
 interface ChatRoomProps {
   chatRoomId: number;
-  partnerInfo: ChatPartnerState;
 }
 
-const ChatRoom = ({
-  chatRoomId,
-  partnerInfo: { partnerImageUrl, partnerName },
-}: ChatRoomProps) => {
+const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
   const {
     member: { data },
     messages,
@@ -56,19 +52,26 @@ const ChatRoom = ({
     handleSubmit,
   } = useChatRoom(chatRoomId);
 
+  console.log(messages, 'messages');
+
   if (!data) return <Navigate to={ROUTES.home} />;
 
   return (
     <>
       <SChatRoomWrap>
         <SChatContainer ref={scrollContainerRef}>
-          <SChatInfoBox>{partnerName}님과의 대화방 입니다.</SChatInfoBox>
           {messages && messages.length > 0 && (
             <SMessageList>
               <div ref={infiniteScrollRef} />
               {messages.map((message, index) => {
-                const { messageContent, senderType, createdAt, messageType } =
-                  message;
+                const {
+                  messageContent,
+                  senderType,
+                  createdAt,
+                  messageType,
+                  receiverImageUrl,
+                  receiverName,
+                } = message;
                 const isMyMessage = senderType === data.role.toUpperCase();
                 const isThePreviousSender =
                   index > 0 && messages[index - 1].senderType === senderType;
@@ -100,13 +103,13 @@ const ChatRoom = ({
                         <SMessageProfile>
                           {!isThePreviousSender && (
                             <img
-                              src={partnerImageUrl || defaultProfileImage}
+                              src={receiverImageUrl || defaultProfileImage}
                               alt="프로필 이미지"
                             />
                           )}
                         </SMessageProfile>
                         <SMessageContent>
-                          {!isThePreviousSender && <span>{partnerName}</span>}
+                          {!isThePreviousSender && <span>{receiverName}</span>}
                           <div>
                             {isText ? (
                               <SMessageText>{messageContent}</SMessageText>

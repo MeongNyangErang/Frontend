@@ -1,4 +1,4 @@
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import useMediaQuery from '@hooks/ui/useMediaQuery';
 import useChatList from '@hooks/query/useChatList';
 import { BREAK_POINTS } from '@components/styles/responsive';
@@ -11,8 +11,6 @@ import useAuth from '@hooks/auth/useAuth';
 
 const Chat = () => {
   const { chatRoomId } = useParams();
-  const location = useLocation();
-  const state = location.state as ChatPartnerState;
   const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
   const { data } = useChatList();
   const listSize = data?.pages.flatMap(({ content }) => content).length;
@@ -25,10 +23,8 @@ const Chat = () => {
       <SChatWrap>
         <SChatContiner>
           {!roomId && <ChatList />}
-          {roomId && state && (
-            <ChatRoom chatRoomId={roomId} partnerInfo={state} />
-          )}
-          {roomId && !state && <Navigate to={ROUTES.chat.list} />}
+          {roomId && <ChatRoom chatRoomId={roomId} />}
+          {roomId && <Navigate to={ROUTES.chat.list} />}
         </SChatContiner>
       </SChatWrap>
     );
@@ -46,10 +42,8 @@ const Chat = () => {
             </p>
           </SEmptyChatRoomMessage>
         )}
-        {roomId && state && (
-          <ChatRoom chatRoomId={roomId} partnerInfo={state} />
-        )}
-        {roomId && !state && <Navigate to={ROUTES.chat.list} />}
+        {roomId && <ChatRoom chatRoomId={roomId} />}
+        {roomId && <Navigate to={ROUTES.chat.list} />}
       </SChatContiner>
     </SChatWrap>
   );
