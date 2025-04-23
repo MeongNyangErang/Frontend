@@ -32,7 +32,7 @@ const useUserPetRecommendations = () => {
       }
       return v;
     });
-    queryClient.setQueryData(['user-pet-recommendations'], newData);
+    queryClient.setQueryData(['user-pet-recommendations'], { data: newData });
   };
 
   return { ...result, refresehUserPetRecommendations };
