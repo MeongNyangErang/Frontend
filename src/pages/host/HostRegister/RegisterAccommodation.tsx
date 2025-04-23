@@ -360,6 +360,8 @@ const RegisterAccommodation = () => {
       const formData = new FormData();
 
       if (accommodationId) {
+        console.log(deletedImageUrls, 'deletedImageUrls');
+        console.log(additionalImages, 'additionalImages');
         data['deletedImageUrls'] = deletedImageUrls;
         if (thumbnail) {
           formData.append('newThumbnail', thumbnail);
