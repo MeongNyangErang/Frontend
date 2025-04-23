@@ -82,10 +82,13 @@ const ReservationList = () => {
   };
 
   useEffect(() => {
-    setReservationList([]);
-    setPage(0);
-    setHasMore(true);
-    fetchRooms();
+    const resetAndFetch = async () => {
+      setReservationList([]);
+      setPage(0);
+      setHasMore(true);
+      await fetchRooms();
+    };
+    resetAndFetch();
   }, [selectedFilter]);
 
   useEffect(() => {
@@ -94,9 +97,7 @@ const ReservationList = () => {
   }, [page, hasMore]);
 
   const handleFilterClick = (filter: string) => {
-    if (selectedFilter !== filter) {
-      setSelectedFilter(filter);
-    }
+    if (selectedFilter !== filter) setSelectedFilter(filter);
   };
 
   return (
