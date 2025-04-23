@@ -223,6 +223,7 @@ const RegisterAccommodation = () => {
       };
       reader.readAsDataURL(file);
       setThumbnailImageUploaded(true);
+      e.target.value = '';
     }
   };
 

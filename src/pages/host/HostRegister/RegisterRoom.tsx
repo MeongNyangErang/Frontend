@@ -276,6 +276,7 @@ const RegisterRoom = () => {
       };
       reader.readAsDataURL(file);
       setThumbnailImageUploaded(true);
+      e.target.value = '';
     }
   };
 
@@ -336,6 +337,7 @@ const RegisterRoom = () => {
       return;
     }
 
+    setThumbnailError('');
     const hashtagTypes = selectedHashTag.map(
       (h) => HASHTAG_TYPE_MAP[h as keyof typeof HASHTAG_TYPE_MAP],
     );
@@ -451,7 +453,7 @@ const RegisterRoom = () => {
         <div>
           <SInput
             type="text"
-            placeholder="객실실명을 입력해주세요"
+            placeholder="객실명을 입력해주세요"
             value={name}
             onChange={handleNameChange}
           />

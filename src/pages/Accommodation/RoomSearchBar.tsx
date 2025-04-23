@@ -8,10 +8,10 @@ import { usePopper } from 'react-popper';
 import styled from 'styled-components';
 
 type SearchBarProps = {
-  checkInDate?: string;
-  checkOutDate?: string;
-  peopleCount?: number;
-  petCount?: number;
+  checkInDate: string;
+  checkOutDate: string;
+  peopleCount: number;
+  petCount: number;
 };
 
 const SearchBar = ({
@@ -91,19 +91,6 @@ const SearchBar = ({
   };
 
   const handleSearch = async () => {
-    const validations = [
-      { condition: !checkInDate, message: '체크인 날짜를 선택해주세요.' },
-      { condition: !checkOutDate, message: '체크아웃 날짜를 선택해주세요.' },
-      { condition: petCount < 1, message: '반려동물 수를 입력해주세요.' },
-    ];
-
-    for (const validation of validations) {
-      if (validation.condition) {
-        setError(validation.message);
-        return;
-      }
-    }
-
     const params = new URLSearchParams({
       checkInDate: formatDate(checkInDate!),
       checkOutDate: formatDate(checkOutDate!),
@@ -126,9 +113,7 @@ const SearchBar = ({
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setCheckInDate(start);
-    console.log('체크인 날짜:', formatDateKST(checkInDate));
     setCheckOutDate(end);
-    console.log('체크아웃 날짜:', formatDateKST(checkOutDate));
   };
 
   const applyPeopleAndPets = () => {

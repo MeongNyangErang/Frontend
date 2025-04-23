@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Header from '@components/common/RegisterHeader/index';
@@ -16,6 +15,7 @@ interface ReservationList {
   totalPrice: number;
   checkInDate: string;
   checkOutDate: string;
+  status: string;
 }
 
 const FILTER = ['RESERVED', 'COMPLETED', 'CANCELED'] as const;
@@ -27,43 +27,76 @@ const ReservationList = () => {
   );
   const [hasMore, setHasMore] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
+  const [page, setPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const fetchRooms = async () => {
     if (!hasMore) return;
 
-    const cursor = lastReservationId ? lastReservationId : '';
     try {
       const response = (await fetchCall(
-        `hosts/reservations?status=${selectedFilter}&cursor=${cursor}`,
+        `hosts/reservations?status=${selectedFilter}&page=${page}&size=20`,
         'get',
       )) as any;
 
-      setReservationList((prev) => [...prev, ...response.content]);
-
-      if (response.length < 10) {
-        setHasMore(false);
+      if (response.page < response.totalPages - 1) {
+        setPage((prevPage) => prevPage + 1);
       } else {
-        setLastReservationId(response[response.length - 1].reservationId);
+        setHasMore(false);
       }
+      setTotalPages(response.totalPages);
     } catch (error) {
       console.error('예약 데이터를 가져오는데 실패했습니다:', error);
     }
   };
 
+  const handleCancelReservation = async (reservationId: string) => {
+    try {
+      const response = (await fetchCall(
+        `hosts/reservations/${reservationId}/cancel`,
+        'put',
+      )) as any;
+
+      if (response.status === 'CANCELED') {
+        setReservationList((prevList) =>
+          prevList.map((reservation) =>
+            reservation.reservationId === reservationId
+              ? { ...reservation, status: 'CANCELED' }
+              : reservation,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error('예약 취소에 실패했습니다:', error);
+    }
+  };
+
   useEffect(() => {
     fetchRooms();
-  }, [selectedFilter]);
+  }, [selectedFilter, page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottom =
+        document.documentElement.scrollHeight ===
+        document.documentElement.scrollTop + window.innerHeight;
+      if (bottom && hasMore) {
+        fetchRooms();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasMore]);
 
   const handleFilterClick = (filter: string) => {
     setSelectedFilter(filter);
     setReservationList([]);
-    setLastReservationId(null);
+    setPage(0);
     setHasMore(true);
   };
-
-  if (reservationList.length === 0) {
-    return <NoRoomsMessage>예약 내역이 없습니다.</NoRoomsMessage>;
-  }
 
   return (
     <Containers>
@@ -88,6 +121,10 @@ const ReservationList = () => {
           취소됨
         </FilterButton>
       </FilterButtons>
+
+      {reservationList.length === 0 && (
+        <NoRoomsMessage>예약 내역이 없습니다.</NoRoomsMessage>
+      )}
 
       {reservationList.map((reservation) => (
         <RoomDetails key={reservation.reservationId}>
@@ -117,18 +154,18 @@ const ReservationList = () => {
                 <Calendar /> {reservation.checkInDate} ~ <Calendar />{' '}
                 {reservation.checkOutDate}
               </Check>
-              <CancelButton
-                isDoneFilter={
-                  selectedFilter === 'done' || selectedFilter === 'cancelled'
-                }
-                onClick={() => {
-                  if (selectedFilter !== 'done') {
-                    console.log(`${reservation.reservationId} 예약 취소`);
-                  }
-                }}
-              >
-                예약 취소
-              </CancelButton>
+
+              {selectedFilter === 'RESERVED' &&
+                reservation.status === 'RESERVED' && (
+                  <CancelButton
+                    isDoneFilter={false}
+                    onClick={() =>
+                      handleCancelReservation(reservation.reservationId)
+                    }
+                  >
+                    예약 취소
+                  </CancelButton>
+                )}
             </Side>
           </Width>
         </RoomDetails>
