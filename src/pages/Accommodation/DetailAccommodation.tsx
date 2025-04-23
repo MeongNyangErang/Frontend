@@ -11,6 +11,7 @@ import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
 import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
+import useWishlist from '@hooks/query/user/useWishlist';
 import { AxiosError } from 'axios';
 import AccommodationMap from './AccommodationMap';
 
@@ -62,6 +63,7 @@ const DetailAccommodation = () => {
   const {
     member: { data },
   } = useAuth();
+  const { refreshWishlist } = useWishlist(0);
   const navigate = useNavigate();
   const location = useLocation();
   const accommodationId = parseInt(location.pathname.split('/').splice(-1)[0]);

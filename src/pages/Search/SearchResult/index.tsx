@@ -13,6 +13,7 @@ import Loader from '@components/common/Loader';
 import { Accommodation } from '@typings/response/accommodations';
 import useAuth from '@hooks/auth/useAuth';
 import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
+import useWishlist from '@hooks/query/user/useWishlist';
 import {
   SMessageArea,
   SItems,
@@ -45,6 +46,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
     error,
   } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
   const { member } = useAuth();
+  const { refreshWishlist } = useWishlist(0);
   const {
     error: wishError,
     updateError: updateWishError,
@@ -76,6 +78,7 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
       });
       return updatedResult;
     });
+    refreshWishlist();
   };
 
   const handleClickWishButton = async (
