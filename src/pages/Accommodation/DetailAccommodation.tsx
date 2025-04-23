@@ -106,6 +106,7 @@ const DetailAccommodation = () => {
       if (!prev) return prev;
       return { ...prev, wishlisted: !prev?.wishlisted };
     });
+    refreshWishlist();
   };
 
   const handleClickWishButton = async () => {
