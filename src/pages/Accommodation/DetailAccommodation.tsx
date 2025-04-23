@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
-import { FaRegHeart } from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
 import { fetchCall } from 'services/api';
 import { media } from '@components/styles/responsive';
 import { createChatRoom } from '@services/chat';
@@ -13,6 +13,7 @@ import useAuth from '@hooks/auth/useAuth';
 import RoomSearchBar from '@pages/Accommodation/RoomSearchBar';
 import { AxiosError } from 'axios';
 import AccommodationMap from './AccommodationMap';
+import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
 
 interface DetailData {
   accommodationId: number;
@@ -31,6 +32,7 @@ interface DetailData {
   longitude: number;
   reviews: ReviewData[];
   roomDetails: RoomData[];
+  wishlisted: boolean;
 }
 
 interface RoomData {
@@ -95,6 +97,30 @@ const DetailAccommodation = () => {
     }
 
     return finalPrice;
+  };
+
+  const handleSuccessClickWishButton = () => {
+    setAccommodation((prev) => {
+      if (!prev) return prev;
+      return { ...prev, wishlisted: !prev?.wishlisted };
+    });
+  };
+
+  const handleClickWishButton = async () => {
+    if (!data || data.role === 'HOST') {
+      alert('로그인한 유저만 이용 할 수 있습니다');
+      return;
+    }
+    if (!accommodationId || !accommodation) return;
+
+    try {
+      accommodation.wishlisted
+        ? await deleteFromWishlist(accommodationId)
+        : await addToWishlist(accommodationId);
+      handleSuccessClickWishButton();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const checkInDate =
@@ -206,8 +232,11 @@ const DetailAccommodation = () => {
     <Container>
       {accommodation && (
         <AccommodationDetailWrap>
-          <RegHeartButton>
-            <FaRegHeart />
+          <RegHeartButton
+            $isActive={accommodation.wishlisted}
+            onClick={handleClickWishButton}
+          >
+            <FaHeart />
           </RegHeartButton>
           <TumbnailImage src={accommodation.thumbnailUrl} />
           <DetailTopArea>
@@ -687,7 +716,7 @@ const Queen = styled(GiChessQueen)`
   font-size: 50px;
 `;
 
-const RegHeartButton = styled.button`
+const RegHeartButton = styled.button<{ $isActive: boolean }>`
   position: absolute;
   z-index: 2;
   right: 10px;
@@ -696,7 +725,8 @@ const RegHeartButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  color: ${({ theme }) => theme.colors.gray600};
+  color: ${({ theme, $isActive }) =>
+    $isActive ? theme.colors.main : theme.colors.gray500};
   width: 30px;
   height: 30px;
 
