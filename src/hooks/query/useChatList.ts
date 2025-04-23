@@ -2,7 +2,7 @@ import { getChatList } from '@services/chat';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { ChatListResponse } from '@typings/response/chat';
 
-const useChatList = () => {
+const useChatList = (enabled = true) => {
   const queryClient = useQueryClient();
 
   const refreshChatList = async (chatRoomId: number) => {
@@ -38,6 +38,7 @@ const useChatList = () => {
       if (!lastPage.last) return lastPage.page + 1;
       return undefined;
     },
+    enabled,
   });
 
   return { refreshChatList, ...result };

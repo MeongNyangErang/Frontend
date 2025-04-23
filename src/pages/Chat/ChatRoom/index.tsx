@@ -29,7 +29,7 @@ import {
 } from './styles';
 
 interface ChatRoomProps {
-  chatRoomId: string;
+  chatRoomId: number;
   partnerInfo: ChatPartnerState;
 }
 
