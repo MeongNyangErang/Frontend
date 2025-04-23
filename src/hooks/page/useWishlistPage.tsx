@@ -15,7 +15,7 @@ const useWishlistPage = () => {
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
-    data: { content, last, page } = {},
+    data: { content, last } = {},
     isLoading,
     error,
     refreshWishlist,
@@ -69,7 +69,7 @@ const useWishlistPage = () => {
     } else {
       setWishlist((prev) => [...prev, ...content]);
     }
-  }, []);
+  }, [content]);
 
   useEffect(() => {
     if (!isLoading && !isFirstLoaded) {
