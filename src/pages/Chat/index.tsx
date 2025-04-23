@@ -18,16 +18,17 @@ const Chat = () => {
   const listSize = data?.pages.flatMap(({ content }) => content).length;
   const { member } = useAuth();
   const partnerRole = member.data?.role === 'HOST' ? '유저' : '호스트';
+  const roomId = isNaN(Number(chatRoomId)) ? undefined : Number(chatRoomId);
 
   if (isTablet) {
     return (
       <SChatWrap>
         <SChatContiner>
-          {!chatRoomId && <ChatList />}
-          {chatRoomId && state && (
-            <ChatRoom chatRoomId={chatRoomId} partnerInfo={state} />
+          {!roomId && <ChatList />}
+          {roomId && state && (
+            <ChatRoom chatRoomId={roomId} partnerInfo={state} />
           )}
-          {chatRoomId && !state && <Navigate to={ROUTES.chat.list} />}
+          {roomId && !state && <Navigate to={ROUTES.chat.list} />}
         </SChatContiner>
       </SChatWrap>
     );
@@ -36,7 +37,7 @@ const Chat = () => {
     <SChatWrap>
       <SChatContiner>
         <ChatList />
-        {!chatRoomId && (
+        {!roomId && (
           <SEmptyChatRoomMessage>
             <p>
               {listSize && listSize > 0
@@ -45,10 +46,10 @@ const Chat = () => {
             </p>
           </SEmptyChatRoomMessage>
         )}
-        {chatRoomId && state && (
-          <ChatRoom chatRoomId={chatRoomId} partnerInfo={state} />
+        {roomId && state && (
+          <ChatRoom chatRoomId={roomId} partnerInfo={state} />
         )}
-        {chatRoomId && !state && <Navigate to={ROUTES.chat.list} />}
+        {roomId && !state && <Navigate to={ROUTES.chat.list} />}
       </SChatContiner>
     </SChatWrap>
   );

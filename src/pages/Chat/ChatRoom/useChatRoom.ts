@@ -1,11 +1,10 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useChatMessages from '@hooks/page/chat/useChatMessages';
 import useAuth from '@hooks/auth/useAuth';
+import useChatList from '@hooks/query/useChatList';
 
-const useChatRoom = (chatRoomId: string) => {
+const useChatRoom = (chatRoomId: number) => {
   const { member } = useAuth();
-  const numericRoomId = Number(chatRoomId);
-  const validRoomId = isNaN(numericRoomId) ? undefined : numericRoomId;
   const {
     messages,
     chatError,
@@ -14,7 +13,8 @@ const useChatRoom = (chatRoomId: string) => {
     sendMessage,
     sendImage,
     updateError,
-  } = useChatMessages(validRoomId);
+  } = useChatMessages(chatRoomId);
+  const { refreshChatList } = useChatList(false);
   const [text, setText] = useState('');
   const [image, setImage] = useState<null | File>(null);
   const [imagePreview, setImagePreview] = useState('');
@@ -72,6 +72,10 @@ const useChatRoom = (chatRoomId: string) => {
       });
     }
   };
+
+  useEffect(() => {
+    refreshChatList(chatRoomId);
+  }, [chatRoomId]);
 
   return {
     member,
