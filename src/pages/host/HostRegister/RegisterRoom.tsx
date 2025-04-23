@@ -371,10 +371,6 @@ const RegisterRoom = () => {
       petFacilityTypes,
     } as any;
 
-    console.log(data, 'data');
-
-    return;
-
     if (roomId) data['roomId'] = roomId;
 
     const formData = new FormData();
