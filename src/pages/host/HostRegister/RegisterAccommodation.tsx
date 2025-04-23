@@ -386,7 +386,6 @@ const RegisterAccommodation = () => {
         }
       }
 
-      return;
       const blob = new Blob([JSON.stringify(data)], {
         type: 'application/json',
       });
