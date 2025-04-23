@@ -28,10 +28,11 @@ interface DetailRoomData {
 const DetailRoom = () => {
   const navigate = useNavigate();
   const [roomDetails, setRoomDetails] = useState<DetailRoomData | null>(null);
-  const { pathname } = useLocation();
-  const roomId = pathname.split('/').slice(-1)[0];
   const location = useLocation();
-  const { totalPrice } = location.state || {};
+  const { pathname, state } = location;
+  const roomId = pathname.split('/').slice(-1)[0];
+  const { totalPrice, checkIn, checkOut, peopleCount, petCount } = state || {};
+  const roomName = state?.roomName || null;
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -44,7 +45,17 @@ const DetailRoom = () => {
   }, []);
 
   const handleAllReserve = () => {
-    navigate(`/accommodation/${roomId}/reservation`);
+    navigate(`/accommodation/${roomId}/reservation`, {
+      state: {
+        totalPrice,
+        checkIn,
+        checkOut,
+        peopleCount,
+        petCount,
+        roomId,
+        roomName,
+      },
+    });
   };
 
   if (!roomDetails) return null;

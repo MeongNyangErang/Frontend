@@ -26,12 +26,13 @@ const Reservation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { refreshReservationList } = useUserReservationList('RESERVED', 0);
+  const { state } = location;
 
   useEffect(() => {
     if (!location) {
       console.log('정보가 없습니다.');
     }
-  }, [location]);
+  }, [location, state]);
 
   const formatDate = (date: Date) => {
     return date.toISOString().split('T')[0];
