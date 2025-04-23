@@ -45,6 +45,7 @@ const ReservationList = () => {
         setHasMore(false);
       }
       setTotalPages(response.totalPages);
+      setReservationList(response.content);
     } catch (error) {
       console.error('예약 데이터를 가져오는데 실패했습니다:', error);
     }
