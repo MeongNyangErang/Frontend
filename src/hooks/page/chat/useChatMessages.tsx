@@ -31,7 +31,11 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
   const previousMessages = useMemo(() => {
-    const messages = pages?.flatMap((page) => page.content || []) || [];
+    const messages =
+      pages?.flatMap(
+        ({ data, receiverImageUrl, receiverName }) =>
+          data.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
+      ) || [];
     messages.sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
@@ -184,6 +188,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
             scrollTarget.scrollTop + scrollTarget.clientHeight >=
               scrollTarget.scrollHeight - 10;
           const newMessage: NewChatMessage = JSON.parse(message.body);
+          console.log(newMessage, newMessage);
           setMessages((prev) => [...prev, newMessage]);
           refreshChatList(chatRoomId);
           if (wasAtBottom)

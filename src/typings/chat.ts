@@ -15,6 +15,8 @@ export interface PreviousChatMessage {
   messageContent: string;
   createdAt: string;
   messageType: 'MESSAGE' | 'IMAGE';
+  receiverName: string;
+  receiverImageUrl: string;
 }
 
 export interface NewChatMessage {
