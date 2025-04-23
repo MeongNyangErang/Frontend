@@ -156,7 +156,7 @@ const ReservationList = () => {
                 {reservation.checkOutDate}
               </Check>
 
-              {selectedFilter === 'RESERVED' && (
+              {selectedFilter === 'RESERVED' && false && (
                 <CancelButton
                   isDoneFilter={false}
                   onClick={() =>
