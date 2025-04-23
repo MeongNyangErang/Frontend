@@ -71,7 +71,6 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-          <Route path="room-list" element={<HostRoomList />} />
 
           <Route path="notification" element={<Notificaion />} />
 
