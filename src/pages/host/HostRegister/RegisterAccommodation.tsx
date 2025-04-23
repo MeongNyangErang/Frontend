@@ -562,7 +562,7 @@ const RegisterAccommodation = () => {
           onChange={handleAdditionalImagesChange}
           accept="image/jpeg,image/jpg,image/png"
         />
-        {additionalImagesPreview.length > 0 && (
+        {additionalImagesPreview && (
           <SSPreviewWrapper>
             {additionalImagesPreview.map((preview, index) => (
               <SSImagePreviewWrapper key={index}>
