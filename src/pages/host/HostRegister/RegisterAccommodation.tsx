@@ -358,7 +358,9 @@ const RegisterAccommodation = () => {
       } as any;
 
       const formData = new FormData();
-
+      console.log(accommodationId, 'accommodationId');
+      console.log(deletedImageUrls, 'deletedImageUrls');
+      console.log(additionalImages, 'additionalImages');
       if (accommodationId) {
         console.log(deletedImageUrls, 'deletedImageUrls');
         console.log(additionalImages, 'additionalImages');
@@ -384,6 +386,7 @@ const RegisterAccommodation = () => {
         }
       }
 
+      return;
       const blob = new Blob([JSON.stringify(data)], {
         type: 'application/json',
       });
