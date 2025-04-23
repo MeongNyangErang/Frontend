@@ -4,7 +4,7 @@ import { FaXmark } from 'react-icons/fa6';
 import Modal from '@components/common/Modal';
 import { ChatPartnerState } from '@typings/chat';
 import ROUTES from '@constants/routes';
-import { formatUTCTimeToDateOrTime } from '@utils/date';
+import { formatTimeToDateOrTime } from '@utils/date';
 import defaultProfileImage from '@assets/images/profile/profileUser.png';
 import useChatRoom from './useChatRoom';
 import {
@@ -73,7 +73,7 @@ const ChatRoom = ({
                 const isThePreviousSender =
                   index > 0 && messages[index - 1].senderType === senderType;
                 const isText = messageType === 'MESSAGE';
-                const formattedTime = formatUTCTimeToDateOrTime(createdAt);
+                const formattedTime = formatTimeToDateOrTime(createdAt);
                 return (
                   <SMessage
                     key={`${createdAt}${index}`}

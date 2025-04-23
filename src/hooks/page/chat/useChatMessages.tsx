@@ -105,8 +105,6 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const onSuccessSending = async (message: string) => {
     if (!chatRoomId) return;
 
-    refreshChatList(chatRoomId);
-
     const data = { chatRoomId, content: message };
 
     try {
@@ -187,7 +185,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
               scrollTarget.scrollHeight - 10;
           const newMessage: NewChatMessage = JSON.parse(message.body);
           setMessages((prev) => [...prev, newMessage]);
-
+          refreshChatList(chatRoomId);
           if (wasAtBottom)
             setTimeout(() => {
               scrollTarget.scrollTop = scrollTarget.scrollHeight;
