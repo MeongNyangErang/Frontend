@@ -33,12 +33,12 @@ const RoomList: React.FC = () => {
 
     try {
       const response = (await fetchCall(
-        `hosts/rooms?page=0&size=20`,
+        `hosts/rooms?page=${page}&size=20`,
         'get',
       )) as any;
       console.log('API 응답:', response);
 
-      if (response && response.data) {
+      if (response && Array.isArray(response.data)) {
         const rooms = response.data;
         if (rooms.length > 0) {
           setRoomList((prev) => [...prev, ...rooms]);
@@ -48,7 +48,7 @@ const RoomList: React.FC = () => {
         console.error('응답 데이터가 올바르지 않습니다.');
       }
     } catch (error) {
-      console.log('서버 오류가 발생했습니다.');
+      console.error('서버 오류가 발생했습니다.', error);
     } finally {
       console.log('객실 로딩이 완료되었습니다.');
     }
