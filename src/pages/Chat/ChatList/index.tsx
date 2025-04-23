@@ -5,7 +5,7 @@ import useInfiniteScroll from '@hooks/ui/useInfiniteScroll';
 import Loader from '@components/common/Loader';
 import ROUTES from '@constants/routes';
 import defaultProfileImage from '@assets/images/profile/profileUser.png';
-import { formatUTCTimeToDateOrTime } from '@utils/date';
+import { formatTimeToDateOrTime } from '@utils/date';
 import {
   SChatListWrap,
   SChatTitle,
@@ -68,7 +68,7 @@ const ChatList = () => {
                       </p>
                       <span>
                         {lastMessageTime
-                          ? formatUTCTimeToDateOrTime(lastMessageTime)
+                          ? formatTimeToDateOrTime(lastMessageTime)
                           : ''}
                       </span>
                     </SItemInfo>
