@@ -80,6 +80,7 @@ const UserPetRecommendationSection = ({
       onSuccessClickWishButton={onSuccessClickWishButton}
       last={last}
       isLoading={isLoading}
+      wishButton
     />
   );
 };
