@@ -6,7 +6,8 @@ import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 import UserPetRecommendationSection from './UserPetRecommendationsSection';
 
 const UserPetRecommendations = () => {
-  const { data, isLoading, error } = useUserPetRecommendations();
+  const { data, isLoading, error, refresehUserPetRecommendations } =
+    useUserPetRecommendations();
 
   return (
     <>
@@ -28,6 +29,7 @@ const UserPetRecommendations = () => {
               <UserPetRecommendationSection
                 petId={petId}
                 initialRecommendations={recommendations}
+                onSuccessClickWishButton={refresehUserPetRecommendations}
               />
             )}
           </SSectionContainer>
