@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { getMoreUserRecommendations } from '@services/recommendations';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import useIsLoading from '@hooks/ui/useIsLoading';
+import useWishlist from '@hooks/query/user/useWishlist';
 import RecommendationSlider from '../RecommendationSlider';
 
 interface UserPetRecommendationSectionProps {
@@ -18,6 +19,7 @@ const UserPetRecommendationSection = ({
   const [recommendations, setRecommendations] = useState(
     initialRecommendations,
   );
+  const { refreshWishlist } = useWishlist(0);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [hasMoreFetched, setHasMoreFetched] = useState(false);
@@ -58,6 +60,7 @@ const UserPetRecommendationSection = ({
         return v;
       });
     });
+    refreshWishlist();
   }, []);
 
   useEffect(() => {
