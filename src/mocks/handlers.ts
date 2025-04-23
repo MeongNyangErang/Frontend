@@ -193,9 +193,9 @@ export const handlers = [
       reviews: [
         {
           reviewId: 1,
-          reviewRating: 4.5,
+          reviewRating: 3.5,
           content: '너무 좋았어요! 바다 전망이 최고였고, 직원들이 친절했어요.',
-          createdAt: '2025-04-11',
+          createdAt: '2025-04-23T14:30:00',
         },
         {
           reviewId: 2,
@@ -362,22 +362,25 @@ export const handlers = [
     };
     return HttpResponse.json(roomDetaiData);
   }),
-  http.get(`${BASE_URL}/register/roomReview`, async () => {
-    const roomReview = {
-      nickname: '김멍냥',
-      profileImageUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-      roomName: '오션 더블A',
-      totalRating: 4.6,
-      content:
-        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-      reviewImages: [
-        'https://i.imgur.com/WrQthuy.jpeg',
-        'https://i.imgur.com/WrQthuy.jpeg',
-        'https://i.imgur.com/WrQthuy.jpeg',
-      ],
-      createdAt: '2025-03-23',
-    };
-    return HttpResponse.json(roomReview);
+  http.get(`${BASE_URL}/hosts/review`, async () => {
+    const response = [
+      {
+        nickname: '김멍냥',
+        roomId: 1,
+        reviewId: 2,
+        roomName: '오션 더블A',
+        totalRating: 4.6,
+        reviewContent:
+          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+        imageUrls: [
+          'https://i.imgur.com/WrQthuy.jpeg',
+          'https://i.imgur.com/WrQthuy.jpeg',
+          'https://i.imgur.com/WrQthuy.jpeg',
+        ],
+        createdAt: '2025-03-23',
+      },
+    ];
+    return HttpResponse.json(response);
   }),
 
   http.get(`${BASE_URL}/users/wishlist/accommodations`, async () => {
@@ -414,7 +417,7 @@ export const handlers = [
     };
     return HttpResponse.json([ReviewList]);
   }),
-  http.get(`${BASE_URL}/reservation-list`, async () => {
+  http.get(`${BASE_URL}/hosts/reservations`, async () => {
     const ReservationList = {
       reservationDate: '2025-04-11',
       reservationName: '김멍냥',

@@ -20,27 +20,51 @@ interface RoomReview {
 type RoomReviewData = RoomReview[];
 
 const RoomReview = () => {
-  const [roomReview, setRoomReview] = useState<RoomReviewData | null>(null);
+  const [roomReview, setRoomReview] = useState<RoomReview[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const { pathname } = useLocation();
   const accommodationId = pathname.split('/')[2];
 
-  useEffect(() => {
-    const fetchRoomDetails = async () => {
-      try {
-        const response = (await fetchCall(
-          `accommodations/${accommodationId}/reviews`,
-          'get',
-        )) as any;
+  const fetchRoomDetails = async () => {
+    if (!hasMore) return;
 
-        setRoomReview(response.content);
-      } catch (error) {
-        console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
+    try {
+      const response = (await fetchCall(
+        `accommodations/${accommodationId}/reviews&page${page}&size=20`,
+        'get',
+      )) as any;
+
+      const newReviews: RoomReview[] = response.content || [];
+      setRoomReview((prev) => [...prev, ...newReviews]);
+
+      if (response.last) setHasMore(false);
+    } catch (error) {
+      console.error('리뷰 불러오기 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoomDetails();
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const innerHeight = window.innerHeight;
+      const bodyHeight = document.body.offsetHeight;
+
+      const reachedBottom = scrollY + innerHeight >= bodyHeight - 200;
+
+      if (reachedBottom && hasMore) {
+        setPage((prev) => prev + 1);
       }
     };
 
-    fetchRoomDetails();
-  }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore]);
 
   return (
     <Card>
@@ -48,7 +72,7 @@ const RoomReview = () => {
         <Star />
         리얼 리뷰
       </Title>
-      {roomReview ? (
+      {roomReview.length > 0 ? (
         roomReview.map((r) => (
           <Fragment key={r.reviewId}>
             <Body>

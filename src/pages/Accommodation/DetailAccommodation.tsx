@@ -66,6 +66,10 @@ const DetailAccommodation = () => {
   const location = useLocation();
   const accommodationId = parseInt(location.pathname.split('/').splice(-1)[0]);
 
+  const formatDate = (dateString: string) => {
+    return dateString.split('T')[0];
+  };
+
   const publicHolidays = ['2025-01-01', '2025-12-25'];
 
   const isWeekend = (date: Date) => {
@@ -80,11 +84,28 @@ const DetailAccommodation = () => {
 
   const getRoomPrice = (room: RoomData) => {
     const today = new Date();
-    const isWeekendDay = isWeekend(today);
-    const isHolidayDay = isHoliday(today);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const defaultCheckIn = today.toLocaleDateString('en-CA');
+    const defaultCheckOut = tomorrow.toLocaleDateString('en-CA');
 
     let finalPrice = room.price;
+    if (checkInDate && checkOutDate && peopleCount && petCount) {
+      finalPrice = room.price * peopleCount + room.extraFee;
+    }
+
+    return finalPrice;
   };
+
+  const checkInDate =
+    location.state?.checkInDate || new Date().toLocaleDateString('en-CA');
+  const checkOutDate =
+    location.state?.checkOutDate ||
+    new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString(
+      'en-CA',
+    );
+  const peopleCount = Number(location.state?.peopleCount || 1);
+  const petCount = Number(location.state?.petCount || 1);
 
   const state = location.state as
     | {
@@ -94,11 +115,6 @@ const DetailAccommodation = () => {
         petCount: number;
       }
     | undefined;
-
-  const checkInDate = state?.checkInDate;
-  const checkOutDate = state?.checkOutDate;
-  const peopleCount = state?.peopleCount;
-  const petCount = state?.petCount;
 
   const handleClickChatButton = async () => {
     if (data === null) {
@@ -161,6 +177,13 @@ const DetailAccommodation = () => {
   };
 
   const handleAllReserve = (room: RoomData) => {
+    /*
+    if (!data) {
+      alert('로그인이 필요한 기능입니다.');
+      return;
+    }
+      */
+
     if (!accommodation) {
       console.error('Accommodation is null.');
       return;
@@ -224,7 +247,7 @@ const DetailAccommodation = () => {
                           starSpacing="1px"
                         />
                       </ReviewRatingWrapper>
-                      <ReviewDate>{review.createdAt}</ReviewDate>
+                      <ReviewDate>{formatDate(review.createdAt)}</ReviewDate>
                     </All>
                     <ReviewContent>
                       <ReviewText>{review.content}</ReviewText>
@@ -233,7 +256,7 @@ const DetailAccommodation = () => {
                 ))}
               </ReviewContainer>
             ) : (
-              <p>아직 리뷰가 없습니다</p>
+              <P>아직 리뷰가 없습니다</P>
             )}
           </Section>
           <SectionTitle>객실선택</SectionTitle>
@@ -758,6 +781,11 @@ const Text = styled.span`
   border-radius: 20px;
   color: white;
   background: #ff7b92;
+`;
+
+const P = styled.p`
+  margin-left: 5px;
+  font-size: 15px;
 `;
 
 const Section = styled.div`

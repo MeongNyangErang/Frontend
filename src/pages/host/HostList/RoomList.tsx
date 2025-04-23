@@ -21,25 +21,25 @@ interface Room {
 
 const RoomList: React.FC = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
   const [hasNext, setHasNext] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [dropdownOpenId, setDropdownOpenId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
 
   const fetchRooms = async () => {
-    if (!hasNext || isLoading) return;
-    setIsLoading(true);
+    if (!hasNext) return;
+
     try {
-      const lastRoomId =
-        roomList.length > 0 ? roomList[roomList.length - 1].roomId : '';
       const response = (await fetchCall(
-        `hosts/rooms?cursorId=${lastRoomId}`,
+        `hosts/rooms?page=${page}&size=20`,
         'get',
       )) as any;
 
-      setRoomList(response.content);
+      if (response.content.length > 0) {
+        setRoomList((prev) => [...prev, ...response.content]);
+      }
+      setHasNext(response.content.length === 20);
     } catch (error) {
       console.log('서버 오류가 발생했습니다.');
     } finally {
@@ -49,7 +49,7 @@ const RoomList: React.FC = () => {
 
   useEffect(() => {
     fetchRooms();
-  }, [BASE_URL]);
+  }, [page]);
 
   const deleteRoom = async (roomId: number) => {
     try {
@@ -66,8 +66,8 @@ const RoomList: React.FC = () => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNext && !isLoading) {
-          fetchRooms();
+        if (entries[0].isIntersecting && hasNext) {
+          setPage((prevPage) => prevPage + 1);
         }
       },
       { threshold: 1 },
@@ -76,7 +76,7 @@ const RoomList: React.FC = () => {
     observer.observe(observerRef.current);
 
     return () => observer.disconnect();
-  }, [observerRef.current, hasNext, isLoading]);
+  }, [observerRef.current, hasNext]);
 
   const openRegisterPage = () => {
     navigate(ROUTES.myPage.host.registerRoom);

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from '@services/api';
 
 interface ReviewList {
-  nickName: string;
+  nickname: string;
   roomId: number;
   reviewId: number;
   roomName: string;
@@ -18,23 +17,37 @@ interface ReviewList {
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState<ReviewList[]>([]);
-  const [expandedReviews, setExpandedReviews] = useState<number[]>([]);
-  const [lastReviewId, setLastReviewId] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isFirst, setIsFirst] = useState(false);
   const fetchReviews = async () => {
     if (!hasMore) return;
 
     try {
-      const response = (await fetchCall(`hosts/reviews`, 'get')) as any;
-      const newReviews = response?.content;
-      setReviews((prev) => [...prev, ...newReviews]);
+      const response = (await fetchCall(
+        `hosts/reviews?page=${page}&size=20`,
+        'get',
+      )) as any;
 
-      if (newReviews.length < 10) {
-        setHasMore(false);
+      const newReviews = Array.isArray(response?.data?.content)
+        ? response.data.content
+        : [];
+
+      if (newReviews.length > 0) {
+        setReviews((prev) => [...prev, ...newReviews]);
+        setSize(response.data.size);
+        setTotalElements(response.data.totalElements);
+        setTotalPages(response.data.totalPages);
+        setIsFirst(response.data.first);
+
+        if (response.data.last) {
+          setHasMore(false);
+        }
       } else {
-        setLastReviewId(newReviews[newReviews.length - 1].reviewId);
+        setHasMore(false);
       }
     } catch (error) {
       console.error('리뷰 데이터를 가져오는데 실패했습니다:', error);
@@ -43,14 +56,15 @@ const ReviewList = () => {
 
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [page]);
 
-  const toggleExpand = (reviewId: number) => {
-    setExpandedReviews((prev) =>
-      prev.includes(reviewId)
-        ? prev.filter((id) => id !== reviewId)
-        : [...prev, reviewId],
-    );
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const bottom =
+      e.currentTarget.scrollHeight ===
+      e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+    if (bottom && hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
   if (reviews.length === 0) {
@@ -58,58 +72,44 @@ const ReviewList = () => {
   }
 
   return (
-    <div>
+    <div onScroll={handleScroll}>
       <Header title="리뷰 목록" />
-      {reviews.map((review) => {
-        const isExpanded = expandedReviews.includes(review.reviewId);
-        const shouldShowToggle = review.reviewContent.length > 200;
-
-        return (
-          <ReviewContainer key={`${review.reviewId}-${review.roomId}`}>
-            <Name>
-              <RoomName>{review.roomName}</RoomName>
-            </Name>
-            <ReviewHeader>
-              <User>{review.nickName}</User>
-              <CreatedAt>
-                {new Date(review.createdAt).toISOString().split('T')[0]}
-              </CreatedAt>
-            </ReviewHeader>
-            <Rating>
-              <StarRatings
-                rating={review.totalRating}
-                starRatedColor="#f03e5e"
-                numberOfStars={5}
-                name="rating"
-                starDimension="16px"
-                starSpacing="1px"
-              />
-            </Rating>
-            {review.imageUrls.length > 0 && (
-              <ImageGallery>
-                {review.imageUrls.map((url, index) => (
-                  <ReviewImage
-                    key={index}
-                    src={url}
-                    alt={`review-image-${index}`}
-                  />
-                ))}
-              </ImageGallery>
-            )}
-
-            <ReviewContent>
-              {isExpanded || !shouldShowToggle
-                ? review.reviewContent
-                : `${review.reviewContent.slice(0, 260)}...`}
-              {shouldShowToggle && (
-                <ToggleButton onClick={() => toggleExpand(review.reviewId)}>
-                  {isExpanded ? '접기' : '더보기'}
-                </ToggleButton>
-              )}
-            </ReviewContent>
-          </ReviewContainer>
-        );
-      })}
+      <ReviewInfo>총 {reviews.length}개 리뷰</ReviewInfo>
+      {reviews.map((review) => (
+        <ReviewContainer key={`${review.reviewId}-${review.roomId}`}>
+          <Name>
+            <RoomName>{review.roomName}</RoomName>
+          </Name>
+          <ReviewHeader>
+            <User>{review.nickname}</User>
+            <CreatedAt>
+              {new Date(review.createdAt).toISOString().split('T')[0]}
+            </CreatedAt>
+          </ReviewHeader>
+          <Rating>
+            <StarRatings
+              rating={review.totalRating}
+              starRatedColor="#f03e5e"
+              numberOfStars={5}
+              name="rating"
+              starDimension="16px"
+              starSpacing="1px"
+            />
+          </Rating>
+          {review.imageUrls.length > 0 && (
+            <ImageGallery>
+              {review.imageUrls.map((url, index) => (
+                <ReviewImage
+                  key={index}
+                  src={url}
+                  alt={`review-image-${index}`}
+                />
+              ))}
+            </ImageGallery>
+          )}
+          <ReviewContent>{review.reviewContent}</ReviewContent>
+        </ReviewContainer>
+      ))}
     </div>
   );
 };
@@ -192,13 +192,12 @@ const NoReviewsMessage = styled.div`
   color: var(--gray-700);
 `;
 
-const ToggleButton = styled.button`
-  display: block;
-  background: none;
-  border: none;
-  color: var(--gray-500);
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 5px;
-  padding: 0;
+const ReviewInfo = styled.div`
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1024px;
+  min-width: 320px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--gray-600);
 `;
