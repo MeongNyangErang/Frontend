@@ -27,7 +27,6 @@ const Reservation = () => {
   const navigate = useNavigate();
   const { refreshReservationList } = useUserReservationList('RESERVED', 0);
   const { state } = location;
-  console.log(state);
   useEffect(() => {
     if (!location) {
       console.log('정보가 없습니다.');
