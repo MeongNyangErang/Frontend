@@ -13,7 +13,7 @@ const MostViewedRecommendations = () => {
   const [list, setList] = useState<RecommendationsAccommodation[]>([]);
   const { data, isLoading, error, refreshMostViewedRecommendations } =
     useMostViewedRecommendations();
-  const { refreshWishlist } = useWishlist(0);
+  const { refreshWishlist } = useWishlist(0, false);
   const { refresehUserPetRecommendations } = useUserPetRecommendations();
 
   const onSuccessClickWishButton = (accommodationId: number) => {

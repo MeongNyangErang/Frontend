@@ -84,6 +84,7 @@ const useUserReservationListPage = () => {
     startChatLoading();
     try {
       const { chatRoomId } = await createChatRoom(accommodationId);
+      console.log(chatRoomId, 'chatRoomId');
       navigate(ROUTES.chat.room(chatRoomId));
     } catch (error) {
       console.log(error);

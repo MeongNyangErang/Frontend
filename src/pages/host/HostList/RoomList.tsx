@@ -35,18 +35,8 @@ const RoomList: React.FC = () => {
         `hosts/rooms?page=${page}&size=20`,
         'get',
       )) as any;
-      console.log('API 응답:', response);
 
-      const rooms = response?.data?.response;
-
-      if (rooms && Array.isArray(rooms)) {
-        if (rooms.length > 0) {
-          setRoomList((prev) => [...prev, ...rooms]);
-        }
-        setHasNext(rooms.length === 20);
-      } else {
-        console.error('응답 데이터가 올바르지 않습니다.');
-      }
+      setRoomList(response);
     } catch (error) {
       console.error('서버 오류가 발생했습니다.', error);
     } finally {

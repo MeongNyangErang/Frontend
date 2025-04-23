@@ -65,7 +65,7 @@ const DetailAccommodation = () => {
   const {
     member: { data },
   } = useAuth();
-  const { refreshWishlist } = useWishlist(0);
+  const { refreshWishlist } = useWishlist(0, false);
   const navigate = useNavigate();
   const location = useLocation();
   const accommodationId = parseInt(location.pathname.split('/').splice(-1)[0]);
@@ -90,8 +90,8 @@ const DetailAccommodation = () => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
-    const defaultCheckIn = today.toLocaleDateString('en-CA');
-    const defaultCheckOut = tomorrow.toLocaleDateString('en-CA');
+    const defaultCheckIn = today.toLocaleDateString();
+    const defaultCheckOut = tomorrow.toLocaleDateString();
 
     let finalPrice = room.price;
     if (checkInDate && checkOutDate && peopleCount && petCount) {
@@ -127,12 +127,10 @@ const DetailAccommodation = () => {
   };
 
   const checkInDate =
-    location.state?.checkInDate || new Date().toLocaleDateString('en-CA');
+    location.state?.checkInDate || new Date().toLocaleDateString();
   const checkOutDate =
     location.state?.checkOutDate ||
-    new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString(
-      'en-CA',
-    );
+    new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
   const peopleCount = Number(location.state?.peopleCount || 1);
   const petCount = Number(location.state?.petCount || 1);
 

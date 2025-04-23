@@ -1,11 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getWishlist } from '@services/wishlist';
 
-const useWishlist = (page: number) => {
+const useWishlist = (page: number, enabled?: boolean) => {
   const queryClient = useQueryClient();
   const result = useQuery({
     queryKey: ['wishlist', page],
     queryFn: () => getWishlist(page),
+    enabled: enabled ? enabled : true,
     staleTime: 1000 * 60 * 60,
   });
 
