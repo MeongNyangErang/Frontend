@@ -22,29 +22,29 @@ const FILTER = ['RESERVED', 'COMPLETED', 'CANCELED'] as const;
 
 const ReservationList = () => {
   const [reservationList, setReservationList] = useState<ReservationList[]>([]);
-  const [lastReservationId, setLastReservationId] = useState<string | null>(
-    null,
-  );
-  const [hasMore, setHasMore] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
   const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [size, setSize] = useState<number>(20);
 
   const fetchRooms = async () => {
     if (!hasMore) return;
 
     try {
       const response = (await fetchCall(
-        `hosts/reservations?status=${selectedFilter}&page=${page}&size=20`,
+        `hosts/reservations?status=${selectedFilter}&page=${page}&size=${size}`,
         'get',
       )) as any;
 
-      if (response.page < response.totalPages - 1) {
-        setPage((prevPage) => prevPage + 1);
+      setReservationList((prev) => [...prev, ...response.content]);
+      setTotalPages(response.totalPages);
+
+      if (page < response.totalPages - 1) {
+        setPage((prev) => prev + 1);
       } else {
         setHasMore(false);
       }
-      setTotalPages(response.totalPages);
     } catch (error) {
       console.error('예약 데이터를 가져오는데 실패했습니다:', error);
     }
@@ -71,31 +71,32 @@ const ReservationList = () => {
     }
   };
 
-  useEffect(() => {
-    fetchRooms();
-  }, [selectedFilter, page]);
+  const handleScroll = () => {
+    const isBottom =
+      Math.ceil(window.innerHeight + document.documentElement.scrollTop) >=
+      document.documentElement.offsetHeight;
+
+    if (isBottom && hasMore) {
+      fetchRooms();
+    }
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const bottom =
-        document.documentElement.scrollHeight ===
-        document.documentElement.scrollTop + window.innerHeight;
-      if (bottom && hasMore) {
-        fetchRooms();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [hasMore]);
-
-  const handleFilterClick = (filter: string) => {
-    setSelectedFilter(filter);
     setReservationList([]);
     setPage(0);
     setHasMore(true);
+    fetchRooms();
+  }, [selectedFilter]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [page, hasMore]);
+
+  const handleFilterClick = (filter: string) => {
+    if (selectedFilter !== filter) {
+      setSelectedFilter(filter);
+    }
   };
 
   return (
