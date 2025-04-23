@@ -461,17 +461,11 @@ export const handlers = [
     return HttpResponse.json(userRecommendationsResponse);
   }),
   http.get(`${BASE_URL}/recommendations/most-viewed`, async () => {
-    const response = {
-      code: 200,
-      data: mostViewedRecommendations,
-    };
+    const response = mostViewedRecommendations;
     return HttpResponse.json(response);
   }),
   http.get(`${BASE_URL}/users/latest-reviews`, async () => {
-    const response = {
-      code: 200,
-      data: latestReviewList,
-    };
+    const response = latestReviewList;
     return HttpResponse.json(response);
   }),
   http.post(`${BASE_URL}/notifications/messages`, async () => {

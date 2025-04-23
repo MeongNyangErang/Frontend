@@ -12,6 +12,7 @@ type SearchBarProps = {
   checkOutDate: string;
   peopleCount: number;
   petCount: number;
+  onChange?: (updated: { [key: string]: string | number }) => void;
 };
 
 const SearchBar = ({
@@ -19,6 +20,7 @@ const SearchBar = ({
   checkOutDate: initCheckOutDate,
   peopleCount: initPeopleCount = 1,
   petCount: initPetCount = 1,
+  onChange,
 }: SearchBarProps) => {
   const [location, setLocation] = useState('');
   const [checkInDate, setCheckInDate] = useState<Date | null>(
@@ -134,6 +136,15 @@ const SearchBar = ({
     }
   }, [currentQuery]);
   */
+
+  useEffect(() => {
+    onChange?.({
+      checkInDate: formatDateKST(checkInDate),
+      checkOutDate: formatDateKST(checkOutDate),
+      peopleCount,
+      petCount,
+    });
+  }, [checkInDate, checkOutDate, peopleCount, petCount]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

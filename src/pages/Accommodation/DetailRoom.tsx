@@ -31,7 +31,9 @@ const DetailRoom = () => {
   const location = useLocation();
   const { pathname, state } = location;
   const roomId = pathname.split('/').slice(-1)[0];
-  const { totalPrice, checkInTime, checkOutTine, peopleCount, petCount } =
+
+  const { totalPrice, checkInDate, checkOutDate, peopleCount, petCount } =
+
     state || {};
   const roomName = state?.roomName || null;
 
@@ -49,8 +51,8 @@ const DetailRoom = () => {
     navigate(`/accommodation/${roomId}/reservation`, {
       state: {
         totalPrice,
-        checkInTime: roomDetails?.checkInTime,
-        checkOutTine: roomDetails?.checkOutTime,
+        checkInDate,
+        checkOutDate,
         peopleCount,
         petCount,
         roomId,
