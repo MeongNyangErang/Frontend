@@ -22,7 +22,7 @@ const UserPetRecommendationSection = ({
   const [recommendations, setRecommendations] = useState(
     initialRecommendations,
   );
-  const { refreshWishlist } = useWishlist(0);
+  const { refreshWishlist } = useWishlist(0, false);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [hasMoreFetched, setHasMoreFetched] = useState(false);

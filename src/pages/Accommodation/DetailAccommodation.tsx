@@ -65,7 +65,7 @@ const DetailAccommodation = () => {
   const {
     member: { data },
   } = useAuth();
-  const { refreshWishlist } = useWishlist(0);
+  const { refreshWishlist } = useWishlist(0, false);
   const navigate = useNavigate();
   const location = useLocation();
   const accommodationId = parseInt(location.pathname.split('/').splice(-1)[0]);
