@@ -59,6 +59,15 @@ interface ReviewData {
   createdAt: string;
 }
 
+type ReservationInfo = {
+  checkInDate: string;
+  checkOutDate: string;
+  peopleCount: number;
+  petCount: number;
+};
+
+const SESSION_KEY = 'reservationInfo';
+
 const DetailAccommodation = () => {
   const [accommodation, setAccommodation] = useState<DetailData | null>(null);
   const [showAllRooms, setShowAllRooms] = useState<boolean>(false);
@@ -74,17 +83,36 @@ const DetailAccommodation = () => {
     return dateString.split('T')[0];
   };
 
-  const publicHolidays = ['2025-01-01', '2025-12-25'];
+  const locationState = location.state as
+    | {
+        checkInDate: string;
+        checkOutDate: string;
+        peopleCount: number;
+        petCount: number;
+      }
+    | undefined;
 
-  const isWeekend = (date: Date) => {
-    const day = date.getDay();
-    return day === 0 || day === 6;
+  const getInitialReservationInfo = () => {
+    const stored = sessionStorage.getItem(SESSION_KEY);
+    if (stored) return JSON.parse(stored);
+    return {
+      checkInDate:
+        locationState?.checkInDate || new Date().toLocaleDateString(),
+      checkOutDate:
+        locationState?.checkOutDate ||
+        new Date(
+          new Date().setDate(new Date().getDate() + 1),
+        ).toLocaleDateString(),
+      peopleCount: locationState?.peopleCount || 1,
+      petCount: locationState?.petCount || 1,
+    };
   };
 
-  const isHoliday = (date: Date) => {
-    const dateString = date.toISOString().split('T')[0];
-    return publicHolidays.includes(dateString);
-  };
+  const [reservationInfo, setReservationInfo] = useState<ReservationInfo>(
+    getInitialReservationInfo(),
+  );
+
+  const { checkInDate, checkOutDate, peopleCount, petCount } = reservationInfo;
 
   const getRoomPrice = (room: RoomData) => {
     const today = new Date();
@@ -126,23 +154,6 @@ const DetailAccommodation = () => {
     }
   };
 
-  const checkInDate =
-    location.state?.checkInDate || new Date().toLocaleDateString();
-  const checkOutDate =
-    location.state?.checkOutDate ||
-    new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
-  const peopleCount = Number(location.state?.peopleCount || 1);
-  const petCount = Number(location.state?.petCount || 1);
-
-  const state = location.state as
-    | {
-        checkInDate: string;
-        checkOutDate: string;
-        peopleCount: number;
-        petCount: number;
-      }
-    | undefined;
-
   const handleClickChatButton = async () => {
     if (data === null) {
       alert('로그인한 유저만 이용 할 수 있습니다.');
@@ -166,6 +177,11 @@ const DetailAccommodation = () => {
       alert('에러가 발생했습니다. 다시 시도해주세요.');
     }
   };
+
+  const onChangeDate = (
+    key: 'checkInDate' | 'checkOutDate',
+    value: Date | null,
+  ) => {};
 
   useEffect(() => {
     const getAccommodationDetails = async () => {
@@ -199,6 +215,8 @@ const DetailAccommodation = () => {
     navigate(`/accommodation/${accommodationId}/room/${roomId}`, {
       state: {
         totalPrice: room.price + room.extraFee,
+        checkInDate,
+        checkOutDate,
       },
     });
   };
@@ -226,6 +244,10 @@ const DetailAccommodation = () => {
       },
     });
   };
+
+  useEffect(() => {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(reservationInfo));
+  }, [reservationInfo]);
 
   return (
     <Container>
@@ -289,10 +311,13 @@ const DetailAccommodation = () => {
           </Section>
           <SectionTitle>객실선택</SectionTitle>
           <RoomSearchBar
-            checkInDate={checkInDate}
-            checkOutDate={checkOutDate}
-            peopleCount={peopleCount}
-            petCount={petCount}
+            checkInDate={reservationInfo.checkInDate}
+            checkOutDate={reservationInfo.checkOutDate}
+            peopleCount={reservationInfo.peopleCount}
+            petCount={reservationInfo.petCount}
+            onChange={(updated) =>
+              setReservationInfo((prev) => ({ ...prev, ...updated }))
+            }
           />
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>

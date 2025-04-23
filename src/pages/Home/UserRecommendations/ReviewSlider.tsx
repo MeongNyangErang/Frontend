@@ -44,7 +44,7 @@ const ReviewSlider = ({ reviews }: RecommendationSliderProps) => {
           },
         }}
       >
-        {reviews.map(
+        {reviews?.map(
           ({
             totalRating,
             nickname,
