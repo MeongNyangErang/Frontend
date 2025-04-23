@@ -11,7 +11,7 @@ export interface ChatListResponse {
 }
 
 export interface PreviousChatMessagesResponse {
-  data: PreviousChatMessage[];
+  content: PreviousChatMessage[];
   receiverName: string;
   receiverImageUrl: string;
   first: boolean;

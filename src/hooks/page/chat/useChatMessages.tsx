@@ -30,12 +30,12 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const pages = (
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
-  console.log(pages, pages);
+
   const previousMessages = useMemo(() => {
     const messages =
       pages?.flatMap(
-        ({ data, receiverImageUrl, receiverName }) =>
-          data?.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
+        ({ content, receiverImageUrl, receiverName }) =>
+          content?.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
       ) || [];
     messages.sort((a, b) => {
       const dateA = new Date(a.createdAt);
