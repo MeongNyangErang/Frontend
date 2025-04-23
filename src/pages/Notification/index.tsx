@@ -125,7 +125,7 @@ const NotificationSender = () => {
         client.deactivate();
       }
     };
-  });
+  }, []);
 
   // 삭제
   const deleteNotification = async (notificationId: number) => {
