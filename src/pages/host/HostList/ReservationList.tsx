@@ -28,8 +28,8 @@ const ReservationList = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [size, setSize] = useState<number>(20);
 
-  const fetchRooms = async () => {
-    if (!hasMore) return;
+  const fetchRooms = async (force: boolean = false) => {
+    if (!hasMore && !force) return;
 
     try {
       const response = (await fetchCall(
@@ -82,13 +82,10 @@ const ReservationList = () => {
   };
 
   useEffect(() => {
-    const resetAndFetch = async () => {
-      setReservationList([]);
-      setPage(0);
-      setHasMore(true);
-      await fetchRooms();
-    };
-    resetAndFetch();
+    setReservationList([]);
+    setPage(0);
+    setHasMore(true);
+    fetchRooms(true);
   }, [selectedFilter]);
 
   useEffect(() => {
