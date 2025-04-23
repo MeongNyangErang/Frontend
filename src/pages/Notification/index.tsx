@@ -97,6 +97,7 @@ const NotificationSender = () => {
         client.subscribe('/user/subscribe/notifications', (message: any) => {
           const { notificationId, content, notificationType, createdAt } =
             message.body;
+          console.log(message, message.body, 'message here');
           setNotifications((prevNotifications) => [
             ...prevNotifications,
             { notificationId, content, notificationType, createdAt },
