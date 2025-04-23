@@ -8,7 +8,7 @@ const socketUrl = `${BASE_URL}/ws`;
 
 export const createStompClient = () => {
   const token = getLocalStorage('accessToken');
-
+  console.log('in createStompClient');
   const client = new Client({
     webSocketFactory: () => new SockJS(socketUrl),
     reconnectDelay: 5000,
