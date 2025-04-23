@@ -1,11 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getWishlist } from '@services/wishlist';
 
-const useWishlist = (cursor: number | undefined) => {
+const useWishlist = (page: number) => {
   const queryClient = useQueryClient();
   const result = useQuery({
-    queryKey: ['wishlist', cursor],
-    queryFn: () => getWishlist(cursor),
+    queryKey: ['wishlist', page],
+    queryFn: () => getWishlist(page),
     staleTime: 1000 * 60 * 60,
   });
 

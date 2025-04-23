@@ -8,20 +8,18 @@ import { WishlistItem } from '@typings/wishlist';
 import { deleteFromWishlist } from '@services/wishlist';
 
 const useWishlistPage = () => {
-  const [currentCursor, setCurrentCusor] = useState<undefined | number>(
-    undefined,
-  );
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
   const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const {
-    data: { content, nextCursor, hasNext } = {},
+    data: { content, last, page } = {},
     isLoading,
     error,
     refreshWishlist,
-  } = useWishlist(currentCursor);
+  } = useWishlist(currentPage);
 
   const {
     isLoading: isDeleteLoading,
@@ -32,18 +30,17 @@ const useWishlistPage = () => {
   const { error: deleteError, updateError, resetError } = useError();
 
   const updateCurrentCursor = useCallback(() => {
-    if (!nextCursor) return;
-    setCurrentCusor(nextCursor);
-  }, [nextCursor]);
+    if (last) return;
+    setCurrentPage((prev) => prev + 1);
+  }, [last]);
 
   const observerTargetRef = useInfiniteScroll(
     updateCurrentCursor,
-    !isLoading && !!hasNext && isFirstLoaded,
+    !isLoading && !last && isFirstLoaded,
   );
 
   const handleSuccessDeleteWishItem = () => {
-    setCurrentCusor(undefined);
-    setWishlist([]);
+    setCurrentPage(0);
     refreshWishlist();
   };
 
@@ -67,8 +64,12 @@ const useWishlistPage = () => {
 
   useEffect(() => {
     if (!content) return;
-    setWishlist((prev) => [...prev, ...content]);
-  }, [content]);
+    if (currentPage === 0) {
+      setWishlist([...content]);
+    } else {
+      setWishlist((prev) => [...prev, ...content]);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isLoading && !isFirstLoaded) {
@@ -77,7 +78,7 @@ const useWishlistPage = () => {
   }, [isLoading, isFirstLoaded]);
 
   return {
-    currentCursor,
+    currentPage,
     wishlist,
     isLoading,
     isFirstLoaded,

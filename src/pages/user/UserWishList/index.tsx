@@ -40,7 +40,7 @@ const UserWishList = () => {
           </MessageBox>
         </SWishlistBox>
       )}
-      {!error && isFirstLoaded && wishlist.length === 0 && (
+      {!error && !isLoading && isFirstLoaded && wishlist.length === 0 && (
         <SWishlistBox>
           <MessageBox variant="light">찜한 숙소가 없습니다.</MessageBox>
         </SWishlistBox>
