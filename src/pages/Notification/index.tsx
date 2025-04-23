@@ -94,7 +94,7 @@ const NotificationSender = () => {
 
       onConnect: () => {
         console.log('WebSocket 연결됨');
-        client.subscribe(`user/subscribe/notifications`, (message: any) => {
+        client.subscribe('/user/subscribe/notifications', (message: any) => {
           const newNotification = message.body;
           console.log(newNotification, 'newNotification');
           setNotifications((prevNotifications) => [
@@ -108,6 +108,14 @@ const NotificationSender = () => {
         console.log('WebSocket 연결 종료');
       },
     });
+
+    client.onStompError = (frame) => {
+      console.log('STOMP error', frame);
+    };
+
+    client.onWebSocketError = (frame) => {
+      console.log('WebSocket error', frame);
+    };
 
     client.activate();
 
