@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
@@ -94,11 +94,13 @@ const NotificationSender = () => {
 
       onConnect: () => {
         console.log('WebSocket 연결됨');
-        client.subscribe(`user/subscribe/notifications`, (message: any) => {
-          const newNotification = JSON.parse(message.body);
+        client.subscribe('/user/subscribe/notifications', (message: any) => {
+          const { notificationId, content, notificationType, createdAt } =
+            JSON.parse(message.body);
+          console.log(message, message.body, 'message here');
           setNotifications((prevNotifications) => [
             ...prevNotifications,
-            newNotification,
+            { notificationId, content, notificationType, createdAt },
           ]);
         });
       },
@@ -108,6 +110,14 @@ const NotificationSender = () => {
       },
     });
 
+    client.onStompError = (frame) => {
+      console.log('STOMP error', frame);
+    };
+
+    client.onWebSocketError = (frame) => {
+      console.log('WebSocket error', frame);
+    };
+
     client.activate();
 
     return () => {
@@ -115,7 +125,7 @@ const NotificationSender = () => {
         client.deactivate();
       }
     };
-  });
+  }, []);
 
   // 삭제
   const deleteNotification = async (notificationId: number) => {
