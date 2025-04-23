@@ -206,12 +206,10 @@ const DetailAccommodation = () => {
   };
 
   const handleAllReserve = (room: RoomData) => {
-    /*
     if (!data) {
       alert('로그인이 필요한 기능입니다.');
       return;
     }
-      */
 
     if (!accommodation) {
       console.error('Accommodation is null.');
