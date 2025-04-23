@@ -2,7 +2,6 @@ import { Navigate } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
 import Modal from '@components/common/Modal';
-import { ChatPartnerState } from '@typings/chat';
 import ROUTES from '@constants/routes';
 import { formatTimeToDateOrTime } from '@utils/date';
 import defaultProfileImage from '@assets/images/profile/profileUser.png';
@@ -10,7 +9,6 @@ import useChatRoom from './useChatRoom';
 import {
   SChatRoomWrap,
   SChatContainer,
-  SChatInfoBox,
   SMessageList,
   SMessage,
   SMessageContainer,
@@ -51,8 +49,6 @@ const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
     handleCloseErrorModal,
     handleSubmit,
   } = useChatRoom(chatRoomId);
-
-  console.log(messages, 'messages');
 
   if (!data) return <Navigate to={ROUTES.home} />;
 
