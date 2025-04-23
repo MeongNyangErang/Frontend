@@ -2,6 +2,10 @@ import { WishlistItem } from '@typings/wishlist';
 
 export interface WishlistResponse {
   content: WishlistItem[];
-  nextCursor: number;
-  hasNext: boolean;
+  page: number;
+  size: number;
+  totatlElements: number;
+  tatalPages: number;
+  fisrt: boolean;
+  last: boolean;
 }
