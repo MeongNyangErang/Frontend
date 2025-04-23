@@ -95,11 +95,11 @@ const NotificationSender = () => {
       onConnect: () => {
         console.log('WebSocket 연결됨');
         client.subscribe('/user/subscribe/notifications', (message: any) => {
-          const newNotification = message.body;
-          console.log(newNotification, 'newNotification');
+          const { notificationId, content, notificationType, createdAt } =
+            message.body;
           setNotifications((prevNotifications) => [
             ...prevNotifications,
-            newNotification,
+            { notificationId, content, notificationType, createdAt },
           ]);
         });
       },
