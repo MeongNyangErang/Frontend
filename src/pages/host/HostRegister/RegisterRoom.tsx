@@ -68,10 +68,10 @@ const petFacility = [
   '배변용품',
   '장난감',
   '침대',
-  '캣 타워',
+  '캣타워',
   '미끄럼 방지 바닥',
   '펜스 설치 공간',
-  '캣 휠',
+  '캣휠',
   '그루밍 브러쉬',
   '강아지 계단',
 ];
@@ -121,8 +121,8 @@ const ROOM_PET_FACILITY_TYPE_MAP = {
   침대: 'BED',
   '미끄럼 방지 바닥': 'ANTI_SLIP_FLOOR',
   '펜스 설치 공간': 'FENCE_AREA',
-  '캣 타워': 'CAT_TOWER',
-  '캣 휠': 'CAT_WHEEL',
+  캣타워: 'CAT_TOWER',
+  캣휠: 'CAT_WHEEL',
   '그루밍 브러쉬': 'BRUSH',
   '강아지 계단': 'PET_STEPS',
 };

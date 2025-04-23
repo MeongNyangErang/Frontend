@@ -393,6 +393,9 @@ const RegisterAccommodation = () => {
           setAccommodationId(response.accommodationId);
         }
         setDeletedImageUrls([]);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } catch (error) {
         console.error('API를 불러오는데 오류가 발생했습니다:', error);
       }
@@ -562,7 +565,7 @@ const RegisterAccommodation = () => {
           onChange={handleAdditionalImagesChange}
           accept="image/jpeg,image/jpg,image/png"
         />
-        {additionalImagesPreview.length > 0 && (
+        {additionalImagesPreview && (
           <SSPreviewWrapper>
             {additionalImagesPreview.map((preview, index) => (
               <SSImagePreviewWrapper key={index}>
