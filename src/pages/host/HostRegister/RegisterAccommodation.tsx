@@ -80,6 +80,11 @@ const ACCOMMODATION_MAP = {
 
 type AccommodationType = keyof typeof ACCOMMODATION_MAP;
 
+type ImageItem = {
+  file: File;
+  preview: string;
+};
+
 const RegisterAccommodation = () => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
@@ -92,7 +97,7 @@ const RegisterAccommodation = () => {
   const [longitude, setLongitude] = useState<number | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
-  const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+  const [additionalImages, setAdditionalImages] = useState<ImageItem[]>([]);
   const [accommodationType, setAccommodationType] =
     useState<AccommodationType | null>(null);
 
@@ -237,9 +242,7 @@ const RegisterAccommodation = () => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       if (additionalImages.length + files.length <= 3) {
-        setAdditionalImages((prevImages) => [...prevImages, ...files]);
-
-        const newPreviews = files.map((file) => {
+        const updatedImages = files.map((file) => {
           const reader = new FileReader();
           reader.onloadend = () => {
             setAdditionalImagesPreview((prev) => [
@@ -248,8 +251,9 @@ const RegisterAccommodation = () => {
             ]);
           };
           reader.readAsDataURL(file);
-          return reader.result as string;
+          return { file, preview: reader.result as string };
         });
+        setAdditionalImages((prev) => [...prev, ...updatedImages]);
         setImageUploaded(true);
       } else {
         alert('최대 3개의 이미지만 업로드 가능합니다.');
@@ -353,7 +357,7 @@ const RegisterAccommodation = () => {
 
         if (additionalImages.length > 0) {
           additionalImages.forEach((image) => {
-            formData.append('newAdditionalImages', image);
+            formData.append('newAdditionalImages', image.file);
           });
         }
       } else {
@@ -363,7 +367,7 @@ const RegisterAccommodation = () => {
 
         if (additionalImages.length > 0) {
           additionalImages.forEach((image) => {
-            formData.append('additionalImages', image);
+            formData.append('additionalImages', image.file);
           });
         }
       }

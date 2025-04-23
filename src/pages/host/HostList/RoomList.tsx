@@ -36,7 +36,7 @@ const RoomList: React.FC = () => {
         'get',
       )) as any;
 
-      if (response.content.length > 0) {
+      if (response && response.content && response.content.length > 0) {
         setRoomList((prev) => [...prev, ...response.content]);
       }
       setHasNext(response.content.length === 20);
@@ -222,7 +222,7 @@ const InfoCharge = styled.p`
 
 const NoRoomsMessage = styled.div`
   font-family: 'Noto Sans KR';
-  font-size: 18px;
+  font-size: 16px;
   color: var(--gray-600);
   text-align: center;
   padding: 20px;
