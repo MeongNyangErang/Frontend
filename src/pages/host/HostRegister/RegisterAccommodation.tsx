@@ -52,8 +52,8 @@ const facility = [
   '피트니스',
   '노래방',
   '와이파이',
-  '무료 주차',
-  '유료 주차',
+  '무료주차',
+  '유료주차',
   '조식',
   '픽업 서비스',
   '족구장',
@@ -306,7 +306,7 @@ const RegisterAccommodation = () => {
       }
 
       const FACILITY_TYPES = {
-        '무료 주차': 'FREE_PARKING',
+        무료주차: 'FREE_PARKING',
         노래방: 'KARAOKE_ROOM',
         피트니스: 'FITNESS',
         족구장: 'FOOT_VOLLEYBALL_COURT',
