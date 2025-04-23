@@ -316,6 +316,7 @@ const RegisterRoom = () => {
 
     if (!thumbnail) {
       setThumbnailError('대표 이미지를 선택해주세요.');
+      return;
     }
 
     if (
