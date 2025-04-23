@@ -30,6 +30,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const pages = (
     data as InfiniteData<PreviousChatMessagesResponse, number | null>
   )?.pages;
+  console.log(pages, pages);
   const previousMessages = useMemo(() => {
     const messages =
       pages?.flatMap(
@@ -178,6 +179,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
     const stompClient = createStompClient();
     stompClientRef.current = stompClient;
     stompClient.onConnect = () => {
+      console.log('연결 성공');
       setIsConnected(true);
       subscription = stompClient.subscribe(
         `/subscribe/chats/${chatRoomId}`,
