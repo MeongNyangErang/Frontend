@@ -255,6 +255,7 @@ const RegisterRoom = () => {
         {options.map((option) => (
           <SCheckInput
             key={option}
+            type="button"
             selected={selectedOptions.includes(option)}
             onClick={() => onSelect(option)}
           >
