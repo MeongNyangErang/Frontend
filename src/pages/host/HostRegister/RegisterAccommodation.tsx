@@ -364,7 +364,7 @@ const RegisterAccommodation = () => {
       console.log(thumbnail, 'thumbnail');
 
       if (accommodationId) {
-        data['deletedImageUrls'] = deletedImageUrls;
+        data['deleteImageUrls'] = deletedImageUrls;
         if (thumbnail) {
           formData.append('newThumbnail', thumbnail);
         }
