@@ -190,7 +190,6 @@ const useChatMessages = (chatRoomId: number | undefined) => {
             scrollTarget.scrollTop + scrollTarget.clientHeight >=
               scrollTarget.scrollHeight - 10;
           const newMessage: NewChatMessage = JSON.parse(message.body);
-          console.log(newMessage, newMessage);
           setMessages((prev) => [...prev, newMessage]);
           refreshChatList(chatRoomId);
           if (wasAtBottom)

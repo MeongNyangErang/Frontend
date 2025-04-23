@@ -75,6 +75,7 @@ const useChatRoom = (chatRoomId: number) => {
 
   useEffect(() => {
     refreshChatList(chatRoomId);
+    console.log('hello');
   }, [chatRoomId]);
 
   return {

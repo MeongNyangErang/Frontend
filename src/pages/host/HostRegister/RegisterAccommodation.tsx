@@ -72,7 +72,7 @@ const petFacility = [
 const allowPet = ['소형견', '중형견', '대형견', '고양이'];
 
 const ACCOMMODATION_MAP = {
-  '호텔 리조트': 'HOTEL_RESORT',
+  호텔리조트: 'HOTEL_RESORT',
   풀빌라: 'FULL_VILLA',
   펜션: 'PENSION',
   독채: 'DETACHED_HOUSE',
@@ -484,12 +484,10 @@ const RegisterAccommodation = () => {
         <SSLabel>숙소 유형</SSLabel>
         <ButtonContainer>
           <CheckInput
-            selected={
-              accommodationType === ('호텔 리조트' as AccommodationType)
-            }
-            onClick={() => handleClick('호텔 리조트')}
+            selected={accommodationType === ('호텔리조트' as AccommodationType)}
+            onClick={() => handleClick('호텔리조트')}
           >
-            호텔 리조트
+            호텔리조트
           </CheckInput>
           <CheckInput
             selected={accommodationType === '독채'}
