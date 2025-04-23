@@ -58,7 +58,7 @@ const facility = [
   '에어컨',
   'TV',
   '와이파이',
-  '욕실 용품',
+  '욕실용품',
   '드라이기',
   '바비큐',
   '객실 내 취사',
@@ -107,7 +107,7 @@ const ROOM_FACILITY_TYPE_MAP = {
   에어컨: 'AIR_CONDITIONER',
   TV: 'TV',
   와이파이: 'WIFI',
-  '욕실 용품': 'BATHROOM_SUPPLIES',
+  욕실용품: 'BATHROOM_SUPPLIES',
   드라이기: 'DRYER',
   바비큐: 'BARBECUE',
   '객실 내 취사': 'POSSIBLE_COOK_IN_ROOM',
@@ -370,10 +370,6 @@ const RegisterRoom = () => {
       facilityTypes,
       petFacilityTypes,
     } as any;
-
-    console.log(data, 'data');
-
-    return;
 
     if (roomId) data['roomId'] = roomId;
 
