@@ -93,18 +93,22 @@ const DetailAccommodation = () => {
     | undefined;
 
   const getInitialReservationInfo = () => {
-    const stored = sessionStorage.getItem(SESSION_KEY);
-    if (stored) return JSON.parse(stored);
+    if (locationState?.checkInDate) {
+      return {
+        checkInDate: locationState.checkInDate,
+        checkOutDate: locationState.checkOutDate,
+        peopleCount: locationState.peopleCount,
+        petCount: locationState.petCount,
+      };
+    }
+
     return {
-      checkInDate:
-        locationState?.checkInDate || new Date().toLocaleDateString(),
-      checkOutDate:
-        locationState?.checkOutDate ||
-        new Date(
-          new Date().setDate(new Date().getDate() + 1),
-        ).toLocaleDateString(),
-      peopleCount: locationState?.peopleCount || 1,
-      petCount: locationState?.petCount || 1,
+      checkInDate: new Date().toLocaleDateString(),
+      checkOutDate: new Date(
+        new Date().setDate(new Date().getDate() + 1),
+      ).toLocaleDateString(),
+      peopleCount: 1,
+      petCount: 1,
     };
   };
 
