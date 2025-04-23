@@ -4,14 +4,17 @@ import MessageBox from '@components/common/MessageBox';
 import Loader from '@components/common/Loader';
 import useMostViewedRecommendations from '@hooks/query/user/useMostViewedRecommendations';
 import useWishlist from '@hooks/query/user/useWishlist';
+import { RecommendationsAccommodation } from '@typings/recommendations';
+import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 import RecommendationSlider from '../RecommendationSlider';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
-import { RecommendationsAccommodation } from '@typings/recommendations';
 
 const MostViewedRecommendations = () => {
   const [list, setList] = useState<RecommendationsAccommodation[]>([]);
-  const { data, isLoading, error } = useMostViewedRecommendations();
+  const { data, isLoading, error, refreshMostViewedRecommendations } =
+    useMostViewedRecommendations();
   const { refreshWishlist } = useWishlist(0);
+  const { refresehUserPetRecommendations } = useUserPetRecommendations();
 
   const onSuccessClickWishButton = (accommodationId: number) => {
     setList((prev) => {
@@ -26,6 +29,8 @@ const MostViewedRecommendations = () => {
       });
     });
     refreshWishlist();
+    refreshMostViewedRecommendations(accommodationId);
+    refresehUserPetRecommendations(accommodationId);
   };
 
   useEffect(() => {

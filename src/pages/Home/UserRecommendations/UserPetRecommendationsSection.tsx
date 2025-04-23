@@ -4,6 +4,7 @@ import { RecommendationsAccommodation } from '@typings/recommendations';
 import useIsLoading from '@hooks/ui/useIsLoading';
 import useWishlist from '@hooks/query/user/useWishlist';
 import RecommendationSlider from '../RecommendationSlider';
+import useMostViewedRecommendations from '@hooks/query/user/useMostViewedRecommendations';
 
 interface UserPetRecommendationSectionProps {
   initialRecommendations: RecommendationsAccommodation[];
@@ -26,6 +27,7 @@ const UserPetRecommendationSection = ({
   const [last, setLast] = useState(false);
   const [hasMoreFetched, setHasMoreFetched] = useState(false);
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
+  const { refreshMostViewedRecommendations } = useMostViewedRecommendations();
 
   const onClickMore = useCallback(async () => {
     if (last || isLoading) return;
@@ -63,6 +65,7 @@ const UserPetRecommendationSection = ({
       });
     });
     onSuccessWishButton(accommodationId);
+    refreshMostViewedRecommendations(accommodationId);
     refreshWishlist();
   }, []);
 
