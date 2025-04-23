@@ -178,7 +178,7 @@ const DetailAccommodation = () => {
 
   const handleAllReserve = (room: RoomData) => {
     if (!data) {
-      alert('로그인이 필요한 기능입니다.');
+      alert('로그인한 유저만 이용 할 수 있습니다.');
       return;
     }
 

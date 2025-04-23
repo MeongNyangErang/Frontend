@@ -32,14 +32,20 @@ const RoomList: React.FC = () => {
 
     try {
       const response = (await fetchCall(
-        `hosts/rooms?page=${page}&size=20`,
+        `hosts/rooms?page=0&size=20`,
         'get',
       )) as any;
+      console.log('API 응답:', response);
 
-      if (response && response.content && response.content.length > 0) {
-        setRoomList((prev) => [...prev, ...response.content]);
+      if (response && response.data) {
+        const rooms = response.data;
+        if (rooms.length > 0) {
+          setRoomList((prev) => [...prev, ...rooms]);
+        }
+        setHasNext(rooms.length === 20);
+      } else {
+        console.error('응답 데이터가 올바르지 않습니다.');
       }
-      setHasNext(response.content.length === 20);
     } catch (error) {
       console.log('서버 오류가 발생했습니다.');
     } finally {

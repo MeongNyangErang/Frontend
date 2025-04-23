@@ -116,6 +116,7 @@ const RegisterAccommodation = () => {
   const [infoError, setInfoError] = useState('');
   const [imageError, setImageError] = useState('');
   const [facilityError, setFacilityError] = useState('');
+  const [deletedImageUrls, setDeletedImageUrls] = useState<string[]>([]);
 
   const POSTCODE_SCRIPT_URL =
     '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -178,11 +179,22 @@ const RegisterAccommodation = () => {
   };
 
   const handleRemoveAdditionalImage = (index: number) => {
+    const removedPreview = additionalImagesPreview[index];
+    if (removedPreview) {
+      setDeletedImageUrls((prev) => [...prev, removedPreview]);
+    }
     setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
     setAdditionalImagesPreview((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleRemoveThumbnail = () => {
+    if (thumbnailPreview) {
+      setDeletedImageUrls((prev) => {
+        const updated = [...prev, thumbnailPreview];
+        console.log('[썸네일 삭제됨] deletedImageUrls:', updated);
+        return updated;
+      });
+    }
     setThumbnail(null);
     setThumbnailPreview(null);
     setThumbnailImageUploaded(false);
@@ -220,6 +232,7 @@ const RegisterAccommodation = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setThumbnailPreview(reader.result as string);
+        console.log('썸네일 이미지 업로드됨:', file);
       };
       reader.readAsDataURL(file);
       setThumbnailImageUploaded(true);
@@ -246,6 +259,7 @@ const RegisterAccommodation = () => {
               ...prev,
               reader.result as string,
             ]);
+            console.log('추가 이미지 업로드됨:', file);
           };
           reader.readAsDataURL(file);
           return reader.result as string;
@@ -346,9 +360,9 @@ const RegisterAccommodation = () => {
       const formData = new FormData();
 
       if (accommodationId) {
+        data['deletedImageUrls'] = deletedImageUrls;
         if (thumbnail) {
           formData.append('newThumbnail', thumbnail);
-          data['deletedImageUrls'] = [thumbnailPreview];
         }
 
         if (additionalImages.length > 0) {
@@ -383,6 +397,7 @@ const RegisterAccommodation = () => {
           alert('숙소 정보가 등록되었습니다.');
           setAccommodationId(response.accommodationId);
         }
+        setDeletedImageUrls([]);
       } catch (error) {
         console.error('API를 불러오는데 오류가 발생했습니다:', error);
       }
