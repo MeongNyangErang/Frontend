@@ -12,11 +12,11 @@ const useUserPetRecommendations = () => {
   const queryClient = useQueryClient();
 
   const refresehUserPetRecommendations = (accommodationId: number) => {
-    const prev = queryClient.getQueryData<{
-      data: UserPetRecommendationsResponse;
-    }>(['user-pet-recommendations']);
+    const prev = queryClient.getQueryData<UserPetRecommendationsResponse>([
+      'user-pet-recommendations',
+    ]);
     if (!prev) return;
-    const newData = prev.data.map((v) => {
+    const newData = prev.map((v) => {
       const hasAccommodation = v.recommendations.find(
         (r) => r.id === accommodationId,
       );
@@ -32,7 +32,7 @@ const useUserPetRecommendations = () => {
       }
       return v;
     });
-    queryClient.setQueryData(['user-pet-recommendations'], { data: newData });
+    queryClient.setQueryData(['user-pet-recommendations'], newData);
   };
 
   return { ...result, refresehUserPetRecommendations };
