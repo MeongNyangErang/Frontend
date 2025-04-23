@@ -24,7 +24,6 @@ const Chat = () => {
         <SChatContiner>
           {!roomId && <ChatList />}
           {roomId && <ChatRoom chatRoomId={roomId} />}
-          {roomId && <Navigate to={ROUTES.chat.list} />}
         </SChatContiner>
       </SChatWrap>
     );
@@ -43,7 +42,6 @@ const Chat = () => {
           </SEmptyChatRoomMessage>
         )}
         {roomId && <ChatRoom chatRoomId={roomId} />}
-        {roomId && <Navigate to={ROUTES.chat.list} />}
       </SChatContiner>
     </SChatWrap>
   );
