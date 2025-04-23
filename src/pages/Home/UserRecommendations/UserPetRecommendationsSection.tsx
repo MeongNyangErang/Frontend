@@ -8,6 +8,7 @@ import RecommendationSlider from '../RecommendationSlider';
 interface UserPetRecommendationSectionProps {
   initialRecommendations: RecommendationsAccommodation[];
   petId: number;
+  onSuccessClickWishButton: (accommodationId: number) => void;
 }
 
 const MAX_INITIAL_DATA_SIZE = 6;
@@ -15,6 +16,7 @@ const MAX_INITIAL_DATA_SIZE = 6;
 const UserPetRecommendationSection = ({
   initialRecommendations,
   petId,
+  onSuccessClickWishButton: onSuccessWishButton,
 }: UserPetRecommendationSectionProps) => {
   const [recommendations, setRecommendations] = useState(
     initialRecommendations,
@@ -60,6 +62,7 @@ const UserPetRecommendationSection = ({
         return v;
       });
     });
+    onSuccessWishButton(accommodationId);
     refreshWishlist();
   }, []);
 

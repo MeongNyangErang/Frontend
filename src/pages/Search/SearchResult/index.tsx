@@ -110,7 +110,6 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
 
   useEffect(() => {
     if (!content) return;
-    console.log('content 변경', content);
     if (currentPage === 0) {
       setSearchedData([...content]);
     } else {
