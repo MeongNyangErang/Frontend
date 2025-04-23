@@ -32,7 +32,7 @@ const RoomReview = () => {
 
     try {
       const response = (await fetchCall(
-        `accommodations/${accommodationId}/reviews&page${page}&size=20`,
+        `accommodations/${accommodationId}/reviews?page${page}&size=20`,
         'get',
       )) as any;
 
