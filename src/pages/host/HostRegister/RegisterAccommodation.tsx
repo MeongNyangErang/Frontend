@@ -355,30 +355,25 @@ const RegisterAccommodation = () => {
         allowPetTypes: selectedAllowPet.map(
           (p) => ALLOWPET_TYPES[p as keyof typeof ALLOWPET_TYPES],
         ),
+        deleteImageUrls: deletedImageUrls,
       } as any;
 
       const formData = new FormData();
 
       if (accommodationId) {
         data['deleteImageUrls'] = deletedImageUrls;
-        if (thumbnail) {
-          formData.append('newThumbnail', thumbnail);
-        }
-
+        if (thumbnail) formData.append('newThumbnail', thumbnail);
         if (additionalImages.length > 0) {
-          additionalImages.forEach((image) => {
-            formData.append('newAdditionalImages', image);
-          });
+          additionalImages.forEach((image) =>
+            formData.append('newAdditionalImages', image),
+          );
         }
       } else {
-        if (thumbnail) {
-          formData.append('thumbnail', thumbnail);
-        }
-
+        if (thumbnail) formData.append('thumbnail', thumbnail);
         if (additionalImages.length > 0) {
-          additionalImages.forEach((image) => {
-            formData.append('additionalImages', image);
-          });
+          additionalImages.forEach((image) =>
+            formData.append('additionalImages', image),
+          );
         }
       }
 
