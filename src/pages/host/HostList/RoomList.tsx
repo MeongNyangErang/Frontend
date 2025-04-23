@@ -38,8 +38,9 @@ const RoomList: React.FC = () => {
       )) as any;
       console.log('API 응답:', response);
 
-      if (response && Array.isArray(response.data)) {
-        const rooms = response.data;
+      if (response && Array.isArray(response)) {
+        const rooms = response;
+
         if (rooms.length > 0) {
           setRoomList((prev) => {
             const updatedRooms = { ...prev };
@@ -49,7 +50,7 @@ const RoomList: React.FC = () => {
             return updatedRooms;
           });
         }
-        setHasNext(response.data.length === 20);
+        setHasNext(response.length === 20);
       } else {
         console.error('응답 데이터가 올바르지 않습니다.');
       }
