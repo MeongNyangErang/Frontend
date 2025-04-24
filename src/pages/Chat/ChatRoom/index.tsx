@@ -99,7 +99,11 @@ const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
                         <SMessageProfile>
                           {!isThePreviousSender && (
                             <img
-                              src={receiverImageUrl || defaultProfileImage}
+                              src={
+                                receiverImageUrl ||
+                                messages[0].receiverImageUrl ||
+                                defaultProfileImage
+                              }
                               alt="프로필 이미지"
                             />
                           )}
