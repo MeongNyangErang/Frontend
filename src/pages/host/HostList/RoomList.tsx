@@ -205,7 +205,9 @@ const InfoItem = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
+  white-space: break-spaces;
   margin: 0 0 10px 0;
+  word-break: break-all;
 `;
 
 const InfoRow = styled.div`
