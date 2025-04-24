@@ -116,19 +116,32 @@ const DetailAccommodation = () => {
 
   const { checkInDate, checkOutDate, peopleCount, petCount } = reservationInfo;
 
-  const getRoomPrice = (room: RoomData) => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const defaultCheckIn = today.toLocaleDateString();
-    const defaultCheckOut = tomorrow.toLocaleDateString();
+  const calculateTotalPrice = (
+    room: RoomData,
+    reservationInfo: ReservationInfo,
+  ): number => {
+    const checkIn = new Date(reservationInfo.checkInDate);
+    const checkOut = new Date(reservationInfo.checkOutDate);
 
-    let finalPrice = room.price;
-    if (checkInDate && checkOutDate && peopleCount && petCount) {
-      finalPrice = room.price * peopleCount + room.extraFee;
-    }
+    const diffTime = checkOut.getTime() - checkIn.getTime();
+    const stayNights = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    return finalPrice;
+    const overPeople = Math.max(
+      reservationInfo.peopleCount - room.standardPeopleCount,
+      0,
+    );
+    const overPets = Math.max(
+      reservationInfo.petCount - room.standardPetCount,
+      0,
+    );
+
+    const baseRoomPrice = room.price * stayNights;
+    const extraPeoplePrice = overPeople * room.extraPeopleFee * stayNights;
+    const extraPetPrice = overPets * room.extraPetFee * stayNights;
+
+    const total = baseRoomPrice + extraPeoplePrice + extraPetPrice;
+
+    return total;
   };
 
   const handleSuccessClickWishButton = () => {
@@ -179,15 +192,6 @@ const DetailAccommodation = () => {
       alert('에러가 발생했습니다. 다시 시도해주세요.');
     }
   };
-  useEffect(() => {
-    console.log(checkInDate);
-    console.log(checkOutDate);
-  }, [checkInDate, checkOutDate]);
-
-  const onChangeDate = (
-    key: 'checkInDate' | 'checkOutDate',
-    value: Date | null,
-  ) => {};
 
   useEffect(() => {
     const getAccommodationDetails = async () => {
@@ -220,7 +224,8 @@ const DetailAccommodation = () => {
 
     navigate(`/accommodation/${accommodationId}/room/${roomId}`, {
       state: {
-        totalPrice: room.price + room.extraFee,
+        roomPrice: room.price,
+        totalPrice: calculateTotalPrice(room, reservationInfo),
         checkInDate,
         checkOutDate,
         peopleCount,
@@ -244,7 +249,7 @@ const DetailAccommodation = () => {
       state: {
         roomId: room.roomId,
         accommodationName: accommodation.name,
-        totalPrice: room.price + room.extraFee,
+        totalPrice: calculateTotalPrice(room, reservationInfo),
         checkInDate: checkInDate,
         checkOutDate: checkOutDate,
         peopleCount: peopleCount,
@@ -369,9 +374,7 @@ const DetailAccommodation = () => {
                         </Check>
                       </RoomInfo>
                       <RoomInfo>
-                        <Price>
-                          {(room.price + room.extraFee).toLocaleString()}
-                        </Price>
+                        <Price>{room.price.toLocaleString()}</Price>
                       </RoomInfo>
                       <RoomButton onClick={() => handleAllReserve(room)}>
                         예약하기
