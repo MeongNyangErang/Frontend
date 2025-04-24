@@ -32,9 +32,14 @@ const DetailRoom = () => {
   const { pathname, state } = location;
   const roomId = pathname.split('/').slice(-1)[0];
 
-  const { totalPrice, checkInDate, checkOutDate, peopleCount, petCount } =
-
-    state || {};
+  const {
+    totalPrice,
+    checkInDate,
+    checkOutDate,
+    peopleCount,
+    petCount,
+    roomPrice,
+  } = state || {};
   const roomName = state?.roomName || null;
 
   useEffect(() => {
@@ -94,7 +99,7 @@ const DetailRoom = () => {
           {` 1마리: ${roomDetails.extraPetFee.toLocaleString()}원`}
         </Check>
 
-        <RoomPrice>{totalPrice?.toLocaleString()}원</RoomPrice>
+        <RoomPrice>{roomPrice?.toLocaleString()}원</RoomPrice>
       </SCheckbox>
 
       <RoomDescription>{roomDetails.description}</RoomDescription>
