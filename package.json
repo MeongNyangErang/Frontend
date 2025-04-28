@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "dev:client": "vite --config vite.config.client.ts",
+    "dev:admin": "vite --config vite.config.admin.ts",
+    "build:client": "vite build --config vite.config.client.ts",
+    "build:admin": "vite build --config vite.config.admin.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

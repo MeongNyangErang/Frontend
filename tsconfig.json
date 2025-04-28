@@ -11,19 +11,20 @@
     "types": ["react", "vite/client"],
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"],
-      "@pages/*": ["pages/*"],
-      "@hooks/*": ["hooks/*"],
-      "@store/*": ["store/*"],
-      "@constants/*": ["constants/*"],
-      "@typings/*": ["typings/*"],
-      "@services/*": ["services/*"],
-      "@routes/*": ["routes/*"],
-      "@utils/*": ["utils/*"],
-      "@mocks/*": ["mocks/*"],
-      "@recoil/*": ["recoil/*"]
+      "@components/*": ["client/components/*"],
+      "@assets/*": ["client/assets/*"],
+      "@pages/*": ["client/pages/*"],
+      "@hooks/*": ["client/hooks/*"],
+      "@constants/*": ["client/constants/*"],
+      "@typings/*": ["client/typings/*"],
+      "@services/*": ["client/services/*"],
+      "@routes/*": ["client/routes/*"],
+      "@utils/*": ["client/utils/*"],
+      "@mocks/*": ["client/mocks/*"],
+      "@recoil/*": ["client/recoil/*"],
+      "@admin/*": ["admin/*"],
+      "@shared/*": ["shared/*"]
     }
   },
-  "include": ["src", "src/react-star-ratings.d.ts"]
+  "include": ["src"]
 }
