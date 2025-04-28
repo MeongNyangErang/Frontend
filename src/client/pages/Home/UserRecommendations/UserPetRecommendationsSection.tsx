@@ -1,0 +1,97 @@
+import { memo, useCallback, useEffect, useState } from 'react';
+import { getMoreUserRecommendations } from '@services/recommendations';
+import { RecommendationsAccommodation } from '@typings/recommendations';
+import useIsLoading from '@shared/hooks/ui/useIsLoading';
+import useWishlist from '@hooks/query/user/useWishlist';
+import RecommendationSlider from '../RecommendationSlider';
+import useMostViewedRecommendations from '@hooks/query/user/useMostViewedRecommendations';
+
+interface UserPetRecommendationSectionProps {
+  initialRecommendations: RecommendationsAccommodation[];
+  petId: number;
+  onSuccessClickWishButton: (accommodationId: number) => void;
+}
+
+const MAX_INITIAL_DATA_SIZE = 6;
+
+const UserPetRecommendationSection = ({
+  initialRecommendations,
+  petId,
+  onSuccessClickWishButton: onSuccessWishButton,
+}: UserPetRecommendationSectionProps) => {
+  const [recommendations, setRecommendations] = useState(
+    initialRecommendations,
+  );
+  const { refreshWishlist } = useWishlist(0, false);
+  const [page, setPage] = useState(0);
+  const [last, setLast] = useState(false);
+  const [hasMoreFetched, setHasMoreFetched] = useState(false);
+  const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
+  const { refreshMostViewedRecommendations } = useMostViewedRecommendations();
+
+  const onClickMore = useCallback(async () => {
+    if (last || isLoading) return;
+
+    startIsLoading();
+
+    try {
+      const {
+        content,
+        last,
+        page: currentPage,
+      } = await getMoreUserRecommendations(petId, page);
+      setRecommendations((prev) => [...prev, ...content]);
+      setHasMoreFetched(true);
+      setLast(last);
+      setPage(currentPage);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      endIsLoading();
+    }
+  }, [last, isLoading]);
+
+  const onSuccessClickWishButton = useCallback((accommodationId: number) => {
+    setRecommendations((prev) => {
+      const targetIndex = prev.findIndex((v) => v.id === accommodationId);
+      const updated = {
+        ...prev[targetIndex],
+        wishlisted: !prev[targetIndex].wishlisted,
+      };
+
+      return prev.map((v) => {
+        if (v.id === accommodationId) return updated;
+        return v;
+      });
+    });
+    onSuccessWishButton(accommodationId);
+    refreshMostViewedRecommendations(accommodationId);
+    refreshWishlist();
+  }, []);
+
+  useEffect(() => {
+    if (!hasMoreFetched) {
+      setRecommendations(initialRecommendations);
+      const legnth = initialRecommendations.length;
+      if (legnth < MAX_INITIAL_DATA_SIZE) {
+        setLast(true);
+      } else {
+        setLast(false);
+        setPage(0);
+      }
+    }
+  }, [initialRecommendations]);
+
+  return (
+    <RecommendationSlider
+      recommendations={recommendations}
+      onClickMore={onClickMore}
+      onSuccessClickWishButton={onSuccessClickWishButton}
+      last={last}
+      isLoading={isLoading}
+      wishButton
+    />
+  );
+};
+
+export default memo(UserPetRecommendationSection);
