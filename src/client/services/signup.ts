@@ -1,4 +1,4 @@
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 export const signupUser = async (formData: FormData) => {
   return await fetchCall('users/signup', 'post', formData);

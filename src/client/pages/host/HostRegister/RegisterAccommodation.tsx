@@ -1,4 +1,4 @@
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import React, { useState, useEffect } from 'react';
 import useHostRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from '@pages/host/HostRegister/RegisterAddress';

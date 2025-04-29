@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@components/common/RegisterHeader/index';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import useUserReservationList from '@hooks/query/user/useUserReservationList';
 
 interface ButtonProps {

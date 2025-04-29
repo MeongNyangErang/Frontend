@@ -1,6 +1,6 @@
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import { getLocalStorage } from '@utils/storage';
+import { getLocalStorage } from '@shared/utils/storage';
 
 const BASE_URL = import.meta.env.VITE_SOCKET_BASE_URL;
 

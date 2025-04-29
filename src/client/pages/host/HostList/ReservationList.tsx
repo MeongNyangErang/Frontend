@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Header from '@components/common/RegisterHeader/index';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 interface ReservationList {
   reservationId: string;

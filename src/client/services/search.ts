@@ -1,4 +1,4 @@
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import { SearchBaseType, SearchFilterType } from '@typings/search';
 import { SearchAccommodationsData } from '@typings/response/accommodations';
 import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';

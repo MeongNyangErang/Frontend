@@ -1,5 +1,5 @@
 import { UserReservationListResponse } from '@typings/response/reservation';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import { ReservationStatus } from '@typings/reservation';
 
 export const getUserReservationList = async (

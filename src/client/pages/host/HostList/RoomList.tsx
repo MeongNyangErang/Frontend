@@ -5,7 +5,7 @@ import { IoMdAdd } from 'react-icons/io';
 import axios, { AxiosResponse } from 'axios';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import ROUTES from '@constants/routes';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 interface Room {
   roomId: number;
