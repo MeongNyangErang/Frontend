@@ -5,7 +5,7 @@ import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
 import { FaHeart } from 'react-icons/fa';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import { media } from '@shared/components/styles/responsive';
 import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';

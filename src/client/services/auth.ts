@@ -1,6 +1,6 @@
 import { UserProfile, HostProfile } from '@typings/response/auth';
 import { LoginAccessToken } from '@typings/response/auth';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 export const loginUser = async (email: string, password: string) => {
   return await fetchCall<LoginAccessToken>('users/login', 'post', {

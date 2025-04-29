@@ -1,6 +1,6 @@
 import { UserReviewEditForm, UserReviewForm } from '@typings/review';
 import { UserReviewsResponse } from '@typings/response/review';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 export const postNewReview = async (review: FormData) => {
   return await fetchCall(`users/reviews`, 'post', review);

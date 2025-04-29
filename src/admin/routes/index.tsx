@@ -4,6 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 const PrivateRoute = lazy(
   () => import('@admin/components/common/PrivateRoute'),
 );
+const PublicRoute = lazy(() => import('@admin/components/common/PublicRoute'));
+const MainLayout = lazy(() => import('@admin/components/layouts/MainLayout'));
 const Login = lazy(() => import('@admin/pages/Login'));
 const DashBoard = lazy(() => import('@admin/pages/DashBoard'));
 const NoticeList = lazy(() => import('@admin/pages/notices/NoticeList'));
@@ -14,12 +16,16 @@ const AdminRouter = () => {
   return (
     <Suspense fallback="loading...">
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
         <Route path="/" element={<PrivateRoute />}>
-          <Route path="dashboard" element={<DashBoard />} />
-          <Route path="notices" element={<NoticeList />} />
-          <Route path="notices/new" element={<NoticeCreate />} />
-          <Route path="notices/:noticeId/edit" element={<NoticeEdit />} />
+          <Route element={<MainLayout />}>
+            <Route path="dashboard" element={<DashBoard />} />
+            <Route path="notices" element={<NoticeList />} />
+            <Route path="notices/new" element={<NoticeCreate />} />
+            <Route path="notices/:noticeId/edit" element={<NoticeEdit />} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>

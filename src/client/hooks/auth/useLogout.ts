@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTES from '@constants/routes';
 import { MemberRole } from '@typings/member';
-import { removeLocalStorage } from '@utils/storage';
+import { removeLocalStorage } from '@shared/utils/storage';
 import { STORAGE_KEYS } from '@constants/storageKey';
 
 const useLogout = (memberType: MemberRole) => {

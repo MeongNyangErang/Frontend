@@ -6,7 +6,7 @@ import {
   setLocalStorage,
   getLocalStorage,
   removeLocalStorage,
-} from '@utils/storage';
+} from '@shared/utils/storage';
 import { STORAGE_KEYS } from '@constants/storageKey';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;

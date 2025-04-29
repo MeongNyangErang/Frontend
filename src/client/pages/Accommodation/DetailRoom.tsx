@@ -4,7 +4,7 @@ import { MdOutlinePets } from 'react-icons/md';
 import { IoTimeOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 interface DetailRoomData {
   name: String;

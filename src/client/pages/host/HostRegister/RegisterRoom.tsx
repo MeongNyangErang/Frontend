@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useHostRegister from '@hooks/page/useHostRegister';
 import Header from '@components/common/RegisterHeader/index';
 import { IoCloudUploadOutline, IoCloseSharp } from 'react-icons/io5';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 import { useNavigate } from 'react-router-dom';
 import {
   SFieldset,

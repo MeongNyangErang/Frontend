@@ -1,10 +1,8 @@
-import { FormEvent, useState } from 'react';
 import logoImage from '@shared/assets/images/logo2.png';
 import Button from '@shared/components/common/Button';
 import Modal from '@shared/components/common/Modal';
-import useIsLoading from '@shared/hooks/ui/useIsLoading';
-import useError from '@shared/hooks/ui/useError';
-import { validateEmail } from '@shared/utils/validateSignUp';
+import { parseNewLine } from '@shared/utils/formatter';
+import useLoginPage from '@admin/hooks/page/useLoginPage';
 import {
   SLoginWrap,
   SLoginContainer,
@@ -14,39 +12,14 @@ import {
 } from './styles';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const { isLoading, endIsLoading, startIsLoading } = useIsLoading();
-  const { error, resetError, updateError } = useError();
-
-  const handleChangeInput = (key: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const validateLoginForm = () => {
-    const emailError = validateEmail(formData.email);
-    if (emailError) return emailError;
-    if (!formData.password) return '비밀번호를 입력해주세요.';
-    return '';
-  };
-
-  const handleLogin = () => {
-    const error = validateLoginForm();
-    if (error) {
-      updateError(error);
-      return;
-    }
-
-    startIsLoading();
-    try {
-    } catch (error) {
-      updateError('로그인에 실패했습니다. ');
-    } finally {
-      endIsLoading();
-    }
-  };
+  const {
+    formData,
+    isLoading,
+    error,
+    resetError,
+    handleChangeInput,
+    handleLogin,
+  } = useLoginPage();
 
   return (
     <SLoginWrap>
@@ -54,7 +27,7 @@ const Login = () => {
         <SLoginLogo>
           <img src={logoImage} alt="멍냥이랑" />
         </SLoginLogo>
-        <SLoginForm>
+        <SLoginForm onSubmit={handleLogin}>
           <SLoginInput
             type="email"
             placeholder="이메일을 입력해주세요"
@@ -70,8 +43,7 @@ const Login = () => {
           <Button
             variant="main"
             fontSize="14px"
-            type="button"
-            onClick={handleLogin}
+            type="submit"
             isLoading={isLoading}
             fullWidth
             fixedHeight
@@ -87,7 +59,7 @@ const Login = () => {
         role="alert"
         onClose={resetError}
       >
-        {error}
+        {parseNewLine(error)}
       </Modal>
     </SLoginWrap>
   );

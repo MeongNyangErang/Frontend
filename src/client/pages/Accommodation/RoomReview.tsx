@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import { FaStar } from 'react-icons/fa';
-import { fetchCall } from '@shared/services/api';
+import { fetchCall } from '@services/api';
 
 interface RoomReview {
   reviewId: number;
