@@ -19,10 +19,10 @@ export default MainLayout;
 
 const SAppWrap = styled.div`
   padding: ${({ theme }) =>
-    `${theme.layouts.headerHeight} ${theme.layouts.paddingX} 0`};
+    `${theme.layouts.headerHeight} ${theme.layouts.paddingX} 60px`};
   min-height: 100vh;
 `;
 const SAppContainer = styled.main`
   margin: 0 auto;
-  max-width: ${({ theme }) => theme.layouts.innerWidth};
+  max-width: ${({ theme }) => theme.layouts.adminWidth};
 `;

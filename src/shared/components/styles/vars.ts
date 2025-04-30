@@ -38,6 +38,7 @@ export const layouts = {
   // sizes
   innerWidth: '1024px',
   loginWidth: '380px',
+  adminWidth: '720px',
   headerHeight: '56px',
   footerHeight: '180px',
   mobileNavHeight: '60px',

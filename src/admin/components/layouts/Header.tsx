@@ -33,7 +33,7 @@ const SHeaderContainer = styled.div`
   align-items: center;
   margin: 0 auto;
   height: 100%;
-  max-width: ${({ theme }) => theme.layouts.innerWidth};
+  max-width: ${({ theme }) => theme.layouts.adminWidth};
   width: 100%;
 `;
 

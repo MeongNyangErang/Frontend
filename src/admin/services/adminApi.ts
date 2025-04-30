@@ -1,12 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { STORAGE_KEYS } from '@admin/constants/storageKey';
 
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_ADMIN_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const axiosInstance = axios.create();
 
 // 요청 인터셉터 추가
 axiosInstance.interceptors.request.use(
@@ -42,14 +37,26 @@ async function fetchCall<T>(
   url: string,
   method: 'get' | 'post' | 'put' | 'delete' | 'patch',
   data?: any,
+  useDefaultBaseUrl: boolean = false,
 ): Promise<T> {
   const isFormData = data instanceof FormData;
+
+  const baseURL = useDefaultBaseUrl
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_ADMIN_BASE_URL;
+
+  const headers = isFormData
+    ? { 'Content-Type': 'multipart/form-data' }
+    : {
+        'Content-Type': 'application/json',
+      };
 
   const config = {
     url,
     method,
+    baseURL,
+    headers,
     ...(data && { data }),
-    headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
   };
 
   return axiosInstance(config);
