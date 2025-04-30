@@ -3,9 +3,6 @@ import { STORAGE_KEYS } from '@constants/storageKey';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // 요청 인터셉터 추가
@@ -45,11 +42,17 @@ async function fetchCall<T>(
 ): Promise<T> {
   const isFormData = data instanceof FormData;
 
+  const headers = isFormData
+    ? { 'Content-Type': 'multipart/form-data' }
+    : {
+        'Content-Type': 'application/json',
+      };
+
   const config = {
     url,
     method,
+    headers,
     ...(data && { data }),
-    headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
   };
 
   return axiosInstance(config);

@@ -142,7 +142,7 @@ const useReviewModal = ({
 
     formData.append('request', blob);
     if (review.images) {
-      review.images.map((img) => {
+      review.images.forEach((img) => {
         formData.append('images', img);
       });
     }
