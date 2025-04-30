@@ -33,7 +33,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  html, body {
+  html, body,textarea {
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
     font-weight: 400;

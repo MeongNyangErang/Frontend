@@ -9,7 +9,7 @@ export const buttonStyle = css`
   min-height: 34px;
   font-size: 14px;
   font-weight: 500;
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${theme.radius.md};
 `;
 
 export const inputStyle = css`
@@ -54,7 +54,7 @@ export const labelDotStyle = css`
   margin-bottom: 2px;
   font-size: 13px;
   line-height: 1;
-  color: ${({ theme }) => theme.colors.gray600};
+  color: ${theme.colors.gray600};
 
   &::after {
     content: '';
@@ -64,7 +64,7 @@ export const labelDotStyle = css`
     width: 4px;
     height: 4px;
     border-radius: 9999px;
-    background-color: ${({ theme }) => theme.colors.main};
+    background-color: ${theme.colors.main};
     transform: translate(100%, -100%);
   }
 `;
