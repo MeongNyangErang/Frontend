@@ -1,6 +1,6 @@
 import useGuestRecommendations from '@hooks/query/useGuestRecommendations';
 import Loader from '@shared/components/common/Loader';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import GuestRecommendationsSection from './GuestRecommendationsSection';
 import { SSectionTitle, SSectionContainer, SSectionBox } from '../styles';
 

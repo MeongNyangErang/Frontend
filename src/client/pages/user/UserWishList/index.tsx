@@ -1,7 +1,7 @@
 import { FaHeart } from 'react-icons/fa';
 import SubPageHeader from '@components/common/SubPageHeader';
 import Loader from '@shared/components/common/Loader';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import StarRating from '@components/common/StarRating';
 import Modal from '@shared/components/common/Modal';
 import ROUTES from '@constants/routes';

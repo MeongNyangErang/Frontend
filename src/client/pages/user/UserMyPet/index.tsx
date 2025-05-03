@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import SubPageHeader from '@components/common/SubPageHeader';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import Button from '@shared/components/common/Button';
 import ROUTES from '@constants/routes';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import useMostViewedRecommendations from '@hooks/query/user/useMostViewedRecommendations';
 import useWishlist from '@hooks/query/user/useWishlist';
