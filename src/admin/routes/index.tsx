@@ -17,6 +17,8 @@ const HostSignupRequestList = lazy(
 const HostSignupRequestDetail = lazy(
   () => import('@admin/pages/hostSignup/HostSignupRequestDetail'),
 );
+const ReportList = lazy(() => import('@admin/pages/reports/ReportList'));
+const ReportDetail = lazy(() => import('@admin/pages/reports/ReportDetail'));
 
 const AdminRouter = () => {
   return (
@@ -33,6 +35,8 @@ const AdminRouter = () => {
             <Route path="notices/:noticeId/edit" element={<NoticeEdit />} />
             <Route path="hosts" element={<HostSignupRequestList />} />
             <Route path="hosts/:hostId" element={<HostSignupRequestDetail />} />
+            <Route path="reports" element={<ReportList />} />
+            <Route path="reports/:reportId" element={<ReportDetail />} />
           </Route>
         </Route>
       </Routes>
