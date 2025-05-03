@@ -50,6 +50,7 @@ interface RoomData {
   extraFee: number;
   checkInTime: string;
   checkOutTime: string;
+  isReserved?: boolean;
 }
 
 interface ReviewData {
@@ -330,58 +331,63 @@ const DetailAccommodation = () => {
           />
           {accommodation.roomDetails && accommodation.roomDetails.length > 0 ? (
             <RoomContainer>
-              {accommodation.roomDetails
-                .slice(0, showAllRooms ? accommodation.roomDetails.length : 2)
-                .map((room) => (
-                  <RoomCard key={room.roomId}>
-                    <RoomInfoLeft>
-                      <RoomImage
-                        src={room.roomImageUrl ? room.roomImageUrl : ''}
-                        alt={room.roomName}
-                      />
-                      <RoomName>{room.roomName}</RoomName>
-                      <RoomInfo>
-                        <Count>
-                          인원 {room.standardPeopleCount}명 / 최대{' '}
-                          {room.maxPeopleCount}명
-                        </Count>
-                        <Count>
-                          반려동물 {room.standardPetCount}마리 / 최대{' '}
-                          {room.maxPetCount}마리
-                        </Count>
-                      </RoomInfo>
-                    </RoomInfoLeft>
-                    <RoomInfoRight>
-                      <All>
-                        <RoomTitle>숙박</RoomTitle>
-                        <Detail onClick={() => handleRoomviews(room.roomId)}>
-                          상세보기
-                        </Detail>
-                      </All>
-                      <RoomInfo>
-                        <Check>
-                          체크인 {room.checkInTime} ~ 체크아웃{' '}
-                          {room.checkOutTime}
-                        </Check>
-                      </RoomInfo>
-                      <RoomInfo>
-                        <CheckInfo>[1인 / 1마리 추가요금]</CheckInfo>
-                        <Check>
-                          인원 {room.extraPeopleFee.toLocaleString()}
-                        </Check>
-                        <Check>
-                          반려동물 {room.extraPetFee.toLocaleString()}
-                        </Check>
-                      </RoomInfo>
-                      <RoomInfo>
-                        <Price>{room.price.toLocaleString()}</Price>
-                      </RoomInfo>
-                      <RoomButton onClick={() => handleAllReserve(room)}>
-                        예약하기
-                      </RoomButton>
-                    </RoomInfoRight>
-                  </RoomCard>
-                ))}
+              {(() => {
+                const availableRooms = accommodation.roomDetails.filter(
+                  (room) => !room.isReserved,
+                );
+                return availableRooms
+                  .slice(0, showAllRooms ? availableRooms.length : 2)
+                  .map((room) => (
+                    <RoomCard key={room.roomId}>
+                      <RoomInfoLeft>
+                        <RoomImage
+                          src={room.roomImageUrl ? room.roomImageUrl : ''}
+                          alt={room.roomName}
+                        />
+                        <RoomName>{room.roomName}</RoomName>
+                        <RoomInfo>
+                          <Count>
+                            인원 {room.standardPeopleCount}명 / 최대{' '}
+                            {room.maxPeopleCount}명
+                          </Count>
+                          <Count>
+                            반려동물 {room.standardPetCount}마리 / 최대{' '}
+                            {room.maxPetCount}마리
+                          </Count>
+                        </RoomInfo>
+                      </RoomInfoLeft>
+                      <RoomInfoRight>
+                        <All>
+                          <RoomTitle>숙박</RoomTitle>
+                          <Detail onClick={() => handleRoomviews(room.roomId)}>
+                            상세보기
+                          </Detail>
+                        </All>
+                        <RoomInfo>
+                          <Check>
+                            체크인 {room.checkInTime} ~ 체크아웃{' '}
+                            {room.checkOutTime}
+                          </Check>
+                        </RoomInfo>
+                        <RoomInfo>
+                          <CheckInfo>[1인 / 1마리 추가요금]</CheckInfo>
+                          <Check>
+                            인원 {room.extraPeopleFee.toLocaleString()}
+                          </Check>
+                          <Check>
+                            반려동물 {room.extraPetFee.toLocaleString()}
+                          </Check>
+                        </RoomInfo>
+                        <RoomInfo>
+                          <Price>{room.price.toLocaleString()}</Price>
+                        </RoomInfo>
+                        <RoomButton onClick={() => handleAllReserve(room)}>
+                          예약하기
+                        </RoomButton>
+                      </RoomInfoRight>
+                    </RoomCard>
+                  ));
+              })()}
             </RoomContainer>
           ) : (
             <p>현재 방이 없습니다</p>
@@ -417,15 +423,17 @@ const DetailAccommodation = () => {
           )}
           <SectionTitle>숙소 편의시설</SectionTitle>
           <Facility>
-            {accommodation.accommodationFacilities.map((facility, index) => (
-              <FacilityItem key={index}>{facility}</FacilityItem>
-            ))}
+            {Array.isArray(accommodation.accommodationFacilities) &&
+              accommodation.accommodationFacilities.map((facility, index) => (
+                <FacilityItem key={index}>{facility}</FacilityItem>
+              ))}
           </Facility>
           <SectionTitle>반려동물 편의시설</SectionTitle>
           <Facility>
-            {accommodation.accommodationPetFacilities.map((facility, index) => (
-              <FacilityItem key={index}>{facility}</FacilityItem>
-            ))}
+            {Array.isArray(accommodation.accommodationFacilities) &&
+              accommodation.accommodationFacilities.map((facility, index) => (
+                <FacilityItem key={index}>{facility}</FacilityItem>
+              ))}
           </Facility>
           <SectionTitle>위치</SectionTitle>
           <AccommodationMap
