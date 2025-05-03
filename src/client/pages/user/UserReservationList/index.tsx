@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import SubPageHeader from '@components/common/SubPageHeader';
 import Loader from '@shared/components/common/Loader';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import Modal from '@shared/components/common/Modal';
 import {
   RESERVATION_STATUS,

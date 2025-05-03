@@ -3,7 +3,7 @@ import SubPageHeader from '@components/common/SubPageHeader';
 import StarRating from '@components/common/StarRating';
 import Button from '@shared/components/common/Button';
 import Loader from '@shared/components/common/Loader';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import RegisterReviewModal from '@components/common/RegisterReviewModal';
 import useUserReviewsPage from '@hooks/page/useUserReviewsPage';
 import ReviewImageGallery from './ReviewImageGallery';

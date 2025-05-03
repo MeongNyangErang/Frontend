@@ -1,4 +1,4 @@
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 import { addParticle } from '@utils/formatter';

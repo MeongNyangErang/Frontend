@@ -17,7 +17,7 @@ import {
   SProfileImageEdit,
 } from './styles';
 import Modal from '@shared/components/common/Modal';
-import MessageBox from '../MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 
 interface ProfileEditProps {
   role: MemberRole;

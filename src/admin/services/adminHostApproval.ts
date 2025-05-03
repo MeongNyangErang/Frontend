@@ -1,5 +1,8 @@
 import { fetchCall } from '@admin/services/adminApi';
-import { HostSignupRequestsResponse } from '@admin/typings/response/adminHostSignupResponse';
+import {
+  HostSignupRequestsResponse,
+  HostSignupRequestDetailResponse,
+} from '@admin/typings/response/adminHostSignupResponse';
 
 const getHostSignupRequests = async (page: number) => {
   return fetchCall<HostSignupRequestsResponse>(
@@ -9,10 +12,13 @@ const getHostSignupRequests = async (page: number) => {
 };
 
 const getHostSignupRequestDetail = async (hostId: number) => {
-  return fetchCall(`hosts/pending/${hostId}`, 'get');
+  return fetchCall<HostSignupRequestDetailResponse>(
+    `hosts/pending/${hostId}`,
+    'get',
+  );
 };
 
-const aproveHostSignupRequest = async (hostId: number) => {
+const approveHostSignupRequest = async (hostId: number) => {
   return fetchCall(`hosts/${hostId}/approve`, 'patch');
 };
 
@@ -23,6 +29,6 @@ const rejectHostSignupRequest = async (hostId: number) => {
 export {
   getHostSignupRequests,
   getHostSignupRequestDetail,
-  aproveHostSignupRequest,
+  approveHostSignupRequest,
   rejectHostSignupRequest,
 };

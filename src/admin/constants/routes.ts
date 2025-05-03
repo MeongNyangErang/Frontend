@@ -11,7 +11,7 @@ const ROUTES = {
     detail: (reportId: number) => `/reports/${reportId}`,
   },
   hosts: {
-    root: '/hosts',
+    root: (page: number) => `/hosts?page=${page}`,
     detail: (hostId: number) => `/hosts/${hostId}`,
   },
 };

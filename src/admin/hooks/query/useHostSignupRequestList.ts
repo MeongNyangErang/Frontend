@@ -3,8 +3,9 @@ import { getHostSignupRequests } from '@admin/services/adminHostApproval';
 
 const useHostSignupRequestList = (page: number, enabled: boolean = true) => {
   const result = useQuery({
-    queryKey: ['host-signup-request-list'],
+    queryKey: ['host-signup-request-list', page],
     queryFn: () => getHostSignupRequests(page),
+    staleTime: 1000 * 60 * 30,
     enabled,
   });
 

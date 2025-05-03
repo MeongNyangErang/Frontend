@@ -8,7 +8,7 @@ import { SectionLayout } from '@components/layouts/SectionLayout';
 import { SearchBaseType, SearchFilterType } from '@typings/search';
 import ROUTES from '@constants/routes';
 import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
-import MessageBox from '@components/common/MessageBox';
+import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import { Accommodation } from '@typings/response/accommodations';
 import useAuth from '@hooks/auth/useAuth';
