@@ -1,0 +1,58 @@
+const reportList = [
+  {
+    reviewId: 101,
+    reporterId: 1,
+    reporterType: 'USER',
+    reason: '욕설이 포함된 리뷰입니다.',
+    evidenceImageUrl: 'https://example.com/evidence1.jpg',
+    status: 'PENDING',
+    createdAt: '2025-05-01T10:15:00Z',
+  },
+  {
+    reviewId: 102,
+    reporterId: 2,
+    reporterType: 'HOST',
+    reason: '사실과 다른 내용이 포함되어 있습니다.',
+    evidenceImageUrl: 'https://example.com/evidence2.jpg',
+    status: 'COMPLETED',
+    createdAt: '2025-05-02T12:30:00Z',
+  },
+  {
+    reviewId: 103,
+    reporterId: 3,
+    reporterType: 'USER',
+    reason: '개인정보가 노출되어 있습니다.',
+    evidenceImageUrl: 'https://example.com/evidence3.jpg',
+    status: 'PENDING',
+    createdAt: '2025-05-03T09:45:00Z',
+  },
+  {
+    reviewId: 104,
+    reporterId: 4,
+    reporterType: 'HOST',
+    reason: '비속어 사용으로 인해 신고합니다.',
+    evidenceImageUrl: 'https://example.com/evidence4.jpg',
+    status: 'COMPLETED',
+    createdAt: '2025-05-03T16:20:00Z',
+  },
+  {
+    reviewId: 105,
+    reporterId: 5,
+    reporterType: 'USER',
+    reason: '광고성 리뷰입니다.',
+    evidenceImageUrl: 'https://example.com/evidence5.jpg',
+    status: 'PENDING',
+    createdAt: '2025-05-04T08:10:00Z',
+  },
+  {
+    reviewId: 106,
+    reporterId: 6,
+    reporterType: 'HOST',
+    reason: '리뷰 내용이 악의적입니다.',
+    evidenceImageUrl: 'https://example.com/evidence6.jpg',
+    status: 'COMPLETED',
+    createdAt: '2025-05-04T11:55:00Z',
+  },
+] as const;
+
+export { reportList };
