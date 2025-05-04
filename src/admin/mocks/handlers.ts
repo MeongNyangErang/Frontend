@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import { hostSignupDetail, hostSignupList } from './data/hostSignup';
+import { hostSignupDetail, hostSignupList } from './data/hostSignupList';
+import { reportList } from './data/reportList';
 
 const ADMIN_BASE_URL = import.meta.env.VITE_API_ADMIN_BASE_URL;
 
@@ -31,6 +32,22 @@ export const handlers = [
     const response = {
       code: 200,
       data: hostSignupDetail,
+    };
+    return HttpResponse.json(response);
+  }),
+
+  http.get(`${ADMIN_BASE_URL}/reports/review`, async () => {
+    const response = {
+      code: 200,
+      data: {
+        content: reportList,
+        page: 0,
+        size: 20,
+        totalElements: 30,
+        totalPages: 2,
+        first: true,
+        last: false,
+      },
     };
     return HttpResponse.json(response);
   }),

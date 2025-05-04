@@ -2,11 +2,6 @@ import { media } from '@shared/components/styles/responsive';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const SHostSignupRequestList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
 const SHostSignupRequestItem = styled(Link)`
   display: flex;
   flex-direction: column;
@@ -33,9 +28,4 @@ const SHostSignupRequestItem = styled(Link)`
   }
 `;
 
-const SPaginationWrap = styled.div`
-  padding-top: 20px;
-  margin-bottom: 20px;
-`;
-
-export { SHostSignupRequestList, SHostSignupRequestItem, SPaginationWrap };
+export { SHostSignupRequestItem };

@@ -7,7 +7,7 @@ const ROUTES = {
     edit: (noticeId: number) => `/notices/${noticeId}/edit`,
   },
   reports: {
-    root: '/reports',
+    root: (page: number) => `/reports?page=${page}`,
     detail: (reportId: number) => `/reports/${reportId}`,
   },
   hosts: {

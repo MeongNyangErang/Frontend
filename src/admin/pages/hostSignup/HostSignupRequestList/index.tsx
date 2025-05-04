@@ -1,56 +1,42 @@
-import { useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import Pagination from '@shared/components/common/Pagination';
-import { SSubPageTitle } from '@admin/components/styles/mixins';
 import useHostSignupRequestList from '@admin/hooks/query/useHostSignupRequestList';
 import ROUTES from '@admin/constants/routes';
-import {
-  SHostSignupRequestList,
-  SHostSignupRequestItem,
-  SPaginationWrap,
-} from './styles';
+import usePageParam from '@shared/hooks/router/usePageParam';
+import usePaginationNavigator from '@shared/hooks/router/usePaginationNavigator';
+import PaginatedListPage from '@admin/components/templates/PaginatedListPage';
+import { SHostSignupRequestItem } from './styles';
 
 const HostSignupRequestList = () => {
-  const [param] = useSearchParams();
-  const page = Number(param.get('page'));
-  const currentPage = !Number.isNaN(page) && page >= 0 ? page : 0;
-  const navigate = useNavigate();
+  const currentPage = usePageParam();
   const {
-    data: { data: { content, size, totalElements } = {} } = {},
+    data: { data } = {},
     isLoading,
-    error,
+    isError,
   } = useHostSignupRequestList(currentPage);
+  const { content, totalElements, size } = data || {};
 
-  const onClickPagination = useCallback((page: number) => {
-    navigate(ROUTES.hosts.root(page));
-  }, []);
+  const onClickPagination = usePaginationNavigator(ROUTES.hosts.root);
 
   return (
     <>
-      <SSubPageTitle>승인 대기 호스트 회원</SSubPageTitle>
-      {!error && (
-        <SHostSignupRequestList>
-          {content?.map(({ hostId, createdAt }) => (
-            <SHostSignupRequestItem
-              to={ROUTES.hosts.detail(hostId)}
-              key={createdAt}
-            >
-              <p>호스트 ID : {hostId}</p>
-              <span>{createdAt}</span>
-            </SHostSignupRequestItem>
-          ))}
-        </SHostSignupRequestList>
-      )}
-      {typeof totalElements === 'number' && typeof size === 'number' && (
-        <SPaginationWrap>
-          <Pagination
-            currentPage={page}
-            totalResults={totalElements}
-            size={size}
-            onClick={onClickPagination}
-          />
-        </SPaginationWrap>
-      )}
+      <PaginatedListPage
+        title="승인 대기 호스트 회원"
+        isLoading={isLoading}
+        isError={isError}
+        currentPage={currentPage}
+        totalElements={totalElements}
+        size={size}
+        onClickPagination={onClickPagination}
+        content={content}
+        renderListItem={({ hostId, createdAt }) => (
+          <SHostSignupRequestItem
+            to={ROUTES.hosts.detail(hostId)}
+            key={createdAt}
+          >
+            <p>호스트 ID : {hostId}</p>
+            <span>{createdAt}</span>
+          </SHostSignupRequestItem>
+        )}
+      />
     </>
   );
 };
