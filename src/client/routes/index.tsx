@@ -71,7 +71,6 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-
           <Route path="notification" element={<Notificaion />} />
 
           <Route element={<PrivateRoute allowedRoles={['USER']} />}>
@@ -87,6 +86,7 @@ const AppRouter = () => {
               <Route path="profile-edit" element={<UserProfileEdit />} />
             </Route>
           </Route>
+
           <Route element={<PrivateRoute allowedRoles={['HOST']} />}>
             <Route path="/mypage/host" element={<MyPageLayout />}>
               <Route index element={<HostMyPage />} />
@@ -101,6 +101,7 @@ const AppRouter = () => {
               <Route path="profile-edit" element={<HostProfileEdit />} />
             </Route>
           </Route>
+
           <Route element={<PrivateRoute allowedRoles={['HOST', 'USER']} />}>
             <Route path="/chat" element={<Chat />} />
             <Route path="/chat/:chatRoomId" element={<Chat />} />

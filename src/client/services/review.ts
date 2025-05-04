@@ -1,4 +1,3 @@
-import { UserReviewEditForm, UserReviewForm } from '@typings/review';
 import { UserReviewsResponse } from '@typings/response/review';
 import { fetchCall } from '@services/api';
 
@@ -19,4 +18,14 @@ export const deleteReview = async (reviewId: string) => {
 
 export const editReview = async (reviewId: string, editedReview: FormData) => {
   return await fetchCall(`users/reviews/${reviewId}`, 'put', editedReview);
+};
+
+export const getAccommodationReviews = async (
+  accommodationId: number,
+  page: number,
+) => {
+  return await fetchCall(
+    `accommodations/${accommodationId}/reviews?page=${page}`,
+    'get',
+  );
 };

@@ -1,14 +1,17 @@
 import { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
+import { PiSirenBold } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import { FaStar } from 'react-icons/fa';
 import { fetchCall } from '@services/api';
+import useAuth from '@hooks/auth/useAuth';
+import { ReviewToReport } from '@typings/report';
+import ReviewReportModal from '@components/common/ReviewReportModal';
 
 interface RoomReview {
   reviewId: number;
-  nickname: String;
+  nickname: string;
   profileImageUrl: string;
   roomName: string;
   totalRating: number;
@@ -17,8 +20,6 @@ interface RoomReview {
   createdAt: string;
 }
 
-type RoomReviewData = RoomReview[];
-
 const RoomReview = () => {
   const [roomReview, setRoomReview] = useState<RoomReview[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -26,6 +27,11 @@ const RoomReview = () => {
   const [hasMore, setHasMore] = useState(true);
   const { pathname } = useLocation();
   const accommodationId = pathname.split('/')[2];
+  const { member } = useAuth();
+  const isUserLoggedIn = member.data?.role === 'USER';
+  const [reviewToReport, setReviewToReport] = useState<ReviewToReport | null>(
+    null,
+  );
 
   const fetchRoomDetails = async () => {
     if (!hasMore) return;
@@ -43,6 +49,23 @@ const RoomReview = () => {
     } catch (error) {
       console.error('리뷰 불러오기 실패:', error);
     }
+  };
+
+  const handleClickReportButton = (
+    reviewId: number,
+    nickname: string,
+    content: string,
+  ) => {
+    if (!isUserLoggedIn) {
+      alert('로그인 유저만 신고 가능합니다.');
+      return;
+    }
+
+    setReviewToReport({ reviewId, nickname, content });
+  };
+
+  const closeReportModal = () => {
+    setReviewToReport(null);
   };
 
   useEffect(() => {
@@ -82,6 +105,13 @@ const RoomReview = () => {
                   <Nickname>{r.nickname}</Nickname>
                   <Date>{r.createdAt}</Date>
                 </Info>
+                <SReportButton
+                  onClick={() =>
+                    handleClickReportButton(r.reviewId, r.nickname, r.content)
+                  }
+                >
+                  <PiSirenBold />
+                </SReportButton>
               </Header>
               <Rating>
                 <StarRatings
@@ -117,6 +147,7 @@ const RoomReview = () => {
       ) : (
         <NoReviewMessage>등록된 리뷰가 없습니다.</NoReviewMessage>
       )}
+      <ReviewReportModal review={reviewToReport} onClose={closeReportModal} />
     </Card>
   );
 };
@@ -166,8 +197,14 @@ const ProfileImage = styled.img`
 `;
 
 const Info = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
+`;
+
+const SReportButton = styled.button`
+  display: flex;
+  font-size: 18px;
 `;
 
 const Nickname = styled.div`
