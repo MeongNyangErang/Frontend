@@ -107,12 +107,14 @@ const UserReservationList = () => {
           {isLoading && <Loader loading size={8} color="grayBorder" />}
         </SListBottom>
       </SReservationListWrap>
-      <RegisterReviewModal
-        type="write"
-        reservationToReview={reservationToReview}
-        onClose={onCloseReviewModal}
-        onSuccess={onSuccessPostReview}
-      />
+      {reservationToReview && (
+        <RegisterReviewModal
+          type="write"
+          reservationToReview={reservationToReview}
+          onClose={onCloseReviewModal}
+          onSuccess={onSuccessPostReview}
+        />
+      )}
       <CancelReservationModal
         reservationToCancel={reservationToCancel}
         onClose={onCloseCancelModal}

@@ -108,12 +108,14 @@ const UserReviews = () => {
             onClose={onCloseDeleteModal}
             onSuccess={onSuccessDeleteReview}
           />
-          <RegisterReviewModal
-            type="edit"
-            onClose={onCloseEditModal}
-            onSuccess={onSuccessEditReview}
-            reviewToEdit={reviewToEdit}
-          />
+          {reviewToEdit && (
+            <RegisterReviewModal
+              type="edit"
+              onClose={onCloseEditModal}
+              onSuccess={onSuccessEditReview}
+              reviewToEdit={reviewToEdit}
+            />
+          )}
         </>
       )}
     </>
