@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { FaCamera, FaCalendarAlt } from 'react-icons/fa';
-import { FaXmark, FaCircleInfo } from 'react-icons/fa6';
+import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCircleInfo } from 'react-icons/fa6';
 import Modal from '@shared/components/common/Modal';
 import Button from '@shared/components/common/Button';
 import StarRating from '@components/common/StarRating';
@@ -8,6 +8,8 @@ import { UserReservationItem } from '@typings/reservation';
 import { UserReview } from '@typings/review';
 import { formatDateStrToStrWithDay } from '@utils/date';
 import { MAX_TEXT_LENGTH } from '@constants/review';
+import ImageUploader from '@shared/components/common/ImageUploader';
+import TextEditor from '@shared/components/common/TextEditor';
 
 import {
   SReviewWrap,
@@ -16,24 +18,15 @@ import {
   SRatingTitle,
   SDetailBox,
   SDetailTitle,
-  STextBoxWrap,
-  STextBox,
-  STextLength,
   SImageNotice,
-  SImageBox,
-  SImageButton,
-  SImagePreviews,
-  SImagePreviewsWrap,
-  SImagePreview,
-  SImageDeleteButton,
   SErrorMessage,
 } from './styles';
 import useRegisterReviewModal from './useRegisterReviewModal';
 
 interface RegisterReviewModalProps {
   type: 'write' | 'edit';
-  reservationToReview?: UserReservationItem | null;
-  reviewToEdit?: UserReview | null;
+  reservationToReview?: UserReservationItem;
+  reviewToEdit?: UserReview;
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -55,23 +48,21 @@ const RegisterReviewModal = ({
 
   const {
     review,
-    imagePreviews,
-    imageInputRef,
+    images,
+    text,
     isValidToSubmit,
     isLoading,
     error,
     resetReview,
-    handleChangeTextArea,
-    handleChangeImage,
-    handleClickImageButton,
-    handleDeleteImage,
     handleSubmit,
     onChangeStarRates,
-  } = useRegisterReviewModal({
-    type,
+    onAddImage,
+    onRemoveImage,
+    onInputChange,
+  } = useRegisterReviewModal(
     onSuccess,
-    ...(type === 'edit' ? { reviewToEdit } : {}),
-  });
+    !!reviewToEdit ? reviewToEdit : undefined,
+  );
 
   return (
     <Modal
@@ -119,44 +110,16 @@ const RegisterReviewModal = ({
           <SDetailTitle>
             상세 리뷰를 남겨주세요<span>(선택)</span>
           </SDetailTitle>
-          <STextBoxWrap>
-            <STextBox
-              placeholder="반려동물과 함께한 숙소 이용 경험을 들려주세요."
-              value={review.content}
-              onChange={handleChangeTextArea}
-            />
-            <STextLength>
-              {review.content?.length || 0} / {MAX_TEXT_LENGTH}
-            </STextLength>
-          </STextBoxWrap>
-          <SImageBox>
-            <input
-              type="file"
-              ref={imageInputRef}
-              accept=".png,.jpg,.jpeg"
-              onChange={handleChangeImage}
-            />
-            <SImageButton onClick={handleClickImageButton}>
-              <FaCamera />
-              <span>사진등록</span>
-            </SImageButton>
-            <SImagePreviews>
-              <SImagePreviewsWrap>
-                {imagePreviews.map((preview, index) => {
-                  return (
-                    <SImagePreview key={preview}>
-                      <img src={preview} alt={`이미지 프리뷰 ${index}`} />
-                      <SImageDeleteButton
-                        onClick={() => handleDeleteImage(index)}
-                      >
-                        <FaXmark />
-                      </SImageDeleteButton>
-                    </SImagePreview>
-                  );
-                })}
-              </SImagePreviewsWrap>
-            </SImagePreviews>
-          </SImageBox>
+          <TextEditor
+            maxLength={MAX_TEXT_LENGTH}
+            text={text}
+            onChange={onInputChange}
+          />
+          <ImageUploader
+            images={images}
+            onAdd={onAddImage}
+            onRemove={onRemoveImage}
+          />
           <SImageNotice>
             <FaCircleInfo />
             이미지는 최대 3장까지 등록 가능합니다.

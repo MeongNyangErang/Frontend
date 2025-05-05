@@ -6,7 +6,9 @@ import useError from '@shared/hooks/ui/useError';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import { parseNewLine } from '@shared/utils/formatter';
 import { postNewNotice } from '@admin/services/adminNotices';
-import ImagesUploader from './ImageUploader';
+import useImageUploader from '@shared/hooks/ui/useImageUploader';
+import ImageUploader from '@shared/components/common/ImageUploader';
+
 import {
   SNoticeForm,
   SNoticeTitleInput,
@@ -15,20 +17,15 @@ import {
 
 const NoticeCreate = () => {
   const [formData, setFormData] = useState({ title: '', content: '' });
-  const [images, setImages] = useState<File[]>([]);
+  const { images, newImages, onAddImage, onRemoveImage } = useImageUploader(
+    1,
+    undefined,
+  );
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError, resetError } = useError();
 
   const onChangeFormData = (key: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const addImage = (image: File) => {
-    setImages((prev) => [...prev, image]);
-  };
-
-  const removeImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateFormData = () => {
@@ -52,8 +49,8 @@ const NoticeCreate = () => {
 
     data.append('request', blob);
 
-    if (images.length > 0) {
-      images.forEach((image) => {
+    if (newImages.length > 0) {
+      newImages.forEach((image) => {
         data.append('image', image);
       });
     }
@@ -83,10 +80,10 @@ const NoticeCreate = () => {
           value={formData.content}
           onChange={(e) => onChangeFormData('content', e.target.value)}
         />
-        <ImagesUploader
+        <ImageUploader
           images={images}
-          addImage={addImage}
-          removeImage={removeImage}
+          onAdd={onAddImage}
+          onRemove={onRemoveImage}
         />
         <Button
           variant="grayBorder"
