@@ -1,12 +1,8 @@
-import { useCallback, useState, useRef, ChangeEvent, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { AxiosError } from 'axios';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import useError from '@shared/hooks/ui/useError';
-import {
-  UserReviewForm,
-  UserReview,
-  UserReviewEditForm,
-} from '@typings/review';
+import { UserReviewForm, UserReview } from '@typings/review';
 import { postNewReview, editReview } from '@services/review';
 import useUserReviews from '@hooks/query/user/useUserReviews';
 import {
@@ -14,110 +10,38 @@ import {
   MAX_TEXT_LENGTH,
   initialReviewState,
 } from '@constants/review';
+import useImageUploader from '@shared/hooks/ui/useImageUploader';
+import useTextInput from '@shared/hooks/ui/useTextInput';
 
-interface UseReviewModalProps {
-  type: 'write' | 'edit';
-  onSuccess(): void;
-  reviewToEdit?: UserReview | null;
-}
-
-const useReviewModal = ({
-  type,
-  onSuccess,
-  reviewToEdit,
-}: UseReviewModalProps) => {
-  const isEditType = type === 'edit' && !!reviewToEdit;
-  const [review, setReveiw] = useState<UserReviewForm>({
+const useReviewModal = (
+  onSuccess: () => void,
+  reviewToEdit: UserReview | undefined,
+) => {
+  const isEditType = !!reviewToEdit;
+  const [review, setReview] = useState<UserReviewForm>({
     ...initialReviewState,
   });
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
+  const { images, newImages, removedImages, onAddImage, onRemoveImage } =
+    useImageUploader(MAX_IMAGE_COUNT, reviewToEdit?.reviewImages);
+  const { text, onInputChange } = useTextInput(
+    MAX_TEXT_LENGTH,
+    reviewToEdit?.content,
+  );
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError, resetError } = useError();
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const { refreshUserReviews } = useUserReviews(0);
+  const { refreshUserReviews } = useUserReviews(0, false);
   const isValidToSubmit = review.userRating && review.petFriendlyRating;
 
   const onChangeStarRates = useCallback(
     (key: 'userRating' | 'petFriendlyRating') => (value: number) => {
-      setReveiw((prev) => ({ ...prev, [key]: value }));
+      setReview((prev) => ({ ...prev, [key]: value }));
     },
     [],
   );
 
   const resetReview = () => {
-    setReveiw({
+    setReview({
       ...initialReviewState,
-    });
-  };
-
-  const handleChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const content = e.target.value.slice(0, MAX_TEXT_LENGTH);
-    setReveiw((prev) => ({ ...prev, content }));
-  };
-
-  const handleClickImageButton = () => {
-    const target = imageInputRef.current;
-    if (target) target.click();
-  };
-
-  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      if (imagePreviews.length === MAX_IMAGE_COUNT) return;
-      const image = files[0];
-
-      setReveiw((prev) => ({
-        ...prev,
-        images: [...(prev.images ? prev.images : []), image],
-      }));
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const url = e.target?.result as string;
-        setImagePreviews((prev) => [...prev, url]);
-      };
-      reader.readAsDataURL(image);
-    }
-  };
-
-  const handleDeleteImage = (index: number) => {
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-
-    if (type === 'write') {
-      setReveiw((prev) => {
-        const images = prev.images!.filter((_, i) => i !== index);
-        return { ...prev, images };
-      });
-    } else {
-      const imageUrl = imagePreviews[index];
-      const imageToDelete = reviewToEdit?.reviewImages.find(
-        (img) => img.imageUrl === imageUrl,
-      );
-      if (imageToDelete) {
-        setImagesToDelete((prev) => [...prev, imageToDelete.imageId]);
-      } else {
-        setReveiw((prev) => {
-          const images = prev.images!.filter((_, i) => i !== index);
-          return { ...prev, images };
-        });
-      }
-    }
-  };
-
-  const deleteEmptyValueFromData = (
-    data: UserReviewForm | UserReviewEditForm,
-    keys: string[],
-  ) => {
-    keys.forEach((key) => {
-      const typedKey = key as keyof typeof data;
-      const value = data[typedKey];
-      if (Array.isArray(value) && value.length === 0) {
-        delete data[typedKey];
-      }
-      if (value === '') {
-        delete data[typedKey];
-      }
     });
   };
 
@@ -126,23 +50,18 @@ const useReviewModal = ({
     if (error) resetError();
 
     const data = { ...review } as any;
-    deleteEmptyValueFromData(data, ['content', 'images']);
-
-    Object.entries(data).forEach(([key, value]) => {
-      if (key === 'images') {
-        delete data[key];
-      }
-    });
 
     data['reservationId'] = reservationId;
+
+    if (text.trim().length > 0) data['content'] = text;
 
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
 
     const formData = new FormData();
 
     formData.append('request', blob);
-    if (review.images) {
-      review.images.forEach((img) => {
+    if (newImages.length > 0) {
+      newImages.forEach((img) => {
         formData.append('images', img);
       });
     }
@@ -171,13 +90,10 @@ const useReviewModal = ({
     const data = {
       userRating: review.userRating,
       petFriendlyRating: review.petFriendlyRating,
-      content: review.content,
-      deletedImageId: [...imagesToDelete],
-    };
+      deletedImageId: [...removedImages],
+    } as any;
 
-    console.log(data, 'data');
-
-    const newImages = [...(review.images ? review.images : [])];
+    if (text.trim().length > 0) data['content'] = text;
 
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
 
@@ -190,13 +106,10 @@ const useReviewModal = ({
         formData.append('newImages', img);
       });
     }
-    console.log(newImages, 'newImages');
-    deleteEmptyValueFromData(data, ['content', 'images']);
 
     startIsLoading();
     try {
       await editReview(reviewToEdit?.reviewId!, formData);
-
       resetReview();
       onSuccess();
     } catch (error) {
@@ -214,38 +127,19 @@ const useReviewModal = ({
     return isEditType ? handleEditReview() : handleWriteReview(reservationId!);
   };
 
-  useEffect(() => {
-    const newReview = isEditType
-      ? {
-          userRating: 0,
-          petFriendlyRating: 0,
-          content: reviewToEdit.content || '',
-          images: [],
-        }
-      : { ...initialReviewState };
-
-    const newImagePreivews = isEditType
-      ? reviewToEdit.reviewImages.map(({ imageUrl }) => imageUrl)
-      : [];
-
-    setReveiw(newReview);
-    setImagePreviews(newImagePreivews);
-  }, [reviewToEdit]);
-
   return {
     review,
-    imagePreviews,
-    imageInputRef,
+    images,
+    text,
     isValidToSubmit,
     isLoading,
     error,
     resetReview,
-    handleChangeTextArea,
-    handleChangeImage,
-    handleClickImageButton,
-    handleDeleteImage,
     handleSubmit,
     onChangeStarRates,
+    onAddImage,
+    onRemoveImage,
+    onInputChange,
   };
 };
 

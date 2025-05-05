@@ -5,5 +5,4 @@ export const initialReviewState = {
   userRating: 0,
   petFriendlyRating: 0,
   content: '',
-  images: [] as File[],
-};
+} as const;

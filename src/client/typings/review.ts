@@ -1,16 +1,11 @@
 export interface UserReviewForm {
   userRating: number;
   petFriendlyRating: number;
-  content?: string;
-  images?: File[];
 }
 
 export interface UserReviewEditForm {
   userRating: number;
   petFriendlyRating: number;
-  content?: string;
-  newImages?: File[];
-  deletedImages?: number[];
 }
 
 export interface UserReveiwImage {
