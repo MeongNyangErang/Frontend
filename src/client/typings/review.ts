@@ -21,3 +21,14 @@ export interface UserReview {
   reviewImages: UserReveiwImage[];
   createdAt: string;
 }
+
+export interface AccommodationReview {
+  reviewId: number;
+  roomName: string;
+  nickname: string;
+  profileImageUrl: string;
+  totalRating: number;
+  content: string;
+  reviewImages: string[];
+  createdAt: string;
+}

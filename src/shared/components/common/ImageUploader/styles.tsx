@@ -13,6 +13,7 @@ const SImageButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   width: 80px;
   height: 80px;
   border: ${({ theme }) => `1px solid ${theme.colors.gray400}`};
@@ -22,7 +23,7 @@ const SImageButton = styled.button`
   background-color: #fff;
 
   > span {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   &:hover {

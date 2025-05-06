@@ -1,3 +1,4 @@
+import { getRecentReviewList } from '@services/recommendations';
 import { http, HttpResponse } from 'msw';
 import { SearchAccommodationsResponse } from '@typings/response/accommodations';
 import { ReservationStatus } from '@typings/reservation';
@@ -17,6 +18,7 @@ import {
   mostViewedRecommendations,
   latestReviewList,
 } from './data/recommendations';
+import { accommodationrReviews } from './data/accommodationReviews';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -80,7 +82,15 @@ export const handlers = [
   http.get(`${BASE_URL}/users/accommodations/search`, async () => {
     const mockData: SearchAccommodationsResponse = {
       code: 200,
-      data: accommodationsData,
+      data: {
+        content: accommodationsData,
+        page: 0,
+        size: 20,
+        totalElements: 30,
+        totalPages: 2,
+        first: true,
+        last: false,
+      },
     };
 
     return HttpResponse.json(mockData);
@@ -334,36 +344,8 @@ export const handlers = [
   http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
   }),
-
-  http.get(`${BASE_URL}/`, async () => {
-    const roomDetaiData = {
-      roomId: 1,
-      name: 'Cozy Mountain Cabin',
-      description:
-        'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-      standardPeopleCount: 2,
-      maxPeopleCount: 4,
-      standardPetCount: 1,
-      maxPetCount: 2,
-      price: 120000,
-      extraPeopleFee: 30000,
-      extraPetFee: 15000,
-      checkInTime: '15:00',
-      checkOutTime: '11:00',
-      thumbnailUrl: 'https://i.imgur.com/TuefC4N.jpeg',
-      FacilityTypes: ['Air Conditioning', 'Wi-Fi', 'Kitchen', 'TV', 'Heater'],
-      PetFacilityTypes: ['Pet bed', 'Pet food bowls', 'Fenced yard'],
-      hashtagTypes: [
-        'MountainRetreat',
-        'CozyStay',
-        'PetFriendly',
-        'RomanticGetaway',
-      ],
-    };
-    return HttpResponse.json(roomDetaiData);
-  }),
-  http.get(`${BASE_URL}/hosts/review`, async () => {
-    const response = [
+  http.get(`${BASE_URL}/hosts/reviews`, async () => {
+    const reviews = [
       {
         nickname: '김멍냥',
         roomId: 1,
@@ -371,15 +353,23 @@ export const handlers = [
         roomName: '오션 더블A',
         totalRating: 4.6,
         reviewContent:
-          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-        imageUrls: [
-          'https://i.imgur.com/WrQthuy.jpeg',
-          'https://i.imgur.com/WrQthuy.jpeg',
-          'https://i.imgur.com/WrQthuy.jpeg',
-        ],
+          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+        imageUrls: ['https://i.imgur.com/WrQthuy.jpeg'],
         createdAt: '2025-03-23',
       },
     ];
+
+    const response = {
+      code: 200,
+      data: {
+        content: reviews,
+        page: 0,
+        size: 1,
+        totalElements: 1,
+        first: true,
+        last: true,
+      },
+    };
     return HttpResponse.json(response);
   }),
 
@@ -473,5 +463,18 @@ export const handlers = [
   }),
   http.post(`${BASE_URL}/notifications/messages`, async () => {
     return HttpResponse.json({ message: '알림 전송 성공' });
+  }),
+  http.get(`${BASE_URL}/accommodations/:accommodationId/reviews`, async () => {
+    const response = {
+      code: 200,
+      content: accommodationrReviews,
+      page: 0,
+      size: 20,
+      totalElements: 30,
+      totalPages: 2,
+      first: true,
+      last: false,
+    };
+    return HttpResponse.json(response);
   }),
 ];

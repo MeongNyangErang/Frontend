@@ -12,7 +12,7 @@ const TextEditor = ({ text, maxLength, onChange }: TextEditorProps) => {
     <>
       <STextEditorWrap>
         <STextArea
-          placeholder="반려동물과 함께한 숙소 이용 경험을 들려주세요."
+          placeholder="내용을 입력해주세요."
           value={text}
           onChange={onChange}
         />

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { PiSirenBold } from 'react-icons/pi';
 import StarRatings from 'react-star-ratings';
 import Header from '@components/common/RegisterHeader/index';
 import { fetchCall } from '@services/api';
+import ReviewReportModal from '@components/common/ReviewReportModal';
+import useReviewReport from '@hooks/ui/useReviewReport';
 
 interface ReviewList {
   nickname: string;
@@ -23,27 +26,28 @@ const ReviewList = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isFirst, setIsFirst] = useState(false);
+  const { reviewToReport, handleReportClick, handleReportClose } =
+    useReviewReport();
+
   const fetchReviews = async () => {
     if (!hasMore) return;
 
     try {
       const response = (await fetchCall(
-        `hosts/reviews?page=${page}&size=20`,
+        `hosts/reviews?page=${page}`,
         'get',
       )) as any;
 
-      const newReviews = response.content;
+      const newReviews = response?.data?.content;
 
-      if (newReviews.length > 0) {
+      if (Array.isArray(newReviews) && newReviews.length > 0) {
         setReviews((prev) => [...prev, ...newReviews]);
         setSize(response.data.size);
         setTotalElements(response.data.totalElements);
         setTotalPages(response.data.totalPages);
         setIsFirst(response.data.first);
 
-        if (response.data.last) {
-          setHasMore(false);
-        }
+        if (response.data.last) setHasMore(false);
       } else {
         setHasMore(false);
       }
@@ -80,9 +84,22 @@ const ReviewList = () => {
           </Name>
           <ReviewHeader>
             <User>{review.nickname}</User>
-            <CreatedAt>
-              {new Date(review.createdAt).toISOString().split('T')[0]}
-            </CreatedAt>
+            <SReportButtonArea>
+              <CreatedAt>
+                {new Date(review.createdAt).toISOString().split('T')[0]}
+              </CreatedAt>
+              <SReportButton
+                onClick={() =>
+                  handleReportClick(
+                    review.reviewId,
+                    review.reviewContent,
+                    review.nickname,
+                  )
+                }
+              >
+                <PiSirenBold />
+              </SReportButton>
+            </SReportButtonArea>
           </ReviewHeader>
           <Rating>
             <StarRatings
@@ -108,6 +125,12 @@ const ReviewList = () => {
           <ReviewContent>{review.reviewContent}</ReviewContent>
         </ReviewContainer>
       ))}
+      {reviewToReport && (
+        <ReviewReportModal
+          review={reviewToReport}
+          onClose={handleReportClose}
+        />
+      )}
     </div>
   );
 };
@@ -133,6 +156,17 @@ const Name = styled.div`
   margin-bottom: 5px;
 `;
 
+const SReportButtonArea = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const SReportButton = styled.button`
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.gray700};
+`;
+
 const User = styled.p`
   font-weight: bold;
   font-size: 14px;
@@ -140,7 +174,7 @@ const User = styled.p`
 `;
 
 const ReviewHeader = styled.div`
-  padding-left: 16px;
+  padding: 0 16px;
   display: flex;
   justify-content: space-between;
 `;
@@ -178,9 +212,10 @@ const ReviewImage = styled.img`
 `;
 
 const CreatedAt = styled.p`
-  padding: 0 16px;
+  padding: 0 12px;
   font-size: 14px;
   color: #999;
+  line-height: 1;
 `;
 
 const NoReviewsMessage = styled.div`
