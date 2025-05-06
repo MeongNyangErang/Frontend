@@ -6,8 +6,8 @@ import StarRatings from 'react-star-ratings';
 import { FaStar } from 'react-icons/fa';
 import { fetchCall } from '@services/api';
 import useAuth from '@hooks/auth/useAuth';
-import { ReviewToReport } from '@typings/report';
 import ReviewReportModal from '@components/common/ReviewReportModal';
+import useReviewReport from '@hooks/ui/useReviewReport';
 
 interface RoomReview {
   reviewId: number;
@@ -28,10 +28,9 @@ const RoomReview = () => {
   const { pathname } = useLocation();
   const accommodationId = pathname.split('/')[2];
   const { member } = useAuth();
+  const { reviewToReport, handleReportClick, handleReportClose } =
+    useReviewReport();
   const isUserLoggedIn = member.data?.role === 'USER';
-  const [reviewToReport, setReviewToReport] = useState<ReviewToReport | null>(
-    null,
-  );
 
   const fetchRoomDetails = async () => {
     if (!hasMore) return;
@@ -61,11 +60,7 @@ const RoomReview = () => {
       return;
     }
 
-    setReviewToReport({ reviewId, nickname, content });
-  };
-
-  const closeReportModal = () => {
-    setReviewToReport(null);
+    handleReportClick(reviewId, nickname, content);
   };
 
   useEffect(() => {
@@ -147,7 +142,12 @@ const RoomReview = () => {
       ) : (
         <NoReviewMessage>등록된 리뷰가 없습니다.</NoReviewMessage>
       )}
-      <ReviewReportModal review={reviewToReport} onClose={closeReportModal} />
+      {reviewToReport && (
+        <ReviewReportModal
+          review={reviewToReport}
+          onClose={handleReportClose}
+        />
+      )}
     </Card>
   );
 };

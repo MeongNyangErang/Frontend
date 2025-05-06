@@ -15,8 +15,6 @@ const useImageUploader = (
     return [...initialImages, ...newImages];
   }, [initialImages, newImages]);
 
-  console.log(images, 'i');
-
   const onAddImage = useCallback(
     (file: File) => {
       if (images.length >= maxCount) return;

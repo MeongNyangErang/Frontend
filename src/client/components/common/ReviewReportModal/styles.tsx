@@ -36,36 +36,18 @@ const SReviewToReport = styled.div`
 `;
 
 const SReportForm = styled.form`
+  margin-bottom: 32px;
   width: 100%;
 `;
 
-const SReportTextareaWrap = styled.div`
-  padding: 12px 12px 8px;
-  width: 100%;
-  border: ${({ theme }) => `1px solid ${theme.colors.gray300}`};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  background-color: ${({ theme }) => theme.colors.gray200};
+const ImageUploaderWrap = styled.div`
+  margin-bottom: 28px;
 `;
 
-const SReportTextarea = styled.textarea`
-  width: 100%;
-  background-color: pink;
-  resize: none;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.gray400};
-  }
-`;
-
-const STextLengthCounter = styled.div`
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.gray500};
-  text-align: right;
-
-  > span {
-    font-weight: 500;
-    color: ${({ theme }) => theme.colors.gray700};
-  }
+const SErrorMessage = styled.div`
+  padding-top: 8px;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.main};
 `;
 
 export {
@@ -73,7 +55,6 @@ export {
   SSectionName,
   SReviewToReport,
   SReportForm,
-  SReportTextareaWrap,
-  SReportTextarea,
-  STextLengthCounter,
+  ImageUploaderWrap,
+  SErrorMessage,
 };

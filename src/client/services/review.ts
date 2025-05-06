@@ -29,3 +29,7 @@ export const getAccommodationReviews = async (
     'get',
   );
 };
+
+export const reportReview = async (reviewId: number, formData: FormData) => {
+  return await fetchCall(`reviews/${reviewId}/report`, 'post', formData);
+};

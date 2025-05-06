@@ -1,3 +1,4 @@
+import { getRecentReviewList } from '@services/recommendations';
 import { http, HttpResponse } from 'msw';
 import { SearchAccommodationsResponse } from '@typings/response/accommodations';
 import { ReservationStatus } from '@typings/reservation';
@@ -343,8 +344,8 @@ export const handlers = [
   http.delete(`${BASE_URL}/users/reviews/:reviewId`, async () => {
     return HttpResponse.json({ message: '리뷰 삭제 성공' });
   }),
-  http.get(`${BASE_URL}/hosts/review`, async () => {
-    const response = [
+  http.get(`${BASE_URL}/hosts/reviews`, async () => {
+    const reviews = [
       {
         nickname: '김멍냥',
         roomId: 1,
@@ -352,15 +353,23 @@ export const handlers = [
         roomName: '오션 더블A',
         totalRating: 4.6,
         reviewContent:
-          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
-        imageUrls: [
-          'https://i.imgur.com/WrQthuy.jpeg',
-          'https://i.imgur.com/WrQthuy.jpeg',
-          'https://i.imgur.com/WrQthuy.jpeg',
-        ],
+          'A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.A peaceful retreat in the mountains, perfect for a quiet getaway with beautiful scenic views.',
+        imageUrls: ['https://i.imgur.com/WrQthuy.jpeg'],
         createdAt: '2025-03-23',
       },
     ];
+
+    const response = {
+      code: 200,
+      data: {
+        content: reviews,
+        page: 0,
+        size: 1,
+        totalElements: 1,
+        first: true,
+        last: true,
+      },
+    };
     return HttpResponse.json(response);
   }),
 
