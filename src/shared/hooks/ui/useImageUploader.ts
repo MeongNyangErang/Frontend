@@ -3,7 +3,7 @@ import { InitialImage } from '@typings/textImageForm';
 
 const useImageUploader = (
   maxCount: number,
-  initialImageList?: InitialImage[],
+  initialImageList: InitialImage[] | undefined = undefined,
 ) => {
   const [initialImages, setInitialImages] = useState(
     initialImageList ? [...initialImageList] : [],

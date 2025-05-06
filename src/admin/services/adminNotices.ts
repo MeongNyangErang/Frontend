@@ -1,19 +1,15 @@
 import { fetchCall } from './adminApi';
 
-const getNoticeList = async () => {
-  return await fetchCall('notices', 'get', undefined, true);
-};
-
-const getNoticeDetail = async (noticeId: number) => {
-  return await fetchCall(`notices/${noticeId}`, 'get', undefined, true);
-};
-
 const postNewNotice = async (formData: FormData) => {
   return await fetchCall('notices', 'post', formData);
 };
 
-const editNotice = async (noticeId: number) => {
-  return await fetchCall(`notices/${noticeId}`, 'put');
+const editNotice = async (noticeId: number, formData: FormData) => {
+  return await fetchCall(`notices/${noticeId}`, 'put', formData);
 };
 
-export { getNoticeList, getNoticeDetail, postNewNotice, editNotice };
+const deleteNotice = async (noticeId: number) => {
+  return await fetchCall(`notices/${noticeId}`, 'delete');
+};
+
+export { postNewNotice, editNotice, deleteNotice };
