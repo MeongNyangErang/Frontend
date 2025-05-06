@@ -37,13 +37,10 @@ async function fetchCall<T>(
   url: string,
   method: 'get' | 'post' | 'put' | 'delete' | 'patch',
   data?: any,
-  useDefaultBaseUrl: boolean = false,
 ): Promise<T> {
   const isFormData = data instanceof FormData;
 
-  const baseURL = useDefaultBaseUrl
-    ? import.meta.env.VITE_API_BASE_URL
-    : import.meta.env.VITE_API_ADMIN_BASE_URL;
+  const baseURL = import.meta.env.VITE_API_ADMIN_BASE_URL;
 
   const headers = isFormData
     ? { 'Content-Type': 'multipart/form-data' }

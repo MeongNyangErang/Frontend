@@ -9,6 +9,7 @@ const NoticeList = () => {
   const handleClickNewNoticeButton = () => {
     navigate(ROUTES.notices.new);
   };
+
   return (
     <SNoticeWrap>
       <SSubPageTitle>공지사항 목록</SSubPageTitle>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const STextEditorWrap = styled.div`
+const STextEditorWrap = styled.div<{ $height: number }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -8,7 +8,7 @@ const STextEditorWrap = styled.div`
   padding: 16px 12px 10px;
   margin-bottom: 4px;
   width: 100%;
-  height: 200px;
+  height: ${({ $height }) => `${$height}px`};
   border: ${({ theme }) => `1px solid ${theme.colors.gray300}`};
   border-radius: ${({ theme }) => theme.radius.sm};
   background-color: ${({ theme }) => theme.colors.gray100};
