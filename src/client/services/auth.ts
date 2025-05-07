@@ -1,5 +1,6 @@
 import { UserProfile, HostProfile } from '@typings/response/auth';
 import { LoginAccessToken } from '@typings/response/auth';
+import { KakaoMemberRole } from '@typings/member';
 import { fetchCall } from '@services/api';
 
 export const loginUser = async (email: string, password: string) => {
@@ -14,6 +15,13 @@ export const loginHost = async (email: string, password: string) => {
     email,
     password,
   });
+};
+
+export const kakaoLogin = async (code: string, role: KakaoMemberRole) => {
+  return fetchCall<LoginAccessToken>(
+    `oauth/kakao/callback?code=${code}&role=${role}`,
+    'get',
+  );
 };
 
 export const logoutUser = async () => {

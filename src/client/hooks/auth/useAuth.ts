@@ -1,20 +1,29 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { memberAtom } from '@recoil/authAtom';
-import { AppMember } from '@typings/member';
+import { AppMember, MemberRole } from '@typings/member';
 import {
   setLocalStorage,
   getLocalStorage,
   removeLocalStorage,
 } from '@shared/utils/storage';
 import { STORAGE_KEYS } from '@constants/storageKey';
+import { MEMBER_KEYS } from '@constants/member';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
 
 const useAuth = () => {
   const [member, setMember] = useRecoilState(memberAtom);
 
-  const setCurrentMember = (member: AppMember, accessToken: string) => {
+  const setCurrentMember = (
+    accessToken: string,
+    role: MemberRole,
+    email: string,
+  ) => {
+    const member = {
+      [MEMBER_KEYS['ROLE']]: role as MemberRole,
+      [MEMBER_KEYS['EMAIL']]: email,
+    };
     setMember((prev) => ({ ...prev, data: member }));
     const token = accessToken.split('"')[0];
     setLocalStorage(accessTokenKey, token);

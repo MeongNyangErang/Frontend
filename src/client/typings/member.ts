@@ -2,6 +2,8 @@ import { MEMBER_KEYS, MEMBER_ROLES } from '@constants/member';
 
 export type MemberRole = (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
 
+export type KakaoMemberRole = 'ROLE_USER' | 'ROLE_HOST';
+
 type Member<T extends MemberRole> = {
   [MEMBER_KEYS.ROLE]: T;
   [MEMBER_KEYS.EMAIL]: string;

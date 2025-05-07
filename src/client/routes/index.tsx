@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router';
+import Login from '@pages/Login';
+import KakaoLoginCallback from '@pages/KakaoLoginCallback';
 
 const LoadingPage = lazy(() => import('@pages/LoadingPage'));
 const PrivateRoute = lazy(() => import('@components/common/PrivateRoute'));
@@ -7,7 +9,6 @@ const PublicRoute = lazy(() => import('@components/common/PublicRoute'));
 const MainLayout = lazy(() => import('@components/layouts/MainLayout'));
 const MyPageLayout = lazy(() => import('@components/layouts/MyPageLayout'));
 const Home = lazy(() => import('@pages/Home'));
-const Login = lazy(() => import('@pages/Login'));
 const UserSignUp = lazy(() => import('@pages/user/UserSignUp'));
 const HostSignUp = lazy(() => import('@pages/host/HostSignUp'));
 const UserMyPage = lazy(() => import('@pages/user/UserMyPage'));
@@ -45,7 +46,7 @@ const Chat = lazy(() => import('@pages/Chat/index'));
 const UserProfileEdit = lazy(() => import('@pages/user/UserProfileEdit'));
 const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
 
-const Notificaion = lazy(() => import('@pages/Notification'));
+const Notification = lazy(() => import('@pages/Notification'));
 
 const AppRouter = () => {
   return (
@@ -71,7 +72,7 @@ const AppRouter = () => {
             path="accommodation/:accommodationId/review"
             element={<AccommodationReview />}
           />
-          <Route path="notification" element={<Notificaion />} />
+          <Route path="notification" element={<Notification />} />
 
           <Route element={<PrivateRoute allowedRoles={['USER']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>
@@ -113,6 +114,7 @@ const AppRouter = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup/user" element={<UserSignUp />} />
           <Route path="/signup/host" element={<HostSignUp />} />
+          <Route path="/auth/kakao/callback" element={<KakaoLoginCallback />} />
         </Route>
 
         <Route path="*" element="Not Found" />

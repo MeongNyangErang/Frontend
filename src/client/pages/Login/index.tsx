@@ -2,21 +2,12 @@ import ROUTES from '@constants/routes';
 import Modal from '@shared/components/common/Modal';
 import { SectionLayout } from '@components/layouts/SectionLayout';
 import logoImage from '@shared/assets/images/logo2.png';
-import kakaoImage from '@assets/images/sns/kakao.png';
-import googleImage from '@assets/images/sns/google.png';
 import { MemberRole } from '@typings/member';
 import useLoginPage from '@hooks/page/useLoginPage';
 import { parseNewLine } from '@shared/utils/formatter';
 import LoginForm from './LoginForm';
-import {
-  SLogin,
-  SLogo,
-  SDesc,
-  SSocialArea,
-  SSocialButton,
-  SSignUpButton,
-  STabBox,
-} from './styles';
+import SocialArea from './SocialArea';
+import { SLogin, SLogo, SDesc, SSignUpButton, STabBox } from './styles';
 import MemberTypeSelector from './MemberTypeSelector';
 
 const tabList = [
@@ -66,16 +57,7 @@ const Login = () => {
           onEnd={endIsLoading}
           onError={updateError}
         />
-        <SSocialArea>
-          <SSocialButton $variant="yellow">
-            <img src={kakaoImage} alt="카카오" />
-            카카오로 시작하기
-          </SSocialButton>
-          <SSocialButton $variant="gray">
-            <img src={googleImage} alt="구글" />
-            구글로 시작하기
-          </SSocialButton>
-        </SSocialArea>
+        <SocialArea memberType={currentType} onError={updateError} />
         <SSignUpButton onClick={openModal}>이메일로 회원가입</SSignUpButton>
         <Modal
           isOpen={isModalOpen}
