@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import useSearchPage from '@hooks/page/useSearchPage';
 import useToggleModal from '@shared/hooks/ui/useToggleModal';
 import SearchHeader from './SearchHeader';
+import SearchControls from './SearchControls';
 import SearchResult from './SearchResult';
 import SearchFilter from './SearchFilter';
 
@@ -19,11 +20,8 @@ const Search = () => {
 
   return (
     <>
-      <SearchHeader
-        currentQuery={currentQuery}
-        isFiltered={isFiltered}
-        onOpenFilter={openModal}
-      />
+      <SearchHeader currentQuery={currentQuery} />
+      <SearchControls onOpenFilter={openModal} isFiltered={isFiltered} />
       <SearchResult currentQuery={currentQuery} currentFilter={currentFilter} />
       <SearchFilter
         isOpen={isModalOpen}

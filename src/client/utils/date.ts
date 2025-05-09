@@ -23,14 +23,30 @@ const formatDateStrToKorean = (dateStr: string) => {
   });
 };
 
+const getMonthFromDate = (date: Date) => {
+  return (date.getMonth() + 1).toString().padStart(2, '0');
+};
+
+const getDateFromDate = (date: Date) => {
+  return date.getDate().toString().padStart(2, '0');
+};
+
+const formatDateStrToMonthAndDay = (dateStr: string) => {
+  const date = stringToDate(dateStr);
+  if (!date) throw new Error('날짜형식이 올바르지 않습니다.');
+  const month = getMonthFromDate(date);
+  const day = getDateFromDate(date);
+  return `${month}.${day}`;
+};
+
 const weekdays = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
 const formatDateStrToStrWithDay = (dateStr: string) => {
   const date = stringToDate(dateStr);
   if (!date) throw new Error('날짜형식이 올바르지 않습니다.');
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+  const month = getMonthFromDate(date);
+  const day = getDateFromDate(date);
   const dayName = weekdays[date.getDay()];
   return `${year}.${month}.${day}(${dayName})`;
 };
@@ -49,8 +65,8 @@ const formatTimeToDateOrTime = (dateStr: string) => {
     return `${hours}:${minutes}`;
   }
 
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+  const month = getMonthFromDate(date);
+  const day = getDateFromDate(date);
 
   if (date.getFullYear() === today.getFullYear()) return `${month}.${day}`;
 
@@ -63,4 +79,5 @@ export {
   formatDateStrToKorean,
   formatDateStrToStrWithDay,
   formatTimeToDateOrTime,
+  formatDateStrToMonthAndDay,
 };

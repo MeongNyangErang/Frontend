@@ -1,10 +1,17 @@
 import styled from 'styled-components';
 
-const SWrap = styled.div`
+const SSearchControlsWrap = styled.div`
+  padding: ${({ theme }) => `0px ${theme.layouts.paddingX}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
+`;
+
+const SSearchControlsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.layouts.innerWidth};
 `;
 
 const SFilterButton = styled.button`
@@ -40,4 +47,9 @@ const SSortButton = styled.button`
   }
 `;
 
-export { SWrap, SFilterButton, SSortButton };
+export {
+  SSearchControlsWrap,
+  SSearchControlsContainer,
+  SFilterButton,
+  SSortButton,
+};

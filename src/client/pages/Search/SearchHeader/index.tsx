@@ -1,33 +1,45 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import SearchBar from '@components/common/SearchBar';
 import { SearchBaseType } from '@typings/search';
-import { SHeaderWrap, SHeaderContainer } from './styles';
-import SearchControls from '../SearchControls';
+import useMediaQuery from '@hooks/ui/useMediaQuery';
+import { BREAK_POINTS } from '@shared/components/styles/responsive';
+import useToggleModal from '@shared/hooks/ui/useToggleModal';
+import { SHeaderWrap, SHeaderContainer, SOverlay } from './styles';
+import SearchSummary from '../SearchSummary';
 
 interface SearchHeaderProps {
   currentQuery: SearchBaseType;
-  isFiltered: boolean;
-  onOpenFilter(): void;
 }
 
-const SearchHeader = ({
-  currentQuery,
-  isFiltered,
-  onOpenFilter,
-}: SearchHeaderProps) => {
-  return (
-    <SHeaderWrap>
-      <SHeaderContainer>
-        <div>
+const SearchHeader = ({ currentQuery }: SearchHeaderProps) => {
+  const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
+  const { isModalOpen, openModal, closeModal } = useToggleModal();
+
+  useEffect(() => {
+    if (!isTablet) {
+      closeModal();
+    }
+  }, [isTablet]);
+
+  if (!isTablet) {
+    return (
+      <SHeaderWrap>
+        <SHeaderContainer>
           <SearchBar currentQuery={currentQuery} />
-        </div>
-      </SHeaderContainer>
-      <SHeaderContainer>
-        <div>
-          <SearchControls onOpenFilter={onOpenFilter} isFiltered={isFiltered} />
-        </div>
-      </SHeaderContainer>
-    </SHeaderWrap>
+        </SHeaderContainer>
+      </SHeaderWrap>
+    );
+  }
+
+  return (
+    <>
+      <SHeaderWrap>
+        <SHeaderContainer>
+          <SearchSummary currentQuery={currentQuery} onClick={openModal} />
+        </SHeaderContainer>
+      </SHeaderWrap>
+      {isModalOpen && <SOverlay />}
+    </>
   );
 };
 
