@@ -1,4 +1,4 @@
-import { memo, useEffect, useCallback, useState } from 'react';
+import { memo } from 'react';
 import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar, FaHeart } from 'react-icons/fa';
 import Modal from '@shared/components/common/Modal';
@@ -10,10 +10,8 @@ import ROUTES from '@constants/routes';
 import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
-import { Accommodation } from '@typings/response/accommodations';
-import useAuth from '@hooks/auth/useAuth';
-import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
-import useWishlist from '@hooks/query/user/useWishlist';
+import useSearchWish from './useSearchWish';
+
 import {
   SMessageArea,
   SItems,
@@ -30,7 +28,6 @@ import {
   SItemsBottom,
   SWishButton,
 } from './styles';
-import useError from '@shared/hooks/ui/useError';
 
 interface SearchResultProps {
   currentQuery: SearchBaseType;
@@ -38,97 +35,33 @@ interface SearchResultProps {
 }
 
 const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
-  const [searchedData, setSearchedData] = useState<Accommodation[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
   const {
-    data: { last, content, page = 0 } = {},
+    data,
     isLoading,
     error,
-  } = useSearchAccommodations(currentQuery, currentPage, currentFilter);
-  const { member } = useAuth();
-  const { refreshWishlist } = useWishlist(0, false);
-  const {
-    error: wishError,
-    updateError: updateWishError,
-    resetError: resetWishError,
-  } = useError();
-
-  const updatePage = useCallback(() => {
-    if (!last) {
-      setCurrentPage(page + 1);
-    }
-  }, [page, last]);
-
+    hasNextPage,
+    fetchNextPage,
+    toggleWishStatus,
+  } = useSearchAccommodations(currentQuery, currentFilter);
+  const results = data?.pages.flatMap((page) => page.content) || [];
   const observerTargetRef = useInfiniteScroll(
-    updatePage,
-    !isLoading && !error && !last,
+    fetchNextPage,
+    !isLoading && !error && hasNextPage,
   );
-  const handleSuccessAddWish = (accommodationId: number) => {
-    setSearchedData((prev) => {
-      const targetIndex = prev.findIndex(
-        (v) => v.accommodationId === accommodationId,
-      );
-      const updated = {
-        ...prev[targetIndex],
-        wishlisted: !prev[targetIndex].wishlisted,
-      };
-      const updatedResult = prev.map((v, i) => {
-        if (i === targetIndex) return updated;
-        return v;
-      });
-      return updatedResult;
-    });
-    refreshWishlist();
-  };
-
-  const handleClickWishButton = async (
-    e: React.MouseEvent,
-    accommodationId: number,
-    wishlisted: boolean,
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!member.data || member.data.role === 'HOST') {
-      updateWishError('로그인한 사용자만 이용 할 수 있습니다.');
-      return;
-    }
-
-    try {
-      !wishlisted
-        ? await addToWishlist(accommodationId)
-        : await deleteFromWishlist(accommodationId);
-      handleSuccessAddWish(accommodationId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [currentQuery, currentFilter]);
-
-  useEffect(() => {
-    if (!content) return;
-    if (currentPage === 0) {
-      setSearchedData([...content]);
-    } else {
-      setSearchedData((prev) => [...prev, ...content]);
-    }
-  }, [content]);
+  const { wishError, resetWishError, handleClickWishButton } = useSearchWish();
 
   return (
     <>
       <SectionLayout>
         <SMessageArea>
           {error && <MessageBox>{error.message}</MessageBox>}
-          {!error && !isLoading && searchedData.length === 0 && (
+          {!error && !isLoading && results.length === 0 && (
             <MessageBox>검색 결과가 없습니다.</MessageBox>
           )}
         </SMessageArea>
         {!error && (
           <SItems>
-            {searchedData.map(
+            {results.map(
               ({
                 accommodationType,
                 accommodationId,
@@ -153,7 +86,12 @@ const SearchResult = ({ currentQuery, currentFilter }: SearchResultProps) => {
                   >
                     <SWishButton
                       onClick={(e) => {
-                        handleClickWishButton(e, accommodationId, wishlisted);
+                        handleClickWishButton(
+                          e,
+                          accommodationId,
+                          wishlisted,
+                          toggleWishStatus,
+                        );
                       }}
                       $isActive={wishlisted}
                     >
