@@ -1,6 +1,7 @@
 const ROUTES = {
   home: '/',
   logIn: '/logIn',
+  kakaoLogInRedirect: '/auth/kakao/callback',
   signUp: {
     user: '/signup/user',
     host: '/signup/host',
