@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const useClickOutside = () => {
   const [isOpen, setIsOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
+
   const toggleIsOpen = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const KAKAO_SDK_URL = 'https://developers.kakao.com/sdk/js/kakao.js';
-const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY;
+const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_AUTH_JS_KEY;
 
 const useKakaoSDK = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,6 +20,7 @@ const useKakaoSDK = () => {
     const initialScript = document.querySelector(
       `script[src='${KAKAO_SDK_URL}']`,
     );
+
     if (initialScript) {
       if (window.Kakao) {
         initKakao();
