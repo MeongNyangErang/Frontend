@@ -2,24 +2,27 @@ import { memo, useEffect } from 'react';
 import SearchBar from '@components/common/SearchBar';
 import { SearchBaseType } from '@typings/search';
 import useMediaQuery from '@hooks/ui/useMediaQuery';
+import useClickOutside from '@hooks/ui/useClickOutside';
 import { BREAK_POINTS } from '@shared/components/styles/responsive';
-import useToggleModal from '@shared/hooks/ui/useToggleModal';
 import { SHeaderWrap, SHeaderContainer, SOverlay } from './styles';
 import SearchSummary from '../SearchSummary';
+import SearchControls from '../SearchControls';
 
 interface SearchHeaderProps {
   currentQuery: SearchBaseType;
+  onOpenFilter: () => void;
+  isFiltered: boolean;
 }
 
-const SearchHeader = ({ currentQuery }: SearchHeaderProps) => {
+const SearchHeader = ({ currentQuery, ...rest }: SearchHeaderProps) => {
   const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
-  const { isModalOpen, openModal, closeModal } = useToggleModal();
+  const { isOpen, targetRef, toggleIsOpen } = useClickOutside();
 
   useEffect(() => {
-    if (!isTablet) {
-      closeModal();
+    if (isOpen) {
+      toggleIsOpen();
     }
-  }, [isTablet]);
+  }, [currentQuery]);
 
   if (!isTablet) {
     return (
@@ -27,18 +30,35 @@ const SearchHeader = ({ currentQuery }: SearchHeaderProps) => {
         <SHeaderContainer>
           <SearchBar currentQuery={currentQuery} />
         </SHeaderContainer>
+        <SHeaderContainer>
+          <SearchControls {...rest} />
+        </SHeaderContainer>
       </SHeaderWrap>
     );
   }
 
   return (
     <>
-      <SHeaderWrap>
-        <SHeaderContainer>
-          <SearchSummary currentQuery={currentQuery} onClick={openModal} />
-        </SHeaderContainer>
-      </SHeaderWrap>
-      {isModalOpen && <SOverlay />}
+      {!isOpen && (
+        <SHeaderWrap>
+          <SHeaderContainer>
+            <SearchSummary currentQuery={currentQuery} onClick={toggleIsOpen} />
+          </SHeaderContainer>
+          <SHeaderContainer>
+            <SearchControls {...rest} />
+          </SHeaderContainer>
+        </SHeaderWrap>
+      )}
+      {isOpen && (
+        <>
+          <SHeaderWrap ref={targetRef}>
+            <SHeaderContainer>
+              <SearchBar currentQuery={currentQuery} />
+            </SHeaderContainer>
+          </SHeaderWrap>
+          <SOverlay />
+        </>
+      )}
     </>
   );
 };

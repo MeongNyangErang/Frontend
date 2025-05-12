@@ -17,3 +17,8 @@ export type SingleSelectFilterKey = (typeof SINGLE_SELECT_FILTER_KEY)[number];
 export type SearchFilterType = {
   [K in SearchFilterKey]: K extends SingleSelectFilterKey ? string : string[];
 };
+
+export interface SearchViewProps {
+  currentQuery: SearchBaseType;
+  currentFilter: SearchFilterType;
+}

@@ -79,21 +79,18 @@ export const handlers = [
   http.post(`${BASE_URL}/hosts/logout`, async () => {
     return HttpResponse.json({ message: '로그아웃 성공' });
   }),
-  http.get(`${BASE_URL}/users/accommodations/search`, async () => {
-    const mockData: SearchAccommodationsResponse = {
-      code: 200,
-      data: {
-        content: accommodationsData,
-        page: 0,
-        size: 20,
-        totalElements: 30,
-        totalPages: 2,
-        first: true,
-        last: false,
-      },
+  http.post(`${BASE_URL}/search/accommodations`, async ({ request }) => {
+    const data = {
+      content: accommodationsData,
+      page: 0,
+      size: 20,
+      totalElements: 30,
+      totalPages: 2,
+      first: true,
+      last: false,
     };
 
-    return HttpResponse.json(mockData);
+    return HttpResponse.json(data);
   }),
   http.get(`${BASE_URL}/users/me`, async () => {
     const userProfileData = {

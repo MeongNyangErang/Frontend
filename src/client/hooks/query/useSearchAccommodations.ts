@@ -12,7 +12,7 @@ export const useSearchAccommodations = (
 ) => {
   const queryClient = useQueryClient();
 
-  const result = useInfiniteQuery({
+  const { data, ...rest } = useInfiniteQuery({
     queryKey: ['search-accommodations', query, filter],
     queryFn: ({ pageParam = 0 }) =>
       searchAccommodations(query, pageParam, filter),
@@ -56,5 +56,16 @@ export const useSearchAccommodations = (
     });
   };
 
-  return { ...result, refreshSearchAccommodations, toggleWishStatus };
+  const results = data?.pages.flatMap((page) => page.content) || [];
+  const currentPage = data?.pages[0].page;
+  const totalPages = data?.pages[0].totalPages;
+
+  return {
+    ...rest,
+    results,
+    currentPage,
+    totalPages,
+    refreshSearchAccommodations,
+    toggleWishStatus,
+  };
 };

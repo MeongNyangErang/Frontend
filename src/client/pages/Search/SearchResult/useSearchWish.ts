@@ -10,6 +10,7 @@ const useSearchWish = () => {
     updateError: updateWishError,
     resetError: resetWishError,
   } = useError();
+
   const { member } = useAuth();
 
   const handleClickWishButton = async (
