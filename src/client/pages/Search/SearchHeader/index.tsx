@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, RefObject, useEffect } from 'react';
 import SearchBar from '@components/common/SearchBar';
 import { SearchBaseType } from '@typings/search';
 import useMediaQuery from '@hooks/ui/useMediaQuery';
@@ -12,9 +12,14 @@ interface SearchHeaderProps {
   currentQuery: SearchBaseType;
   onOpenFilter: () => void;
   isFiltered: boolean;
+  headerRef: RefObject<HTMLDivElement>;
 }
 
-const SearchHeader = ({ currentQuery, ...rest }: SearchHeaderProps) => {
+const SearchHeader = ({
+  currentQuery,
+  headerRef,
+  ...rest
+}: SearchHeaderProps) => {
   const isTablet = useMediaQuery(`(max-width:${BREAK_POINTS.tablet})`);
   const { isOpen, targetRef, toggleIsOpen } = useClickOutside();
 
@@ -26,7 +31,7 @@ const SearchHeader = ({ currentQuery, ...rest }: SearchHeaderProps) => {
 
   if (!isTablet) {
     return (
-      <SHeaderWrap>
+      <SHeaderWrap ref={headerRef}>
         <SHeaderContainer>
           <SearchBar currentQuery={currentQuery} />
         </SHeaderContainer>
@@ -40,7 +45,7 @@ const SearchHeader = ({ currentQuery, ...rest }: SearchHeaderProps) => {
   return (
     <>
       {!isOpen && (
-        <SHeaderWrap>
+        <SHeaderWrap ref={headerRef}>
           <SHeaderContainer>
             <SearchSummary currentQuery={currentQuery} onClick={toggleIsOpen} />
           </SHeaderContainer>
@@ -51,12 +56,14 @@ const SearchHeader = ({ currentQuery, ...rest }: SearchHeaderProps) => {
       )}
       {isOpen && (
         <>
-          <SHeaderWrap ref={targetRef}>
-            <SHeaderContainer>
-              <SearchBar currentQuery={currentQuery} />
-            </SHeaderContainer>
-          </SHeaderWrap>
-          <SOverlay />
+          <div ref={headerRef}>
+            <SHeaderWrap ref={targetRef}>
+              <SHeaderContainer>
+                <SearchBar currentQuery={currentQuery} />
+              </SHeaderContainer>
+            </SHeaderWrap>
+            <SOverlay />
+          </div>
         </>
       )}
     </>

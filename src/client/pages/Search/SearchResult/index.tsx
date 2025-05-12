@@ -1,18 +1,22 @@
-import { memo } from 'react';
+import { memo, RefObject } from 'react';
 import { SearchViewProps } from '@typings/search';
 import useSearchView from '@hooks/page/useSearchView';
-import SearchListView from './SearchListView';
-import SearchMapView from './SearchMapView';
+import ListView from './ListView';
+import MapView from './MapView';
 
-const SearchResult = (searchResultProps: SearchViewProps) => {
+type SearchResultProps = SearchViewProps & {
+  headerHeight: number;
+};
+
+const SearchResult = ({ headerHeight, ...rest }: SearchResultProps) => {
   const { view } = useSearchView();
 
   return (
     <>
       {view === 'list' ? (
-        <SearchListView {...searchResultProps} />
+        <ListView {...rest} />
       ) : (
-        <SearchMapView {...searchResultProps} />
+        <MapView headerHeight={headerHeight} {...rest} />
       )}
     </>
   );

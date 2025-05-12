@@ -10,7 +10,7 @@ import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import { SearchViewProps } from '@typings/search';
-import useSearchWish from './useSearchWish';
+import useSearchWish from '../useSearchWish';
 import {
   SMessageArea,
   SItems,
@@ -28,7 +28,7 @@ import {
   SWishButton,
 } from './styles';
 
-const SearchListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
+const ListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
   const {
     results,
     isLoading,
@@ -162,4 +162,4 @@ const SearchListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
   );
 };
 
-export default memo(SearchListView);
+export default memo(ListView);

@@ -4,14 +4,16 @@ import useToggleModal from '@shared/hooks/ui/useToggleModal';
 import SearchHeader from './SearchHeader';
 import SearchResult from './SearchResult';
 import SearchFilter from './SearchFilter';
+import useSearchHeaderHeight from './useSearchHeaderHeight';
 
 const Search = () => {
   const { searchParams, currentQuery, currentFilter } = useSearchPage();
-  const { isModalOpen, openModal, closeModal } = useToggleModal();
   const isFiltered = Object.entries(currentFilter).some(([k, v]) => {
     if (Array.isArray(v)) return v.length > 0;
     return v !== '';
   });
+  const { isModalOpen, openModal, closeModal } = useToggleModal();
+  const { headerHeight, headerRef } = useSearchHeaderHeight();
 
   useEffect(() => {
     if (isModalOpen) closeModal();
@@ -23,8 +25,13 @@ const Search = () => {
         currentQuery={currentQuery}
         onOpenFilter={openModal}
         isFiltered={isFiltered}
+        headerRef={headerRef}
       />
-      <SearchResult currentQuery={currentQuery} currentFilter={currentFilter} />
+      <SearchResult
+        currentQuery={currentQuery}
+        currentFilter={currentFilter}
+        headerHeight={headerHeight}
+      />
       <SearchFilter
         isOpen={isModalOpen}
         onClose={closeModal}
