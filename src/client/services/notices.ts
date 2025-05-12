@@ -1,7 +1,7 @@
 import { fetchCall } from './api';
 
-const getNoticeList = () => {};
+const getNoticeList = (page: number) => {};
 
-const getNoticeDetail = () => {};
+const getNoticeDetail = (noticeId: number) => {};
 
 export { getNoticeList, getNoticeDetail };
