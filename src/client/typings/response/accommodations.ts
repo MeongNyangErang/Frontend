@@ -15,6 +15,8 @@ export interface Accommodation {
   accommodationType: AccommodationType;
   standardPeopleCount: number;
   standardPetCount: number;
+  latitude: number;
+  longitude: number;
 }
 
 export interface SearchAccommodationsData {

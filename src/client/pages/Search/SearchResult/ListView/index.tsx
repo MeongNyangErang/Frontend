@@ -1,32 +1,16 @@
-import { memo } from 'react';
-import { FaUser, FaPaw } from 'react-icons/fa6';
-import { FaStar, FaHeart } from 'react-icons/fa';
+import { memo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from '@shared/components/common/Modal';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
 import useInfiniteScroll from '@shared/hooks/ui/useInfiniteScroll';
 import { SectionLayout } from '@components/layouts/SectionLayout';
-import ROUTES from '@constants/routes';
-import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import { SearchViewProps } from '@typings/search';
+import ROUTES from '@constants/routes';
+import SearchItemCard from '../SearchItemCard';
 import useSearchWish from '../useSearchWish';
-import {
-  SMessageArea,
-  SItems,
-  SItem,
-  SItemTypeBadge,
-  SImageArea,
-  STextArea,
-  SNameBox,
-  SPriceBox,
-  SName,
-  SRating,
-  SPrice,
-  SCapacity,
-  SItemsBottom,
-  SWishButton,
-} from './styles';
+import { SMessageArea, SItems, SItemsBottom } from './styles';
 
 const ListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
   const {
@@ -44,6 +28,28 @@ const ListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
   );
 
   const { wishError, resetWishError, handleClickWishButton } = useSearchWish();
+
+  const navigate = useNavigate();
+
+  const onClickWishButton = useCallback(
+    (e: React.MouseEvent, accommodationId: number, wishListed: boolean) => {
+      handleClickWishButton(e, accommodationId, wishListed, toggleWishStatus);
+    },
+    [toggleWishStatus],
+  );
+
+  const onClickCard = useCallback(
+    (accommodationId: number) =>
+      navigate(ROUTES.accommodationDetail.root(accommodationId), {
+        state: {
+          checkInDate: currentQuery.checkInDate,
+          checkOutDate: currentQuery.checkOutDate,
+          peopleCount: currentQuery.peopleCount,
+          petCount: currentQuery.petCount,
+        },
+      }),
+    [navigate, currentQuery],
+  );
 
   if (error) {
     return (
@@ -63,84 +69,14 @@ const ListView = ({ currentQuery, currentFilter }: SearchViewProps) => {
         )}
         {!error && (
           <SItems>
-            {results?.map(
-              (
-                {
-                  accommodationType,
-                  accommodationId,
-                  accommodationName,
-                  thumbnailUrl,
-                  totalRating,
-                  price,
-                  standardPetCount,
-                  standardPeopleCount,
-                  wishlisted,
-                },
-                i,
-              ) => {
-                return (
-                  <SItem
-                    key={accommodationId.toString() + i.toString()}
-                    to={`${ROUTES.accommodationDetail.root(accommodationId)}`}
-                    state={{
-                      checkInDate: currentQuery.checkInDate,
-                      checkOutDate: currentQuery.checkOutDate,
-                      peopleCount: currentQuery.peopleCount,
-                      petCount: currentQuery.petCount,
-                    }}
-                  >
-                    <SWishButton
-                      onClick={(e) => {
-                        handleClickWishButton(
-                          e,
-                          accommodationId,
-                          wishlisted,
-                          toggleWishStatus,
-                        );
-                      }}
-                      $isActive={wishlisted}
-                    >
-                      <FaHeart />
-                    </SWishButton>
-                    <SImageArea>
-                      <SItemTypeBadge $type={accommodationType}>
-                        {ACCOMMODATION_TYPE_MAP[accommodationType]}
-                      </SItemTypeBadge>
-                      {thumbnailUrl ? (
-                        <img src={thumbnailUrl} alt={accommodationName} />
-                      ) : (
-                        <div>NO IMAGE</div>
-                      )}
-                    </SImageArea>
-                    <STextArea>
-                      <SNameBox>
-                        <SName $line={1}>{accommodationName}</SName>
-                        <SRating>
-                          <FaStar />
-                          {totalRating.toString().padEnd(3, '.0')}
-                        </SRating>
-                      </SNameBox>
-                      <SPriceBox>
-                        <SCapacity>
-                          <div>
-                            <FaUser />
-                            {standardPeopleCount}
-                          </div>
-                          <div>
-                            <FaPaw />
-                            {standardPetCount}
-                          </div>
-                        </SCapacity>
-                        <SPrice $line={1}>
-                          <span>1박/</span>
-                          {price.toLocaleString()}원~
-                        </SPrice>
-                      </SPriceBox>
-                    </STextArea>
-                  </SItem>
-                );
-              },
-            )}
+            {results?.map(({ longitude, latitude, ...rest }, index) => (
+              <SearchItemCard
+                key={longitude.toString() + index.toString()}
+                {...rest}
+                onClickCard={onClickCard}
+                onClickWishButton={onClickWishButton}
+              />
+            ))}
           </SItems>
         )}
         <SItemsBottom ref={observerTargetRef}>
