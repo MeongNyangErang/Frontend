@@ -4,8 +4,9 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from 'shared/components/styles/theme';
 import useKakaoMapSDK from '@hooks/ui/useKakaoMapSDK';
 import markerImage from '@assets/icons/map-marker.png';
+import activeMarkerImage from '@assets/icons/active-map-marker.png';
 import { Accommodation } from '@typings/response/accommodations';
-import SearchItemCard from '../SearchItemCard';
+import MapItemCard from '../MapItemCard';
 
 interface UseKakaoSearchMapProps {
   mapContainer: HTMLDivElement | null;
@@ -21,9 +22,31 @@ const useKakaoSearchMap = ({
   const isLoaded = useKakaoMapSDK();
   const mapRef = useRef<typeof window.kakao.maps.Map | null>(null);
   const markerRef = useRef<(typeof window.kakao.maps.Marker)[]>([]);
-  const infoWindowRef = useRef<typeof window.kakao.maps.InfoWindow | null>(
+  const overlayRef = useRef<typeof window.kakao.maps.CustomOverlay | null>(
     null,
   );
+  const activeMarkerRef = useRef<typeof window.kakao.maps.Marker | null>(null);
+  const defaultMarkerImageRef = useRef<
+    typeof window.kakao.maps.MarkerImage | null
+  >(null);
+  const activeMarkerImageRef = useRef<
+    typeof window.kakao.maps.MarkerImage | null
+  >(null);
+
+  useEffect(() => {
+    if (!isLoaded || !window.kakao) return;
+    const { kakao } = window;
+
+    defaultMarkerImageRef.current = new kakao.maps.MarkerImage(
+      markerImage,
+      new kakao.maps.Size(20, 28),
+    );
+
+    activeMarkerImageRef.current = new kakao.maps.MarkerImage(
+      activeMarkerImage,
+      new kakao.maps.Size(20, 28),
+    );
+  }, [isLoaded]);
 
   useEffect(() => {
     if (!isLoaded || !mapContainer || !window.kakao) return;
@@ -37,7 +60,8 @@ const useKakaoSearchMap = ({
     }
 
     kakao.maps.event.addListener(mapRef.current, 'click', () => {
-      infoWindowRef.current?.close();
+      overlayRef.current?.setMap(null);
+      activeMarkerRef.current.setImage(defaultMarkerImageRef.current!);
     });
   }, [isLoaded, mapContainer]);
 
@@ -59,29 +83,41 @@ const useKakaoSearchMap = ({
       const marker = new kakao.maps.Marker({
         map,
         position,
-        image: new kakao.maps.MarkerImage(
-          markerImage,
-          new kakao.maps.Size(20, 28),
-        ),
+        image: defaultMarkerImageRef.current!,
       });
 
       const container = document.createElement('div');
-      const root = createRoot(container);
+      container.style.position = 'relative';
+      container.style.width = '280px';
 
+      const root = createRoot(container);
       root.render(
         <ThemeProvider theme={theme}>
-          <SearchItemCard {...rest} onClickCard={onClickCard} />
+          <MapItemCard {...rest} onClickCard={onClickCard} />
         </ThemeProvider>,
       );
 
-      const infoWindow = new kakao.maps.InfoWindow({
+      const overlay = new kakao.maps.CustomOverlay({
         content: container,
+        position,
+        yAnchor: 1,
       });
 
       kakao.maps.event.addListener(marker, 'click', () => {
-        infoWindowRef.current?.close();
-        infoWindow.open(map, marker);
-        infoWindowRef.current = infoWindow;
+        overlayRef.current?.setMap(null);
+        overlay.setMap(map);
+        overlayRef.current = overlay;
+
+        if (activeMarkerRef.current) {
+          activeMarkerRef.current.setImage(defaultMarkerImageRef.current!);
+        }
+
+        if (activeMarkerRef.current !== marker) {
+          marker.setImage(activeMarkerImageRef.current!);
+          activeMarkerRef.current = marker;
+        }
+
+        map.panTo(position);
       });
 
       markerRef.current.push(marker);

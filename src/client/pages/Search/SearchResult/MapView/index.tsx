@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { SearchViewProps } from '@typings/search';
 import { useSearchAccommodations } from '@hooks/query/useSearchAccommodations';
 import ROUTES from '@constants/routes';
-import useSearchWish from '../useSearchWish';
 import useKakaoSearchMap from './useKakaoSearchMap';
-import { SMapWrap, SMapContainer } from './styles';
+import { SMapWrap, SMapContainer, SMoreAccommodationsButton } from './styles';
 
 type MapViewProps = SearchViewProps & { headerHeight: number };
 
@@ -16,10 +15,11 @@ const MapView = ({
 }: MapViewProps) => {
   const { results, currentPage, totalPages, fetchNextPage, toggleWishStatus } =
     useSearchAccommodations(currentQuery, currentFilter);
-  const { wishError, resetWishError, handleClickWishButton } = useSearchWish();
   const mapRef = useRef<HTMLDivElement>(null);
   const accommodations = useMemo(() => results, [results]);
   const navigate = useNavigate();
+  const isMoreButtonActive =
+    currentPage !== undefined && totalPages !== undefined;
 
   const handleClickCard = useCallback(
     (accommodationId: number) => {
@@ -44,6 +44,17 @@ const MapView = ({
   return (
     <SMapWrap $headerHeight={headerHeight}>
       <SMapContainer ref={mapRef} />
+      <SMoreAccommodationsButton
+        disabled={!isMoreButtonActive || currentPage + 1 >= totalPages}
+        onClick={() => fetchNextPage()}
+      >
+        숙소 더 보기
+        {isMoreButtonActive && (
+          <span>
+            {currentPage + 1}/{totalPages}
+          </span>
+        )}
+      </SMoreAccommodationsButton>
     </SMapWrap>
   );
 };

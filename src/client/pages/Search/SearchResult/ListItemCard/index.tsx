@@ -1,6 +1,5 @@
 import { FaUser, FaPaw } from 'react-icons/fa6';
 import { FaStar, FaHeart } from 'react-icons/fa';
-import ROUTES from '@constants/routes';
 import { ACCOMMODATION_TYPE_MAP } from '@constants/accommodation';
 import { Accommodation } from '@typings/response/accommodations';
 import {
@@ -17,7 +16,7 @@ import {
   SWishButton,
 } from './styles';
 
-type SearchItemCardProps = Omit<Accommodation, 'latitude' | 'longitude'> & {
+type ListItemCardProps = Omit<Accommodation, 'latitude' | 'longitude'> & {
   onClickCard: (accommodationId: number) => void;
   onClickWishButton?: (
     e: React.MouseEvent,
@@ -26,7 +25,7 @@ type SearchItemCardProps = Omit<Accommodation, 'latitude' | 'longitude'> & {
   ) => void;
 };
 
-const SearchItemCard = ({
+const ListItemCard = ({
   accommodationType,
   accommodationId,
   accommodationName,
@@ -38,9 +37,19 @@ const SearchItemCard = ({
   wishlisted,
   onClickWishButton,
   onClickCard,
-}: SearchItemCardProps) => {
+}: ListItemCardProps) => {
   return (
-    <SItem onClick={() => onClickCard(accommodationId)}>
+    <SItem
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClickCard(accommodationId);
+        }
+      }}
+      onClick={() => onClickCard(accommodationId)}
+    >
       {!!onClickWishButton && (
         <SWishButton
           onClick={(e) => {
@@ -90,4 +99,4 @@ const SearchItemCard = ({
   );
 };
 
-export default SearchItemCard;
+export default ListItemCard;

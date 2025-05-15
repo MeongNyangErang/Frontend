@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { RecommendationsAccommodation } from '@typings/recommendations';
 import ROUTES from '@constants/routes';
-import { SWishButton } from '@pages/Search/SearchResult/ListView/styles';
+import { SWishButton } from '@pages/Search/SearchResult/ListItemCard/styles';
 import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
 import {
   SSliderWrap,

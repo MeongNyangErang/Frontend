@@ -8,7 +8,7 @@ import MessageBox from '@shared/components/common/MessageBox';
 import Loader from '@shared/components/common/Loader';
 import { SearchViewProps } from '@typings/search';
 import ROUTES from '@constants/routes';
-import SearchItemCard from '../SearchItemCard';
+import SearchItemCard from '../ListItemCard';
 import useSearchWish from '../useSearchWish';
 import { SMessageArea, SItems, SItemsBottom } from './styles';
 
