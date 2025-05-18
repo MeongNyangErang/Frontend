@@ -1,27 +1,38 @@
 import { memo } from 'react';
-import filterIcon from '@assets/icons/filterIcon.png';
-import sortIcon from '@assets/icons/sortIcon.png';
-import { SWrap, SFilterButton, SSortButton } from './styles';
+import { FaFilter, FaMap, FaList } from 'react-icons/fa';
+import useSearchView from '@hooks/page/useSearchView';
+import { SSearchControlsContainer, SFilterButton, SViewButton } from './styles';
 
-interface Props {
+interface SearchControlsProps {
   isFiltered: boolean;
   onOpenFilter(): void;
 }
 
-const SearchControls = ({ onOpenFilter, isFiltered }: Props) => {
+const SearchControls = ({ onOpenFilter, isFiltered }: SearchControlsProps) => {
+  const { view, toggleSearchView } = useSearchView();
+
   return (
-    <SWrap>
+    <SSearchControlsContainer>
       <SFilterButton
         className={isFiltered ? 'is--active' : ''}
         onClick={onOpenFilter}
       >
-        <img src={filterIcon} alt="필터" /> 필터
+        <FaFilter /> 필터
       </SFilterButton>
-      <SSortButton onClick={() => {}}>
-        최신 등록순
-        <img src={sortIcon} alt="정렬" />
-      </SSortButton>
-    </SWrap>
+      <SViewButton onClick={toggleSearchView}>
+        {view === 'list' ? (
+          <>
+            지도 보기
+            <FaMap />
+          </>
+        ) : (
+          <>
+            목록 보기
+            <FaList />
+          </>
+        )}
+      </SViewButton>
+    </SSearchControlsContainer>
   );
 };
 

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
-const SWrap = styled.div`
+const SSearchControlsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.layouts.innerWidth};
 `;
 
 const SFilterButton = styled.button`
@@ -20,24 +21,21 @@ const SFilterButton = styled.button`
 
   &.is--active {
     border: ${({ theme }) => `1.2px solid ${theme.colors.main}`};
+    color: ${({ theme }) => theme.colors.main};
   }
 
-  > img {
-    width: 16px;
+  > svg {
+    font-size: 12px;
   }
 `;
 
-const SSortButton = styled.button`
+const SViewButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0px;
-  padding: 4px 8px;
-  color: ${({ theme }) => theme.colors.gray600};
+  letter-spacing: -1px;
+  gap: 4px;
+  color: ${({ theme }) => theme.colors.gray700};
   font-size: 13px;
-
-  > img {
-    width: 20px;
-  }
 `;
 
-export { SWrap, SFilterButton, SSortButton };
+export { SSearchControlsContainer, SFilterButton, SViewButton };

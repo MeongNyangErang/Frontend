@@ -5,22 +5,26 @@ const SHeaderWrap = styled.div`
   left: 0;
   top: ${({ theme }) => theme.layouts.headerHeight};
   z-index: 1000;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
   background-color: white;
 `;
 
 const SHeaderContainer = styled.div`
-  padding: ${({ theme }) => `0 ${theme.layouts.paddingX}`};
-
-  &:first-child {
-    padding: ${({ theme }) => `12px ${theme.layouts.paddingX}`};
-    border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
-  }
-
+  padding: ${({ theme }) => `12px ${theme.layouts.paddingX}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.gray200}`};
   > div {
-    max-width: ${({ theme }) => theme.layouts.innerWidth};
     margin: 0 auto;
+    max-width: ${({ theme }) => theme.layouts.innerWidth};
   }
 `;
 
-export { SHeaderWrap, SHeaderContainer };
+const SOverlay = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+`;
+
+export { SHeaderWrap, SHeaderContainer, SOverlay };

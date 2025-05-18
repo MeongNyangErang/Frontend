@@ -6,7 +6,7 @@ const useWishlist = (page: number, enabled?: boolean) => {
   const result = useQuery({
     queryKey: ['wishlist', page],
     queryFn: () => getWishlist(page),
-    enabled: enabled ? enabled : true,
+    enabled: enabled !== undefined ? enabled : true,
     staleTime: 1000 * 60 * 60,
   });
 
