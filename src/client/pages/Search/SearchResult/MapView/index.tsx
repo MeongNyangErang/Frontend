@@ -22,7 +22,11 @@ const MapView = ({
     currentPage !== undefined && totalPages !== undefined;
 
   const handleClickCard = useCallback(
-    (accommodationId: number) => {
+    (
+      e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
+      accommodationId: number,
+    ) => {
+      e.stopPropagation();
       navigate(ROUTES.accommodationDetail.root(accommodationId), {
         state: {
           checkInDate: currentQuery.checkInDate,

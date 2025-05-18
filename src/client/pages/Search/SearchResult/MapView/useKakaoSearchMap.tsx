@@ -11,7 +11,10 @@ import MapItemCard from '../MapItemCard';
 interface UseKakaoSearchMapProps {
   mapContainer: HTMLDivElement | null;
   accommodations: Accommodation[];
-  onClickCard: (accommodationId: number) => void;
+  onClickCard: (
+    e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
+    accommodationId: number,
+  ) => void;
 }
 
 const useKakaoSearchMap = ({
@@ -101,6 +104,7 @@ const useKakaoSearchMap = ({
         content: container,
         position,
         yAnchor: 1,
+        clickable: true,
       });
 
       kakao.maps.event.addListener(marker, 'click', () => {

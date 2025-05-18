@@ -15,7 +15,10 @@ import {
 } from './styles';
 
 type MapItemCardProps = Omit<Accommodation, 'latitude' | 'longitude'> & {
-  onClickCard: (accommodationId: number) => void;
+  onClickCard: (
+    e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
+    accommodationId: number,
+  ) => void;
 };
 
 const MapItemCard = ({
@@ -34,12 +37,15 @@ const MapItemCard = ({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
+        e.stopPropagation();
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onClickCard(accommodationId);
+          onClickCard(e, accommodationId);
         }
       }}
-      onClick={() => onClickCard(accommodationId)}
+      onClick={(e) => {
+        onClickCard(e, accommodationId);
+      }}
     >
       <SImageArea>
         {thumbnailUrl ? (
