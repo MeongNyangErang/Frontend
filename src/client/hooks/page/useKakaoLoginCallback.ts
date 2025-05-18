@@ -1,21 +1,19 @@
 import { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import ROUTES from '@constants/routes';
+import { useSearchParams } from 'react-router-dom';
 import { kakaoLogin } from '@services/auth';
 import { KakaoMemberRole } from '@typings/member';
 import useAuth from '@hooks/auth/useAuth';
 
-const useKakaoLoginCallback = () => {
+const useKakaoLoginCallback = (onError: (message: string) => void) => {
   const [searchParams] = useSearchParams();
   const { setCurrentMember } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const code = searchParams.get('code');
     const role = searchParams.get('role') as KakaoMemberRole;
 
     if (!code || !role) {
-      navigate(ROUTES.logIn);
+      onError('잘못된 접근입니다.');
       return;
     }
 
@@ -27,12 +25,12 @@ const useKakaoLoginCallback = () => {
         setCurrentMember(accessToken, memberRole, '');
       } catch (error) {
         console.log(error);
-        navigate(ROUTES.logIn);
+        onError('로그인에 실패했습니다.');
       }
     };
 
     login();
-  }, [searchParams, navigate]);
+  }, [searchParams]);
 };
 
 export default useKakaoLoginCallback;
