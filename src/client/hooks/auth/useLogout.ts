@@ -1,12 +1,12 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTES from '@constants/routes';
-import { MemberRole } from '@typings/member';
-import { removeLocalStorage } from '@shared/utils/storage';
-import { STORAGE_KEYS } from '@constants/storageKey';
+import { logoutMember } from '@services/auth';
+import { setLogoutFn } from '@utils/logoutEmitter';
 
-const useLogout = (memberType: MemberRole) => {
+const useLogout = () => {
   const { removeMember } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -16,11 +16,15 @@ const useLogout = (memberType: MemberRole) => {
   };
 
   const logout = async () => {
+    await logoutMember();
     removeMember();
-    removeLocalStorage(STORAGE_KEYS.ACCESS_TOKEN);
     invalidateAllQueries();
     navigate(ROUTES.home, { replace: true });
   };
+
+  useEffect(() => {
+    setLogoutFn(logout);
+  }, []);
 
   return { logout };
 };

@@ -9,6 +9,7 @@ import MobileNav from './MobileNav';
 const MainLayout = () => {
   const { member } = useAuth();
   const isMemberExist = !!member.data;
+
   return (
     <SContainer>
       <Header />

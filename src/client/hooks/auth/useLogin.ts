@@ -7,8 +7,8 @@ const useLogin = <T extends MemberRole>(memberType: T) => {
 
   const login = async (email: string, password: string) => {
     const loginFn = memberType === 'USER' ? loginUser : loginHost;
-    const { accessToken } = await loginFn(email, password);
-    setCurrentMember(accessToken, memberType, email);
+    const tokens = await loginFn(email, password);
+    setCurrentMember(tokens, memberType, email);
   };
 
   return { login };

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { memberAtom } from '@recoil/authAtom';
-import { AppMember, MemberRole } from '@typings/member';
+import { MemberRole } from '@typings/member';
+import { AuthToken } from '@typings/response/auth';
 import {
   setLocalStorage,
   getLocalStorage,
@@ -11,12 +12,13 @@ import { STORAGE_KEYS } from '@constants/storageKey';
 import { MEMBER_KEYS } from '@constants/member';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
+const refreshTokenKey = STORAGE_KEYS.REFRESH_TOKEN;
 
 const useAuth = () => {
   const [member, setMember] = useRecoilState(memberAtom);
 
   const setCurrentMember = (
-    accessToken: string,
+    tokens: AuthToken,
     role: MemberRole,
     email: string,
   ) => {
@@ -25,13 +27,19 @@ const useAuth = () => {
       [MEMBER_KEYS['EMAIL']]: email,
     };
     setMember((prev) => ({ ...prev, data: member }));
-    const token = accessToken.split('"')[0];
-    setLocalStorage(accessTokenKey, token);
+    const { accessToken, refreshToken } = tokens;
+    saveAuthTokens(JSON.parse(accessToken), JSON.parse(refreshToken));
+  };
+
+  const saveAuthTokens = (accessToken: string, refreshToken: string) => {
+    setLocalStorage(accessTokenKey, accessToken);
+    setLocalStorage(refreshTokenKey, refreshToken);
   };
 
   const removeMember = () => {
     setMember((prev) => ({ ...prev, data: null }));
     removeLocalStorage(accessTokenKey);
+    removeLocalStorage(refreshTokenKey);
   };
 
   useEffect(() => {
@@ -53,7 +61,7 @@ const useAuth = () => {
         const email = payload.sub;
         setMember((prev) => ({ ...prev, data: { role, email } }));
       } else {
-        removeLocalStorage(accessTokenKey);
+        // removeLocalStorage(accessTokenKey);
       }
     }
 
