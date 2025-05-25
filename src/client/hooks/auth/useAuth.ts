@@ -3,16 +3,17 @@ import { useRecoilState } from 'recoil';
 import { memberAtom } from '@recoil/authAtom';
 import { MemberRole } from '@typings/member';
 import { AuthToken } from '@typings/response/auth';
-import {
-  setLocalStorage,
-  getLocalStorage,
-  removeLocalStorage,
-} from '@shared/utils/storage';
+import { setLocalStorage, getLocalStorage } from '@shared/utils/storage';
 import { STORAGE_KEYS } from '@constants/storageKey';
 import { MEMBER_KEYS } from '@constants/member';
+import { reIssueToken } from '@services/auth';
+import {
+  saveAuthTokens,
+  removeAuthTokens,
+  extractUserInfoFromToken,
+} from '@utils/auth';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
-const refreshTokenKey = STORAGE_KEYS.REFRESH_TOKEN;
 
 const useAuth = () => {
   const [member, setMember] = useRecoilState(memberAtom);
@@ -28,18 +29,12 @@ const useAuth = () => {
     };
     setMember((prev) => ({ ...prev, data: member }));
     const { accessToken, refreshToken } = tokens;
-    saveAuthTokens(JSON.parse(accessToken), JSON.parse(refreshToken));
-  };
-
-  const saveAuthTokens = (accessToken: string, refreshToken: string) => {
-    setLocalStorage(accessTokenKey, accessToken);
-    setLocalStorage(refreshTokenKey, refreshToken);
+    saveAuthTokens(accessToken, refreshToken);
   };
 
   const removeMember = () => {
     setMember((prev) => ({ ...prev, data: null }));
-    removeLocalStorage(accessTokenKey);
-    removeLocalStorage(refreshTokenKey);
+    removeAuthTokens();
   };
 
   useEffect(() => {
@@ -53,19 +48,36 @@ const useAuth = () => {
     const token = getLocalStorage<string>(accessTokenKey);
 
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = extractUserInfoFromToken(token);
       const isTokenExpired = Date.now() > payload.exp * 1000;
 
       if (!isTokenExpired) {
-        const role = payload.role.split('_')[1];
-        const email = payload.sub;
+        const { role, email } = payload;
         setMember((prev) => ({ ...prev, data: { role, email } }));
-      } else {
-        // removeLocalStorage(accessTokenKey);
+        setMember((prev) => ({ ...prev, authLoading: false }));
+        return;
       }
     }
 
-    setMember((prev) => ({ ...prev, authLoading: false }));
+    const refreshToken = getLocalStorage<string>(STORAGE_KEYS['REFRESH_TOKEN']);
+    if (refreshToken) {
+      reIssueToken(refreshToken)
+        .then(({ accessToken }) => {
+          setLocalStorage(STORAGE_KEYS['ACCESS_TOKEN'], accessToken);
+          const { role, email } = extractUserInfoFromToken(accessToken);
+          setMember((prev) => ({ ...prev, data: { role, email } }));
+        })
+        .catch(() => {
+          removeMember();
+        })
+        .finally(() => {
+          setMember((prev) => ({ ...prev, authLoading: false }));
+        });
+    }
+
+    if (!token && !refreshToken) {
+      setMember((prev) => ({ ...prev, authLoading: false }));
+    }
   }, []);
 
   return { member, setCurrentMember, removeMember };
