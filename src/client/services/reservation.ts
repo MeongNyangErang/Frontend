@@ -1,6 +1,6 @@
 import { UserReservationListResponse } from '@typings/response/reservation';
-import { fetchCall } from '@services/api';
 import { ReservationStatus } from '@typings/reservation';
+import { fetchCall } from './apiClient';
 
 export const getUserReservationList = async (
   status: ReservationStatus,

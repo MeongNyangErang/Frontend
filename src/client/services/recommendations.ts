@@ -7,7 +7,7 @@ import {
   UserPetMoreRecommendationsResponse,
   GuestMoreRecommendationsResponse,
 } from '@typings/response/recommendations';
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 export const getUserPetRecommendations = async () => {
   return await fetchCall<UserPetRecommendationsResponse>(

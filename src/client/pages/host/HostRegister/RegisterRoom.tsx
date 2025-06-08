@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import useHostRegister from '@hooks/page/useHostRegister';
 import Header from '@components/common/RegisterHeader/index';
 import { IoCloudUploadOutline, IoCloseSharp } from 'react-icons/io5';
-import { fetchCall } from '@services/api';
 import { useNavigate } from 'react-router-dom';
 import {
   SFieldset,
@@ -25,6 +24,7 @@ import {
   SSUploadContainer,
 } from '@pages/host/HostRegister/styles';
 import ROUTES from '@constants/routes';
+import { fetchCall } from '@services/apiClient';
 
 interface ButtonProps {
   selected: boolean;

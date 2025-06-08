@@ -1,4 +1,3 @@
-import { fetchCall } from '@services/api';
 import React, { useState, useEffect } from 'react';
 import useHostRegister from '@hooks/page/useHostRegister';
 import RegisterAddress from '@pages/host/HostRegister/RegisterAddress';
@@ -24,6 +23,7 @@ import {
   ButtonContainer,
   SSUploadContainer,
 } from '@pages/host/HostRegister/styles';
+import { fetchCall } from '@services/apiClient';
 
 interface ButtonProps {
   selected: boolean;

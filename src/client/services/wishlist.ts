@@ -1,5 +1,5 @@
 import { WishlistResponse } from '@typings/response/wishlist';
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 export const getWishlist = async (page: number) => {
   return await fetchCall<WishlistResponse>(

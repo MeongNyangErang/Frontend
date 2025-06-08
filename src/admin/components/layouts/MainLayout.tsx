@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { Outlet } from 'react-router-dom';
+import useAdminLogout from '@admin/hooks/auth/useAdminLogout';
 import Header from './Header';
 
 const MainLayout = () => {
+  useAdminLogout(); // logoutFn setting
+
   return (
     <>
       <Header />

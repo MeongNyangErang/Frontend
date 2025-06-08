@@ -1,4 +1,4 @@
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 export const signupUser = async (formData: FormData) => {
   return await fetchCall('users/signup', 'post', formData);

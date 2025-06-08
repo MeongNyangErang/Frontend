@@ -1,8 +1,8 @@
-import { fetchCall } from '@admin/services/adminApi';
 import {
   HostSignupRequestsResponse,
   HostSignupRequestDetailResponse,
 } from '@admin/typings/response/adminHostSignupResponse';
+import { fetchCall } from './adminApiClient';
 
 const getHostSignupRequests = async (page: number) => {
   return fetchCall<HostSignupRequestsResponse>(

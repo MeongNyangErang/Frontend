@@ -1,7 +1,7 @@
-import { fetchCall } from '@services/api';
 import { SearchBaseType, SearchFilterType } from '@typings/search';
 import { SearchAccommodationsData } from '@typings/response/accommodations';
 import { FILTER_VALUE_MAP } from '@constants/searchFilterMap';
+import { fetchCall } from './apiClient';
 
 export const searchAccommodations = async (
   query: SearchBaseType,

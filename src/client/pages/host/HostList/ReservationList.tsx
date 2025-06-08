@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Header from '@components/common/RegisterHeader/index';
-import { fetchCall } from '@services/api';
+import { fetchCall } from '@services/apiClient';
 
 interface ReservationList {
   reservationId: string;

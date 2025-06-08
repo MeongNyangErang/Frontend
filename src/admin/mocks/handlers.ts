@@ -6,8 +6,10 @@ const ADMIN_BASE_URL = import.meta.env.VITE_API_ADMIN_BASE_URL;
 
 export const handlers = [
   http.post(`${ADMIN_BASE_URL}/login`, async () => {
+    console.log('sdfds');
     return HttpResponse.json({
       accessToken: 123,
+      refreshToken: 2456,
     });
   }),
 

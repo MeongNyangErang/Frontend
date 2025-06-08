@@ -5,7 +5,6 @@ import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri';
 import { GiChessQueen } from 'react-icons/gi';
 import StarRatings from 'react-star-ratings';
 import { FaHeart } from 'react-icons/fa';
-import { fetchCall } from '@services/api';
 import { media } from '@shared/components/styles/responsive';
 import { createChatRoom } from '@services/chat';
 import ROUTES from '@constants/routes';
@@ -15,6 +14,7 @@ import useWishlist from '@hooks/query/user/useWishlist';
 import { AxiosError } from 'axios';
 import AccommodationMap from './AccommodationMap';
 import { addToWishlist, deleteFromWishlist } from '@services/wishlist';
+import { fetchCall } from '@services/apiClient';
 
 interface DetailData {
   accommodationId: number;

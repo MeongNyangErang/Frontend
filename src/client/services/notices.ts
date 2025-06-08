@@ -1,4 +1,4 @@
-import { fetchCall } from './api';
+import { fetchCall } from './apiClient';
 
 const getNoticeList = (page: number) => {};
 

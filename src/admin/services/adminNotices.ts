@@ -1,4 +1,4 @@
-import { fetchCall } from './adminApi';
+import { fetchCall } from './adminApiClient';
 
 const postNewNotice = async (formData: FormData) => {
   return await fetchCall('notices', 'post', formData);

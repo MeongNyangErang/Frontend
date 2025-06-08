@@ -1,25 +1,25 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTES from '@constants/routes';
-import { logoutMember } from '@services/auth';
-import { setLogoutFn } from '@utils/logoutEmitter';
+import { setLogoutFn } from '@shared/utils/logoutEmitter';
+import useInvalidateQueries from '@shared/hooks/query/useInvalidateQueries';
+import { authServices } from '@services/authServices';
 
 const useLogout = () => {
   const { removeMember } = useAuth();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const invalidateAllQueries = () => {
-    queryClient.invalidateQueries();
-  };
+  const { invalidateAllQueries } = useInvalidateQueries();
 
   const logout = async () => {
-    await logoutMember();
-    removeMember();
-    invalidateAllQueries();
-    navigate(ROUTES.home, { replace: true });
+    try {
+      await authServices.logout();
+      removeMember();
+      invalidateAllQueries();
+      navigate(ROUTES.home, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

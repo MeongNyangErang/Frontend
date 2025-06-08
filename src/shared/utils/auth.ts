@@ -1,4 +1,5 @@
 import { STORAGE_KEYS } from '@constants/storageKey';
+import { PayloadFromToken } from '@shared/typings/auth';
 import { removeLocalStorage, setLocalStorage } from '@shared/utils/storage';
 
 const accessTokenKey = STORAGE_KEYS.ACCESS_TOKEN;
@@ -14,11 +15,9 @@ const removeAuthTokens = () => {
   removeLocalStorage(refreshTokenKey);
 };
 
-const extractUserInfoFromToken = (token: string) => {
+const extractUserInfoFromToken = (token: string): PayloadFromToken => {
   const payload = JSON.parse(atob(token.split('.')[1]));
-  const role = payload.role.split('_')[1];
-  const email = payload.sub;
-  return { ...payload, role, email };
+  return payload;
 };
 
 export { saveAuthTokens, removeAuthTokens, extractUserInfoFromToken };
