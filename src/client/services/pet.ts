@@ -1,6 +1,6 @@
 import { PetInfoList } from '@typings/pet';
-import { fetchCall } from '@services/api';
 import { PetInfoState } from '@typings/pet';
+import { fetchCall } from './apiClient';
 
 export const getMyPetList = async () => {
   return await fetchCall<PetInfoList>('users/pets', 'get');

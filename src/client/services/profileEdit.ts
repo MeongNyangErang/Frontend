@@ -1,4 +1,4 @@
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 const deleteAccount = async () => {
   return await fetchCall('users', 'delete');

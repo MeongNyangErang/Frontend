@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import useAuth from '@hooks/auth/useAuth';
+import useLogout from '@hooks/auth/useLogout';
 import { media } from '@shared/components/styles/responsive';
 import Header from './Header';
 import Footer from './Footer';
@@ -9,6 +10,8 @@ import MobileNav from './MobileNav';
 const MainLayout = () => {
   const { member } = useAuth();
   const isMemberExist = !!member.data;
+  useLogout(); // setLogoutFn
+
   return (
     <SContainer>
       <Header />

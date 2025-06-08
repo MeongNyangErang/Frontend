@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { PiSirenBold } from 'react-icons/pi';
 import StarRatings from 'react-star-ratings';
 import Header from '@components/common/RegisterHeader/index';
-import { fetchCall } from '@services/api';
 import ReviewReportModal from '@components/common/ReviewReportModal';
 import useReviewReport from '@hooks/ui/useReviewReport';
+import { fetchCall } from '@services/apiClient';
 
 interface ReviewList {
   nickname: string;

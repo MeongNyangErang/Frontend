@@ -1,7 +1,3 @@
-export interface LoginAccessToken {
-  accessToken: string;
-}
-
 export interface UserProfile {
   nickname: string;
   profileImageUrl: string;

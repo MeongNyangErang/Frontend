@@ -21,8 +21,8 @@ const useKakaoLoginCallback = (onError: (message: string) => void) => {
       const memberRole = role === 'ROLE_USER' ? 'USER' : 'HOST';
 
       try {
-        const { accessToken } = await kakaoLogin(code, role);
-        setCurrentMember(accessToken, memberRole, '');
+        const tokens = await kakaoLogin(code, role);
+        setCurrentMember(tokens, memberRole, '');
       } catch (error) {
         console.log(error);
         onError('로그인에 실패했습니다.');

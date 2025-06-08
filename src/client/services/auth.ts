@@ -1,31 +1,27 @@
 import { UserProfile, HostProfile } from '@typings/response/auth';
-import { LoginAccessToken } from '@typings/response/auth';
 import { KakaoMemberRole } from '@typings/member';
-import { fetchCall } from '@services/api';
+import { AuthToken } from '@shared/typings/response/authResponse';
+import { fetchCall } from './apiClient';
 
 const loginUser = async (email: string, password: string) => {
-  return await fetchCall<LoginAccessToken>('users/login', 'post', {
+  return await fetchCall<AuthToken>('users/login', 'post', {
     email,
     password,
   });
 };
 
 const loginHost = async (email: string, password: string) => {
-  return await fetchCall<LoginAccessToken>('hosts/login', 'post', {
+  return await fetchCall<AuthToken>('hosts/login', 'post', {
     email,
     password,
   });
 };
 
 const kakaoLogin = async (code: string, role: KakaoMemberRole) => {
-  return fetchCall<LoginAccessToken>(
+  return await fetchCall<AuthToken>(
     `oauth/kakao/callback?code=${code}&role=${role}`,
     'get',
   );
-};
-
-const logout = async () => {
-  return fetchCall('auth/logout', 'post');
 };
 
 const getUserProfile = async () => {
@@ -36,11 +32,4 @@ const getHostProfile = async () => {
   return await fetchCall<HostProfile>('hosts/me', 'get');
 };
 
-export {
-  loginUser,
-  loginHost,
-  kakaoLogin,
-  logout,
-  getUserProfile,
-  getHostProfile,
-};
+export { loginUser, loginHost, kakaoLogin, getUserProfile, getHostProfile };

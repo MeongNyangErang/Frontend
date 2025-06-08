@@ -5,8 +5,8 @@ const useAdminLogin = () => {
   const { setCurrentAdminUser } = useAdminAuth();
 
   const loginAdminUser = async (email: string, password: string) => {
-    const { accessToken } = await loginAdmin(email, password);
-    setCurrentAdminUser({ email }, accessToken);
+    const tokens = await loginAdmin(email, password);
+    setCurrentAdminUser({ email }, tokens);
   };
 
   return { loginAdminUser };

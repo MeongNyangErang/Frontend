@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '@components/common/RegisterHeader';
 import { AiOutlineNotification } from 'react-icons/ai';
-import { fetchCall } from '@services/api';
 import { getLocalStorage } from '@shared/utils/storage';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { GoX } from 'react-icons/go';
+import { fetchCall } from '@services/apiClient';
 
 type NotificationType =
   | 'MESSAGE'

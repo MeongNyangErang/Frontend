@@ -1,5 +1,5 @@
 import { UserReviewsResponse } from '@typings/response/review';
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 export const postNewReview = async (review: FormData) => {
   return await fetchCall(`users/reviews`, 'post', review);

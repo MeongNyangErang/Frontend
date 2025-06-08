@@ -16,17 +16,15 @@ interface MyPageOverviewProps {
 }
 
 const MyPageOverview = ({ role }: MyPageOverviewProps) => {
-  const { logout: hostLogout } = useLogout('HOST');
-  const { logout: userLogout } = useLogout('USER');
+  const { logout } = useLogout();
   const { isModalOpen, openModal, closeModal } = useToggleModal();
   const navigate = useNavigate();
   const isHost = role === 'HOST';
   const overviewList = isHost ? HOST_OVERVIEW_LIST : USER_OVERVEIW_LIST;
-  const logoutFn = isHost ? hostLogout : userLogout;
   const handleLogout = useCallback(() => {
-    logoutFn();
+    logout();
     closeModal();
-  }, [logoutFn]);
+  }, []);
 
   return (
     <>

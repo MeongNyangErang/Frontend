@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdOutlinePets } from 'react-icons/md';
 import { IoTimeOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchCall } from '@services/api';
+import { fetchCall } from '@services/apiClient';
 
 interface DetailRoomData {
   name: String;

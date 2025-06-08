@@ -3,7 +3,7 @@ import {
   PreviousChatMessagesResponse,
   CreateChatRoomResponse,
 } from '@typings/response/chat';
-import { fetchCall } from '@services/api';
+import { fetchCall } from './apiClient';
 
 export const getChatList = async (page: number) => {
   return await fetchCall<ChatListResponse>(`chats?page=${page}`, 'get');

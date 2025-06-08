@@ -34,6 +34,7 @@ export const handlers = [
       password: 'user123#',
       data: {
         accessToken: 123,
+        refreshToken: 2134,
       },
     };
 
@@ -62,6 +63,7 @@ export const handlers = [
       password: 'host123#',
       data: {
         accessToken: 2134,
+        refreshToken: 2134,
       },
     };
 

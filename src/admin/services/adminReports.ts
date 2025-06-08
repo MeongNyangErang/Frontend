@@ -1,5 +1,5 @@
 import { ReportListResponse } from '@admin/typings/response/adminReportsResponse';
-import { fetchCall } from './adminApi';
+import { fetchCall } from './adminApiClient';
 
 const getReportList = async (page: number) => {
   return await fetchCall<ReportListResponse>(

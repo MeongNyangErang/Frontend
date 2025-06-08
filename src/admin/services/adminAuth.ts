@@ -1,12 +1,9 @@
-import { fetchCall } from '@admin/services/adminApi';
+import { AuthToken } from '@shared/typings/response/authResponse';
+import { fetchCall } from './adminApiClient';
 
-const loginAdmin = async (email: string, password: string) => {
-  return await fetchCall<{ accessToken: string }>('login', 'post', {
+export const loginAdmin = async (email: string, password: string) => {
+  return await fetchCall<AuthToken>('login', 'post', {
     email,
     password,
   });
 };
-
-const logoutAdmin = async () => {};
-
-export { loginAdmin, logoutAdmin };

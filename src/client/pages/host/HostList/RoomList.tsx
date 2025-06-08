@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
-import axios, { AxiosResponse } from 'axios';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import ROUTES from '@constants/routes';
-import { fetchCall } from '@services/api';
+import { fetchCall } from '@services/apiClient';
 
 interface Room {
   roomId: number;
