@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { notices } from '@shared/mocks/data/notices';
 import { noticeDetail } from '@shared/mocks/data/noticeDetail';
 import { hostSignupDetail, hostSignupList } from './data/hostSignupList';
-import { reportList } from './data/reportList';
+import { reportList, reportDetail } from './data/reportList';
 
 const ADMIN_BASE_URL = import.meta.env.VITE_API_ADMIN_BASE_URL;
 const CLIENT_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -53,6 +53,15 @@ export const handlers = [
         last: false,
       },
     };
+    return HttpResponse.json(response);
+  }),
+
+  http.get(`${ADMIN_BASE_URL}/reports/:reportId`, async () => {
+    const response = {
+      code: 200,
+      data: reportDetail,
+    };
+
     return HttpResponse.json(response);
   }),
 

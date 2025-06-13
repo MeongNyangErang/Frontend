@@ -20,9 +20,9 @@ const NoticeDetail = () => {
 
   const { data, isLoading, error } = useNoticeDetail(numericNoticeId);
 
-  if (isLoading) return null;
+  if (isLoading || (!data && !error)) return null;
 
-  if (error || !data) {
+  if (error) {
     return (
       <>
         <SSubPageTitle>공지사항</SSubPageTitle>
@@ -36,24 +36,28 @@ const NoticeDetail = () => {
   return (
     <>
       <SSubPageTitle>공지사항</SSubPageTitle>
-      {NOTICE_FIELDS.map(({ id, name }) => {
-        return (
-          <React.Fragment key={id}>
-            <InfoField name={name}>{data[id]}</InfoField>
-          </React.Fragment>
-        );
-      })}
-      <InfoField name="내용">
-        <div>
-          {data.noticeImageUrl && (
-            <SNoticeImageBox>
-              <img src={data.noticeImageUrl} alt="첨부 이미지" />
-            </SNoticeImageBox>
-          )}
-          {data.content}
-        </div>
-      </InfoField>
-      <NoticeControlButtons noticeId={numericNoticeId} />
+      {data && (
+        <>
+          {NOTICE_FIELDS.map(({ id, name }) => {
+            return (
+              <React.Fragment key={id}>
+                <InfoField name={name}>{data[id]}</InfoField>
+              </React.Fragment>
+            );
+          })}
+          <InfoField name="내용">
+            <div>
+              {data.noticeImageUrl && (
+                <SNoticeImageBox>
+                  <img src={data.noticeImageUrl} alt="첨부 이미지" />
+                </SNoticeImageBox>
+              )}
+              {data.content}
+            </div>
+          </InfoField>
+          <NoticeControlButtons noticeId={numericNoticeId} />
+        </>
+      )}
     </>
   );
 };

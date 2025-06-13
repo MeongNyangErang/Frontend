@@ -5,7 +5,8 @@ const useReportList = (page: number, enabled: boolean = true) => {
   const result = useQuery({
     queryKey: ['report-list', page],
     queryFn: () => getReportList(page),
-    staleTime: 1000 * 60 * 30,
+    staleTime: 1000 * 60 * 10,
+    refetchOnMount: 'always',
     enabled,
   });
 

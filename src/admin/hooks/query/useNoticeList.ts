@@ -5,7 +5,8 @@ const useNoticeList = (page: number, enabled: boolean = true) => {
   const result = useQuery({
     queryKey: ['notice-list', page],
     queryFn: () => getNotices(page),
-    staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 10,
+    refetchOnMount: 'always',
     enabled,
   });
 
