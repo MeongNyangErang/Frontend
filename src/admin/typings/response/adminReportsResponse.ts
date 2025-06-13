@@ -1,4 +1,4 @@
-import { ReportListItem } from '../adminReports';
+import { ReportListItem, ReportDetail } from '../adminReports';
 
 interface ReportListResponse {
   code: number;
@@ -13,4 +13,9 @@ interface ReportListResponse {
   };
 }
 
-export { ReportListResponse };
+interface ReportDetailResponse {
+  code: number;
+  data: ReportDetail;
+}
+
+export { ReportListResponse, ReportDetailResponse };

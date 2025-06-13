@@ -1,17 +1,19 @@
-import { ReportListResponse } from '@admin/typings/response/adminReportsResponse';
+import {
+  ReportListResponse,
+  ReportDetailResponse,
+} from '@admin/typings/response/adminReportsResponse';
 import { fetchCall } from './adminApiClient';
 
 const getReportList = async (page: number) => {
-  return await fetchCall<ReportListResponse>(
-    `reports/review?page=${page}`,
-    'get',
-  );
+  return fetchCall<ReportListResponse>(`reports/review?page=${page}`, 'get');
 };
 
 const getReportDetail = async (reportId: number) => {
-  return await fetchCall(`report/${reportId}`, 'get');
+  return fetchCall<ReportDetailResponse>(`reports/${reportId}`, 'get');
 };
 
-const deleteReportedReview = async (reportId: number) => {};
+const deleteReportedReview = async (reportId: number) => {
+  return fetchCall(`reports/${reportId}`, 'delete');
+};
 
-export { getReportList, getReportDetail };
+export { getReportList, getReportDetail, deleteReportedReview };

@@ -55,4 +55,13 @@ const reportList = [
   },
 ] as const;
 
-export { reportList };
+const reportDetail = {
+  reviewId: 1234567890123,
+  reviewerNickname: 'meongNyangLover',
+  reporterNickname: 'dogoFreinds',
+  reason: '광고성 댓글',
+  evidenceImageUrl: 'https://cdn.example.com/evidence/1234567890123.png',
+  reportDate: '2025-06-13T09:30:00+09:00',
+} as const;
+
+export { reportList, reportDetail };

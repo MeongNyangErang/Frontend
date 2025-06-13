@@ -8,4 +8,13 @@ interface ReportListItem {
   createdAt: string;
 }
 
-export { ReportListItem };
+interface ReportDetail {
+  reviewId: number;
+  reviewerNickname: string;
+  reporterNickname: string;
+  reason: string;
+  evidenceImageUrl: string;
+  reportDate: string;
+}
+
+export { ReportListItem, ReportDetail };

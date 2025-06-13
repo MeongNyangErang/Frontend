@@ -15,7 +15,6 @@ const useHostSignupApproval = (hostId: number) => {
   ) => {
     const action =
       type === 'approve' ? approveHostSignupRequest : rejectHostSignupRequest;
-    resetError();
     startIsLoading();
     try {
       await action(hostId);
@@ -28,7 +27,7 @@ const useHostSignupApproval = (hostId: number) => {
     }
   };
 
-  return { isLoading, error, handleClickButton };
+  return { isLoading, error, resetError, handleClickButton };
 };
 
 export default useHostSignupApproval;

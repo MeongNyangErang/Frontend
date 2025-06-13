@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@shared/components/common/Button';
 import useHostSignupRequestList from '@admin/hooks/query/useHostSignupRequestList';
 import ROUTES from '@admin/constants/routes';
+import Modal from '@shared/components/common/Modal';
 import useHostSignupApproval from './useHostSignupApproval';
 
 interface HostSignupApprovalButtonsProps {
@@ -11,7 +12,8 @@ interface HostSignupApprovalButtonsProps {
 const HostSignupApprovalButtons = ({
   hostId,
 }: HostSignupApprovalButtonsProps) => {
-  const { isLoading, error, handleClickButton } = useHostSignupApproval(hostId);
+  const { isLoading, error, handleClickButton, resetError } =
+    useHostSignupApproval(hostId);
   const { refreshHostSignupRequestList } = useHostSignupRequestList(0, false);
   const navigate = useNavigate();
 
@@ -42,7 +44,15 @@ const HostSignupApprovalButtons = ({
           승인
         </Button>
       </SButtonWrap>
-      <SErrorMessage>{error}</SErrorMessage>
+      <Modal
+        isOpen={!!error}
+        variant="centered"
+        closeType="none"
+        role="alert"
+        onClose={resetError}
+      >
+        {error}
+      </Modal>
     </>
   );
 };
@@ -53,8 +63,4 @@ const SButtonWrap = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
-`;
-
-const SErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.main};
 `;
