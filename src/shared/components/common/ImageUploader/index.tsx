@@ -12,7 +12,7 @@ import {
 } from './styles';
 
 interface ImageUploaderProps {
-  images: (File | InitialImage)[];
+  images: (File | InitialImage | string)[];
   onAdd: (imageFile: File) => void;
   onRemove: (index: number) => void;
 }
@@ -26,8 +26,10 @@ const ImageUploader = ({ images, onAdd, onRemove }: ImageUploaderProps) => {
     onAdd(file);
   };
 
-  const getPreviewUrl = (image: File | InitialImage) => {
-    return image instanceof File ? URL.createObjectURL(image) : image.imageUrl;
+  const getPreviewUrl = (image: File | InitialImage | string) => {
+    if (image instanceof File) return URL.createObjectURL(image);
+    if (typeof image === 'string') return image;
+    return image.imageUrl;
   };
 
   return (

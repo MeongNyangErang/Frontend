@@ -1,15 +1,31 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { media } from '@shared/components/styles/responsive';
 
-const SNoticeWrap = styled.div`
+const SNoticeItem = styled(Link)`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  row-gap: 2px;
+
+  padding: ${({ theme }) => theme.layouts.paddingX};
+  background-color: ${({ theme }) => theme.colors.gray100};
+  border-radius: ${({ theme }) => theme.radius.md};
+
+  > h3 {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  > span {
+    color: ${({ theme }) => theme.colors.gray600};
+  }
+
+  ${media.mobile} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 8px;
+  }
 `;
 
-const SNoticeList = styled.div`
-  margin-bottom: 40px;
-`;
-
-const SNoticeItem = styled.div``;
-
-export { SNoticeWrap, SNoticeList, SNoticeItem };
+export { SNoticeItem };

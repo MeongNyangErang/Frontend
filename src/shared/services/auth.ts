@@ -3,8 +3,8 @@ import { authInstance } from './api';
 
 export const createAuthServices = (baseURL: string) => {
   return {
-    logout: () => authInstance.post('auth/logout', null, { baseURL }),
-    reIssueToken: (refreshToken: string | null): Promise<ReIssueToken> =>
+    logout: async () => authInstance.post('auth/logout', null, { baseURL }),
+    reIssueToken: async (refreshToken: string | null): Promise<ReIssueToken> =>
       authInstance
         .post('auth/reissue', { refreshToken }, { baseURL })
         .then((res) => res.data),

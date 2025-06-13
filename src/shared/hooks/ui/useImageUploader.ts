@@ -3,7 +3,7 @@ import { InitialImage } from '@typings/textImageForm';
 
 const useImageUploader = (
   maxCount: number,
-  initialImageList: InitialImage[] | undefined = undefined,
+  initialImageList: (InitialImage | string)[] | undefined = undefined,
 ) => {
   const [initialImages, setInitialImages] = useState(
     initialImageList ? [...initialImageList] : [],
@@ -31,7 +31,9 @@ const useImageUploader = (
         setNewImages((prev) => prev.filter((_, i) => i !== realIndex));
       } else {
         setInitialImages((prev) => prev.filter((_, i) => i !== index));
-        setRemovedImages((prev) => [...prev, imageToRemove.imageId]);
+        if (typeof imageToRemove !== 'string') {
+          setRemovedImages((prev) => [...prev, imageToRemove.imageId]);
+        }
       }
     },
     [images, initialImages],

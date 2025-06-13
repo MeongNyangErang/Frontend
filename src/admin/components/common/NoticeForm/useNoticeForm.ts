@@ -1,14 +1,27 @@
 import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useError from '@shared/hooks/ui/useError';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import { postNewNotice } from '@admin/services/adminNotices';
 import useImageUploader from '@shared/hooks/ui/useImageUploader';
+import { NoticeDetail } from '@shared/typings/notices';
+import ROUTES from '@admin/constants/routes';
+import useNoticeList from '@admin/hooks/query/useNoticeList';
 
-const useNoticeRegisterForm = () => {
-  const [formData, setFormData] = useState({ title: '', content: '' });
-  const { images, newImages, onAddImage, onRemoveImage } = useImageUploader(1);
+const useNoticeForm = (initialData: NoticeDetail | undefined) => {
+  const { title, content, noticeImageUrl } = initialData || {};
+  const [formData, setFormData] = useState({
+    title: title ? title : '',
+    content: content ? content : '',
+  });
+  const { images, newImages, onAddImage, onRemoveImage } = useImageUploader(
+    1,
+    noticeImageUrl ? [noticeImageUrl] : undefined,
+  );
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError, resetError } = useError();
+  const { refreshNoticeList } = useNoticeList(0, false);
+  const navigate = useNavigate();
 
   const onChangeFormData = (key: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -44,7 +57,8 @@ const useNoticeRegisterForm = () => {
     startIsLoading();
     try {
       await postNewNotice(data);
-      // 공지사항 목록 갱신 필요
+      await refreshNoticeList();
+      navigate(ROUTES.notices.root(0));
     } catch (error) {
       console.log(error);
       updateError('등록에 실패했습니다.\n다시 시도해주세요.');
@@ -66,4 +80,4 @@ const useNoticeRegisterForm = () => {
   };
 };
 
-export default useNoticeRegisterForm;
+export default useNoticeForm;

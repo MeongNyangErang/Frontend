@@ -3,10 +3,16 @@ import { parseNewLine } from '@shared/utils/formatter';
 import ImageUploader from '@shared/components/common/ImageUploader';
 import TextEditor from '@shared/components/common/TextEditor';
 import Button from '@shared/components/common/Button';
-import useNoticeRegisterForm from './useNoticeRegisterForm';
+import { NoticeDetail } from '@shared/typings/notices';
+import useNoticeForm from './useNoticeForm';
 import { SNoticeForm, SNoticeTitleInput, SImageUploaderWrap } from './styles';
 
-const NoticeRegisterForm = () => {
+interface NoticeFormProps {
+  type: 'new' | 'edit';
+  initialData?: NoticeDetail;
+}
+
+const NoticeForm = ({ type, initialData }: NoticeFormProps) => {
   const {
     formData,
     images,
@@ -17,7 +23,7 @@ const NoticeRegisterForm = () => {
     onRemoveImage,
     handleSubmit,
     resetError,
-  } = useNoticeRegisterForm();
+  } = useNoticeForm(initialData);
 
   return (
     <>
@@ -47,7 +53,7 @@ const NoticeRegisterForm = () => {
           isLoading={isLoading}
           fixedHeight
         >
-          등록하기
+          {type === 'new' ? '등록하기' : '수정하기'}
         </Button>
       </SNoticeForm>
       <Modal
@@ -63,4 +69,4 @@ const NoticeRegisterForm = () => {
   );
 };
 
-export default NoticeRegisterForm;
+export default NoticeForm;
