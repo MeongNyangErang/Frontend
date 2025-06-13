@@ -115,7 +115,7 @@ const createFetchCall = (
       : {
           'Content-Type': 'application/json',
         };
-    console.log('create fetchCall', baseURL);
+
     const config = {
       url,
       method,
@@ -127,4 +127,6 @@ const createFetchCall = (
     return axiosInstance(config);
   };
 
-export { authInstance, createAxiosInstance, createFetchCall };
+type FetchCallType = ReturnType<typeof createFetchCall>;
+
+export { authInstance, createAxiosInstance, createFetchCall, FetchCallType };

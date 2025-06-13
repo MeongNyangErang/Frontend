@@ -1,4 +1,5 @@
-import { fetchCall } from './adminApiClient';
+import { fetchCall, clientFetchCall } from './adminApiClient';
+import { createNoticeServices } from '@shared/services/notices';
 
 const postNewNotice = async (formData: FormData) => {
   return await fetchCall('notices', 'post', formData);
@@ -12,4 +13,10 @@ const deleteNotice = async (noticeId: number) => {
   return await fetchCall(`notices/${noticeId}`, 'delete');
 };
 
-export { postNewNotice, editNotice, deleteNotice };
+const noticeServices = createNoticeServices(clientFetchCall);
+
+const getNotices = noticeServices.getNotices;
+
+const getNoticeDetail = noticeServices.getNoticeDetail;
+
+export { postNewNotice, editNotice, deleteNotice, getNotices, getNoticeDetail };

@@ -1,6 +1,6 @@
-import { media } from '@shared/components/styles/responsive';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { media } from '@shared/components/styles/responsive';
 
 const SHostSignupRequestItem = styled(Link)`
   display: flex;

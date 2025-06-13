@@ -9,6 +9,7 @@ const MainLayout = lazy(() => import('@admin/components/layouts/MainLayout'));
 const Login = lazy(() => import('@admin/pages/Login'));
 const DashBoard = lazy(() => import('@admin/pages/DashBoard'));
 const NoticeList = lazy(() => import('@admin/pages/notices/NoticeList'));
+const NoticeDetail = lazy(() => import('@admin/pages/notices/NoticeDetail'));
 const NoticeCreate = lazy(() => import('@admin/pages/notices/NoticeCreate'));
 const NoticeEdit = lazy(() => import('@admin/pages/notices/NoticeEdit'));
 const HostSignupRequestList = lazy(
@@ -31,6 +32,7 @@ const AdminRouter = () => {
           <Route element={<MainLayout />}>
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="notices" element={<NoticeList />} />
+            <Route path="notices/:noticeId" element={<NoticeDetail />} />
             <Route path="notices/new" element={<NoticeCreate />} />
             <Route path="notices/:noticeId/edit" element={<NoticeEdit />} />
             <Route path="hosts" element={<HostSignupRequestList />} />
