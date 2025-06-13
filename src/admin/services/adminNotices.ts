@@ -2,15 +2,15 @@ import { fetchCall, clientFetchCall } from './adminApiClient';
 import { createNoticeServices } from '@shared/services/notices';
 
 const postNewNotice = async (formData: FormData) => {
-  return await fetchCall('notices', 'post', formData);
+  return fetchCall('notices', 'post', formData);
 };
 
 const editNotice = async (noticeId: number, formData: FormData) => {
-  return await fetchCall(`notices/${noticeId}`, 'put', formData);
+  return fetchCall(`notices/${noticeId}`, 'put', formData);
 };
 
 const deleteNotice = async (noticeId: number) => {
-  return await fetchCall(`notices/${noticeId}`, 'delete');
+  return fetchCall(`notices/${noticeId}`, 'delete');
 };
 
 const noticeServices = createNoticeServices(clientFetchCall);
