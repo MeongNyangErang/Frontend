@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@components/common/RegisterHeader/index';
 import useUserReservationList from '@hooks/query/user/useUserReservationList';
-import { fetchCall } from '@services/apiClient';
+import ROUTES from '@constants/routes';
+import {
+  postConfirmReservation,
+  postPreCheckReservation,
+} from '@services/reservation';
+import useIamportPayment from '@hooks/payment/useIamportPayment';
 
 interface ButtonProps {
   selected: boolean;
@@ -27,15 +32,14 @@ const Reservation = () => {
   const navigate = useNavigate();
   const { refreshReservationList } = useUserReservationList('RESERVED', 0);
   const { state } = location;
-  useEffect(() => {
-    if (!location) {
-      console.log('정보가 없습니다.');
-    }
-  }, [location, state]);
+  const { triggerPayment } = useIamportPayment();
 
-  const formatDate = (date: Date) => {
-    return date.toISOString().split('T')[0];
-  };
+  useEffect(() => {
+    if (!state) {
+      console.log('정보가 없습니다.');
+      navigate(ROUTES.home);
+    }
+  }, [state]);
 
   const today = new Date();
   const tomorrow = new Date();
@@ -49,9 +53,7 @@ const Reservation = () => {
     checkOutDate,
     peopleCount,
     petCount,
-  } = location.state || {};
-
-  console.log(checkInDate, checkOutDate, '날짜');
+  } = state || {};
 
   const calculateStayDuration = (checkInDate: string, checkOutDate: string) => {
     const checkIn = new Date(checkInDate);
@@ -68,30 +70,6 @@ const Reservation = () => {
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
-  const [roomDetails, setRoomDetails] = useState<any>(null);
-
-  useEffect(() => {
-    if (
-      !accommodationName ||
-      !roomId ||
-      !checkInDate ||
-      !checkOutDate ||
-      peopleCount === undefined ||
-      petCount === undefined ||
-      !totalPrice
-    ) {
-      console.log('잘못된 접근입니다.');
-    }
-  }, [
-    navigate,
-    accommodationName,
-    roomId,
-    checkInDate,
-    checkOutDate,
-    peopleCount,
-    petCount,
-    totalPrice,
-  ]);
 
   const handleReserverPhoneNumber = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -116,26 +94,25 @@ const Reservation = () => {
     setHasvehicle(value);
   };
 
-  const handlePayment = async () => {
-    if (!reserverName || !/^[가-힣]+$/.test(reserverName)) {
-      setFormError('성명을 올바르게 입력해주세요.');
-      return;
-    }
+  const validateReservationInfo = () => {
+    if (!reserverName || !/^[가-힣]+$/.test(reserverName))
+      return '성명을 올바르게 입력해주세요.';
 
     if (
       !reserverPhoneNumber ||
       !/^\d{3}-\d{3,4}-\d{4}$/.test(reserverPhoneNumber)
-    ) {
-      setFormError('휴대폰 번호를 올바르게 입력해주세요.');
+    )
+      return '휴대폰 번호를 올바르게 입력해주세요.';
+
+    if (!hasVehicle) return '주차 여부를 선택해주세요.';
+  };
+
+  const handlePayment = async () => {
+    const error = validateReservationInfo();
+    if (error) {
+      setFormError(error);
       return;
     }
-
-    if (!hasVehicle) {
-      setFormError('주차 여부를 선택해주세요.');
-      return;
-    }
-
-    const sanitizedTotalPrice = adjustedTotalPrice;
 
     const reservationData = {
       accommodationName,
@@ -147,8 +124,8 @@ const Reservation = () => {
       reserverName,
       reserverPhoneNumber,
       hasVehicle,
-      totalPrice: sanitizedTotalPrice,
-    } as any;
+      totalPrice: adjustedTotalPrice,
+    };
 
     const formData = new FormData();
     const blob = new Blob([JSON.stringify(reservationData)], {
@@ -158,13 +135,33 @@ const Reservation = () => {
     formData.append('request', blob);
 
     try {
-      await fetchCall('/users/reservations', 'post', reservationData);
-      refreshReservationList('RESERVED');
-      alert('예약이 완료되었습니다!');
-      navigate('/mypage/user/reservation-list');
+      await postPreCheckReservation(formData);
+
+      const merchant_uid = `id_${Date.now()}`;
+
+      const res = await triggerPayment({
+        pg: 'html5_inicis',
+        // pay_method: 'card',
+        merchant_uid,
+        name: accommodationName,
+        amount: adjustedTotalPrice,
+        buyer_name: reserverName,
+        buyer_tel: reserverPhoneNumber,
+      });
+
+      if (res.success && res.imp_uid && res.merchant_uid) {
+        formData.append('imp_uid', res.imp_uid);
+        formData.append('merchant_uid', res.merchant_uid);
+
+        await postConfirmReservation(formData);
+        refreshReservationList('RESERVED');
+        navigate(ROUTES.myPage.user.reservationList);
+      } else {
+        throw new Error(res.error_msg ?? '결제가 실패했습니다.');
+      }
     } catch (error) {
-      console.error('API를 불러오는데 오류가 발생했습니다:', error);
-      alert('예약 처리 중 오류가 발생했습니다.');
+      console.log(error);
+      alert('결제중 오류가 발생했습니다.');
     }
   };
 
