@@ -59,6 +59,10 @@ const SNavItem = styled(NavLink)`
   &:hover {
     color: ${({ theme }) => theme.colors.gray600};
   }
+
+  &.active {
+    color: ${({ theme }) => theme.colors.gray800};
+  }
 `;
 
 const SUserMenu = styled.div`

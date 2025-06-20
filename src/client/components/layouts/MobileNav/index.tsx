@@ -1,13 +1,14 @@
 import { GrHomeRounded } from 'react-icons/gr';
 import { IoSearch } from 'react-icons/io5';
 import { FaRegMessage } from 'react-icons/fa6';
-import { FaRegUser } from 'react-icons/fa';
+import { FaRegUser, FaListUl } from 'react-icons/fa';
 import ROUTES from '@constants/routes';
 import useAuth from '@hooks/auth/useAuth';
 import { SNav, SNavLink } from './styles';
 
 const mobileMenu = [
   { name: '홈', path: ROUTES.home, icon: <GrHomeRounded /> },
+  { name: '공지', path: ROUTES.notice.list, icon: <FaListUl /> },
   { name: '검색', path: ROUTES.search, icon: <IoSearch /> },
   { name: '채팅', path: ROUTES.chat.list, icon: <FaRegMessage /> },
   { name: 'MY', path: ROUTES.myPage.user.root, icon: <FaRegUser /> },
@@ -15,7 +16,7 @@ const mobileMenu = [
 
 const MobileNav = () => {
   const {
-    member: { data, authLoading },
+    member: { data },
   } = useAuth();
 
   if (!data) return null;
