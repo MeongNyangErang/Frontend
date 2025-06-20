@@ -48,6 +48,9 @@ const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
 
 const Notification = lazy(() => import('@pages/Notification'));
 
+const NoticeList = lazy(() => import('@pages/Notice/NoticeList'));
+const NoticeDetail = lazy(() => import('@pages/Notice/NoticeDetail'));
+
 const AppRouter = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -73,6 +76,8 @@ const AppRouter = () => {
             element={<AccommodationReview />}
           />
           <Route path="notification" element={<Notification />} />
+          <Route path="notices" element={<NoticeList />} />
+          <Route path="notices/:noticeId" element={<NoticeDetail />} />
 
           <Route element={<PrivateRoute allowedRoles={['USER']} />}>
             <Route path="/mypage/user" element={<MyPageLayout />}>

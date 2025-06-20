@@ -13,7 +13,7 @@ import UserMenu from './UserMenu';
 
 const mainMenu = [
   { name: '숙소 찾기', path: ROUTES.search },
-  { name: '공지사항', path: '' },
+  { name: '공지사항', path: ROUTES.notice.list },
 ] as const;
 
 const Header = () => {
