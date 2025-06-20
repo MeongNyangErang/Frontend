@@ -6,8 +6,8 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
-  root: 'src/admin',
-  publicDir: '../../public',
+  root: path.resolve(__dirname, 'src/admin'),
+  publicDir: path.resolve(__dirname, 'public'),
   define: {
     global: 'window',
   },
