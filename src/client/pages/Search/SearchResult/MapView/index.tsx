@@ -13,7 +13,7 @@ const MapView = ({
   currentQuery,
   currentFilter,
 }: MapViewProps) => {
-  const { results, currentPage, totalPages, fetchNextPage, toggleWishStatus } =
+  const { results, currentPage, totalPages, fetchNextPage } =
     useSearchAccommodations(currentQuery, currentFilter);
   const mapRef = useRef<HTMLDivElement>(null);
   const accommodations = useMemo(() => results, [results]);

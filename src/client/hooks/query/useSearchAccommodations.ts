@@ -57,7 +57,7 @@ export const useSearchAccommodations = (
   };
 
   const results = data?.pages.flatMap((page) => page.content) || [];
-  const currentPage = data?.pages[0].page;
+  const currentPage = data?.pages[data?.pages.length - 1].page;
   const totalPages = data?.pages[0].totalPages;
 
   return {
