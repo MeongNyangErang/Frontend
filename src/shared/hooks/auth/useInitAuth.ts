@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { getLocalStorage } from '@shared/utils/storage';
 import { extractUserInfoFromToken } from '@shared/utils/auth';
-import { STORAGE_KEYS } from '@constants/storageKey';
+import { STORAGE_KEYS } from '@shared/constants/storageKey';
 import { setLocalStorage } from '@shared/utils/storage';
 import { PayloadFromToken } from '@shared/typings/auth';
 import { ReIssueToken } from '@shared/typings/response/authResponse';

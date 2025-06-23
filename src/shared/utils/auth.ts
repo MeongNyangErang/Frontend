@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from '@constants/storageKey';
+import { STORAGE_KEYS } from '@shared/constants/storageKey';
 import { PayloadFromToken } from '@shared/typings/auth';
 import { removeLocalStorage, setLocalStorage } from '@shared/utils/storage';
 
