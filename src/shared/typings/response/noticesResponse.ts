@@ -2,7 +2,7 @@ import { Notice, NoticeDetail } from '../notices';
 
 interface NoticesResponse {
   code: number;
-  data: Notice[];
+  content: Notice[];
   page: number;
   size: number;
   totalElements: number;
