@@ -16,7 +16,7 @@ const useLogout = () => {
       await authServices.logout();
       removeMember();
       invalidateAllQueries();
-      navigate(ROUTES.home, { replace: true });
+      // navigate(ROUTES.home, { replace: true });
     } catch (error) {
       console.log(error);
     }
