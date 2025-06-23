@@ -15,7 +15,7 @@ const useNoticeDetail = (noticeId: number) => {
       startIsLoading();
       try {
         const res = await getNoticeDetail(noticeId);
-        setData(res.data);
+        setData(res);
       } catch (error) {
         console.log(error);
         updateError('데이터를 불러오는데 실패했습니다.');
