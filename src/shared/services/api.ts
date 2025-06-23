@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { STORAGE_KEYS } from '@constants/storageKey';
+import { STORAGE_KEYS } from '@shared/constants/storageKey';
 import { getLocalStorage, setLocalStorage } from '@shared/utils/storage';
 import { triggerLogout } from '@shared/utils/logoutEmitter';
 import { ReIssueToken } from '@shared/typings/response/authResponse';
