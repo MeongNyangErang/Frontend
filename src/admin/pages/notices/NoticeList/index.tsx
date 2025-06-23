@@ -10,7 +10,7 @@ import { SNoticeItem } from './styles';
 const NoticeList = () => {
   const currentPage = usePageParam();
   const { data, isLoading, isError } = useNoticeList(currentPage);
-  const { data: content, totalElements, size } = data || {};
+  const { content, totalElements, size } = data || {};
   const onClickPagination = usePaginationNavigator(ROUTES.notices.root);
 
   const navigate = useNavigate();
