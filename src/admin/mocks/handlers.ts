@@ -68,7 +68,7 @@ export const handlers = [
   http.get(`${CLIENT_BASE_URL}/notices`, async () => {
     const response = {
       code: 200,
-      data: notices,
+      content: notices,
       page: 0,
       size: 20,
       totalElements: 22,

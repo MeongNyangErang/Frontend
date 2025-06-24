@@ -6,3 +6,5 @@ const noticeServices = createNoticeServices(fetchCall);
 const getNoticeList = noticeServices.getNotices;
 
 const getNoticeDetail = noticeServices.getNoticeDetail;
+
+export { getNoticeList, getNoticeDetail };

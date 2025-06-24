@@ -11,6 +11,7 @@ const useNoticeList = (page: number, enabled: boolean = true) => {
   });
 
   const queryClient = useQueryClient();
+
   const refreshNoticeList = async () => {
     await queryClient.invalidateQueries({
       queryKey: ['notice-list'],
