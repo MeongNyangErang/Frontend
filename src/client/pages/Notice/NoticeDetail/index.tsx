@@ -1,5 +1,19 @@
+import ROUTES from '@constants/routes';
+import useNumericParam from '@shared/hooks/router/useNumericParam';
+import useNoticeDetail from '@hooks/page/useNoticeDetail';
+
 const NoticeDetail = () => {
-  return <>공지 상세</>;
+  const numericNoticeId = useNumericParam('noticeId', ROUTES.notice.list);
+
+  if (!numericNoticeId) return null;
+
+  const { data, isLoading, error } = useNoticeDetail(numericNoticeId);
+
+  if (isLoading) return null;
+
+  if (error || !data) return <></>;
+
+  return <></>;
 };
 
 export default NoticeDetail;

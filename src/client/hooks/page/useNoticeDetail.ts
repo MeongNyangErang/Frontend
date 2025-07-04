@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getNoticeDetail } from '@admin/services/adminNotices';
-import { NoticeDetail } from '@shared/typings/notices';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import useError from '@shared/hooks/ui/useError';
+import { getNoticeDetail } from '@services/notices';
+import { NoticeDetail } from '@shared/typings/notices';
 
 const useNoticeDetail = (noticeId: number) => {
   const [data, setData] = useState<NoticeDetail | null>(null);
@@ -27,11 +27,7 @@ const useNoticeDetail = (noticeId: number) => {
     fetchNoticeDetail();
   }, []);
 
-  return {
-    data,
-    isLoading,
-    error,
-  };
+  return { data, isLoading, error };
 };
 
 export default useNoticeDetail;

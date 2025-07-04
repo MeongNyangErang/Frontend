@@ -81,11 +81,6 @@ export const handlers = [
   }),
 
   http.get(`${CLIENT_BASE_URL}/notices/:noticeId`, async () => {
-    const response = {
-      code: 200,
-      data: noticeDetail,
-    };
-
-    return HttpResponse.json(response);
+    return HttpResponse.json(noticeDetail);
   }),
 ];
