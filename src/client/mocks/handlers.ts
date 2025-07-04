@@ -1,6 +1,4 @@
-import { getRecentReviewList } from '@services/recommendations';
 import { http, HttpResponse } from 'msw';
-import { SearchAccommodationsResponse } from '@typings/response/accommodations';
 import { ReservationStatus } from '@typings/reservation';
 import { accommodationsData } from './data/accommodations';
 import {
@@ -19,6 +17,8 @@ import {
   latestReviewList,
 } from './data/recommendations';
 import { accommodationrReviews } from './data/accommodationReviews';
+import { notices } from '@shared/mocks/data/notices';
+import { noticeDetail } from '@shared/mocks/data/noticeDetail';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -475,5 +475,22 @@ export const handlers = [
       last: false,
     };
     return HttpResponse.json(response);
+  }),
+  http.get(`${BASE_URL}/notices`, async () => {
+    const response = {
+      code: 200,
+      content: notices,
+      page: 0,
+      size: 20,
+      totalElements: 22,
+      tatalPages: 2,
+      first: true,
+      last: false,
+    };
+
+    return HttpResponse.json(response);
+  }),
+  http.get(`${BASE_URL}/notices/:noticeId`, async () => {
+    return HttpResponse.json(noticeDetail);
   }),
 ];

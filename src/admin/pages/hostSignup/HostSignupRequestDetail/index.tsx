@@ -1,5 +1,5 @@
 import React from 'react';
-import useNumericParam from '@admin/hooks/router/useNumericParam';
+import useNumericParam from '@shared/hooks/router/useNumericParam';
 import ROUTES from '@admin/constants/routes';
 import { SSubPageTitle } from '@admin/components/styles/mixins';
 import MessageBox from '@shared/components/common/MessageBox';

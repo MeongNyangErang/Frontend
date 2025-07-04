@@ -1,7 +1,7 @@
 import NoticeForm from '@admin/components/common/NoticeForm';
 import { SSubPageTitle } from '@admin/components/styles/mixins';
 import ROUTES from '@admin/constants/routes';
-import useNumericParam from '@admin/hooks/router/useNumericParam';
+import useNumericParam from '@shared/hooks/router/useNumericParam';
 import useNoticeDetail from '@admin/hooks/page/useNoticeDetail';
 import MessageBox from '@shared/components/common/MessageBox';
 

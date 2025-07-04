@@ -1,6 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { buttonStyle } from '@shared/components/styles/mixins';
 import { media } from '@shared/components/styles/responsive';
 
 const SHeader = styled.header`
@@ -51,13 +50,14 @@ const SMainNav = styled.div`
 `;
 
 const SNavItem = styled(NavLink)`
+  position: relative;
   font-size: 16px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.gray700};
+  color: ${({ theme }) => theme.colors.gray600};
   transition: ${({ theme }) => theme.transition.default};
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.gray600};
+  &:hover:not(.active) {
+    color: ${({ theme }) => theme.colors.gray800};
   }
 
   &.active {

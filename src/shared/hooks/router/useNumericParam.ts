@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const useNumericParam = (param: string, fallbackRoute: string) => {
@@ -5,8 +6,13 @@ const useNumericParam = (param: string, fallbackRoute: string) => {
   const numericParam = Number(params[`${param}`]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!numericParam || Number.isNaN(numericParam)) {
+      navigate(fallbackRoute);
+    }
+  }, [numericParam]);
+
   if (!numericParam || Number.isNaN(numericParam)) {
-    navigate(fallbackRoute);
     return null;
   }
 

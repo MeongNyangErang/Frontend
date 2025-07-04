@@ -11,9 +11,6 @@ interface NoticesResponse {
   last: boolean;
 }
 
-interface NoticeDetailResponse {
-  code: number;
-  data: NoticeDetail;
-}
+type NoticeDetailResponse = NoticeDetail;
 
 export { NoticesResponse, NoticeDetailResponse };

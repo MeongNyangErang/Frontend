@@ -2,7 +2,7 @@ import React from 'react';
 import { SSubPageTitle } from '@admin/components/styles/mixins';
 import ROUTES from '@admin/constants/routes';
 import useReportDetail from '@admin/hooks/page/useReportDetail';
-import useNumericParam from '@admin/hooks/router/useNumericParam';
+import useNumericParam from '@shared/hooks/router/useNumericParam';
 import MessageBox from '@shared/components/common/MessageBox';
 import InfoField from '@shared/components/common/InfoField';
 import ReportDetailButtons from './ReportDetailButtons';
