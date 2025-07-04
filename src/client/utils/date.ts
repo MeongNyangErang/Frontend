@@ -32,6 +32,7 @@ const getDateFromDate = (date: Date) => {
 };
 
 const formatDateStrToMonthAndDay = (dateStr: string) => {
+  console.log(dateStr, 'dateStr');
   const date = stringToDate(dateStr);
   if (!date) throw new Error('날짜형식이 올바르지 않습니다.');
   const month = getMonthFromDate(date);
