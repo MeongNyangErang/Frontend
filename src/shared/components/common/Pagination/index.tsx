@@ -34,6 +34,10 @@ const Pagination = ({
     onClick(firstPageOfTheGroup - 1);
   };
 
+  if (totalResults <= 0) {
+    return null;
+  }
+
   return (
     <SPagination>
       <SNavigationButton

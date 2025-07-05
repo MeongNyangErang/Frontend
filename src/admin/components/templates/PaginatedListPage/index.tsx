@@ -49,6 +49,15 @@ const PaginatedListPage = <T,>({
     );
   }
 
+  if (totalElements !== undefined && totalElements <= 0) {
+    return (
+      <>
+        <SSubPageTitle>{title}</SSubPageTitle>
+        <MessageBox variant="light">조회된 결과가 없습니다.</MessageBox>
+      </>
+    );
+  }
+
   return (
     <>
       <SSubPageTitle>{title}</SSubPageTitle>
