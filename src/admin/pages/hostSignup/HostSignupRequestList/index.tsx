@@ -7,11 +7,7 @@ import { SHostSignupRequestItem } from './styles';
 
 const HostSignupRequestList = () => {
   const currentPage = usePageParam();
-  const {
-    data: { data } = {},
-    isLoading,
-    isError,
-  } = useHostSignupRequestList(currentPage);
+  const { data, isLoading, isError } = useHostSignupRequestList(currentPage);
   const { content, totalElements, size } = data || {};
 
   const onClickPagination = usePaginationNavigator(ROUTES.hosts.root);
