@@ -18,27 +18,32 @@ const SCheckboxArea = styled.div`
   margin-bottom: 20px;
   width: 100%;
 
-  span {
-    margin-right: 4px;
-    font-size: 13px;
-    color: ${({ theme }) => theme.colors.gray600};
-  }
-
   [type='checkbox'] {
     display: none;
   }
 
   label {
-    width: 14px;
-    height: 14px;
-    border: ${({ theme }) => `1px solid ${theme.colors.gray500}`};
-    border-radius: 2px;
-    font-size: 10px;
-    color: #fff;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: ${({ theme }) => theme.colors.gray600};
     cursor: pointer;
 
-    &.is-active {
+    &::after {
+      content: '';
+      display: block;
+      width: 14px;
+      height: 14px;
+      border: ${({ theme }) => `1px solid ${theme.colors.gray500}`};
+      border-radius: 2px;
+      font-size: 10px;
+      color: #fff;
+      text-align: center;
+    }
+
+    &.is-active::after {
+      content: '✔';
       border: none;
       background-color: ${({ theme }) => theme.colors.infoText};
     }
