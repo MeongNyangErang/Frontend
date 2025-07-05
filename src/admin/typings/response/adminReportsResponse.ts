@@ -10,9 +10,6 @@ interface ReportListResponse {
   last: boolean;
 }
 
-interface ReportDetailResponse {
-  code: number;
-  data: ReportDetail;
-}
+type ReportDetailResponse = ReportDetail;
 
 export { ReportListResponse, ReportDetailResponse };

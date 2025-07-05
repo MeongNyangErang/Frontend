@@ -14,7 +14,7 @@ const useReportDetail = (reportId: number) => {
       startIsLoading();
       try {
         const res = await getReportDetail(reportId);
-        setData(res.data);
+        setData(res);
       } catch (error) {
         console.log(error);
         updateError('데이터를 가져오는데 실패했습니다.');
