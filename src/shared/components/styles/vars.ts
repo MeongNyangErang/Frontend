@@ -2,7 +2,6 @@ export const colors = {
   main: 'var(--main-color)',
   sub: 'var(--sub-color)',
   light: 'var(--light-color)',
-  success: 'var(--success-color)',
   info: 'var(--info-color)',
   infoText: 'var(--info-text-color)',
   starYellow: 'var(--star-yellow)',
