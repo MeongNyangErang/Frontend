@@ -2,14 +2,14 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useError from '@shared/hooks/ui/useError';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
-import { postNewNotice } from '@admin/services/adminNotices';
+import { postNewNotice, editNotice } from '@admin/services/adminNotices';
 import useImageUploader from '@shared/hooks/ui/useImageUploader';
 import { NoticeDetail } from '@shared/typings/notices';
 import ROUTES from '@admin/constants/routes';
 import useNoticeList from '@admin/hooks/query/useNoticeList';
 
 const useNoticeForm = (initialData: NoticeDetail | undefined) => {
-  const { title, content, noticeImageUrl } = initialData || {};
+  const { title, content, noticeImageUrl, noticeId } = initialData || {};
   const [formData, setFormData] = useState({
     title: title ? title : '',
     content: content ? content : '',
@@ -56,7 +56,9 @@ const useNoticeForm = (initialData: NoticeDetail | undefined) => {
 
     startIsLoading();
     try {
-      await postNewNotice(data);
+      noticeId === undefined
+        ? await postNewNotice(data)
+        : await editNotice(noticeId, data);
       await refreshNoticeList();
       navigate(ROUTES.notices.root(0));
     } catch (error) {
