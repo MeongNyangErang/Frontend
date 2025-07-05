@@ -30,7 +30,7 @@ const SPageTitle = styled.div`
 const SPageContent = styled.div`
   ${paddingBox}
   flex: 1;
-  margin: 0 auto;
+  margin: 0 auto 52px;
   width: 100%;
   max-width: ${BREAK_POINTS.tablet};
 `;
