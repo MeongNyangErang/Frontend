@@ -48,8 +48,8 @@ const HostProfileEdit = lazy(() => import('@pages/host/HostProfileEdit'));
 
 const Notification = lazy(() => import('@pages/Notification'));
 
-const NoticeList = lazy(() => import('@pages/Notice/NoticeList'));
-const NoticeDetail = lazy(() => import('@pages/Notice/NoticeDetail'));
+const NoticeList = lazy(() => import('@pages/notice/NoticeList'));
+const NoticeDetail = lazy(() => import('@pages/notice/NoticeDetail'));
 
 const AppRouter = () => {
   return (
