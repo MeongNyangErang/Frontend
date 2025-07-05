@@ -10,8 +10,8 @@ import {
   SNoticeItem,
   SNoticeTitle,
   SNoticeCreatedAt,
-} from '@pages/notice/NoticeList/styles';
-import NoticeLayout from '@pages/notice/components/NoticeLayout';
+} from './styles';
+import NoticeLayout from '../components/NoticeLayout';
 
 const NoticeList = () => {
   const { result, isLoading, error, fetchNextPage, hasNextPage } =

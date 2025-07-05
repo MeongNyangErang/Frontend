@@ -1,10 +1,10 @@
 import ROUTES from '@constants/routes';
 import useNumericParam from '@shared/hooks/router/useNumericParam';
 import useNoticeDetail from '@hooks/page/useNoticeDetail';
-import NoticeLayout from '@pages/notice/components/NoticeLayout';
 import MessageBox from '@shared/components/common/MessageBox';
-import { SNoticeHeader, SNoticeBody } from '@pages/notice/NoticeDetail/styles';
 import { formatUTCTimeToStr } from '@shared/utils/date';
+import NoticeLayout from '../components/NoticeLayout';
+import { SNoticeHeader, SNoticeBody } from './styles';
 
 const NoticeDetail = () => {
   const numericNoticeId = useNumericParam('noticeId', ROUTES.notice.list);
