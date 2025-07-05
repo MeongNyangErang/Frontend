@@ -7,11 +7,7 @@ import { SReportItem } from './styles';
 
 const ReportList = () => {
   const currentPage = usePageParam();
-  const {
-    data: { data } = {},
-    isLoading,
-    isError,
-  } = useReportList(currentPage);
+  const { data, isLoading, isError } = useReportList(currentPage);
   const { content, totalElements, size } = data || {};
 
   const onClickPagination = usePaginationNavigator(ROUTES.reports.root);
