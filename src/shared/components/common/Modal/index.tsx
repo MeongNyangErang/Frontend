@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { FaXmark, FaArrowLeftLong } from 'react-icons/fa6';
 import {
   SWrap,
@@ -57,4 +58,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default memo(Modal);

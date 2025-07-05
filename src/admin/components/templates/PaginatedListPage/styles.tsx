@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+const SPaginatedPageWrap = styled.div`
+  margin-bottom: 30px;
+`;
+
 const SListWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -11,4 +15,4 @@ const SPaginationWrap = styled.div`
   margin-bottom: 30px;
 `;
 
-export { SListWrap, SPaginationWrap };
+export { SPaginatedPageWrap, SListWrap, SPaginationWrap };

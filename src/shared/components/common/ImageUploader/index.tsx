@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, useRef, memo } from 'react';
 import { FaCamera } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
 import { InitialImage } from '@typings/textImageForm';
@@ -69,4 +69,4 @@ const ImageUploader = ({ images, onAdd, onRemove }: ImageUploaderProps) => {
   );
 };
 
-export default ImageUploader;
+export default memo(ImageUploader);

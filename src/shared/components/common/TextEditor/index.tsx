@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, memo } from 'react';
 import { STextEditorWrap, STextArea, STextLength } from './styles';
 
 interface TextEditorProps {
@@ -30,4 +30,4 @@ const TextEditor = ({
   );
 };
 
-export default TextEditor;
+export default memo(TextEditor);
