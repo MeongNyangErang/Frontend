@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { SButton } from './styles';
 import Loader from '../Loader';
 
@@ -46,4 +47,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default memo(Button);

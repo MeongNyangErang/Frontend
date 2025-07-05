@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Modal from '@shared/components/common/Modal';
 import { parseNewLine } from '@shared/utils/formatter';
 import ImageUploader from '@shared/components/common/ImageUploader';
@@ -69,4 +70,4 @@ const NoticeForm = ({ type, initialData }: NoticeFormProps) => {
   );
 };
 
-export default NoticeForm;
+export default memo(NoticeForm);
