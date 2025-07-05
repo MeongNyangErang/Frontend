@@ -1,7 +1,7 @@
 import { fetchCall } from './apiClient';
 
 const deleteAccount = async () => {
-  return await fetchCall('users', 'delete');
+  return await fetchCall('users/me', 'delete');
 };
 
 const changeNickname = async (newNickname: string) => {

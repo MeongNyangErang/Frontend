@@ -1,20 +1,24 @@
-import styled from 'styled-components';
+import { useState } from 'react';
+import { FaCheck } from 'react-icons/fa';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import useError from '@shared/hooks/ui/useError';
 import { deleteAccount } from '@services/profileEdit';
-import { SFormTitle } from './styles';
 import Button from '@shared/components/common/Button';
-import { SFormErrorMessage } from './styles';
+import { SFormTitle, SFormErrorMessage } from './styles';
+import { SButtonBox, SCheckboxArea, SContentBox } from './withdrawFormStyles';
 
 interface WithdrawFormProps {
   onClose(): void;
 }
 
 const WithdrawForm = ({}: WithdrawFormProps) => {
+  const [isChecked, setIsChecked] = useState(false);
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError } = useError();
 
   const handleWithdraw = async () => {
+    if (!isChecked) return;
+
     updateError('');
 
     startIsLoading();
@@ -32,10 +36,28 @@ const WithdrawForm = ({}: WithdrawFormProps) => {
   return (
     <>
       <SFormTitle>회원 탈퇴</SFormTitle>
+      <SContentBox>탈퇴 약관 입니다.</SContentBox>
+      <SCheckboxArea>
+        <span>약관에 동의합니다.</span>
+        <input
+          id="withdraw-checkbox"
+          type="checkbox"
+          checked={isChecked}
+          onClick={() => {
+            setIsChecked((prev) => !prev);
+          }}
+        />
+        <label
+          htmlFor="withdraw-checkbox"
+          className={isChecked ? 'is-active' : ''}
+        >
+          {isChecked && <FaCheck />}
+        </label>
+      </SCheckboxArea>
       <SButtonBox>
         <Button
           onClick={handleWithdraw}
-          disabled={isLoading}
+          disabled={isLoading || !isChecked}
           variant="accent"
           fullWidth
           fixedHeight
@@ -49,8 +71,3 @@ const WithdrawForm = ({}: WithdrawFormProps) => {
 };
 
 export default WithdrawForm;
-
-const SButtonBox = styled.div`
-  margin-bottom: 6px;
-  width: 100%;
-`;
