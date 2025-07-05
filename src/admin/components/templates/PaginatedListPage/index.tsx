@@ -27,6 +27,7 @@ const PaginatedListPage = <T,>({
   renderListItem,
   onClickPagination,
 }: PaginatedListPageProps<T>) => {
+  console.log('content1', content);
   if (isLoading) {
     return (
       <SPaginatedPageWrap>
@@ -57,6 +58,8 @@ const PaginatedListPage = <T,>({
       </SPaginatedPageWrap>
     );
   }
+
+  console.log('content2', content);
 
   return (
     <SPaginatedPageWrap>
