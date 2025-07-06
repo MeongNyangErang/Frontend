@@ -15,7 +15,7 @@ const ReportList = () => {
 
   return (
     <PaginatedListPage
-      title="신고 목록"
+      title="리뷰 신고 목록"
       isLoading={isLoading}
       isError={isError}
       content={content}
