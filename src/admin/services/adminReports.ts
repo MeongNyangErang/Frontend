@@ -13,7 +13,7 @@ const getReportDetail = async (reportId: number) => {
 };
 
 const deleteReportedReview = async (reportId: number) => {
-  return fetchCall(`reports/${reportId}`, 'delete');
+  return fetchCall(`reports/${reportId}`, 'patch');
 };
 
 export { getReportList, getReportDetail, deleteReportedReview };
