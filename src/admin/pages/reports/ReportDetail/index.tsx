@@ -9,7 +9,7 @@ import ReportDetailButtons from './ReportDetailButtons';
 import { SImageWrap } from './styles';
 
 const REPORT_FIELDS = [
-  { id: 'reviewId', name: '리뷰ID' },
+  { id: 'reviewReportId', name: '신고ID' },
   { id: 'reportDate', name: '신고일자' },
   { id: 'reporterNickname', name: '신고자' },
   { id: 'reviewerNickname', name: '리뷰 작성자' },
@@ -51,7 +51,7 @@ const ReportDetail = () => {
               </SImageWrap>
             </InfoField>
           )}
-          <ReportDetailButtons reviewId={data.reviewId} />
+          <ReportDetailButtons reviewReportId={data.reviewReportId} />
         </>
       )}
     </>

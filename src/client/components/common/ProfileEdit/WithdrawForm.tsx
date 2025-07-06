@@ -38,7 +38,12 @@ const WithdrawForm = ({}: WithdrawFormProps) => {
       <SFormTitle>회원 탈퇴</SFormTitle>
       <SContentBox>탈퇴 약관 입니다.</SContentBox>
       <SCheckboxArea>
-        <span>약관에 동의합니다.</span>
+        <label
+          htmlFor="withdraw-checkbox"
+          className={isChecked ? 'is-active' : ''}
+        >
+          약관에 동의합니다.
+        </label>
         <input
           id="withdraw-checkbox"
           type="checkbox"
@@ -47,12 +52,6 @@ const WithdrawForm = ({}: WithdrawFormProps) => {
             setIsChecked((prev) => !prev);
           }}
         />
-        <label
-          htmlFor="withdraw-checkbox"
-          className={isChecked ? 'is-active' : ''}
-        >
-          {isChecked && <FaCheck />}
-        </label>
       </SCheckboxArea>
       <SButtonBox>
         <Button

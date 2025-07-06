@@ -5,7 +5,7 @@ import useError from '@shared/hooks/ui/useError';
 import useReportList from '@admin/hooks/query/useReportList';
 import ROUTES from '@admin/constants/routes';
 
-const useReportDetailButtons = (reviewId: number) => {
+const useReportDetailButtons = (reviewReportId: number) => {
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, resetError, updateError } = useError();
   const { refreshReportList } = useReportList(0, false);
@@ -14,7 +14,7 @@ const useReportDetailButtons = (reviewId: number) => {
   const handleDeleteReview = async () => {
     startIsLoading();
     try {
-      await deleteReportedReview(reviewId);
+      await deleteReportedReview(reviewReportId);
       await refreshReportList();
       navigate(ROUTES.reports.root(0));
     } catch (error) {
