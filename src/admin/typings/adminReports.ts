@@ -1,5 +1,5 @@
 interface ReportListItem {
-  reviewId: number;
+  reviewReportId: number;
   reporterId: number;
   reporterType: 'USER' | 'HOST';
   reason: string;

@@ -1,5 +1,6 @@
 import usePageParam from '@shared/hooks/router/usePageParam';
 import usePaginationNavigator from '@shared/hooks/router/usePaginationNavigator';
+import { formatUTCTimeToStr } from '@shared/utils/date';
 import useReportList from '@admin/hooks/query/useReportList';
 import ROUTES from '@admin/constants/routes';
 import PaginatedListPage from '@admin/components/templates/PaginatedListPage';
@@ -22,10 +23,10 @@ const ReportList = () => {
       totalElements={totalElements}
       size={size}
       onClickPagination={onClickPagination}
-      renderListItem={({ reviewId, createdAt }) => (
-        <SReportItem key={createdAt} to={ROUTES.reports.detail(reviewId)}>
-          <div>리뷰ID : {reviewId}</div>
-          <p>{createdAt}</p>
+      renderListItem={({ reviewReportId, createdAt }) => (
+        <SReportItem key={createdAt} to={ROUTES.reports.detail(reviewReportId)}>
+          <div>신고ID : {reviewReportId}</div>
+          <p>{formatUTCTimeToStr(createdAt)}</p>
         </SReportItem>
       )}
     />
