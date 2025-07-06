@@ -9,6 +9,7 @@ interface ReportListItem {
 }
 
 interface ReportDetail {
+  reviewReportId: number;
   reviewId: number;
   reviewerNickname: string;
   reporterNickname: string;

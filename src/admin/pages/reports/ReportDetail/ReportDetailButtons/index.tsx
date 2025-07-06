@@ -3,12 +3,12 @@ import Modal from '@shared/components/common/Modal';
 import useReportDetailButtons from './useReportDetailButtons';
 
 interface ReportDetailButtonsProps {
-  reviewId: number;
+  reviewReportId: number;
 }
 
-const ReportDetailButtons = ({ reviewId }: ReportDetailButtonsProps) => {
+const ReportDetailButtons = ({ reviewReportId }: ReportDetailButtonsProps) => {
   const { isLoading, error, resetError, handleDeleteReview } =
-    useReportDetailButtons(reviewId);
+    useReportDetailButtons(reviewReportId);
 
   return (
     <>
