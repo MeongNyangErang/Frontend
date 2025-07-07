@@ -15,7 +15,7 @@ const ReportList = () => {
 
   return (
     <PaginatedListPage
-      title="신고 목록"
+      title="리뷰 신고 목록"
       isLoading={isLoading}
       isError={isError}
       content={content}
@@ -26,7 +26,7 @@ const ReportList = () => {
       renderListItem={({ reviewReportId, createdAt }) => (
         <SReportItem key={createdAt} to={ROUTES.reports.detail(reviewReportId)}>
           <div>신고ID : {reviewReportId}</div>
-          <p>{formatUTCTimeToStr(createdAt)}</p>
+          <p>{formatUTCTimeToStr(createdAt, true)}</p>
         </SReportItem>
       )}
     />
