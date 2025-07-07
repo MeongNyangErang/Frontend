@@ -17,11 +17,11 @@ const cancelReservation = async (reservationId: string) => {
 };
 
 const postPreCheckReservation = async (reservationData: FormData) => {
-  return fetchCall('reservations/validate', 'post', reservationData);
+  return fetchCall('users/reservations/validate', 'post', reservationData);
 };
 
 const postConfirmReservation = (reservationData: FormData) => {
-  return fetchCall('reservations/payment', 'post', reservationData);
+  return fetchCall('users/reservations/payment', 'post', reservationData);
 };
 
 export {
