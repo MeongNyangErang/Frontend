@@ -21,7 +21,6 @@ const useKakaoLogin = (
     window.Kakao.Auth.authorize({
       redirectUri: redirectUri,
       state: memberRole,
-      prompt: 'consent',
     });
   };
 
