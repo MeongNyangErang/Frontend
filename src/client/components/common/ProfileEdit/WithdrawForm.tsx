@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { FaCheck } from 'react-icons/fa';
 import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import useError from '@shared/hooks/ui/useError';
-import { deleteAccount } from '@services/profileEdit';
+import { deleteHostAccount, deleteUserAccount } from '@services/profileEdit';
 import Button from '@shared/components/common/Button';
+import { MemberRole } from '@typings/member';
 import { SFormTitle, SFormErrorMessage } from './styles';
 import { SButtonBox, SCheckboxArea, SContentBox } from './withdrawFormStyles';
 
 interface WithdrawFormProps {
+  role: MemberRole;
   onClose(): void;
 }
 
-const WithdrawForm = ({}: WithdrawFormProps) => {
+const WithdrawForm = ({ role, onClose }: WithdrawFormProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const { isLoading, startIsLoading, endIsLoading } = useIsLoading();
   const { error, updateError } = useError();
@@ -23,7 +24,7 @@ const WithdrawForm = ({}: WithdrawFormProps) => {
 
     startIsLoading();
     try {
-      await deleteAccount();
+      role === 'USER' ? await deleteUserAccount() : await deleteHostAccount();
       // logout?
     } catch (error) {
       console.log(error);

@@ -106,7 +106,7 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
               </Modal>
             );
           }
-          if (id === 'password' || id === 'withdraw') {
+          if (id === 'password') {
             return (
               <Modal
                 key={id}
@@ -116,6 +116,19 @@ const ProfileEdit = ({ role }: ProfileEditProps) => {
                 closeType="x"
               >
                 {element(onCloseModal)}
+              </Modal>
+            );
+          }
+          if (id === 'withdraw') {
+            return (
+              <Modal
+                key={id}
+                isOpen={isOpen && enableToEdit}
+                variant="full"
+                onClose={onCloseModal}
+                closeType="x"
+              >
+                {element(role, onCloseModal)}
               </Modal>
             );
           }

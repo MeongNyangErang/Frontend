@@ -1,7 +1,11 @@
 import { fetchCall } from './apiClient';
 
-const deleteAccount = async () => {
+const deleteUserAccount = async () => {
   return await fetchCall('users/me', 'delete');
+};
+
+const deleteHostAccount = async () => {
+  return await fetchCall('hosts/me', 'delete');
 };
 
 const changeNickname = async (newNickname: string) => {
@@ -29,7 +33,8 @@ const changeName = async (name: string) => {
 };
 
 export {
-  deleteAccount,
+  deleteUserAccount,
+  deleteHostAccount,
   changeNickname,
   changePassword,
   changeProfileImage,
