@@ -19,17 +19,13 @@ const MobileNav = () => {
     member: { data },
   } = useAuth();
 
-  if (!data) return null;
-
+  const isMember = !!data;
   return (
     <SNav>
       {mobileMenu.map(({ name, path, icon }) => {
-        const isHostMyPage = data.role === 'HOST' && name === 'MY';
+        // const isHostMyPage = data.role === 'HOST' && name === 'MY';
         return (
-          <SNavLink
-            key={name}
-            to={!isHostMyPage ? path : ROUTES.myPage.host.root}
-          >
+          <SNavLink key={name} to={path}>
             {icon}
             <span>{name}</span>
           </SNavLink>

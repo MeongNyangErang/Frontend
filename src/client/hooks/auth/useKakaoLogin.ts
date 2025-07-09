@@ -17,10 +17,10 @@ const useKakaoLogin = (
 
     const redirectUri = `${getClientDomain()}${ROUTES.kakaoLogInRedirect}`;
     const memberRole = role === 'USER' ? 'ROLE_USER' : 'ROLE_HOST';
-    const uriWithRole = `${redirectUri}?role=${memberRole}`;
 
     window.Kakao.Auth.authorize({
-      redirectUri: uriWithRole,
+      redirectUri: redirectUri,
+      state: memberRole,
     });
   };
 
