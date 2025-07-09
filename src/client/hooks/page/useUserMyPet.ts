@@ -5,6 +5,7 @@ import useIsLoading from '@shared/hooks/ui/useIsLoading';
 import useError from '@shared/hooks/ui/useError';
 import { PetInfo } from '@typings/pet';
 import { deleteMyPet } from '@services/pet';
+import useUserPetRecommendations from '@hooks/query/user/useUserPetRecommendations';
 
 const useUserMyPet = () => {
   const { data, error, isLoading, refreshMyPetList } = useMyPetList();
@@ -26,6 +27,7 @@ const useUserMyPet = () => {
     startIsLoading: startDeleteLoading,
     endIsLoading: endDeleteLoading,
   } = useIsLoading();
+  const { invalidateUserPetRecommendations } = useUserPetRecommendations(false);
 
   const resetSelectedPet = () => {
     if (selectedPet) setSelectedPet(null);
@@ -66,6 +68,7 @@ const useUserMyPet = () => {
     closeForm();
     resetSelectedPet();
     refreshMyPetList();
+    invalidateUserPetRecommendations();
   }, [resetSelectedPet]);
 
   return {

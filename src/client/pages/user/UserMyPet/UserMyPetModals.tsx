@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Modal from '@shared/components/common/Modal';
 import Button from '@shared/components/common/Button';
 import { SDeleteConfirmation } from './styles';
@@ -79,4 +80,4 @@ const UserMyPetModals = ({
   );
 };
 
-export default UserMyPetModals;
+export default memo(UserMyPetModals);
