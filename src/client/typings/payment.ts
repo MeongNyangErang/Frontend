@@ -1,3 +1,18 @@
+interface ReservationInfo {
+  accommodationName: string;
+  roomId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  peopleCount: number;
+  petCount: number;
+  reserverName: string;
+  reserverPhoneNumber: string;
+  hasVehicle: boolean;
+  totalPrice: number;
+  imp_uid?: string;
+  merchant_uid?: string;
+}
+
 interface IamportPaymentParams {
   pg: 'html5_inicis';
   pay_method?: 'card';
@@ -16,4 +31,4 @@ interface IamportPaymentResponse {
   error_msg?: string;
 }
 
-export { IamportPaymentParams, IamportPaymentResponse };
+export { ReservationInfo, IamportPaymentParams, IamportPaymentResponse };

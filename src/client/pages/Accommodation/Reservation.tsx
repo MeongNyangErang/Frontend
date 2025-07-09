@@ -9,6 +9,7 @@ import {
   postPreCheckReservation,
 } from '@services/reservation';
 import useIamportPayment from '@hooks/payment/useIamportPayment';
+import { ReservationInfo } from '@typings/payment';
 
 interface ButtonProps {
   selected: boolean;
@@ -66,7 +67,7 @@ const Reservation = () => {
   const stayDuration = calculateStayDuration(checkInDate, checkOutDate);
   const adjustedTotalPrice = totalPrice * stayDuration;
 
-  const [hasVehicle, setHasvehicle] = useState<string | null>(null);
+  const [hasVehicle, setHasvehicle] = useState<boolean | null>(null);
   const [reserverPhoneNumber, setReserverPhoneNumber] = useState('');
   const [reserverName, setReserverName] = useState('');
   const [formError, setFormError] = useState<string>('');
@@ -90,7 +91,7 @@ const Reservation = () => {
     setReserverName(e.target.value);
   };
 
-  const handleClick = (value: string) => {
+  const handleClick = (value: boolean) => {
     setHasvehicle(value);
   };
 
@@ -125,17 +126,10 @@ const Reservation = () => {
       reserverPhoneNumber,
       hasVehicle,
       totalPrice: adjustedTotalPrice,
-    };
-
-    const formData = new FormData();
-    const blob = new Blob([JSON.stringify(reservationData)], {
-      type: 'application/json',
-    });
-
-    formData.append('request', blob);
+    } as ReservationInfo;
 
     try {
-      await postPreCheckReservation(formData);
+      await postPreCheckReservation(reservationData);
 
       const merchant_uid = `id_${Date.now()}`;
 
@@ -150,10 +144,10 @@ const Reservation = () => {
       });
 
       if (res.success && res.imp_uid && res.merchant_uid) {
-        formData.append('imp_uid', res.imp_uid);
-        formData.append('merchant_uid', res.merchant_uid);
+        reservationData['imp_uid'] = res.imp_uid;
+        reservationData['merchant_uid'] = res.merchant_uid;
 
-        await postConfirmReservation(formData);
+        await postConfirmReservation(reservationData);
         refreshReservationList('RESERVED');
         navigate(ROUTES.myPage.user.reservationList);
       } else {
@@ -211,14 +205,14 @@ const Reservation = () => {
       <SLabel>주차 여부</SLabel>
       <ButtonContainer>
         <CheckInput
-          selected={hasVehicle === 'true'}
-          onClick={() => handleClick('true')}
+          selected={hasVehicle === true}
+          onClick={() => handleClick(true)}
         >
           O
         </CheckInput>
         <CheckInput
-          selected={hasVehicle === 'false'}
-          onClick={() => handleClick('false')}
+          selected={hasVehicle === false}
+          onClick={() => handleClick(false)}
         >
           X
         </CheckInput>
