@@ -5,6 +5,7 @@ import PhoneNumberEditForm from '@components/common/ProfileEdit/PhoneNumberEditF
 import PasswordEditForm from '@components/common/ProfileEdit/PasswordEditForm';
 import WithdrawForm from '@components/common/ProfileEdit/WithdrawForm';
 import ProfileImageEditForm from '@components/common/ProfileEdit/ProfileImageEditForm';
+import { MemberRole } from '@typings/member';
 
 export const userProfileEditList = [
   { name: '닉네임 변경', id: 'nickname' },
@@ -33,8 +34,12 @@ type ModalFormItem =
       element: (data: HostProfile, onClose: () => void) => JSX.Element;
     }
   | {
-      id: 'password' | 'withdraw';
+      id: 'password';
       element: (onClose: () => void) => JSX.Element;
+    }
+  | {
+      id: 'withdraw';
+      element: (role: MemberRole, onClose: () => void) => JSX.Element;
     };
 
 export const modalFormList: ModalFormItem[] = [
@@ -71,7 +76,9 @@ export const modalFormList: ModalFormItem[] = [
   },
   {
     id: 'withdraw',
-    element: (onClose: () => void) => <WithdrawForm onClose={onClose} />,
+    element: (role: MemberRole, onClose: () => void) => (
+      <WithdrawForm onClose={onClose} role={role} />
+    ),
   },
 ];
 
