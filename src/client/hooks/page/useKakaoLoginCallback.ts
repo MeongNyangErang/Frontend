@@ -10,7 +10,7 @@ const useKakaoLoginCallback = (onError: (message: string) => void) => {
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const role = searchParams.get('role') as KakaoMemberRole;
+    const role = searchParams.get('state') as KakaoMemberRole;
 
     if (!code || !role) {
       onError('잘못된 접근입니다.');
