@@ -14,7 +14,7 @@ const MostViewedRecommendations = () => {
   const { data, isLoading, error, refreshMostViewedRecommendations } =
     useMostViewedRecommendations();
   const { refreshWishlist } = useWishlist(0, false);
-  const { refresehUserPetRecommendations } = useUserPetRecommendations();
+  const { refresehUserPetRecommendations } = useUserPetRecommendations(false);
 
   const onSuccessClickWishButton = (accommodationId: number) => {
     setList((prev) => {

@@ -2,18 +2,21 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserPetRecommendations } from '@services/recommendations';
 import { UserPetRecommendationsResponse } from '@typings/response/recommendations';
 
-const useUserPetRecommendations = () => {
+const useUserPetRecommendations = (enabled: boolean = true) => {
+  const QUERY_KEY = 'user-pet-recommendations' as const;
+
   const result = useQuery({
-    queryKey: ['user-pet-recommendations'],
+    queryKey: [QUERY_KEY],
     queryFn: () => getUserPetRecommendations(),
     staleTime: 1000 * 60 * 60,
+    enabled,
   });
 
   const queryClient = useQueryClient();
 
   const refresehUserPetRecommendations = (accommodationId: number) => {
     const prev = queryClient.getQueryData<UserPetRecommendationsResponse>([
-      'user-pet-recommendations',
+      QUERY_KEY,
     ]);
     if (!prev) return;
     const newData = prev.map((v) => {
@@ -32,10 +35,18 @@ const useUserPetRecommendations = () => {
       }
       return v;
     });
-    queryClient.setQueryData(['user-pet-recommendations'], newData);
+    queryClient.setQueryData([QUERY_KEY], newData);
   };
 
-  return { ...result, refresehUserPetRecommendations };
+  const invalidateUserPetRecommendations = async () => {
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+  };
+
+  return {
+    ...result,
+    refresehUserPetRecommendations,
+    invalidateUserPetRecommendations,
+  };
 };
 
 export default useUserPetRecommendations;
