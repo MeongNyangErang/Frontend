@@ -111,7 +111,7 @@ const createFetchCall = (
     const isFormData = data instanceof FormData;
 
     const headers = isFormData
-      ? { 'Content-Type': 'multipart/form-data' }
+      ? undefined
       : {
           'Content-Type': 'application/json',
         };
@@ -120,7 +120,7 @@ const createFetchCall = (
       url,
       method,
       baseURL,
-      headers,
+      ...(headers && { headers }),
       ...(data && { data }),
     };
 
