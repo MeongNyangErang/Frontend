@@ -1,4 +1,4 @@
-interface ReservationInfo {
+interface ReservationRequest {
   accommodationName: string;
   roomId: number;
   checkInDate: string;
@@ -9,8 +9,12 @@ interface ReservationInfo {
   reserverPhoneNumber: string;
   hasVehicle: boolean;
   totalPrice: number;
-  imp_uid?: string;
-  merchant_uid?: string;
+}
+
+interface ReservationInfo {
+  merchantUid: string;
+  impUid: string;
+  reservationRequest: ReservationRequest;
 }
 
 interface IamportPaymentParams {
@@ -31,4 +35,9 @@ interface IamportPaymentResponse {
   error_msg?: string;
 }
 
-export { ReservationInfo, IamportPaymentParams, IamportPaymentResponse };
+export {
+  ReservationRequest,
+  ReservationInfo,
+  IamportPaymentParams,
+  IamportPaymentResponse,
+};

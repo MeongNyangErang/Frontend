@@ -9,7 +9,7 @@ import {
   postPreCheckReservation,
 } from '@services/reservation';
 import useIamportPayment from '@hooks/payment/useIamportPayment';
-import { ReservationInfo } from '@typings/payment';
+import { ReservationInfo, ReservationRequest } from '@typings/payment';
 
 interface ButtonProps {
   selected: boolean;
@@ -115,7 +115,7 @@ const Reservation = () => {
       return;
     }
 
-    const reservationData = {
+    const reservationRequest = {
       accommodationName,
       roomId,
       checkInDate,
@@ -126,17 +126,17 @@ const Reservation = () => {
       reserverPhoneNumber,
       hasVehicle,
       totalPrice: adjustedTotalPrice,
-    } as ReservationInfo;
+    } as ReservationRequest;
 
     try {
-      await postPreCheckReservation(reservationData);
+      await postPreCheckReservation(reservationRequest);
 
-      const merchant_uid = `id_${Date.now()}`;
+      const merchantUid = `id_${Date.now()}`;
 
       const res = await triggerPayment({
         pg: 'html5_inicis',
         // pay_method: 'card',
-        merchant_uid,
+        merchant_uid: merchantUid,
         name: accommodationName,
         amount: adjustedTotalPrice,
         buyer_name: reserverName,
@@ -144,10 +144,13 @@ const Reservation = () => {
       });
 
       if (res.success && res.imp_uid && res.merchant_uid) {
-        reservationData['imp_uid'] = res.imp_uid;
-        reservationData['merchant_uid'] = res.merchant_uid;
+        const reservationInfo = {
+          merchantUid,
+          impUid: res.imp_uid,
+          reservationRequest,
+        } as ReservationInfo;
 
-        await postConfirmReservation(reservationData);
+        await postConfirmReservation(reservationInfo);
         refreshReservationList('RESERVED');
         navigate(ROUTES.myPage.user.reservationList);
       } else {
