@@ -141,6 +141,7 @@ const Reservation = () => {
         amount: adjustedTotalPrice,
         buyer_name: reserverName,
         buyer_tel: reserverPhoneNumber,
+        buyer_email: '',
       });
 
       if (res.success && res.imp_uid && res.merchant_uid) {
