@@ -1,6 +1,6 @@
 import { UserReservationListResponse } from '@typings/response/reservation';
 import { ReservationStatus } from '@typings/reservation';
-import { ReservationInfo } from '@typings/payment';
+import { ReservationRequest, ReservationInfo } from '@typings/payment';
 import { fetchCall } from './apiClient';
 
 const getUserReservationList = async (
@@ -17,7 +17,7 @@ const cancelReservation = async (reservationId: string) => {
   return fetchCall(`users/reservations/${reservationId}/cancel`, 'patch');
 };
 
-const postPreCheckReservation = async (reservationData: ReservationInfo) => {
+const postPreCheckReservation = async (reservationData: ReservationRequest) => {
   return fetchCall('users/reservations/validate', 'post', reservationData);
 };
 
