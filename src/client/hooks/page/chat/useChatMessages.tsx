@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
-import { PreviousChatMessage, NewChatMessage } from '@typings/chat';
+import { NewChatMessage } from '@typings/chat';
 import usePreviousChatMessages from '@hooks/query/usePreviousChatMessages';
 import useInfiniteScroll from '@shared/hooks/ui/useInfiniteScroll';
 import useAuth from '@hooks/auth/useAuth';
@@ -16,7 +16,7 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   );
   const { member } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
-  const [messages, setMessages] = useState<PreviousChatMessage[]>([]);
+  const [messages, setMessages] = useState<NewChatMessage[]>([]);
   const [pendingMessage, setPendingMessage] = useState<null | string>(null);
   const [chatError, setChatError] = useState({ ...initialChatError });
   const {
@@ -34,8 +34,8 @@ const useChatMessages = (chatRoomId: number | undefined) => {
   const previousMessages = useMemo(() => {
     const messages =
       pages?.flatMap(
-        ({ content, receiverImageUrl, receiverName }) =>
-          content?.map((v) => ({ ...v, receiverImageUrl, receiverName })) || [],
+        ({ chatMessagePage: { content }, partnerName, partnerImageUrl }) =>
+          content.map((v) => ({ ...v, partnerName, partnerImageUrl })) || [],
       ) || [];
     messages.sort((a, b) => {
       const dateA = new Date(a.createdAt);

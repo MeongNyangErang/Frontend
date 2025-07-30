@@ -11,15 +11,17 @@ export interface ChatListResponse {
 }
 
 export interface PreviousChatMessagesResponse {
-  content: PreviousChatMessage[];
-  receiverName: string;
-  receiverImageUrl: string;
-  first: boolean;
-  last: boolean;
-  page: number;
-  size: number;
-  totalElement: number;
-  totalPages: number;
+  chatMessagePage: {
+    content: PreviousChatMessage[];
+    first: boolean;
+    last: boolean;
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
+  partnerName: string;
+  partnerImageUrl: null | string;
 }
 
 export interface CreateChatRoomResponse {
