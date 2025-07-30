@@ -65,8 +65,8 @@ const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
                   senderType,
                   createdAt,
                   messageType,
-                  receiverImageUrl,
-                  receiverName,
+                  partnerName,
+                  partnerImageUrl,
                 } = message;
                 const isMyMessage = senderType === data.role.toUpperCase();
                 const isThePreviousSender =
@@ -99,17 +99,13 @@ const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
                         <SMessageProfile>
                           {!isThePreviousSender && (
                             <img
-                              src={
-                                receiverImageUrl ||
-                                messages[0].receiverImageUrl ||
-                                defaultProfileImage
-                              }
+                              src={partnerImageUrl || defaultProfileImage}
                               alt="프로필 이미지"
                             />
                           )}
                         </SMessageProfile>
                         <SMessageContent>
-                          {!isThePreviousSender && <span>{receiverName}</span>}
+                          {!isThePreviousSender && <span>{partnerName}</span>}
                           <div>
                             {isText ? (
                               <SMessageText>{messageContent}</SMessageText>
