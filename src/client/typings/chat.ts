@@ -9,24 +9,19 @@ export interface ChatItem {
   unreadCount: number;
 }
 
-export interface PreviousChatMessage {
-  messageId?: number;
+interface ChatMessage {
   senderType: 'USER' | 'HOST';
+  messageType: 'MESSAGE' | 'IMAGE';
   messageContent: string;
   createdAt: string;
-  messageType: 'MESSAGE' | 'IMAGE';
-  receiverName: string;
-  receiverImageUrl: string;
 }
 
-export interface NewChatMessage {
-  messageContent: string;
-  senderType: 'USER' | 'HOST';
-  messageType: 'MESSAGE' | 'IMAGE';
-  createdAt: string;
-  receiverName: string;
-  receiverImageUrl: string;
-}
+export type PreviousChatMessage = ChatMessage & { chatRoomId: number };
+
+export type NewChatMessage = ChatMessage & {
+  partnerName: string;
+  partnerImageUrl: string | null;
+};
 
 export interface ChatPartnerState {
   partnerName: string;
